@@ -60,6 +60,7 @@ mesh = SubResource("CylinderMesh_pedestal")
 unique_name_in_owner = true
 
 [node name="Body" type="MeshInstance3D" parent="SubViewport/Model"]
+unique_name_in_owner = true
 position = Vector3(0, 0.9, 0)
 mesh = SubResource("CapsuleMesh_body")
 
