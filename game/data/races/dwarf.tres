@@ -6,6 +6,7 @@
 script = ExtResource("1_race")
 id = &"dwarf"
 display_name = "Zwerg"
+description = "Körperfamilie Kompakt. Klein und breit, mit kurzen Beinen und großen Händen."
 body_family = 1
 height_factor = 0.8
 order = 4

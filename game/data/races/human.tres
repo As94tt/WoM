@@ -6,6 +6,7 @@
 script = ExtResource("1_race")
 id = &"human"
 display_name = "Mensch"
+description = "Körperfamilie Normal. Ausgewogene Proportionen; an Mensch männlich und weiblich wird die ganze Pipeline gebaut."
 body_family = 0
 height_factor = 1.0
 order = 1

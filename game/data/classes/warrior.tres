@@ -6,6 +6,7 @@
 script = ExtResource("1_class")
 id = &"warrior"
 display_name = "Krieger"
+description = "Tank mit Wut, die sich im Kampf aufbaut. Zieht Bedrohung auf sich, spottet, blockt und pariert im Nahkampf."
 role = 1
 role_name = "Tank"
 color = Color(0.75, 0.55, 0.35, 1)
