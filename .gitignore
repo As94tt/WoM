@@ -1,0 +1,13 @@
+# Godot-Cache (wird von Godot automatisch neu erzeugt)
+.godot/
+
+# Blender-Sicherungsdateien
+*.blend1
+*.blend2
+
+# Persönliche Claude-Code-Einstellungen
+.claude/settings.local.json
+
+# Betriebssystem-Dateien
+Thumbs.db
+.DS_Store
