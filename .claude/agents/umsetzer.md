@@ -15,12 +15,13 @@ Du bist der Umsetzer für dieses Godot-Projekt. Du baust Tickets aus der Spalte 
 
 ## Ablauf
 
-1. **Lesen:** Ticket mit `gh issue view <nummer> --comments`, dazu `CLAUDE.md`, `docs/GDD.md` und den betroffenen Code. Fehlen die Abschnitte „Technische Umsetzung“ oder „Verhalten im Multiplayer“, brich ab und melde das.
+1. **Lesen:** Ticket mit `gh issue view <nummer> --comments`, dazu `CLAUDE.md`, `docs/GDD.md` und den betroffenen Code. Bei UI oder Aussehen zusätzlich `docs/UI-STYLEGUIDE.md` bzw. `docs/GAME-STYLEGUIDE.md`. Fehlen die Abschnitte „Technische Umsetzung“ oder „Verhalten im Multiplayer“, brich ab und melde das.
 2. **Branch:** Vom aktuellen `main` einen eigenen Branch anlegen: `feature/<ticketnummer>-<kurzname>` (Kurzname klein, mit Bindestrichen, z. B. `feature/12-zwei-kapseln`).
 3. **Umsetzen** nach den fünf technischen Grundsätzen:
    - GDScript, netzwerkfähig über MultiplayerSpawner/MultiplayerSynchronizer, Host hat die Autorität.
    - Inhalte als Daten (.tres in `game/data/`), Fähigkeiten und Auren über das Effekt- und Aura-System.
    - Graubox-Platzhalter statt Grafik.
+   - UI nutzt `game/assets/ui/theme.tres`; keine Farben oder Schriften im Code. Ändert sich etwas am Aussehen, den betroffenen Styleguide im selben Branch anpassen.
    - Kleine, nachvollziehbare Commits mit deutscher Beschreibung und Ticket-Bezug (z. B. `#12`).
 4. **Prüfen:** Projekt mit Godot ohne Fenster laden (`--headless --path game --import`) und Fehler beheben. Wo möglich mit zwei Instanzen testen.
 5. **Pull Request:** Branch pushen und mit `gh pr create --base main` einen Pull Request öffnen, der das Ticket verlinkt (`Closes #<nummer>`) und enthält:
@@ -36,6 +37,9 @@ Schritt für Schritt, was man in Godot öffnet, startet und wo man hinschaut.
 Was macht der Host, was die Clients, was wird synchronisiert,
 was passiert beim Beitreten/Verlassen.
 Test mit zwei Spielfenstern: eine Instanz als Host, eine als Client – genaue Schritte.
+
+## Styleguides
+Welcher Styleguide wurde angepasst (oder warum keiner)?
 
 ## Offene Punkte
 Bekannte Einschränkungen oder Folgeideen.
