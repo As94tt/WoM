@@ -136,14 +136,25 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `ScreenMargin` | `MarginContainer` | Rand 32 px auf allen Seiten | Außenrand eines Bildschirms |
 | `MenuLayout` | `VBoxContainer` | Abstand 48 px | große Abschnitte, z. B. Titel zu Buttons |
 | `ButtonList` | `VBoxContainer` | Abstand 12 px | Button-Listen, Inhaltslisten |
+| `ButtonRow` | `HBoxContainer` | Abstand 12 px | Buttons nebeneinander, Spalten eines Bildschirms |
+| `InlineRow` | `HBoxContainer` | Abstand 8 px | Angaben in einer Zeile (z. B. Volk und Klasse) |
+| `HintText` | `Label` | Schriftgröße 16 px, gedämpfte Textfarbe | sekundärer Text, Hinweise (z. B. „Noch keine Charaktere“) |
+| `EnterWorldButton` | `Button` | Schriftgröße 24 px, sonst wie `Button` | großer Hauptbutton eines Bildschirms („Welt betreten“) |
+| `ListEntryButton` | `Button` | eigene `StyleBoxFlat` für normal, Hover, ausgewählt (gedrückt, auch Hover+gedrückt), deaktiviert; Fokus wie `Button` | auswählbarer Listeneintrag (Charakterliste). „Ausgewählt“ ist heller und hat einen breiten linken Rand, damit es sich klar von Hover unterscheidet |
+| `ListEntryMargin` | `MarginContainer` | Rand 20 px links, 16 px rechts, 12 px oben/unten | Inhalt eines `ListEntryButton` (links breiter wegen des Auswahlrands) |
+| `DialogPanel` | `PanelContainer` | `StyleBoxFlat` mit 24 px Innenabstand und 2-px-Rahmen | modale Dialoge (z. B. Charakter löschen) |
+| `DimOverlay` | `Panel` | halbtransparente dunkle Fläche ohne Rahmen | Abdunklung hinter modalen Dialogen; fängt Mausklicks ab |
 
 **Basistypen ohne Variation:**
 
 - `Label`: Schriftgröße 16 px (wie `BodyText`).
 - `Button`: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert und Fokus. Fokus ist ein zusätzlicher heller Rahmen über dem jeweiligen Zustand. Innenabstand 16 px horizontal / 12 px vertikal; damit sind Buttons mit Standardschrift 47 px hoch und erfüllen die **Mindesthöhe von 40 px** aus Abschnitt 6.
 - `Panel` und `PanelContainer`: eine `StyleBoxFlat` mit 16 px Innenabstand.
+- `LineEdit`: eigene `StyleBoxFlat` für normal und deaktiviert (`read_only`, bei `editable = false`), Fokus wie `Button`. Innenabstand 12 px horizontal / 8 px vertikal, Schriftgröße 16 px, gedämpfte Farbe für Platzhaltertext.
 
-**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit).
+**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px).
+
+**Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
 
 ## 8. Qualitätssicherung und Abnahme
 

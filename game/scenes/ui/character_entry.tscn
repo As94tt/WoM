@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_entry.gd" id="1_entry"]
+
+[node name="CharacterEntry" type="Button"]
+size_flags_horizontal = 3
+theme_type_variation = &"ListEntryButton"
+toggle_mode = true
+action_mode = 0
+script = ExtResource("1_entry")
+
+[node name="Margin" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ListEntryMargin"
+
+[node name="Rows" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TopRow" type="HBoxContainer" parent="Margin/Rows"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="NameLabel" type="Label" parent="Margin/Rows/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"Subtitle"
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="LevelLabel" type="Label" parent="Margin/Rows/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SmallLabel"
+text = "Stufe 1"
+
+[node name="InfoRow" type="HBoxContainer" parent="Margin/Rows"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="RaceLabel" type="Label" parent="Margin/Rows/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SmallLabel"
+text = "Volk"
+
+[node name="ClassLabel" type="Label" parent="Margin/Rows/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SmallLabel"
+text = "Klasse"

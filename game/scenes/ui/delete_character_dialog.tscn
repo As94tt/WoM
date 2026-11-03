@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/delete_character_dialog.gd" id="1_dialog"]
+
+[node name="DeleteCharacterDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dialog")
+
+[node name="Dim" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"DimOverlay"
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DialogPanel"
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="TitleLabel" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Charakter löschen"
+
+[node name="MessageLabel" type="Label" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(432, 0)
+layout_mode = 2
+theme_type_variation = &"BodyText"
+text = "Gib zum Bestätigen den Namen ein."
+autowrap_mode = 3
+
+[node name="NameInput" type="LineEdit" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Name des Charakters"
+max_length = 32
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+alignment = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="CancelButton" type="Button" parent="Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Abbrechen"
+
+[node name="DeleteButton" type="Button" parent="Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+disabled = true
+text = "Löschen"

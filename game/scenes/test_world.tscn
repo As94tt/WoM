@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/test_world.gd" id="1_world"]
+
+[sub_resource type="Environment" id="Environment_world"]
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.45, 0.45, 0.45, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+material = SubResource("Material_floor")
+size = Vector2(40, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape_floor"]
+size = Vector3(40, 1, 40)
+
+[node name="TestWorld" type="Node3D"]
+script = ExtResource("1_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_world")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, 0.6, 0)
+shadow_enabled = true
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(0, 6, 10)
+rotation = Vector3(-0.5, 0, 0)
+current = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("BoxShape_floor")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Margin" type="MarginContainer" parent="Hud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Rows" type="VBoxContainer" parent="Hud/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+
+[node name="NameLabel" type="Label" parent="Hud/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ScreenTitle"
+text = "Name"
+
+[node name="InfoLabel" type="Label" parent="Hud/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Stufe · Volk · Klasse"
+
+[node name="Spacer" type="Control" parent="Hud/Margin/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="Hud/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Zur Charakterauswahl"

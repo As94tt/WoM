@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RaceData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/race_data.gd" id="1_race"]
+
+[resource]
+script = ExtResource("1_race")
+id = &"troll"
+display_name = "Troll"
+body_family = 3
+height_factor = 1.35
+order = 6
