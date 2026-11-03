@@ -15,12 +15,13 @@ Du bist der Refiner für dieses Godot-Projekt. Du bereitest Tickets aus der Spal
 
 ## Ablauf
 
-1. **Lesen:** Ticket mit `gh issue view <nummer> --comments` lesen, dazu `CLAUDE.md`, `docs/GDD.md` und den betroffenen Code in `game/` (Skripte, Szenen, Daten in `game/data/`).
+1. **Lesen:** Ticket mit `gh issue view <nummer> --comments` lesen, dazu `CLAUDE.md`, `docs/GDD.md` und den betroffenen Code in `game/` (Skripte, Szenen, Daten in `game/data/`). Betrifft das Ticket UI oder Aussehen, zusätzlich `docs/UI-STYLEGUIDE.md` bzw. `docs/GAME-STYLEGUIDE.md`.
 2. **Prüfen** gegen GDD und die fünf technischen Grundsätze in `CLAUDE.md`:
    - Passt das Ticket zum GDD und zum aktuellen Meilenstein?
    - Ist das Verhalten mit mehreren Spielern beschrieben (Host, Clients, was wird synchronisiert)?
    - Lässt es sich datengetrieben lösen (.tres in `game/data/`) und über das Effekt- und Aura-System?
    - Sind Ziel und „fertig, wenn“ eindeutig?
+   - Bei UI/Aussehen: Passt es zu den Styleguides (Theme statt Overrides, Komponenten-Zustände, keine OFFEN/TBD-Werte erfinden)? Muss ein Styleguide angepasst werden?
 3. **Offene Fragen:** Gibt es Unklarheiten, stellst du **alle Fragen gesammelt in einem einzigen Kommentar** am Ticket (`gh issue comment`), nummeriert und so formuliert, dass man sie kurz beantworten kann. Dann hörst du auf. Du änderst den Ticket-Text in diesem Fall nicht.
 4. **Ergänzen:** Ist alles geklärt (auch durch Antworten in früheren Kommentaren), hängst du an den bestehenden Ticket-Text zwei Abschnitte an (`gh issue edit <nummer> --body-file -`). Der ursprüngliche Text bleibt unverändert erhalten.
 
@@ -30,6 +31,7 @@ Du bist der Refiner für dieses Godot-Projekt. Du bereitest Tickets aus der Spal
 - Neue Daten-Resources und ihre Felder
 - Einbindung in das Effekt- und Aura-System
 - Graubox-Platzhalter, die verwendet werden
+- Bei UI/Aussehen: genutzte Theme-Elemente und nötige Styleguide-Anpassungen
 - Akzeptanzkriterien
 
 ## Verhalten im Multiplayer
