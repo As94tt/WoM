@@ -81,6 +81,7 @@ Alle Spielfarben müssen in sämtlichen Szenen **dieselbe Bedeutung** haben. Wer
 - **Fließtext-/UI-Font:** TBD; nur frei lizenzierte Schrift, bevorzugt SIL Open Font License 1.1.
 - **Lizenznachweis:** Dateiname, Urheber, genaue Lizenz und Lizenzdatei im Repository dokumentieren.
 - **Größenhierarchie (Ausgangswerte, bei Tests anpassen):** Screen-Titel 30–36 px, Fenstertitel 22–26 px, Untertitel 18–20 px, Fließtext 16–18 px, kompakte Labels mindestens 14 px.
+- **Hauptmenü-Titel:** 64 px (eigener Wert, bewusst größer als der Screen-Titel; nur für den Spieltitel im Hauptmenü).
 - Keine allein durch Versalien, geringe Größe oder verzierte Fonts schwer lesbaren Informationstexte.
 
 ## 5. Komponentenstandards
@@ -101,7 +102,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 
 ## 6. Raster, Abstände und Eingabegrößen
 
-- **Basisraster:** 4 px; Standard-Abstandsfolge 4 / 8 / 12 / 16 / 24 / 32 px.
+- **Basisraster:** 4 px; Standard-Abstandsfolge 4 / 8 / 12 / 16 / 24 / 32 / 48 px (48 px für große Abschnittsabstände, z. B. zwischen Menü-Titel und Buttons).
 - **Interaktive Ziele:** nach Möglichkeit mindestens 40×40 logische Pixel; auf Gamepad-Navigation separat prüfen.
 - **UI-Safe-Areas:** HUD nicht direkt an Bildschirmkanten platzieren; konfigurierbare Abstände vorsehen.
 - **Responsive Verhalten:** Bei 1080p und 1440p testen; lange Namen, lokalisierte Texte und Skalierungsoptionen berücksichtigen.
@@ -117,6 +118,32 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 - **Keine Farben und Schriften direkt in Gameplay- oder UI-Code hardcoden.**
 - Pflicht-Vorschauszene: `game/scenes/ui/style_preview.tscn` mit sämtlichen Komponenten und States.
 - Godot-Projektversion und Font-Import vor Übergabe prüfen; Szene im Editor und im laufenden Projekt testen.
+
+### Theme-Aufbau
+
+`game/assets/ui/theme.tres` ist in `game/project.godot` unter `[gui] theme/custom` als projektweites Standard-Theme eingetragen. Szenen setzen kein eigenes Theme und keine `theme_override_*`-Werte, sondern wählen über `theme_type_variation` eine der folgenden Variationen.
+
+**Alle Werte im Theme sind Graubox-Platzhalter** (neutrale Grau-/Weißtöne, Godot-Standardschrift, nur `StyleBoxFlat`). Sie sind keine Tokens; die Tokens in Abschnitt 3 bleiben TBD, bis die Stilrichtung freigegeben ist. Neue Variationen werden hier eingetragen und in `style_preview.tscn` gezeigt.
+
+| Variation | Basistyp | Wert | Verwendung |
+|---|---|---|---|
+| `MenuTitle` | `Label` | Schriftgröße 64 px | Spieltitel im Hauptmenü |
+| `ScreenTitle` | `Label` | Schriftgröße 36 px | Titel eines Bildschirms |
+| `WindowTitle` | `Label` | Schriftgröße 24 px | Fenster- und Abschnittstitel |
+| `Subtitle` | `Label` | Schriftgröße 18 px | Untertitel |
+| `BodyText` | `Label` | Schriftgröße 16 px | Fließtext |
+| `SmallLabel` | `Label` | Schriftgröße 14 px | kompakte Beschriftungen |
+| `ScreenMargin` | `MarginContainer` | Rand 32 px auf allen Seiten | Außenrand eines Bildschirms |
+| `MenuLayout` | `VBoxContainer` | Abstand 48 px | große Abschnitte, z. B. Titel zu Buttons |
+| `ButtonList` | `VBoxContainer` | Abstand 12 px | Button-Listen, Inhaltslisten |
+
+**Basistypen ohne Variation:**
+
+- `Label`: Schriftgröße 16 px (wie `BodyText`).
+- `Button`: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert und Fokus. Fokus ist ein zusätzlicher heller Rahmen über dem jeweiligen Zustand. Innenabstand 16 px horizontal / 12 px vertikal; damit sind Buttons mit Standardschrift 47 px hoch und erfüllen die **Mindesthöhe von 40 px** aus Abschnitt 6.
+- `Panel` und `PanelContainer`: eine `StyleBoxFlat` mit 16 px Innenabstand.
+
+**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit).
 
 ## 8. Qualitätssicherung und Abnahme
 
