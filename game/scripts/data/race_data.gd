@@ -12,6 +12,8 @@ enum BodyFamily { NORMAL, COMPACT, MASSIVE, HUNCHED }
 @export var id: StringName
 ## Anzeigename (z. B. „Mensch“).
 @export var display_name: String
+## Kurzbeschreibung für die Charaktererstellung (#8). Platzhaltertext nach GDD.
+@export_multiline var description: String
 @export var body_family: BodyFamily = BodyFamily.NORMAL
 ## Größenfaktor des Platzhaltermodells (Mensch = 1,0). Gilt für beide Geschlechter.
 @export_range(0.5, 2.0, 0.05) var height_factor: float = 1.0

@@ -6,6 +6,7 @@
 script = ExtResource("1_class")
 id = &"druid"
 display_name = "Druide"
+description = "Heiler mit Mana. Heilt Verbündete direkt, über Zeit und die ganze Gruppe."
 role = 2
 role_name = "Heiler"
 color = Color(1, 0.6, 0.2, 1)

@@ -6,6 +6,7 @@
 script = ExtResource("1_class")
 id = &"rogue"
 display_name = "Schurke"
+description = "Nahkampf-Schaden mit Energie und Combopunkten. Der Präzisionskämpfer: aufbauen, ausgeben, Positionierung und Tarnung."
 role = 0
 role_name = "Schaden"
 color = Color(0.95, 0.85, 0.3, 1)

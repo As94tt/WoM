@@ -6,6 +6,7 @@
 script = ExtResource("1_race")
 id = &"dark_elf"
 display_name = "Dunkelelf"
+description = "Körperfamilie Normal. Ähnlich gebaut wie Menschen, aber schlanker und größer."
 body_family = 0
 height_factor = 1.1
 order = 3

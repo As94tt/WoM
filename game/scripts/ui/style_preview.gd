@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6 und #8).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -25,5 +25,10 @@ func _ready() -> void:
 	for entry: CharacterEntry in [%EntryNormal, %EntryHover, %EntrySelected, %EntryDisabled]:
 		entry.setup(sample)
 	%EntryHover.add_theme_stylebox_override("normal", %EntryHover.get_theme_stylebox("hover"))
+
+	# Auswahlbutton der Charaktererstellung (#8), Hover dauerhaft dargestellt.
+	var choice_hover: Button = %ChoiceHover
+	choice_hover.add_theme_stylebox_override("normal", choice_hover.get_theme_stylebox("hover"))
+	choice_hover.add_theme_color_override("font_color", choice_hover.get_theme_color("font_hover_color"))
 
 	%FocusButton.grab_focus()

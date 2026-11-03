@@ -1,0 +1,226 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_creation.gd" id="1_creation"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_preview.tscn" id="2_preview"]
+
+[node name="CharacterCreation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_creation")
+
+[node name="Layout" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Rows" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="TitleLabel" type="Label" parent="Layout/Rows"]
+layout_mode = 2
+theme_type_variation = &"ScreenTitle"
+text = "Charaktererstellung"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Layout/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ButtonRow"
+
+[node name="LeftPanel" type="PanelContainer" parent="Layout/Rows/Columns"]
+layout_mode = 2
+
+[node name="LeftRows" type="VBoxContainer" parent="Layout/Rows/Columns/LeftPanel"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="RaceTitle" type="Label" parent="Layout/Rows/Columns/LeftPanel/LeftRows"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Volk"
+
+[node name="RaceGrid" type="GridContainer" parent="Layout/Rows/Columns/LeftPanel/LeftRows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ChoiceGrid"
+columns = 2
+
+[node name="GenderTitle" type="Label" parent="Layout/Rows/Columns/LeftPanel/LeftRows"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Geschlecht"
+
+[node name="GenderRow" type="HBoxContainer" parent="Layout/Rows/Columns/LeftPanel/LeftRows"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="MaleButton" type="Button" parent="Layout/Rows/Columns/LeftPanel/LeftRows/GenderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+toggle_mode = true
+action_mode = 0
+text = "Männlich"
+
+[node name="FemaleButton" type="Button" parent="Layout/Rows/Columns/LeftPanel/LeftRows/GenderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+toggle_mode = true
+action_mode = 0
+text = "Weiblich"
+
+[node name="Center" type="VBoxContainer" parent="Layout/Rows/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ButtonList"
+
+[node name="Preview" parent="Layout/Rows/Columns/Center" instance=ExtResource("2_preview")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Mit gedrückter linker Maustaste ziehen, um das Modell zu drehen."
+
+[node name="InfoPanel" type="PanelContainer" parent="Layout/Rows/Columns/Center"]
+custom_minimum_size = Vector2(0, 164)
+layout_mode = 2
+
+[node name="InfoColumns" type="HBoxContainer" parent="Layout/Rows/Columns/Center/InfoPanel"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="RaceInfo" type="VBoxContainer" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RaceNameLabel" type="Label" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/RaceInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Volk"
+
+[node name="RaceDescription" type="Label" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/RaceInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyText"
+autowrap_mode = 3
+
+[node name="ClassInfo" type="VBoxContainer" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClassHeader" type="HBoxContainer" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/ClassInfo"]
+layout_mode = 2
+theme_type_variation = &"InlineRow"
+
+[node name="ClassNameLabel" type="Label" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/ClassInfo/ClassHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Klasse"
+
+[node name="ClassRoleLabel" type="Label" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/ClassInfo/ClassHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"HintText"
+text = "Rolle"
+
+[node name="ClassDescription" type="Label" parent="Layout/Rows/Columns/Center/InfoPanel/InfoColumns/ClassInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyText"
+autowrap_mode = 3
+
+[node name="RightPanel" type="PanelContainer" parent="Layout/Rows/Columns"]
+layout_mode = 2
+
+[node name="RightRows" type="VBoxContainer" parent="Layout/Rows/Columns/RightPanel"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="ClassTitle" type="Label" parent="Layout/Rows/Columns/RightPanel/RightRows"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Klasse"
+
+[node name="ClassList" type="VBoxContainer" parent="Layout/Rows/Columns/RightPanel/RightRows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="BottomBar" type="HBoxContainer" parent="Layout/Rows"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="BottomLeft" type="HBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ButtonRow"
+
+[node name="BackButton" type="Button" parent="Layout/Rows/BottomBar/BottomLeft"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 0
+text = "Zurück"
+
+[node name="RandomButton" type="Button" parent="Layout/Rows/BottomBar/BottomLeft"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Würfelt Volk, Geschlecht und Klasse. Der Name bleibt erhalten."
+text = "Zufällig"
+
+[node name="NameColumn" type="VBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="Layout/Rows/BottomBar/NameColumn"]
+layout_mode = 2
+theme_type_variation = &"InlineRow"
+
+[node name="NameTitle" type="Label" parent="Layout/Rows/BottomBar/NameColumn/NameRow"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameInput" type="LineEdit" parent="Layout/Rows/BottomBar/NameColumn/NameRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+placeholder_text = "Name des Charakters"
+
+[node name="MessageLabel" type="Label" parent="Layout/Rows/BottomBar/NameColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(480, 44)
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "2 bis 12 Buchstaben von A bis Z, ein Wort."
+autowrap_mode = 3
+
+[node name="BottomRight" type="HBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="CreateButton" type="Button" parent="Layout/Rows/BottomBar/BottomRight"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"EnterWorldButton"
+disabled = true
+text = "Erstellen"

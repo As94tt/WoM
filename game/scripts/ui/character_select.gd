@@ -8,6 +8,7 @@ extends Control
 const CHARACTER_ENTRY := preload("res://scenes/ui/character_entry.tscn")
 const TEST_WORLD_SCENE := "res://scenes/test_world.tscn"
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
+const CHARACTER_CREATION_SCENE := "res://scenes/ui/character_creation.tscn"
 
 var _group := ButtonGroup.new()
 var _entries: Array[CharacterEntry] = []
@@ -28,6 +29,10 @@ func _ready() -> void:
 	# Entwicklerhilfe nur in Debug-Builds (Editor und Debug-Export).
 	%SampleButton.visible = OS.is_debug_build()
 	_reload()
+	# Ohne Charaktere direkt zur Erstellung (#8). Nur beim Öffnen, nicht nach
+	# dem Löschen des letzten Charakters.
+	if _entries.is_empty():
+		_open_creation.call_deferred()
 
 
 ## Baut die Liste neu auf und wählt einen Eintrag aus: den mit dem Namen
@@ -123,8 +128,13 @@ func _on_back_pressed() -> void:
 
 
 func _on_new_pressed() -> void:
-	# Verdrahtung in #8 (Charaktererstellung). Bis dahin ohne Wirkung.
-	pass
+	if _entries.size() >= CharacterStore.MAX_CHARACTERS:
+		return
+	_open_creation()
+
+
+func _open_creation() -> void:
+	get_tree().change_scene_to_file(CHARACTER_CREATION_SCENE)
 
 
 func _on_sample_pressed() -> void:

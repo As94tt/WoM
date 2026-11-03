@@ -10,6 +10,8 @@ enum Role { DAMAGE, TANK, HEALER }
 @export var id: StringName
 ## Anzeigename (z. B. „Magier“).
 @export var display_name: String
+## Kurzbeschreibung für die Charaktererstellung (#8). Platzhaltertext nach GDD.
+@export_multiline var description: String
 @export var role: Role = Role.DAMAGE
 ## Anzeigename der Rolle (z. B. „Schaden“).
 @export var role_name: String

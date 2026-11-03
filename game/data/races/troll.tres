@@ -6,6 +6,7 @@
 script = ExtResource("1_race")
 id = &"troll"
 display_name = "Troll"
+description = "Körperfamilie Groß und gebeugt. Lange Arme, gebückte Haltung und große Füße."
 body_family = 3
 height_factor = 1.35
 order = 6

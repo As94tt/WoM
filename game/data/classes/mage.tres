@@ -6,6 +6,7 @@
 script = ExtResource("1_class")
 id = &"mage"
 display_name = "Magier"
+description = "Fernkampf-Schaden mit Mana. Wirkt Zauber mit Zauberzeit, Projektile, Flächenschaden und Kontrolle."
 role = 0
 role_name = "Schaden"
 color = Color(0.35, 0.6, 1, 1)
