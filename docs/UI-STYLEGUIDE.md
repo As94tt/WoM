@@ -99,6 +99,8 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | Spieler-/Zielrahmen | Name, Leben, Ressource, Status, Buffs/Debuffs, eindeutige Zielmarkierung |
 | Kampftext | Schaden, Krit, Heilung, Verfehlt; klare Priorisierung bei hoher Dichte |
 | Gegenstandsqualität | fünf Seltenheitsfarben mit Text oder Symbol als zweitem Signal |
+| Auswahlbutton (Toggle) | normal, Hover, ausgewählt (gedrückt, auch Hover+ausgewählt), deaktiviert, Fokus; genau eine Auswahl pro Gruppe (`ButtonGroup`); „ausgewählt“ ist heller und hat einen breiten linken Rand |
+| Texteingabefeld mit Fehlermeldung | Feld (leer mit Platzhalter, mit Text, deaktiviert, Fokus) und darunter eine Meldungszeile: Hinweis (`HintText`) oder Fehler (`ErrorText`); die Meldung ist immer ein verständlicher Satz, nie nur eine Farbe; die Zeile hat eine feste Mindesthöhe, damit das Layout beim Wechsel nicht springt |
 
 ## 6. Raster, Abstände und Eingabegrößen
 
@@ -144,6 +146,9 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `ListEntryMargin` | `MarginContainer` | Rand 20 px links, 16 px rechts, 12 px oben/unten | Inhalt eines `ListEntryButton` (links breiter wegen des Auswahlrands) |
 | `DialogPanel` | `PanelContainer` | `StyleBoxFlat` mit 24 px Innenabstand und 2-px-Rahmen | modale Dialoge (z. B. Charakter löschen) |
 | `DimOverlay` | `Panel` | halbtransparente dunkle Fläche ohne Rahmen | Abdunklung hinter modalen Dialogen; fängt Mausklicks ab |
+| `ChoiceButton` | `Button` | wie `Button`; gedrückt und Hover+gedrückt nutzen die Ausgewählt-Fläche von `ListEntryButton`, Schrift im ausgewählten Zustand weiß | Auswahlbutton mit `toggle_mode` in einer `ButtonGroup` (Volk, Geschlecht, Klasse in der Charaktererstellung) |
+| `ChoiceGrid` | `GridContainer` | Abstand 12 px horizontal und vertikal | Raster aus Auswahlbuttons (z. B. Völker in zwei Spalten) |
+| `ErrorText` | `Label` | Schriftgröße 16 px, hellste Textfarbe (Graubox-Platzhalter, bis ein Warn-Token freigegeben ist) | Fehlermeldung unter einem Eingabefeld; ersetzt in derselben Zeile den `HintText` |
 
 **Basistypen ohne Variation:**
 
@@ -152,9 +157,9 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 - `Panel` und `PanelContainer`: eine `StyleBoxFlat` mit 16 px Innenabstand.
 - `LineEdit`: eigene `StyleBoxFlat` für normal und deaktiviert (`read_only`, bei `editable = false`), Fokus wie `Button`. Innenabstand 12 px horizontal / 8 px vertikal, Schriftgröße 16 px, gedämpfte Farbe für Platzhaltertext.
 
-**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px).
+**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“ und „Erstellen“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px, Namensfeld: 320 px, Meldungszeile unter dem Namensfeld: 480 × 44 px für zwei Zeilen).
 
-**Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
+**Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Dieselbe Farbe färbt in der Charakterauswahl und -erstellung auch das Platzhaltermodell (Kapsel) in der 3D-Vorschau. Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
 
 ## 8. Qualitätssicherung und Abnahme
 

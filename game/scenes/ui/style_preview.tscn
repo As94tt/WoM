@@ -360,3 +360,155 @@ custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 focus_mode = 0
 text = "Bestätigen"
+
+[node name="SectionCharacterCreation" type="HSeparator" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+
+[node name="CharacterCreationTitle" type="Label" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Charaktererstellung (Ticket #8)"
+
+[node name="CharacterCreationGrid" type="GridContainer" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+columns = 2
+
+[node name="ChoiceNormalLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ChoiceButton: normal"
+vertical_alignment = 1
+
+[node name="ChoiceNormal" type="Button" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"ChoiceButton"
+toggle_mode = true
+text = "Zwerg"
+
+[node name="ChoiceHoverLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ChoiceButton: Hover (dauerhaft)"
+vertical_alignment = 1
+
+[node name="ChoiceHover" type="Button" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"ChoiceButton"
+toggle_mode = true
+text = "Ork"
+
+[node name="ChoiceSelectedLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ChoiceButton: ausgewählt"
+vertical_alignment = 1
+
+[node name="ChoiceSelected" type="Button" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"ChoiceButton"
+toggle_mode = true
+button_pressed = true
+text = "Mensch"
+
+[node name="ChoiceDisabledLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ChoiceButton: deaktiviert"
+vertical_alignment = 1
+
+[node name="ChoiceDisabled" type="Button" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"ChoiceButton"
+disabled = true
+toggle_mode = true
+text = "Troll"
+
+[node name="ChoiceFocusLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ChoiceButton: Fokus"
+vertical_alignment = 1
+
+[node name="ChoiceFocusNote" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Fokusrahmen wie bei den Buttons (siehe oben)."
+
+[node name="NameHintLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Namensfeld: leer, mit Hinweis (HintText)"
+vertical_alignment = 1
+
+[node name="NameHint" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+
+[node name="NameHintInput" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameHint"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+placeholder_text = "Name des Charakters"
+
+[node name="NameHintText" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameHint"]
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "2 bis 12 Buchstaben von A bis Z, ein Wort."
+
+[node name="NameValidLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Namensfeld: gültig"
+vertical_alignment = 1
+
+[node name="NameValid" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+
+[node name="NameValidInput" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameValid"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+text = "Thorin"
+
+[node name="NameValidText" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameValid"]
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "2 bis 12 Buchstaben von A bis Z, ein Wort."
+
+[node name="NameErrorLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Namensfeld: Fehler (ErrorText)"
+vertical_alignment = 1
+
+[node name="NameError" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid"]
+layout_mode = 2
+
+[node name="NameErrorInput" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameError"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+text = "Jörg"
+
+[node name="NameErrorText" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterCreationGrid/NameError"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"ErrorText"
+text = "Nur Buchstaben von A bis Z erlaubt, keine Leerzeichen, Zahlen, Umlaute oder Sonderzeichen."
+autowrap_mode = 3
