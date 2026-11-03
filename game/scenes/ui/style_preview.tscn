@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/style_preview.gd" id="1_preview"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_entry.tscn" id="2_entry"]
 
 [node name="StylePreview" type="Control"]
 layout_mode = 3
@@ -169,3 +170,193 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Button im Panel"
+
+[node name="SectionCharacterSelect" type="HSeparator" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+
+[node name="CharacterSelectTitle" type="Label" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Charakterauswahl (Ticket #6)"
+
+[node name="CharacterSelectGrid" type="GridContainer" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+columns = 2
+
+[node name="EnterWorldLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "EnterWorldButton (24 px)"
+vertical_alignment = 1
+
+[node name="EnterWorldButton" type="Button" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"EnterWorldButton"
+text = "Welt betreten"
+
+[node name="HintTextLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "HintText"
+vertical_alignment = 1
+
+[node name="HintText" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "Noch keine Charaktere"
+
+[node name="EntryNormalLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ListEntryButton: normal"
+vertical_alignment = 1
+
+[node name="EntryNormal" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid" instance=ExtResource("2_entry")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+
+[node name="EntryHoverLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ListEntryButton: Hover (dauerhaft)"
+vertical_alignment = 1
+
+[node name="EntryHover" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid" instance=ExtResource("2_entry")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+
+[node name="EntrySelectedLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ListEntryButton: ausgewählt"
+vertical_alignment = 1
+
+[node name="EntrySelected" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid" instance=ExtResource("2_entry")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+button_pressed = true
+
+[node name="EntryDisabledLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ListEntryButton: deaktiviert"
+vertical_alignment = 1
+
+[node name="EntryDisabled" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid" instance=ExtResource("2_entry")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+disabled = true
+
+[node name="LineEditNormalLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "LineEdit: leer (Platzhalter)"
+vertical_alignment = 1
+
+[node name="LineEditNormal" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+placeholder_text = "Name des Charakters"
+
+[node name="LineEditTextLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "LineEdit: mit Text"
+vertical_alignment = 1
+
+[node name="LineEditText" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+text = "Durgin"
+
+[node name="LineEditDisabledLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "LineEdit: deaktiviert"
+vertical_alignment = 1
+
+[node name="LineEditDisabled" type="LineEdit" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Nicht änderbar"
+editable = false
+
+[node name="FocusNoteLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Fokus"
+vertical_alignment = 1
+
+[node name="FocusNote" type="Label" parent="ScrollContainer/MarginContainer/Content/CharacterSelectGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "ListEntryButton und LineEdit nutzen den Fokusrahmen der Buttons (siehe oben)."
+
+[node name="DialogTitle" type="Label" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "DialogPanel auf DimOverlay"
+
+[node name="DialogSample" type="Panel" parent="ScrollContainer/MarginContainer/Content"]
+custom_minimum_size = Vector2(640, 240)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"DimOverlay"
+
+[node name="Center" type="CenterContainer" parent="ScrollContainer/MarginContainer/Content/DialogSample"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dialog" type="PanelContainer" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center"]
+layout_mode = 2
+theme_type_variation = &"DialogPanel"
+
+[node name="DialogContent" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center/Dialog"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="DialogHeading" type="Label" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center/Dialog/DialogContent"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Dialogtitel"
+
+[node name="DialogButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center/Dialog/DialogContent"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="DialogCancel" type="Button" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center/Dialog/DialogContent/DialogButtons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Abbrechen"
+
+[node name="DialogConfirm" type="Button" parent="ScrollContainer/MarginContainer/Content/DialogSample/Center/Dialog/DialogContent/DialogButtons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Bestätigen"
