@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_select.gd" id="1_select"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_preview.tscn" id="2_preview"]
+[ext_resource type="PackedScene" path="res://scenes/ui/delete_character_dialog.tscn" id="3_dialog"]
+
+[node name="CharacterSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_select")
+
+[node name="Layout" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Rows" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="TitleLabel" type="Label" parent="Layout/Rows"]
+layout_mode = 2
+theme_type_variation = &"ScreenTitle"
+text = "Charakterauswahl"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Layout/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ButtonRow"
+
+[node name="LeftSpacer" type="Control" parent="Layout/Rows/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Preview" parent="Layout/Rows/Columns" instance=ExtResource("2_preview")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="ListPanel" type="PanelContainer" parent="Layout/Rows/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ListRows" type="VBoxContainer" parent="Layout/Rows/Columns/ListPanel"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="ListHeader" type="HBoxContainer" parent="Layout/Rows/Columns/ListPanel/ListRows"]
+layout_mode = 2
+theme_type_variation = &"InlineRow"
+
+[node name="ListTitle" type="Label" parent="Layout/Rows/Columns/ListPanel/ListRows/ListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"WindowTitle"
+text = "Charaktere"
+
+[node name="CountLabel" type="Label" parent="Layout/Rows/Columns/ListPanel/ListRows/ListHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"HintText"
+text = "0 / 10"
+
+[node name="EmptyHint" type="Label" parent="Layout/Rows/Columns/ListPanel/ListRows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "Noch keine Charaktere"
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Layout/Rows/Columns/ListPanel/ListRows"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EntryList" type="VBoxContainer" parent="Layout/Rows/Columns/ListPanel/ListRows/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ButtonList"
+
+[node name="BottomBar" type="HBoxContainer" parent="Layout/Rows"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="BottomLeft" type="HBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ButtonRow"
+
+[node name="BackButton" type="Button" parent="Layout/Rows/BottomBar/BottomLeft"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 8
+text = "Zurück"
+
+[node name="SampleButton" type="Button" parent="Layout/Rows/BottomBar/BottomLeft"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+tooltip_text = "Entwickler: legt bis zu 3 Beispielcharaktere an (nur in Debug-Builds sichtbar)."
+text = "Beispielcharaktere"
+
+[node name="BottomCenter" type="HBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_type_variation = &"ButtonRow"
+
+[node name="EnterWorldButton" type="Button" parent="Layout/Rows/BottomBar/BottomCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_type_variation = &"EnterWorldButton"
+text = "Welt betreten"
+
+[node name="BottomRight" type="HBoxContainer" parent="Layout/Rows/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="NewButton" type="Button" parent="Layout/Rows/BottomBar/BottomRight"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Neuer Charakter"
+
+[node name="DeleteButton" type="Button" parent="Layout/Rows/BottomBar/BottomRight"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Charakter löschen"
+
+[node name="DeleteDialog" parent="." instance=ExtResource("3_dialog")]
+unique_name_in_owner = true
+layout_mode = 1

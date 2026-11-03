@@ -1,7 +1,10 @@
 extends Control
 ## Hauptmenü beim Spielstart (Ticket #3).
-## Rein lokal, keine Netzwerkfunktion. Die Handler für Hosten und Beitreten
-## sind die Einstiegspunkte für M1 (create_server / create_client).
+## Hosten und Beitreten merken den Modus in GameSession und öffnen die
+## Charakterauswahl (Ticket #6). Noch keine Netzwerkfunktion; in M1 wird
+## der Modus beim Betreten der Welt ausgewertet (create_server / create_client).
+
+const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 
 
 func _ready() -> void:
@@ -12,13 +15,17 @@ func _ready() -> void:
 
 
 func _on_host_pressed() -> void:
-	# M1: Hier wird das Spiel als Host gestartet (create_server).
-	pass
+	_open_character_select(GameSession.Mode.HOST)
 
 
 func _on_join_pressed() -> void:
-	# M1: Hier tritt der Spieler einem Spiel bei (create_client).
-	pass
+	_open_character_select(GameSession.Mode.JOIN)
+
+
+func _open_character_select(mode: GameSession.Mode) -> void:
+	GameSession.reset()
+	GameSession.mode = mode
+	get_tree().change_scene_to_file(CHARACTER_SELECT_SCENE)
 
 
 func _on_quit_pressed() -> void:
