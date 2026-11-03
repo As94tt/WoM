@@ -11,7 +11,13 @@ config_version=5
 [application]
 
 config/name="Startzone"
+run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [rendering]
 
