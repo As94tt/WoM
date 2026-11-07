@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MovementData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/movement_data.gd" id="1_movement"]
+
+[resource]
+script = ExtResource("1_movement")
+run_speed = 7.0
+backward_speed = 4.5
+walk_speed = 2.5
+jump_height = 1.2
+gravity = 20.0
+turn_speed_deg = 180.0
+max_slope_deg = 50.0
+step_height = 0.4
