@@ -13,7 +13,11 @@ extends Control
 ## - Talente mittig im Platz rechts davon,
 ## - Karte mittig, ca. 70 % des Bildschirms, exklusiv (siehe HudWindow.exclusive),
 ## - Taschen unten rechts über Menü- und Taschenleiste.
-## Inhalte setzen spätere Tickets über get_hud_window(id).set_content() ein.
+## Inhalte setzen spätere Tickets über get_hud_window(id).set_content() ein
+## (z. B. die Karte aus #15).
+##
+## Gebietsnamen-Einblendung (#15): show_zone_banner() zeigt den Namen eines
+## neu betretenen Gebiets oben in der Mitte (ZoneBanner).
 ##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
@@ -106,6 +110,12 @@ func handle_cancel() -> void:
 	if close_all_windows():
 		return
 	_game_menu.open()
+
+
+## Blendet den Namen eines neu betretenen Gebiets kurz groß ein, darunter
+## klein subtitle (z. B. „Stufe 4–6“; leer = keine zweite Zeile).
+func show_zone_banner(title: String, subtitle: String) -> void:
+	%ZoneBanner.show_zone(title, subtitle)
 
 
 func get_hud_window(window_id: StringName) -> HudWindow:

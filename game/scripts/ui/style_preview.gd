@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8 und #17).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17 und #15).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
