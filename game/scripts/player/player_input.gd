@@ -16,7 +16,8 @@ extends Node
 ##   wenn der (ausgeblendete) Zeiger über einem UI-Element liegt.
 ## - Ein Klick in die Spielwelt nimmt der Oberfläche den Fokus.
 ## - Hat ein Textfeld (LineEdit/TextEdit) den Fokus, z. B. später der Chat,
-##   werden die Bewegungstasten ignoriert.
+##   oder ist ein Knoten der Gruppe „blocks_game_input“ sichtbar (z. B. das
+##   Spielmenü aus #17), werden die Bewegungstasten ignoriert.
 
 ## Kamera der Figur.
 @export var camera: PlayerCamera
@@ -59,6 +60,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.pressed:
 		_handle_mouse_press(event)
+		return
+	if _keyboard_blocked():
 		return
 	if event.is_action_pressed("jump"):
 		_player.request_jump()
@@ -122,7 +125,7 @@ func _physics_process(_delta: float) -> void:
 	var strafe := 0.0
 	var turn := 0.0
 	var keys_held := false
-	if not _text_field_has_focus():
+	if not _keyboard_blocked():
 		var w := Input.is_action_pressed("move_forward")
 		var s := Input.is_action_pressed("move_backward")
 		var q := Input.is_action_pressed("strafe_left")
@@ -171,6 +174,13 @@ func _release_mouse_buttons() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-func _text_field_has_focus() -> bool:
+## Tastatur für die Figur gesperrt: Textfeld mit Fokus oder ein sichtbares
+## Element der Gruppe „blocks_game_input“ (z. B. das Spielmenü).
+func _keyboard_blocked() -> bool:
 	var focus := get_viewport().gui_get_focus_owner()
-	return focus is LineEdit or focus is TextEdit
+	if focus is LineEdit or focus is TextEdit:
+		return true
+	for node in get_tree().get_nodes_in_group(&"blocks_game_input"):
+		if node is CanvasItem and node.is_visible_in_tree():
+			return true
+	return false

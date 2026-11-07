@@ -3,16 +3,16 @@ extends Node3D
 ## für die Bewegung (Rampe, steiler Hang, Treppe, Kisten, Wände, Tunnel) und
 ## eine Anzeige des gewählten Charakters aus GameSession.
 ## Die eigene Spielfigur erscheint am SpawnPoint unter dem Knoten Players.
+## Das Interface (HUD, #17) ist als eigene Szene unter dem Knoten Hud
+## eingebunden; „Zurück zur Charakterauswahl“ liegt jetzt im Spielmenü (Esc).
 ## Rein lokal. In M1 startet hier je nach GameSession.mode der Host
 ## (create_server) oder der Client (create_client); dann spawnt ein
 ## MultiplayerSpawner (spawn_path = Players) eine Figur pro Spieler.
 
-const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 
 
 func _ready() -> void:
-	%BackButton.pressed.connect(_on_back_pressed)
 	_spawn_local_player()
 	var c := GameSession.selected_character
 	if c == null:
@@ -38,8 +38,3 @@ func _spawn_local_player() -> void:
 	player.peer_id = peer_id
 	%Players.add_child(player)
 	player.global_transform = %SpawnPoint.global_transform
-
-
-func _on_back_pressed() -> void:
-	GameSession.selected_character = null
-	get_tree().change_scene_to_file(CHARACTER_SELECT_SCENE)
