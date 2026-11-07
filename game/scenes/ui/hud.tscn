@@ -1,0 +1,225 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/ui/action_bar.gd" id="2_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/hud_window.tscn" id="3_window"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/game_menu.tscn" id="4_menu"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hud")
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Layout" type="Control" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WindowRow" type="HBoxContainer" parent="SafeArea/Layout"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 96.0
+offset_bottom = 616.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="LeftWindows" type="HBoxContainer" parent="SafeArea/Layout/WindowRow"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="CharacterWindow" parent="SafeArea/Layout/WindowRow/LeftWindows" instance=ExtResource("3_window")]
+unique_name_in_owner = true
+layout_mode = 2
+window_id = &"character"
+title = "Charakter"
+toggle_action = &"toggle_character"
+
+[node name="SpellbookWindow" parent="SafeArea/Layout/WindowRow/LeftWindows" instance=ExtResource("3_window")]
+unique_name_in_owner = true
+layout_mode = 2
+window_id = &"spellbook"
+title = "Zauberbuch"
+toggle_action = &"toggle_spellbook"
+
+[node name="CenterArea" type="CenterContainer" parent="SafeArea/Layout/WindowRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="TalentWindow" parent="SafeArea/Layout/WindowRow/CenterArea" instance=ExtResource("3_window")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(640, 520)
+window_id = &"talents"
+title = "Talente"
+toggle_action = &"toggle_talents"
+
+[node name="MapWindow" parent="SafeArea/Layout" instance=ExtResource("3_window")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+window_id = &"map"
+title = "Karte"
+toggle_action = &"toggle_map"
+exclusive = true
+
+[node name="ActionBars" type="VBoxContainer" parent="SafeArea/Layout"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="ActionBar2" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+script = ExtResource("2_bar")
+
+[node name="ActionBar1" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+script = ExtResource("2_bar")
+action_prefix = "action_bar_1_slot_"
+
+[node name="BottomRight" type="VBoxContainer" parent="SafeArea/Layout"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+
+[node name="BagWindow" parent="SafeArea/Layout/BottomRight" instance=ExtResource("3_window")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(360, 280)
+size_flags_horizontal = 8
+window_id = &"bags"
+title = "Taschen"
+toggle_action = &"toggle_bags"
+
+[node name="MicroMenu" type="HBoxContainer" parent="SafeArea/Layout/BottomRight"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+
+[node name="CharacterButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "C"
+
+[node name="SpellbookButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "Z"
+
+[node name="TalentsButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "T"
+
+[node name="MapButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "K"
+
+[node name="GameMenuButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "S"
+
+[node name="BagBar" type="HBoxContainer" parent="SafeArea/Layout/BottomRight"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+
+[node name="BagSlot4" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Taschenplatz (leer)"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+
+[node name="BagSlot3" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Taschenplatz (leer)"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+
+[node name="BagSlot2" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Taschenplatz (leer)"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+
+[node name="BagSlot1" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Taschenplatz (leer)"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+
+[node name="BackpackButton" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "R"
+
+[node name="GameMenu" parent="." instance=ExtResource("4_menu")]
+unique_name_in_owner = true
+layout_mode = 1
