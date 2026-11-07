@@ -84,6 +84,20 @@ func request_jump() -> void:
 	_jump_requested = true
 
 
+## Setzt die Figur sofort an eine Stelle, z. B. Teleport im Entwickler-Panel
+## oder Wiedereinstieg (#15). Übernommen wird nur die Drehung um die
+## Hochachse; Schwung und Fallgeschwindigkeit verfallen. Nur auf der Instanz
+## mit Authority aufrufen; der MultiplayerSynchronizer (#30) überträgt die
+## neue Position an die anderen.
+func teleport_to(target: Transform3D) -> void:
+	var forward := -target.basis.z
+	global_position = target.origin
+	rotation = Vector3(0.0, atan2(-forward.x, -forward.z), 0.0)
+	velocity = Vector3.ZERO
+	_air_velocity = Vector3.ZERO
+	_jump_requested = false
+
+
 ## Dreht die Figur um die Hochachse (Bogenmaß, positiv = nach links).
 func add_yaw(radians: float) -> void:
 	rotation.y = wrapf(rotation.y + radians, -PI, PI)
