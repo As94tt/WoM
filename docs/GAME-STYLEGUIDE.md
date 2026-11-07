@@ -82,6 +82,24 @@ Jede Region erhält einen kleinen **Biome-Baukasten**:
 
 Kulturen erhalten eigenständige Bildsprachen. Nicht einfach bekannte WoW-Städte oder -Gebiete nachbauen.
 
+### Graubox-Startwelt (Ticket #15)
+
+Solange Graubox gilt, unterscheiden sich die Gebiete der Startwelt nur über ihre **Bodenfarbe**. Diese Farben sind Spielwelt-Platzhalter (keine UI-Farben, keine endgültige Palette) und stehen als Daten in der Gebiets-Resource (`ZoneData.ground_color` in `game/data/zones/*.tres`), nicht im Code. Farben für Gelände außerhalb der Gebiete, Berghänge und Wege stehen in `game/data/world/startwelt.tres`.
+
+| Gebiet | Bodenfarbe (Graubox) |
+|---|---|
+| Startdorf | sandfarben |
+| Trainingsgelände | helles Graubeige |
+| Bewegungsparcours | bläuliches Grau (hebt sich von den grauen Testelementen ab) |
+| Wolfswiese | hellgrün |
+| Banditenstraße, Banditenlager | braun (Lager etwas dunkler) |
+| Dunkler Wald | dunkelgrün |
+| Boss-Arena | dunkelrot |
+
+Platzhalter-Pfähle für fehlende Inhalte (NPC, Questgeber, Übungspuppe, Spawn, Gegner, Boss, Bereich) haben je Art eine eigene Farbe in `game/data/world/placeholders/*.tres` und tragen immer eine Beschriftung („NPC: Händlerin“), Farbe ist also nie das einzige Merkmal. Sie sind nur im Entwicklungsmodus sichtbar.
+
+Wahrzeichen zur Orientierung: hoher Turm im Startdorf, großer einzelner Baum auf der Wolfswiese, Wachturm im Banditenlager. Diese Rollen bleiben, wenn die Graubox durch echte Grafik ersetzt wird.
+
 ## 8. Kreaturen und Gegner
 
 - Pro Gegnertyp eine dominante Silhouette mit gut lesbarem Kopf-/Waffenbereich.

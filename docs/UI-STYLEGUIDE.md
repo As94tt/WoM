@@ -82,6 +82,7 @@ Alle Spielfarben müssen in sämtlichen Szenen **dieselbe Bedeutung** haben. Wer
 - **Lizenznachweis:** Dateiname, Urheber, genaue Lizenz und Lizenzdatei im Repository dokumentieren.
 - **Größenhierarchie (Ausgangswerte, bei Tests anpassen):** Screen-Titel 30–36 px, Fenstertitel 22–26 px, Untertitel 18–20 px, Fließtext 16–18 px, kompakte Labels mindestens 14 px.
 - **Hauptmenü-Titel:** 64 px (eigener Wert, bewusst größer als der Screen-Titel; nur für den Spieltitel im Hauptmenü).
+- **Gebietsnamen-Einblendung:** 48 px mit Kontur, darunter Stufenbereich 20 px (eigene Werte; nur für die kurze Einblendung beim Betreten eines Gebiets, die über der 3D-Welt lesbar sein muss).
 - Keine allein durch Versalien, geringe Größe oder verzierte Fonts schwer lesbaren Informationstexte.
 
 ## 5. Komponentenstandards
@@ -154,6 +155,9 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `SlotHotkey` | `Label` | Schriftgröße 14 px | Taste unten rechts im Aktionsslot (4 px Abstand zum Rand) |
 | `SlotRow` | `HBoxContainer` | Abstand 4 px | Slots einer Aktionsleiste, Menüleiste, Taschenleiste |
 | `SlotColumn` | `VBoxContainer` | Abstand 4 px | übereinanderliegende Aktionsleisten |
+| `ZoneBannerTitle` | `Label` | Schriftgröße 48 px, helle Schrift mit 8-px-Kontur in dunkler Konturfarbe | Gebietsname der Einblendung beim Betreten eines Gebiets (#15) |
+| `ZoneBannerSubtitle` | `Label` | Schriftgröße 20 px, gedämpft helle Schrift mit 6-px-Kontur | Stufenbereich unter dem Gebietsnamen („Stufe 4–6“); entfällt bei Gebieten ohne Stufenbereich |
+| `MapZoneLabel` | `Label` | Schriftgröße 18 px, helle Schrift mit 6-px-Kontur | Gebietsnamen auf der Karte (über dem Kartenbild lesbar, egal welche Bodenfarbe darunter liegt) |
 
 **Basistypen ohne Variation:**
 
@@ -161,6 +165,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 - `Button`: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert und Fokus. Fokus ist ein zusätzlicher heller Rahmen über dem jeweiligen Zustand. Innenabstand 16 px horizontal / 12 px vertikal; damit sind Buttons mit Standardschrift 47 px hoch und erfüllen die **Mindesthöhe von 40 px** aus Abschnitt 6.
 - `Panel` und `PanelContainer`: eine `StyleBoxFlat` mit 16 px Innenabstand.
 - `TooltipPanel` / `TooltipLabel`: Tooltip mit eigener `StyleBoxFlat` (8 px horizontal / 4 px vertikal Innenabstand, 1-px-Rahmen), Schriftgröße 16 px. Gilt für alle `tooltip_text` im Spiel (z. B. Menüleiste: „Charakter (C)“).
+- `MapMarker` (eigener Theme-Typ ohne Basistyp, gelesen von `scripts/ui/map_marker.gd`, das die Symbole selbst zeichnet): Farben `player_color` (eigener Pfeil, hell), `respawn_color` (Wiedereinstiegspunkt, mittelgrau), `outline_color` (Kontur, dunkel); Konstanten `player_size` 28 px, `respawn_size` 22 px, `outline_width` 2 px. Zweites Erkennungsmerkmal ist die Form (Pfeil bzw. Kreis mit Kreuz) und beim Wiedereinstiegspunkt ein Tooltip.
 - `LineEdit`: eigene `StyleBoxFlat` für normal und deaktiviert (`read_only`, bei `editable = false`), Fokus wie `Button`. Innenabstand 12 px horizontal / 8 px vertikal, Schriftgröße 16 px, gedämpfte Farbe für Platzhaltertext.
 
 **Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“ und „Erstellen“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px, Namensfeld: 320 px, Meldungszeile unter dem Namensfeld: 480 × 44 px für zwei Zeilen; Spielmenü-Buttons: 280 px; HUD siehe unten).
@@ -182,6 +187,12 @@ Szene `game/scenes/ui/hud.tscn` mit Teilen in `game/scenes/ui/hud/`. Außenrand 
 | Spielmenü | `DimOverlay` + `DialogPanel` mit `WindowTitle` und `ButtonList`; nicht belegte Punkte deaktiviert | Bildschirmmitte |
 
 Fenstergrößen und Plätze: Charakter und Zauberbuch 400 × 520 px links nebeneinander (feste Reihenfolge, 12 px Abstand, 128 px vom oberen Rand, unter Namens- und Infozeile); Talente 640 × 520 px mittig im Platz rechts davon; Karte ca. 70 % des Bildschirms mittig; Taschen 360 × 280 px unten rechts über Menü- und Taschenleiste. Bei 16:9 überlappen sich gleichzeitig offene Fenster nicht; die Karte schließt beim Öffnen alle anderen Fenster.
+
+**Gebietsnamen-Einblendung (#15):** `game/scenes/ui/hud/zone_banner.tscn`, Teil von `hud.tscn`. Oben mittig, 160 px vom oberen Rand: Gebietsname (`ZoneBannerTitle`), darunter Stufenbereich (`ZoneBannerSubtitle`). Blendet in 0,5 s ein, bleibt 2,5 s und blendet in 1,5 s aus (Deckkraft, keine Farbänderung). Fängt keine Mausklicks ab.
+
+**Karte (#15):** Inhalt des Kartenfensters ist `game/scenes/ui/hud/map_view.tscn`: quadratisches Kartenbild (von oben gerendert, Norden oben), mittig im Fenster, darüber Gebietsnamen (`MapZoneLabel`), Wiedereinstiegspunkte und eigene Position (`MapMarker`). Der Fenstertitel nennt das aktuelle Gebiet („Karte – Wolfswiese“). Ohne Grafikausgabe steht statt des Bilds der `HintText` „Kartenbild nicht verfügbar“. Mitspieler als Punkte in Klassenfarbe folgen mit #30.
+
+**Entwickler-Panel (#15, nur Debug-Builds):** `game/scenes/ui/dev/dev_panel.tscn`, F10. `PanelContainer` 360 px breit am rechten Rand (128 px von oben, 200 px Abstand unten), Titel `WindowTitle`, Abschnittsüberschriften `Subtitle`, Einträge in `ButtonList` (Standard-`Button`, `CheckBox` mit Godot-Standardaussehen, Infozeilen `SmallLabel`), bei Bedarf mit Bildlaufleiste. Werkzeug für Entwickler, kein Teil des Spiel-Interfaces; spätere Tickets (#19) ergänzen eigene Abschnitte.
 
 **Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Dieselbe Farbe färbt in der Charakterauswahl und -erstellung auch das Platzhaltermodell (Kapsel) in der 3D-Vorschau. Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
 
