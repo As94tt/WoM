@@ -1,12 +1,12 @@
 extends Control
 ## Charakterauswahl (Ticket #6). Zeigt die lokal gespeicherten Charaktere,
-## das Platzhaltermodell des gewählten Charakters und führt in die Testwelt.
+## das Platzhaltermodell des gewählten Charakters und führt in die Startwelt (#15).
 ## Rein lokal: Charaktere liegen in user://characters/ auf dem eigenen PC,
 ## nichts wird synchronisiert. In M1 überträgt der Client nur den gewählten
 ## Charakter (CharacterData.to_dict()) an den Host.
 
 const CHARACTER_ENTRY := preload("res://scenes/ui/character_entry.tscn")
-const TEST_WORLD_SCENE := "res://scenes/test_world.tscn"
+const WORLD_SCENE := "res://scenes/world/world.tscn"
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 const CHARACTER_CREATION_SCENE := "res://scenes/ui/character_creation.tscn"
 
@@ -119,7 +119,7 @@ func _enter_world() -> void:
 	c.last_played = int(Time.get_unix_time_from_system())
 	CharacterStore.save(c)
 	GameSession.selected_character = c
-	get_tree().change_scene_to_file(TEST_WORLD_SCENE)
+	get_tree().change_scene_to_file(WORLD_SCENE)
 
 
 func _on_back_pressed() -> void:

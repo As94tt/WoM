@@ -1,0 +1,111 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/tent.tscn" id="1_tent"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/watchtower.tscn" id="2_watchtower"]
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="3_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="4_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/spawn.tres" id="5_spawn"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="6_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/banditenlager.tres" id="7_banditenlager"]
+
+[sub_resource type="StandardMaterial3D" id="Material_fence"]
+albedo_color = Color(0.5, 0.42, 0.34, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(180, 80, 130)
+
+[node name="Banditenlager" type="Node3D"]
+script = ExtResource("6_world_zone")
+data = ExtResource("7_banditenlager")
+flat_ground = true
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Palisade" type="CSGCombiner3D" parent="."]
+position = Vector3(10, 0, 0)
+use_collision = true
+
+[node name="Outer" type="CSGBox3D" parent="Palisade"]
+position = Vector3(0, 1.3, 0)
+size = Vector3(110, 2.6, 90)
+material = SubResource("Material_fence")
+
+[node name="Inner" type="CSGBox3D" parent="Palisade"]
+position = Vector3(0, 1.3, 0)
+operation = 2
+size = Vector3(109.4, 3.6, 89.4)
+
+[node name="Gate1" type="CSGBox3D" parent="Palisade"]
+position = Vector3(0, 1.3, 45)
+operation = 2
+size = Vector3(10, 4.6, 2)
+
+[node name="Gate2" type="CSGBox3D" parent="Palisade"]
+position = Vector3(0, 1.3, -45)
+operation = 2
+size = Vector3(10, 4.6, 2)
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="Tent" parent="Buildings" instance=ExtResource("1_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -27)
+
+[node name="Tent2" parent="Buildings" instance=ExtResource("1_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -3)
+
+[node name="Tent3" parent="Buildings" instance=ExtResource("1_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 21)
+
+[node name="Tent4" parent="Buildings" instance=ExtResource("1_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 21)
+
+[node name="Tent5" parent="Buildings" instance=ExtResource("1_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, -7)
+
+[node name="Watchtower" parent="Buildings" instance=ExtResource("2_watchtower")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54, 0, -33)
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 53)
+script = ExtResource("3_teleport_point")
+display_name = "Banditenlager"
+order = 60
+
+[node name="Spawn" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(-12, 0, -20)
+kind = ExtResource("5_spawn")
+text = "Bandit, Schütze, Hexer (4–6), Gruppe"
+spawn_group_id = &"banditenlager_gruppe_1"
+area_radius = 8
+
+[node name="Spawn2" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(-12, 0, 13)
+kind = ExtResource("5_spawn")
+text = "Bandit, Schütze, Hexer (4–6), Gruppe"
+spawn_group_id = &"banditenlager_gruppe_2"
+area_radius = 8
+
+[node name="Spawn3" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(30, 0, 5)
+kind = ExtResource("5_spawn")
+text = "Bandit, Schütze, Hexer (4–6), Gruppe"
+spawn_group_id = &"banditenlager_gruppe_3"
+area_radius = 8
+
+[node name="Spawn4" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(10, 0, 0)
+kind = ExtResource("5_spawn")
+text = "Patrouille (4–6), Südtor bis Nordtor"
+spawn_group_id = &"banditenlager_patrouille"
+area_radius = 4

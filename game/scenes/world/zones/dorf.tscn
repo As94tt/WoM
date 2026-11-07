@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/tower.tscn" id="1_tower"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/house.tscn" id="2_house"]
+[ext_resource type="Script" path="res://scripts/world/world_spawn_point.gd" id="3_world_spawn_point"]
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="4_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="5_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/npc.tres" id="6_npc"]
+[ext_resource type="Resource" path="res://data/world/placeholders/quest_giver.tres" id="7_quest_giver"]
+[ext_resource type="Script" path="res://scripts/world/class_trainer_row.gd" id="8_class_trainer_row"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="9_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/startdorf.tres" id="10_startdorf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(200, 80, 170)
+
+[node name="Startdorf" type="Node3D"]
+script = ExtResource("9_world_zone")
+data = ExtResource("10_startdorf")
+flat_ground = true
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="Tower" parent="Buildings" instance=ExtResource("1_tower")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -15)
+
+[node name="House" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 0, -40)
+
+[node name="House2" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -43)
+
+[node name="House3" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -60, 0, 17)
+
+[node name="House4" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 50, 0, 17)
+
+[node name="House5" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -20, 0, 43)
+
+[node name="House6" parent="Buildings" instance=ExtResource("2_house")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 25, 0, 45)
+
+[node name="StartPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("3_world_spawn_point")
+display_name = "Startdorf"
+is_start = true
+
+[node name="RespawnPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
+script = ExtResource("3_world_spawn_point")
+display_name = "Startdorf"
+is_respawn = true
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+script = ExtResource("4_teleport_point")
+display_name = "Startdorf"
+order = 10
+
+[node name="Npc" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(15, 0, -17)
+kind = ExtResource("6_npc")
+text = "Händlerin"
+
+[node name="QuestGiver" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(0, 0, -20)
+kind = ExtResource("7_quest_giver")
+text = "Platz für späteren Questgeber"
+
+[node name="Npc2" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(20, 0, 7)
+kind = ExtResource("6_npc")
+text = "Dorfbewohnerin (einfaches Gespräch)"
+
+[node name="Npc3" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(-10, 0, -55)
+kind = ExtResource("6_npc")
+text = "Wache 1 (Patrouille am Nordweg)"
+
+[node name="Npc4" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(60, 0, -19)
+kind = ExtResource("6_npc")
+text = "Wache 2 (Patrouille am Ostweg)"
+
+[node name="ClassTrainers" type="Node3D" parent="Placeholders"]
+position = Vector3(-16, 0, 19)
+script = ExtResource("8_class_trainer_row")
+kind = ExtResource("6_npc")
