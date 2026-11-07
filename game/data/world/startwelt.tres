@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WorldData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/world_data.gd" id="1_world"]
+
+[resource]
+script = ExtResource("1_world")
+map_half_extent = 300.0
+playable_half_extent = 280.0
+terrain_half_extent = 340.0
+border_height = 35.0
+border_width = 40.0
+terrain_cell_size = 4.0
+flatten_margin = 25.0
+fallback_ground_color = Color(0.5, 0.5, 0.5, 1)
+mountain_ground_color = Color(0.44, 0.43, 0.42, 1)
+path_color = Color(0.74, 0.68, 0.56, 1)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ZoneData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+id = &"trainingsgelaende"
+display_name = "Trainingsgelände"
+level_min = 0
+level_max = 0
+ground_color = Color(0.74, 0.7, 0.62, 1)
+order = 20
