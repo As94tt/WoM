@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="1_heil"]
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="2_heil"]
+
+[sub_resource type="Resource" id="Resource_heil_mod"]
+script = ExtResource("2_heil")
+kind = 3
+percent = 50.0
+
+[resource]
+script = ExtResource("1_heil")
+id = &"test_heilempfang"
+display_name = "Heilempfang"
+description = "+50 % erhaltene Heilung. Testaura: Heilmodifikator des Ziels (#34)."
+category = 1
+duration = 60.0
+amount_modifiers = Array[ExtResource("2_heil")]([SubResource("Resource_heil_mod")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

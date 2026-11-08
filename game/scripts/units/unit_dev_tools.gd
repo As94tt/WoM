@@ -2,7 +2,7 @@ class_name UnitDevTools
 extends Resource
 ## Testwerte für den Abschnitt „Einheiten“ im Entwickler-Panel (Ticket #31).
 ## Liegt in res://data/units/dev_tools.tres. Nur für Entwickler, kein Teil des
-## Spiels: Bis Schaden und Heilung aus #34 kommen, testet man damit Rahmen,
+## Spiels: feste Beträge ohne Würfel und Rüstung (#34) für Rahmen,
 ## Namensplaketten und Übungspuppen.
 
 ## „Ziel: Schaden“: Prozent des maximalen Lebens.

@@ -788,8 +788,9 @@ func _rpc_unit_dev_action(target_path: NodePath, action: String, value: Variant)
 
 
 ## Host: Aktion ausführen. Schaden und Heilung laufen seit #32 über
-## Combat.deal_damage bzw. Combat.heal (physisch, ohne Rüstung und Würfel),
-## wie später echte Treffer (#34): Kampfzustand, Schilde, Auslöser, Kampftext.
+## Combat.deal_damage bzw. Combat.heal (physisch, bewusst ohne Rüstung und
+## Würfel, damit die Beträge fest sind): Kampfzustand, Schilde, Auslöser,
+## Kampftext und Kampflog wie bei echten Treffern (#34, Combat.roll_damage).
 func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Variant) -> void:
 	var stats := target.get_stats()
 	if stats == null:

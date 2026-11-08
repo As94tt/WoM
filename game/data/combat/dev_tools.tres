@@ -35,6 +35,8 @@
 [ext_resource type="Resource" path="res://data/auras/test_pro_wirker.tres" id="33_7hno4"]
 [ext_resource type="Resource" path="res://data/auras/test_dauerhaft.tres" id="34_7l21f"]
 [ext_resource type="Script" path="res://scripts/combat/combat_dev_tools.gd" id="35_bvae1"]
+[ext_resource type="Resource" path="res://data/auras/test_feuermacht.tres" id="36_feuer"]
+[ext_resource type="Resource" path="res://data/auras/test_heilempfang.tres" id="37_heil"]
 
 [sub_resource type="Resource" id="Resource_05c6t"]
 script = ExtResource("5_cd4r6")
@@ -488,6 +490,26 @@ label = "Wert-Modifikatoren: Segen der Stärke"
 group = "Auren"
 effects = Array[ExtResource("2_2xke3")]([SubResource("Resource_jsms8")])
 
+[sub_resource type="Resource" id="Resource_feuer_apply"]
+script = ExtResource("11_h7tq3")
+aura = ExtResource("36_feuer")
+
+[sub_resource type="Resource" id="Resource_feuer_entry"]
+script = ExtResource("1_s14yd")
+label = "Schadensmodifikator: Feuermacht (+25 % Feuer)"
+group = "Auren"
+effects = Array[ExtResource("2_2xke3")]([SubResource("Resource_feuer_apply")])
+
+[sub_resource type="Resource" id="Resource_heil_apply"]
+script = ExtResource("11_h7tq3")
+aura = ExtResource("37_heil")
+
+[sub_resource type="Resource" id="Resource_heil_entry"]
+script = ExtResource("1_s14yd")
+label = "Heilmodifikator: Heilempfang (+50 % erhaltene Heilung)"
+group = "Auren"
+effects = Array[ExtResource("2_2xke3")]([SubResource("Resource_heil_apply")])
+
 [sub_resource type="Resource" id="Resource_qcu1y"]
 script = ExtResource("11_h7tq3")
 aura = ExtResource("24_a77me")
@@ -611,4 +633,4 @@ effects = Array[ExtResource("2_2xke3")]([SubResource("Resource_1ernr")])
 
 [resource]
 script = ExtResource("35_bvae1")
-entries = Array[ExtResource("1_s14yd")]([SubResource("Resource_1d8jh"), SubResource("Resource_iryww"), SubResource("Resource_84g0j"), SubResource("Resource_lhlbn"), SubResource("Resource_j5tm7"), SubResource("Resource_1dnkd"), SubResource("Resource_aeh0q"), SubResource("Resource_6kdv8"), SubResource("Resource_stfjk"), SubResource("Resource_y6vvr"), SubResource("Resource_u8ien"), SubResource("Resource_ms6dj"), SubResource("Resource_vqr5w"), SubResource("Resource_46vet"), SubResource("Resource_ai8i4"), SubResource("Resource_rp0yk"), SubResource("Resource_3awa8"), SubResource("Resource_u7joo"), SubResource("Resource_je6f1"), SubResource("Resource_3jkya"), SubResource("Resource_g05cg"), SubResource("Resource_p6l23"), SubResource("Resource_41dk7"), SubResource("Resource_ya6kd"), SubResource("Resource_ixwgt"), SubResource("Resource_i3uaj"), SubResource("Resource_2j1mp"), SubResource("Resource_veq4b"), SubResource("Resource_t0ltj"), SubResource("Resource_wal84"), SubResource("Resource_j584s"), SubResource("Resource_7u3se"), SubResource("Resource_ahn41"), SubResource("Resource_w4ggs"), SubResource("Resource_fwf8r"), SubResource("Resource_ligyw"), SubResource("Resource_vlnwu"), SubResource("Resource_3q1pa"), SubResource("Resource_kkifu"), SubResource("Resource_rw6en"), SubResource("Resource_owc7p"), SubResource("Resource_wuvfl"), SubResource("Resource_vwrcn"), SubResource("Resource_v81xt"), SubResource("Resource_hm62n"), SubResource("Resource_lt2ct")])
+entries = Array[ExtResource("1_s14yd")]([SubResource("Resource_1d8jh"), SubResource("Resource_iryww"), SubResource("Resource_84g0j"), SubResource("Resource_lhlbn"), SubResource("Resource_j5tm7"), SubResource("Resource_1dnkd"), SubResource("Resource_aeh0q"), SubResource("Resource_6kdv8"), SubResource("Resource_stfjk"), SubResource("Resource_y6vvr"), SubResource("Resource_u8ien"), SubResource("Resource_ms6dj"), SubResource("Resource_vqr5w"), SubResource("Resource_46vet"), SubResource("Resource_ai8i4"), SubResource("Resource_rp0yk"), SubResource("Resource_3awa8"), SubResource("Resource_u7joo"), SubResource("Resource_je6f1"), SubResource("Resource_3jkya"), SubResource("Resource_g05cg"), SubResource("Resource_p6l23"), SubResource("Resource_41dk7"), SubResource("Resource_ya6kd"), SubResource("Resource_ixwgt"), SubResource("Resource_i3uaj"), SubResource("Resource_2j1mp"), SubResource("Resource_veq4b"), SubResource("Resource_t0ltj"), SubResource("Resource_wal84"), SubResource("Resource_j584s"), SubResource("Resource_7u3se"), SubResource("Resource_ahn41"), SubResource("Resource_w4ggs"), SubResource("Resource_feuer_entry"), SubResource("Resource_heil_entry"),SubResource("Resource_fwf8r"), SubResource("Resource_ligyw"), SubResource("Resource_vlnwu"), SubResource("Resource_3q1pa"), SubResource("Resource_kkifu"), SubResource("Resource_rw6en"), SubResource("Resource_owc7p"), SubResource("Resource_wuvfl"), SubResource("Resource_vwrcn"), SubResource("Resource_v81xt"), SubResource("Resource_hm62n"), SubResource("Resource_lt2ct")])

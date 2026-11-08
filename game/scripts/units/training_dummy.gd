@@ -26,6 +26,16 @@ extends Unit
 
 enum Kind { DAMAGE, HEALING }
 
+## Spalte in uebungspuppen.csv → Wert im Wertesystem (#34).
+const DEFENSE_COLUMNS := {
+	"ruestung": &"armor",
+	"zauberschutz": &"spell_ward",
+	"ausweichen": &"dodge",
+	"parieren": &"parry",
+	"blocken": &"block",
+	"blockwert": &"block_value",
+}
+
 ## Zeile in uebungspuppen.csv. Beim Erzeugen gesetzt (Host) und übertragen.
 @export var dummy_id: StringName = &"":
 	set(value):
@@ -149,8 +159,17 @@ func get_base_level() -> int:
 	return int(_row.get_value("stufe", 1)) if _row != null else 1
 
 
+## Feste Grundwerte aus uebungspuppen.csv: Leben und seit #34 die
+## Abwehrwerte (Rüstung, Zauberschutz, Ausweichen, Parieren, Blocken,
+## Blockwert); leere Zellen lassen das Wertesystem rechnen.
 func get_stat_base_overrides() -> Dictionary:
-	return {&"max_health": float(_row.get_value("leben", 1))} if _row != null else {}
+	if _row == null:
+		return {}
+	var result := {&"max_health": float(_row.get_value("leben", 1))}
+	for column: String in DEFENSE_COLUMNS:
+		if not _row.is_blank(column):
+			result[DEFENSE_COLUMNS[column]] = float(_row.get_value(column, 0.0))
+	return result
 
 
 ## Immunitäten aus uebungspuppen.csv (#32), z. B. die Bosspuppe.
