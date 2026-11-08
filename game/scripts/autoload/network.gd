@@ -238,10 +238,16 @@ func leave_session() -> void:
 	_close_peer()
 
 
+## Der eigene Charakter dieser Sitzung (auch der Testcharakter der
+## Startparameter) oder null.
+func get_local_character() -> CharacterData:
+	return _local_character if _local_character != null else GameSession.selected_character
+
+
 ## Speichert den eigenen Charakter lokal (regelmäßig, beim Verlassen und
 ## Beenden). Testcharaktere werden nie gespeichert.
 func save_local_character() -> void:
-	var c := _local_character if _local_character != null else GameSession.selected_character
+	var c := get_local_character()
 	if c == null or c.is_temporary:
 		return
 	c.last_played = int(Time.get_unix_time_from_system())

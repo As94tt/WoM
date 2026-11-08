@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/player/player_input.gd" id="2_input"]
 [ext_resource type="Script" path="res://scripts/player/player_camera.gd" id="3_camera"]
 [ext_resource type="Script" path="res://scripts/stats/character_stats.gd" id="4_stats"]
+[ext_resource type="Script" path="res://scripts/abilities/player_abilities.gd" id="5_abilities"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -177,3 +178,6 @@ script = ExtResource("4_stats")
 root_path = NodePath("..")
 delta_interval = 0.1
 replication_config = SubResource("Replication_stats")
+
+[node name="Abilities" type="Node" parent="."]
+script = ExtResource("5_abilities")
