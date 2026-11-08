@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ZoneData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+id = &"dunkler_wald"
+display_name = "Dunkler Wald"
+level_min = 5
+level_max = 7
+ground_color = Color(0.22, 0.4, 0.22, 1)
+order = 70

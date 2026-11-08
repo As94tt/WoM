@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ZoneData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/zone_data.gd" id="1_zone"]
+
+[resource]
+script = ExtResource("1_zone")
+id = &"wolfswiese"
+display_name = "Wolfswiese"
+level_min = 1
+level_max = 3
+ground_color = Color(0.56, 0.76, 0.42, 1)
+order = 40

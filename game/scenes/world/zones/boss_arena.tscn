@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/world_spawn_point.gd" id="1_world_spawn_point"]
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="2_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="3_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/boss.tres" id="4_boss"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="5_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/boss_arena.tres" id="6_boss_arena"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.55, 0.5, 0.48, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(180, 80, 130)
+
+[node name="BossArena" type="Node3D"]
+script = ExtResource("5_world_zone")
+data = ExtResource("6_boss_arena")
+flat_ground = true
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="ArenaWall" type="CSGCombiner3D" parent="."]
+position = Vector3(-10, 0, -10)
+use_collision = true
+
+[node name="Outer" type="CSGCylinder3D" parent="ArenaWall"]
+position = Vector3(0, 2, 0)
+radius = 31.5
+height = 4.0
+sides = 40
+material = SubResource("Material_wall")
+
+[node name="Inner" type="CSGCylinder3D" parent="ArenaWall"]
+position = Vector3(0, 2, 0)
+operation = 2
+radius = 30.0
+height = 5.0
+sides = 40
+
+[node name="Entrance" type="CSGBox3D" parent="ArenaWall"]
+position = Vector3(0, 2, 30.75)
+operation = 2
+size = Vector3(8, 6, 4)
+
+[node name="RespawnPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 38, 0, 20)
+script = ExtResource("1_world_spawn_point")
+display_name = "Boss-Arena"
+is_respawn = true
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 29)
+script = ExtResource("2_teleport_point")
+display_name = "Boss-Eingang"
+order = 90
+
+[node name="Boss" parent="Placeholders" instance=ExtResource("3_placeholder_post")]
+position = Vector3(-10, 0, -10)
+kind = ExtResource("4_boss")
+text = "Banditenhauptmann (Boss 10), feste Stelle, Leine ca. 30 m"

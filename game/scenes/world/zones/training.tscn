@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="1_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="2_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/dummy.tres" id="3_dummy"]
+[ext_resource type="Resource" path="res://data/world/placeholders/area.tres" id="4_area"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="5_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/trainingsgelaende.tres" id="6_trainingsgelaende"]
+
+[sub_resource type="StandardMaterial3D" id="Material_fence"]
+albedo_color = Color(0.55, 0.5, 0.45, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(220, 80, 75)
+
+[node name="Trainingsgelaende" type="Node3D"]
+script = ExtResource("5_world_zone")
+data = ExtResource("6_trainingsgelaende")
+flat_ground = true
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Fence" type="CSGCombiner3D" parent="."]
+position = Vector3(0, 0, 1.5)
+use_collision = true
+
+[node name="Outer" type="CSGBox3D" parent="Fence"]
+position = Vector3(0, 0.8, 0)
+size = Vector3(140, 1.6, 58)
+material = SubResource("Material_fence")
+
+[node name="Inner" type="CSGBox3D" parent="Fence"]
+position = Vector3(0, 0.8, 0)
+operation = 2
+size = Vector3(139.4, 2.6, 57.4)
+
+[node name="Gate1" type="CSGBox3D" parent="Fence"]
+position = Vector3(-70, 0.8, -3)
+operation = 2
+size = Vector3(2, 3.6, 10)
+
+[node name="Gate2" type="CSGBox3D" parent="Fence"]
+position = Vector3(1, 0.8, 29)
+operation = 2
+size = Vector3(10, 3.6, 2)
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -62, 0, -1.5)
+script = ExtResource("1_teleport_point")
+display_name = "Trainingsgelände"
+order = 20
+
+[node name="Dummy" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-50, 0, -15.5)
+kind = ExtResource("3_dummy")
+text = "Schadenspuppe Stufe 1"
+
+[node name="Dummy2" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-44, 0, -15.5)
+kind = ExtResource("3_dummy")
+text = "Schadenspuppe Stufe 10"
+
+[node name="Dummy3" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-38, 0, -15.5)
+kind = ExtResource("3_dummy")
+text = "Schadenspuppe Stufe 30"
+
+[node name="Dummy4" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-26, 0, -15.5)
+kind = ExtResource("3_dummy")
+text = "Heilpuppe"
+
+[node name="Dummy5" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-50, 0, 18.5)
+kind = ExtResource("3_dummy")
+text = "Angriffspuppe 1"
+
+[node name="Dummy6" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-44, 0, 18.5)
+kind = ExtResource("3_dummy")
+text = "Angriffspuppe 2"
+
+[node name="Dummy7" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-38, 0, 18.5)
+kind = ExtResource("3_dummy")
+text = "Angriffspuppe 3"
+
+[node name="Area" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(25, 0, 0.5)
+kind = ExtResource("4_area")
+text = "Freie Fläche für Flächenzauber"
+area_radius = 18

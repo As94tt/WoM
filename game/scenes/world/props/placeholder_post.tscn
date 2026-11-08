@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/placeholder_post.gd" id="1_post"]
+
+[sub_resource type="CylinderMesh" id="Mesh_pole"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 3.0
+radial_segments = 8
+rings = 1
+
+[node name="PlaceholderPost" type="Node3D"]
+script = ExtResource("1_post")
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+layers = 2
+position = Vector3(0, 1.5, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_pole")
+
+[node name="Label" type="Label3D" parent="."]
+unique_name_in_owner = true
+layers = 2
+position = Vector3(0, 3.6, 0)
+visibility_range_end = 150.0
+pixel_size = 0.015
+billboard = 1
+text = "Platzhalter"
+font_size = 40
+outline_size = 10

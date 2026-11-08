@@ -1,0 +1,185 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/forest_scatter.gd" id="1_forest_scatter"]
+[ext_resource type="Script" path="res://scripts/world/forest_clearing.gd" id="2_forest_clearing"]
+[ext_resource type="Script" path="res://scripts/world/terrain_hill.gd" id="3_terrain_hill"]
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="4_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="5_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/enemy.tres" id="6_enemy"]
+[ext_resource type="Resource" path="res://data/world/placeholders/spawn.tres" id="7_spawn"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="8_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/dunkler_wald.tres" id="9_dunkler_wald"]
+
+[sub_resource type="StandardMaterial3D" id="Material_trunk"]
+albedo_color = Color(0.38, 0.31, 0.25, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_trunk"]
+material = SubResource("Material_trunk")
+top_radius = 0.35
+bottom_radius = 0.5
+height = 6.0
+radial_segments = 8
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="Material_crown"]
+albedo_color = Color(0.16, 0.3, 0.16, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_crown"]
+material = SubResource("Material_crown")
+radius = 3.0
+height = 5.0
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(420, 80, 240)
+
+[node name="DunklerWald" type="Node3D"]
+script = ExtResource("8_world_zone")
+data = ExtResource("9_dunkler_wald")
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Hills" type="Node3D" parent="."]
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="Forest" type="Node3D" parent="."]
+script = ExtResource("1_forest_scatter")
+area_size = Vector2(412, 232)
+tree_count = 1400
+min_spacing = 5.0
+trunk_mesh = SubResource("Mesh_trunk")
+crown_mesh = SubResource("Mesh_crown")
+
+[node name="GrizzlyClearing" type="Marker3D" parent="Forest"]
+position = Vector3(70, 0, -35)
+script = ExtResource("2_forest_clearing")
+radius = 20
+
+[node name="GrauschnauzeClearing" type="Marker3D" parent="Forest"]
+position = Vector3(-60, 0, -60)
+script = ExtResource("2_forest_clearing")
+radius = 10
+
+[node name="WolfClearing" type="Marker3D" parent="Forest"]
+position = Vector3(-150, 0, 60)
+script = ExtResource("2_forest_clearing")
+radius = 6
+
+[node name="WolfClearing2" type="Marker3D" parent="Forest"]
+position = Vector3(-30, 0, 45)
+script = ExtResource("2_forest_clearing")
+radius = 6
+
+[node name="WolfClearing3" type="Marker3D" parent="Forest"]
+position = Vector3(130, 0, 60)
+script = ExtResource("2_forest_clearing")
+radius = 6
+
+[node name="WolfClearing4" type="Marker3D" parent="Forest"]
+position = Vector3(150, 0, -70)
+script = ExtResource("2_forest_clearing")
+radius = 6
+
+[node name="WolfClearing5" type="Marker3D" parent="Forest"]
+position = Vector3(-110, 0, -20)
+script = ExtResource("2_forest_clearing")
+radius = 6
+
+[node name="TeleportClearing" type="Marker3D" parent="Forest"]
+position = Vector3(15, 0, 90)
+script = ExtResource("2_forest_clearing")
+radius = 5
+
+[node name="Hill" type="Marker3D" parent="Hills"]
+position = Vector3(-90, 0, 30)
+script = ExtResource("3_terrain_hill")
+height = 8
+radius = 45
+
+[node name="Hill2" type="Marker3D" parent="Hills"]
+position = Vector3(130, 0, 30)
+script = ExtResource("3_terrain_hill")
+height = 9
+radius = 50
+
+[node name="Hill3" type="Marker3D" parent="Hills"]
+position = Vector3(30, 0, -82)
+script = ExtResource("3_terrain_hill")
+height = 6
+radius = 40
+
+[node name="Hill4" type="Marker3D" parent="Hills"]
+position = Vector3(-170, 0, -55)
+script = ExtResource("3_terrain_hill")
+height = 7
+radius = 35
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 90)
+script = ExtResource("4_teleport_point")
+display_name = "Dunkler Wald"
+order = 70
+
+[node name="Teleport2" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0, -17)
+script = ExtResource("4_teleport_point")
+display_name = "Grizzly"
+order = 80
+
+[node name="Enemy" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(70, 0, -35)
+kind = ExtResource("6_enemy")
+text = "Alter Grizzly (Elite 7), feste Stelle"
+
+[node name="Spawn" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(-60, 0, -60)
+kind = ExtResource("7_spawn")
+text = "Grauschnauze (Selten 6), seltener Spawn"
+spawn_group_id = &"dunkler_wald_grauschnauze"
+area_radius = 8
+
+[node name="Spawn2" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(-150, 0, 60)
+kind = ExtResource("7_spawn")
+text = "Wölfe (5–6), Füllung"
+spawn_group_id = &"dunkler_wald_woelfe"
+area_radius = 6
+
+[node name="Spawn3" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(-30, 0, 45)
+kind = ExtResource("7_spawn")
+text = "Wölfe (5–6), Füllung"
+spawn_group_id = &"dunkler_wald_woelfe"
+area_radius = 6
+
+[node name="Spawn4" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(130, 0, 60)
+kind = ExtResource("7_spawn")
+text = "Wölfe (5–6), Füllung"
+spawn_group_id = &"dunkler_wald_woelfe"
+area_radius = 6
+
+[node name="Spawn5" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(150, 0, -70)
+kind = ExtResource("7_spawn")
+text = "Wölfe (5–6), Füllung"
+spawn_group_id = &"dunkler_wald_woelfe"
+area_radius = 6
+
+[node name="Spawn6" parent="Placeholders" instance=ExtResource("5_placeholder_post")]
+position = Vector3(-110, 0, -20)
+kind = ExtResource("7_spawn")
+text = "Wölfe (5–6), Füllung"
+spawn_group_id = &"dunkler_wald_woelfe"
+area_radius = 6

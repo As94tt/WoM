@@ -1,0 +1,240 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="1_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="2_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/area.tres" id="3_area"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="4_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/bewegungsparcours.tres" id="5_bewegungsparcours"]
+
+[sub_resource type="StandardMaterial3D" id="Material_block"]
+albedo_color = Color(0.62, 0.62, 0.62, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(220, 80, 95)
+
+[node name="Bewegungsparcours" type="Node3D"]
+script = ExtResource("4_world_zone")
+data = ExtResource("5_bewegungsparcours")
+flat_ground = true
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Course" type="Node3D" parent="."]
+
+[node name="JumpPath" type="Node3D" parent="."]
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="RampFlat" type="CSGBox3D" parent="Course"]
+position = Vector3(-68, 0.838, -8)
+rotation = Vector3(0.349, 0, 0)
+use_collision = true
+size = Vector3(4, 0.4, 6)
+material = SubResource("Material_block")
+
+[node name="RampFlatTop" type="CSGBox3D" parent="Course"]
+position = Vector3(-68, 1.025, -12.7)
+use_collision = true
+size = Vector3(4, 2.05, 4)
+material = SubResource("Material_block")
+
+[node name="SlopeSteep" type="CSGBox3D" parent="Course"]
+position = Vector3(-74, 2.065, -8)
+rotation = Vector3(1.047, 0, 0)
+use_collision = true
+size = Vector3(4, 0.4, 5)
+material = SubResource("Material_block")
+
+[node name="Stair1" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.15, -6)
+use_collision = true
+size = Vector3(3, 0.3, 0.6)
+material = SubResource("Material_block")
+
+[node name="Stair2" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.3, -6.6)
+use_collision = true
+size = Vector3(3, 0.6, 0.6)
+material = SubResource("Material_block")
+
+[node name="Stair3" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.45, -7.2)
+use_collision = true
+size = Vector3(3, 0.9, 0.6)
+material = SubResource("Material_block")
+
+[node name="Stair4" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.6, -7.8)
+use_collision = true
+size = Vector3(3, 1.2, 0.6)
+material = SubResource("Material_block")
+
+[node name="Stair5" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.75, -8.4)
+use_collision = true
+size = Vector3(3, 1.5, 0.6)
+material = SubResource("Material_block")
+
+[node name="Stair6" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.9, -9)
+use_collision = true
+size = Vector3(3, 1.8, 0.6)
+material = SubResource("Material_block")
+
+[node name="StairTop" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 0.9, -10.8)
+use_collision = true
+size = Vector3(3, 1.8, 3)
+material = SubResource("Material_block")
+
+[node name="StepTooHigh" type="CSGBox3D" parent="Course"]
+position = Vector3(-56, 0.25, -6)
+use_collision = true
+size = Vector3(2, 0.5, 1)
+material = SubResource("Material_block")
+
+[node name="BoxLow" type="CSGBox3D" parent="Course"]
+position = Vector3(-52, 0.5, -6)
+use_collision = true
+size = Vector3(1.5, 1, 1.5)
+material = SubResource("Material_block")
+
+[node name="BoxHigh" type="CSGBox3D" parent="Course"]
+position = Vector3(-52, 1, -8.5)
+use_collision = true
+size = Vector3(1.5, 2, 1.5)
+material = SubResource("Material_block")
+
+[node name="BoxTooHigh" type="CSGBox3D" parent="Course"]
+position = Vector3(-49, 0.75, -6)
+use_collision = true
+size = Vector3(1.5, 1.5, 1.5)
+material = SubResource("Material_block")
+
+[node name="TunnelWallLeft" type="CSGBox3D" parent="Course"]
+position = Vector3(-61.75, 1.5, 10)
+use_collision = true
+size = Vector3(0.5, 3, 8)
+material = SubResource("Material_block")
+
+[node name="TunnelWallRight" type="CSGBox3D" parent="Course"]
+position = Vector3(-58.25, 1.5, 10)
+use_collision = true
+size = Vector3(0.5, 3, 8)
+material = SubResource("Material_block")
+
+[node name="TunnelRoof" type="CSGBox3D" parent="Course"]
+position = Vector3(-60, 3.25, 10)
+use_collision = true
+size = Vector3(4, 0.5, 8)
+material = SubResource("Material_block")
+
+[node name="Wall" type="CSGBox3D" parent="Course"]
+position = Vector3(-50, 1.5, 8)
+use_collision = true
+size = Vector3(10, 3, 0.5)
+material = SubResource("Material_block")
+
+[node name="WallCorner" type="CSGBox3D" parent="Course"]
+position = Vector3(-45, 1.5, 11)
+use_collision = true
+size = Vector3(0.5, 3, 6)
+material = SubResource("Material_block")
+
+[node name="HurdleLow" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(-25, 0.3, 0)
+use_collision = true
+size = Vector3(0.3, 0.6, 4)
+material = SubResource("Material_block")
+
+[node name="HurdleHigh" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(-20, 0.5, 0)
+use_collision = true
+size = Vector3(0.3, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Platform1" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(-13, 0.5, 0)
+use_collision = true
+size = Vector3(4, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Platform2Gap2m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(-7, 0.5, 0)
+use_collision = true
+size = Vector3(4, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Platform3Gap3m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(0, 0.5, 0)
+use_collision = true
+size = Vector3(4, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Platform4Gap4m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(8, 0.5, 0)
+use_collision = true
+size = Vector3(4, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Platform5Gap5m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(17, 0.5, 0)
+use_collision = true
+size = Vector3(4, 1, 4)
+material = SubResource("Material_block")
+
+[node name="Pillar1m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(25, 0.5, 0)
+use_collision = true
+size = Vector3(2, 1, 2)
+material = SubResource("Material_block")
+
+[node name="Pillar2m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(29, 1, 0)
+use_collision = true
+size = Vector3(2, 2, 2)
+material = SubResource("Material_block")
+
+[node name="Pillar3m" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(33, 1.5, 0)
+use_collision = true
+size = Vector3(2, 3, 2)
+material = SubResource("Material_block")
+
+[node name="Beam" type="CSGBox3D" parent="JumpPath"]
+position = Vector3(44, 0.25, 0)
+use_collision = true
+size = Vector3(12, 0.5, 0.5)
+material = SubResource("Material_block")
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, 1.5)
+script = ExtResource("1_teleport_point")
+display_name = "Bewegungsparcours"
+order = 30
+
+[node name="Teleport2" type="Marker3D" parent="Points"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -32, 0, 0)
+script = ExtResource("1_teleport_point")
+display_name = "Sprungpfad"
+order = 31
+
+[node name="Area" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(-28, 0, -6.5)
+kind = ExtResource("3_area")
+text = "Sprungpfad: Hürden, Lücken 2–5 m, Stufen, Balken"
+
+[node name="Area2" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
+position = Vector3(68, 0, -12.5)
+kind = ExtResource("3_area")
+text = "Freie Strecke für Bewegungsfähigkeiten"
+area_radius = 10

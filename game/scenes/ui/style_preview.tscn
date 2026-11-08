@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/character_entry.tscn" id="2_entry"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/action_slot.tscn" id="3_slot"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/hud_window.tscn" id="4_window"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/map_marker.tscn" id="5_marker"]
 
 [node name="StylePreview" type="Control"]
 layout_mode = 3
@@ -607,3 +608,64 @@ custom_minimum_size = Vector2(400, 200)
 layout_mode = 2
 size_flags_horizontal = 0
 title = "Charakter"
+
+[node name="SectionWorld" type="HSeparator" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+
+[node name="WorldTitle" type="Label" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Spielwelt (Ticket #15)"
+
+[node name="WorldGrid" type="GridContainer" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+columns = 2
+
+[node name="BannerLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Gebietsnamen-Einblendung (ZoneBannerTitle, ZoneBannerSubtitle)"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BannerSample" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid/BannerSample"]
+layout_mode = 2
+theme_type_variation = &"ZoneBannerTitle"
+text = "Banditenlager"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid/BannerSample"]
+layout_mode = 2
+theme_type_variation = &"ZoneBannerSubtitle"
+text = "Stufe 4–6"
+horizontal_alignment = 1
+
+[node name="MapLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Karte: Gebietsname (MapZoneLabel), eigene Position, Wiedereinstiegspunkt (MapMarker)"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="MapSample" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="ZoneName" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid/MapSample"]
+layout_mode = 2
+theme_type_variation = &"MapZoneLabel"
+text = "Wolfswiese"
+
+[node name="PlayerMarker" parent="ScrollContainer/MarginContainer/Content/WorldGrid/MapSample" instance=ExtResource("5_marker")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="RespawnMarker" parent="ScrollContainer/MarginContainer/Content/WorldGrid/MapSample" instance=ExtResource("5_marker")]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Wiedereinstiegspunkt: Startdorf"
+kind = 1

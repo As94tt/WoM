@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/big_tree.tscn" id="1_big_tree"]
+[ext_resource type="Script" path="res://scripts/world/terrain_hill.gd" id="2_terrain_hill"]
+[ext_resource type="Script" path="res://scripts/world/teleport_point.gd" id="3_teleport_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/placeholder_post.tscn" id="4_placeholder_post"]
+[ext_resource type="Resource" path="res://data/world/placeholders/spawn.tres" id="5_spawn"]
+[ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="6_world_zone"]
+[ext_resource type="Resource" path="res://data/zones/wolfswiese.tres" id="7_wolfswiese"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_bounds"]
+size = Vector3(420, 80, 190)
+
+[node name="Wolfswiese" type="Node3D"]
+script = ExtResource("6_world_zone")
+data = ExtResource("7_wolfswiese")
+
+[node name="Bounds" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Bounds"]
+position = Vector3(0, 20, 0)
+shape = SubResource("BoxShape_bounds")
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Hills" type="Node3D" parent="."]
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="Placeholders" type="Node3D" parent="."]
+
+[node name="BigTree" parent="Buildings" instance=ExtResource("1_big_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -15)
+
+[node name="Hill" type="Marker3D" parent="Hills"]
+position = Vector3(-70, 0, 25)
+script = ExtResource("2_terrain_hill")
+height = 5
+radius = 40
+
+[node name="Hill2" type="Marker3D" parent="Hills"]
+position = Vector3(80, 0, -35)
+script = ExtResource("2_terrain_hill")
+height = 7
+radius = 50
+
+[node name="Hill3" type="Marker3D" parent="Hills"]
+position = Vector3(150, 0, 55)
+script = ExtResource("2_terrain_hill")
+height = 6
+radius = 35
+
+[node name="Hill4" type="Marker3D" parent="Hills"]
+position = Vector3(-150, 0, -55)
+script = ExtResource("2_terrain_hill")
+height = 4
+radius = 30
+
+[node name="Teleport" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 57)
+script = ExtResource("3_teleport_point")
+display_name = "Wolfswiese"
+order = 40
+
+[node name="Spawn" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(-130, 0, 45)
+kind = ExtResource("5_spawn")
+text = "Junge Wölfe (1–3), Rudel"
+spawn_group_id = &"wolfswiese_junge_woelfe"
+area_radius = 12
+
+[node name="Spawn2" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(-70, 0, -55)
+kind = ExtResource("5_spawn")
+text = "Junge Wölfe (1–3), Rudel"
+spawn_group_id = &"wolfswiese_junge_woelfe"
+area_radius = 12
+
+[node name="Spawn3" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(50, 0, 25)
+kind = ExtResource("5_spawn")
+text = "Junge Wölfe (1–3), Rudel"
+spawn_group_id = &"wolfswiese_junge_woelfe"
+area_radius = 12
+
+[node name="Spawn4" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(110, 0, -55)
+kind = ExtResource("5_spawn")
+text = "Junge Wölfe (1–3), Rudel"
+spawn_group_id = &"wolfswiese_junge_woelfe"
+area_radius = 12
+
+[node name="Spawn5" parent="Placeholders" instance=ExtResource("4_placeholder_post")]
+position = Vector3(160, 0, 5)
+kind = ExtResource("5_spawn")
+text = "Junge Wölfe (1–3), Rudel"
+spawn_group_id = &"wolfswiese_junge_woelfe"
+area_radius = 12

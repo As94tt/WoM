@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_cloth"]
+albedo_color = Color(0.62, 0.56, 0.46, 1)
+
+[node name="Tent" type="CSGCombiner3D"]
+use_collision = true
+
+[node name="Cloth" type="CSGCylinder3D" parent="."]
+position = Vector3(0, 1.6, 0)
+rotation = Vector3(0, 0.785398, 0)
+radius = 3.5
+height = 3.2
+sides = 4
+cone = true
+material = SubResource("Material_cloth")

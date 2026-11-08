@@ -1,0 +1,202 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/game_world.gd" id="1_world"]
+[ext_resource type="Resource" path="res://data/world/startwelt.tres" id="2_data"]
+[ext_resource type="Script" path="res://scripts/world/world_terrain.gd" id="3_terrain"]
+[ext_resource type="Script" path="res://scripts/world/world_path.gd" id="4_path"]
+[ext_resource type="Script" path="res://scripts/world/mountain_ring.gd" id="5_mountains"]
+[ext_resource type="Script" path="res://scripts/world/zone_tracker.gd" id="6_tracker"]
+[ext_resource type="Script" path="res://scripts/world/map_renderer.gd" id="7_map"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/dorf.tscn" id="10_dorf"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/training.tscn" id="11_training"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/parcours.tscn" id="12_parcours"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/wolfswiese.tscn" id="13_wolfswiese"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/banditenstrasse.tscn" id="14_banditenstrasse"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/banditenlager.tscn" id="15_banditenlager"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/dunkler_wald.tscn" id="16_dunkler_wald"]
+[ext_resource type="PackedScene" path="res://scenes/world/zones/boss_arena.tscn" id="17_boss_arena"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_world"]
+
+[sub_resource type="Sky" id="Sky_world"]
+sky_material = SubResource("SkyMaterial_world")
+
+[sub_resource type="Environment" id="Environment_world"]
+background_mode = 2
+sky = SubResource("Sky_world")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+
+[sub_resource type="NavigationMesh" id="NavMesh_world"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 5
+filter_baking_aabb = AABB(-285, -20, -285, 570, 120, 570)
+cell_size = 0.25
+cell_height = 0.25
+agent_height = 1.75
+agent_radius = 0.5
+agent_max_climb = 0.5
+agent_max_slope = 50.0
+
+[sub_resource type="StandardMaterial3D" id="Material_mountain"]
+albedo_color = Color(0.48, 0.47, 0.46, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_mountain"]
+material = SubResource("Material_mountain")
+top_radius = 0.0
+bottom_radius = 1.0
+height = 1.0
+radial_segments = 7
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_wall_x"]
+size = Vector3(2, 120, 600)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_z"]
+size = Vector3(600, 120, 2)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_world")
+world_data = ExtResource("2_data")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_world")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, 0.6, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 120.0
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+unique_name_in_owner = true
+navigation_mesh = SubResource("NavMesh_world")
+
+[node name="Terrain" type="StaticBody3D" parent="Navigation"]
+collision_mask = 0
+script = ExtResource("3_terrain")
+world_data = ExtResource("2_data")
+
+[node name="Paths" type="Node3D" parent="Navigation"]
+
+[node name="Hauptweg" type="Node3D" parent="Navigation/Paths"]
+script = ExtResource("4_path")
+world_data = ExtResource("2_data")
+points = PackedVector3Array(-20, 0, 195, -20, 0, 135, -80, 0, 128, -150, 0, 110, -185, 0, 60, -170, 0, 10, -200, 0, -30, -200, 0, -60, -200, 0, -150, -205, 0, -180, -220, 0, -207)
+
+[node name="Ostweg" type="Node3D" parent="Navigation/Paths"]
+script = ExtResource("4_path")
+world_data = ExtResource("2_data")
+points = PackedVector3Array(-20, 0, 135, 40, 0, 100, 80, 0, 40, 90, 0, -40, 110, 0, -120, 160, 0, -188)
+
+[node name="Verbindungsweg" type="Node3D" parent="Navigation/Paths"]
+script = ExtResource("4_path")
+world_data = ExtResource("2_data")
+points = PackedVector3Array(-172, 0, 12, -110, 0, -5, -20, 0, -30, 60, 0, -50, 88, 0, -42)
+
+[node name="Trainingsweg" type="Node3D" parent="Navigation/Paths"]
+script = ExtResource("4_path")
+world_data = ExtResource("2_data")
+points = PackedVector3Array(0, 0, 205, 60, 0, 190, 110, 0, 166, 125, 0, 166)
+
+[node name="Parcoursweg" type="Node3D" parent="Navigation/Paths"]
+script = ExtResource("4_path")
+world_data = ExtResource("2_data")
+points = PackedVector3Array(191, 0, 192, 191, 0, 212)
+
+[node name="Zones" type="Node3D" parent="Navigation"]
+
+[node name="Startdorf" parent="Navigation/Zones" instance=ExtResource("10_dorf")]
+position = Vector3(-20, 0, 215)
+
+[node name="Trainingsgelaende" parent="Navigation/Zones" instance=ExtResource("11_training")]
+position = Vector3(190, 0, 167.5)
+
+[node name="Bewegungsparcours" parent="Navigation/Zones" instance=ExtResource("12_parcours")]
+position = Vector3(190, 0, 252.5)
+
+[node name="Wolfswiese" parent="Navigation/Zones" instance=ExtResource("13_wolfswiese")]
+position = Vector3(90, 0, 35)
+
+[node name="Banditenstrasse" parent="Navigation/Zones" instance=ExtResource("14_banditenstrasse")]
+position = Vector3(-210, 0, 130)
+
+[node name="Banditenlager" parent="Navigation/Zones" instance=ExtResource("15_banditenlager")]
+position = Vector3(-210, 0, -105)
+
+[node name="DunklerWald" parent="Navigation/Zones" instance=ExtResource("16_dunkler_wald")]
+position = Vector3(90, 0, -180)
+
+[node name="BossArena" parent="Navigation/Zones" instance=ExtResource("17_boss_arena")]
+position = Vector3(-210, 0, -235)
+
+[node name="Boundary" type="Node3D" parent="Navigation"]
+
+[node name="Mountains" type="Node3D" parent="Navigation/Boundary"]
+script = ExtResource("5_mountains")
+mesh = SubResource("Mesh_mountain")
+
+[node name="InvisibleWalls" type="StaticBody3D" parent="Navigation/Boundary"]
+collision_layer = 4
+collision_mask = 0
+
+[node name="North" type="CollisionShape3D" parent="Navigation/Boundary/InvisibleWalls"]
+position = Vector3(0, 40, -285)
+shape = SubResource("Shape_wall_z")
+
+[node name="South" type="CollisionShape3D" parent="Navigation/Boundary/InvisibleWalls"]
+position = Vector3(0, 40, 285)
+shape = SubResource("Shape_wall_z")
+
+[node name="West" type="CollisionShape3D" parent="Navigation/Boundary/InvisibleWalls"]
+position = Vector3(-285, 40, 0)
+shape = SubResource("Shape_wall_x")
+
+[node name="East" type="CollisionShape3D" parent="Navigation/Boundary/InvisibleWalls"]
+position = Vector3(285, 40, 0)
+shape = SubResource("Shape_wall_x")
+
+[node name="Players" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="ZoneTracker" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_tracker")
+
+[node name="MapRenderer" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_map")
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="Margin" type="MarginContainer" parent="HudLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ScreenMargin"
+
+[node name="Rows" type="VBoxContainer" parent="HudLayer/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+
+[node name="NameLabel" type="Label" parent="HudLayer/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ScreenTitle"
+text = "Name"
+
+[node name="InfoLabel" type="Label" parent="HudLayer/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Stufe · Volk · Klasse"
+
+[node name="GameHud" parent="HudLayer" instance=ExtResource("8_hud")]
+unique_name_in_owner = true

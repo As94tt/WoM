@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.75, 0.75, 0.73, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_roof"]
+albedo_color = Color(0.38, 0.36, 0.36, 1)
+
+[node name="Tower" type="CSGCombiner3D"]
+use_collision = true
+
+[node name="Body" type="CSGBox3D" parent="."]
+position = Vector3(0, 14, 0)
+size = Vector3(6, 28, 6)
+material = SubResource("Material_wall")
+
+[node name="Roof" type="CSGCylinder3D" parent="."]
+position = Vector3(0, 31, 0)
+rotation = Vector3(0, 0.785398, 0)
+radius = 5.0
+height = 6.0
+sides = 4
+cone = true
+material = SubResource("Material_roof")

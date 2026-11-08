@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/ui/action_bar.gd" id="2_bar"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/hud_window.tscn" id="3_window"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/game_menu.tscn" id="4_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/zone_banner.tscn" id="5_banner"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -219,6 +220,10 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"SlotButton"
 text = "R"
+
+[node name="ZoneBanner" parent="." instance=ExtResource("5_banner")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="GameMenu" parent="." instance=ExtResource("4_menu")]
 unique_name_in_owner = true
