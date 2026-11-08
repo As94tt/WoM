@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+
+[resource]
+script = ExtResource("1_ability")
+id = &"finsterer_stoss"
+display_name = "Finsterer Stoß"
+description = "Ein schneller Stich, der Schaden verursacht und einen Combopunkt erzeugt."
+class_id = &"rogue"

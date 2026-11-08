@@ -1,6 +1,11 @@
 [gd_resource type="Resource" script_class="ClassData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/class_data.gd" id="1_class"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
+[ext_resource type="Resource" path="res://data/abilities/schildschlag.tres" id="2_schildschlag"]
+[ext_resource type="Resource" path="res://data/abilities/spott.tres" id="3_spott"]
+[ext_resource type="Resource" path="res://data/abilities/passiv_krieger.tres" id="4_passiv_krieger"]
+[ext_resource type="Resource" path="res://data/abilities/kampfschrei.tres" id="5_kampfschrei"]
 
 [resource]
 script = ExtResource("1_class")
@@ -14,3 +19,4 @@ order = 2
 primary_attribute = &"strength"
 power_stat = &"attack_power"
 resources = Array[StringName]([&"rage"])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_schildschlag"), ExtResource("3_spott"), ExtResource("4_passiv_krieger"), ExtResource("5_kampfschrei")])

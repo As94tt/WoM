@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+
+[resource]
+script = ExtResource("1_ability")
+id = &"heilende_beruehrung"
+display_name = "Heilende Berührung"
+description = "Eine langsame, kräftige Heilung auf ein einzelnes Ziel."
+class_id = &"druid"
+required_level = 2

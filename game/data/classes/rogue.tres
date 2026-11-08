@@ -1,6 +1,11 @@
 [gd_resource type="Resource" script_class="ClassData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/class_data.gd" id="1_class"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
+[ext_resource type="Resource" path="res://data/abilities/finsterer_stoss.tres" id="2_finsterer_stoss"]
+[ext_resource type="Resource" path="res://data/abilities/ausweiden.tres" id="3_ausweiden"]
+[ext_resource type="Resource" path="res://data/abilities/passiv_schurke.tres" id="4_passiv_schurke"]
+[ext_resource type="Resource" path="res://data/abilities/verstohlenheit.tres" id="5_verstohlenheit"]
 
 [resource]
 script = ExtResource("1_class")
@@ -14,3 +19,4 @@ order = 4
 primary_attribute = &"agility"
 power_stat = &"attack_power"
 resources = Array[StringName]([&"energy"])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_finsterer_stoss"), ExtResource("3_ausweiden"), ExtResource("4_passiv_schurke"), ExtResource("5_verstohlenheit")])

@@ -1,6 +1,11 @@
 [gd_resource type="Resource" script_class="ClassData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/class_data.gd" id="1_class"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
+[ext_resource type="Resource" path="res://data/abilities/verjuengung.tres" id="2_verjuengung"]
+[ext_resource type="Resource" path="res://data/abilities/heilende_beruehrung.tres" id="3_heilende_beruehrung"]
+[ext_resource type="Resource" path="res://data/abilities/passiv_druide.tres" id="4_passiv_druide"]
+[ext_resource type="Resource" path="res://data/abilities/wildwuchs.tres" id="5_wildwuchs"]
 
 [resource]
 script = ExtResource("1_class")
@@ -14,3 +19,4 @@ order = 3
 primary_attribute = &"intellect"
 power_stat = &"spell_power"
 resources = Array[StringName]([&"mana"])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_verjuengung"), ExtResource("3_heilende_beruehrung"), ExtResource("4_passiv_druide"), ExtResource("5_wildwuchs")])

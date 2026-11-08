@@ -82,6 +82,12 @@ In `faehigkeitswerte.csv` die Zeile der Fähigkeit suchen, z. B. `feuerball`:
 
 Die `.tres` der Fähigkeit beschreibt nur den Aufbau (welche Effekte), die Zahlen kommen aus dieser Tabelle. So stehen die Zahlen aller Klassen nebeneinander.
 
+### Eine neue Fähigkeit anlegen (#21)
+
+1. In `game/data/abilities/` eine `.tres` vom Typ `AbilityData` anlegen (z. B. eine vorhandene kopieren): `id` (nie ändern, gespeicherte Aktionsleisten verweisen darauf), Name, Beschreibung, optional Icon, Klasse (leer = „Allgemein“), benötigte Stufe, passiv ja/nein.
+2. In `faehigkeitswerte.csv` eine Zeile mit derselben `id` ergänzen (Kosten, Ressource, Zauberzeit, Abklingzeit, Reichweite …). Ohne Zeile meldet die Datenprüfung einen Fehler. `klasse` und `stufe` gleich wie in der `.tres` halten; bei Abweichung gilt die `.tres` (Warnung in der Konsole).
+3. Die Fähigkeit in die Liste `abilities` der Klasse (`game/data/classes/<klasse>.tres`) bzw. des Reiters „Allgemein“ (`game/data/spellbook/general.tres`) aufnehmen. Dann erscheint sie im Zauberbuch.
+
 ### Werte der Charaktere anpassen (Wertesystem #19)
 
 Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welche Spalten nutzt, Namen und Tooltips der Werte) in `game/data/stats/stat_rules.tres`. Alle Zahlen sind Platzhalter.
