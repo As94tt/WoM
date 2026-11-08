@@ -11,9 +11,13 @@ extends RefCounted
 ## Modifikatoren berechnet: Bonus = Wert − Grundwert (auch bei abgeleiteten
 ## Werten, z. B. Kampfkraft durch Stärke-Bonus).
 ##
-## Benutzt von CharacterStats (Spielfigur, Host-Autorität). Ausrüstung (#29)
+## Benutzt von CharacterStats (Einheiten, Host-Autorität). Ausrüstung (#29)
 ## und Auren (#32) fügen Modifikatoren mit eigener Quelle hinzu und
 ## entfernen sie über remove_source().
+##
+## Einheiten ohne Klasse (Übungspuppen #31, später Gegner #36) setzen feste
+## Grundwerte (base_overrides, z. B. {&"max_health": 100000}); sie ersetzen
+## die Formel, Modifikatoren und Obergrenzen gelten weiterhin.
 
 ## Ein Eingabewert oder Modifikator hat sich geändert; alle Werte sind neu
 ## berechnet.
@@ -34,6 +38,8 @@ var level: int = 1
 ## die Ausrüstung (#29), bis dahin das Entwickler-Panel.
 var _flags: Dictionary[StringName, bool] = {}
 var _modifiers: Array[StatModifier] = []
+## Feste Grundwerte statt Formel (Wert-ID → Zahl), siehe oben.
+var _base_overrides: Dictionary[StringName, float] = {}
 ## Endwerte (mit Modifikatoren, mit Obergrenze).
 var _values: Dictionary[StringName, float] = {}
 ## Grundwerte (ohne jeden Modifikator, mit Obergrenze).
@@ -46,8 +52,11 @@ var _batch := false
 
 ## Setzt alle Eingaben auf einmal und rechnet einmal neu.
 func set_state(p_class_id: StringName, p_race_id: StringName, p_level: int,
-		flags: Dictionary, modifiers: Array[StatModifier]) -> void:
+		flags: Dictionary, modifiers: Array[StatModifier], base_overrides: Dictionary = {}) -> void:
 	_batch = true
+	_base_overrides.clear()
+	for stat: StringName in base_overrides:
+		_base_overrides[stat] = float(base_overrides[stat])
 	class_id = p_class_id
 	race_id = p_race_id
 	level = maxi(1, p_level)
@@ -200,10 +209,11 @@ func _compute(with_modifiers: bool) -> Dictionary[StringName, float]:
 	var race_row := Data.row("voelker", race_id)
 	var conversion := Data.umrechnung(level)
 	for definition in RULES.stats:
-		if not _is_relevant(definition, class_data):
+		if not _base_overrides.has(definition.id) and not _is_relevant(definition, class_data):
 			result[definition.id] = 0.0
 			continue
-		var value := _formula(definition, result, class_data, class_values, race_row, conversion)
+		var value: float = _base_overrides[definition.id] if _base_overrides.has(definition.id) \
+				else _formula(definition, result, class_data, class_values, race_row, conversion)
 		if definition.scales_with_haste:
 			value *= 1.0 + result.get(HASTE_STAT, 0.0) / 100.0
 		if with_modifiers:

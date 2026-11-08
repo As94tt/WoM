@@ -1,8 +1,10 @@
 class_name CharacterStats
 extends Node
-## Werte und Ressourcen einer Spielfigur (Ticket #19). Kindknoten „Stats“ der
-## Spielfigur (player.tscn); funktioniert ohne Interface. Die Rechnung macht
-## StatBlock, dieser Knoten verwaltet Eingaben, Ressourcen und Netzwerk.
+## Werte und Ressourcen einer Einheit (Ticket #19, seit #31 für alle Einheiten:
+## Spielfiguren, Übungspuppen, später Gegner). Kindknoten „Stats“ einer Unit;
+## funktioniert ohne Interface. Die Rechnung macht StatBlock, dieser Knoten
+## verwaltet Eingaben, Ressourcen und Netzwerk. Klasse, Volk, Stufe und feste
+## Grundwerte (z. B. Leben einer Puppe) liefert die Einheit (Unit.get_stat_*).
 ##
 ## Netzwerk: Der Host ist die Autorität über die Werte aller Charaktere.
 ## - Eingaben (Stufe, „Im Kampf“, „Nahkampfwaffe/Schild getragen“,
@@ -21,7 +23,7 @@ extends Node
 ##   add_modifier(StatModifier) / remove_source(&"aura:xyz")   – #29, #32
 ##   set_flag(StatBlock.FLAG_SHIELD, true)                      – #29
 ##   set_in_combat(true)                                        – Kampf (M2)
-##   take_damage(x), register_damage_dealt(x)                   – Kampf (M2)
+##   take_damage(x), heal(x), register_damage_dealt(x)          – Kampf (M2)
 ##   spend_resource(&"mana", x), gain_resource(&"chi", x)       – Fähigkeiten
 ## Lesen geht überall: get_value(&"attack_power"), get_resource(&"energy"),
 ## block (StatBlock) für Grundwert, Bonus und Modifikatoren.
@@ -84,6 +86,12 @@ var chi_draining := false:
 ## Die Rechnung (überall gleich).
 var block := StatBlock.new()
 
+## Host: Leben sinkt durch Schaden nicht unter diesen Wert. Spieler: MIN_HEALTH
+## (Tod folgt in #35); Schadenspuppen: 0 (sie füllen sich danach selbst auf).
+var min_health := MIN_HEALTH
+## Host: Leben und Ressourcen regenerieren sich (Übungspuppen: aus).
+var regeneration_enabled := true
+
 ## Host: Stufe aus dem Entwickler-Panel (0 = Stufe des Charakters). Wird
 ## nicht gespeichert.
 var _level_override := 0
@@ -95,7 +103,7 @@ var _last_level := 0
 ## Zuletzt gemeldeter Stand von Leben und Ressourcen (für resources_changed).
 var _last_resources := PackedFloat32Array()
 
-@onready var _player: PlayerCharacter = get_parent() as PlayerCharacter
+@onready var _unit: Unit = get_parent() as Unit
 
 
 func _ready() -> void:
@@ -106,12 +114,12 @@ func _ready() -> void:
 			block.recalculate())
 	if Network.is_host() and stat_state.is_empty():
 		# Der Setter rechnet erst nach _ready, deshalb hier selbst.
-		stat_state = _make_state(_player_level(), false, false, false, [])
+		stat_state = _make_state(_unit_level(), false, false, false, [])
 	_apply_state()
 
 
 func _process(delta: float) -> void:
-	if Network.is_host() and _filled:
+	if Network.is_host() and _filled and regeneration_enabled:
 		_regenerate(delta)
 	_emit_resources_if_changed()
 
@@ -195,28 +203,60 @@ func set_level_override(level: int) -> void:
 	if not _require_host("set_level_override"):
 		return
 	_level_override = maxi(0, level)
-	_set_state_value("level", _player_level())
+	_set_state_value("level", _unit_level())
 
 
 ## Von der Spielfigur gerufen, wenn sich Klasse, Volk oder Stufe des
 ## Charakters ändern.
-func refresh_from_player() -> void:
-	if _player == null:
+func refresh_from_unit() -> void:
+	if _unit == null:
 		return
-	block.set_identity(_player.class_id, _player.race_id)
+	block.set_identity(_unit.get_stat_class_id(), _unit.get_stat_race_id())
 	if Network.is_host() and not stat_state.is_empty() \
-			and int(stat_state.get("level", 0)) != _player_level():
-		_set_state_value("level", _player_level())
+			and int(stat_state.get("level", 0)) != _unit_level():
+		_set_state_value("level", _unit_level())
 
 
-## Schaden nehmen: Leben sinkt (nicht unter MIN_HEALTH, Tod folgt in M3),
-## der Krieger bekommt Wut: Faktor × Schaden / maximales Leben.
-func take_damage(amount: float) -> void:
+## Eingaben neu anwenden, z. B. wenn sich die festen Grundwerte der Einheit
+## geändert haben (Übungspuppe mit anderer Kennung).
+func reapply() -> void:
+	if is_node_ready():
+		_apply_state()
+
+
+## Schaden nehmen: Leben sinkt (nicht unter min_health, Tod folgt in #35),
+## der Krieger bekommt Wut: Faktor × Schaden / maximales Leben. Gibt den
+## tatsächlich abgezogenen Betrag zurück.
+func take_damage(amount: float) -> float:
 	if not _require_host("take_damage") or amount <= 0.0:
-		return
-	health = maxf(MIN_HEALTH, health - amount)
+		return 0.0
+	var before := health
+	health = maxf(minf(min_health, before), health - amount)
 	if max_rage > 0.0 and max_health > 0.0:
 		rage = minf(max_rage, rage + Data.konstante(&"wut_pro_schaden_genommen") * amount / max_health)
+	return before - health
+
+
+## Heilung: Leben steigt bis zum Maximum. Gibt die Überheilung zurück (der
+## Teil, der über das Maximum hinausging).
+func heal(amount: float) -> float:
+	if not _require_host("heal") or amount <= 0.0:
+		return 0.0
+	var missing := maxf(0.0, max_health - health)
+	health = minf(max_health, health + amount)
+	return maxf(0.0, amount - missing)
+
+
+## Host: Leben auf einen Wert setzen (begrenzt auf 0 bis Maximum).
+func set_health(value: float) -> void:
+	if _require_host("set_health"):
+		health = clampf(value, 0.0, max_health)
+
+
+## Host: Leben, Mana und Energie voll, Wut und Chi leer.
+func refill() -> void:
+	if _require_host("refill"):
+		_fill_resources()
 
 
 ## Schaden ausgeteilt: der Krieger bekommt Wut (Faktor × Schaden).
@@ -286,7 +326,7 @@ static func dev_modifier_label(index: int) -> String:
 func _rpc_dev_action(action: String, value: Variant) -> void:
 	if not Network.is_host() or not OS.is_debug_build():
 		return
-	if _player == null or multiplayer.get_remote_sender_id() != _player.peer_id:
+	if _unit == null or multiplayer.get_remote_sender_id() != _unit.get_controlling_peer():
 		return
 	_do_dev_action(action, value)
 
@@ -329,10 +369,10 @@ func _do_dev_action(action: String, value: Variant) -> void:
 
 # --- Intern ------------------------------------------------------------------
 
-func _player_level() -> int:
+func _unit_level() -> int:
 	if _level_override > 0:
 		return _level_override
-	return _player.level if _player != null else 1
+	return _unit.get_base_level() if _unit != null else 1
 
 
 func _make_state(level: int, combat: bool, melee: bool, shield: bool, mods: Array) -> Dictionary:
@@ -350,7 +390,7 @@ func _set_state_value(key: String, value: Variant) -> void:
 
 
 func _apply_state() -> void:
-	if _player == null:
+	if _unit == null:
 		return
 	var mods: Array[StatModifier] = []
 	for data: Variant in stat_state.get("mods", []):
@@ -362,7 +402,8 @@ func _apply_state() -> void:
 		StatBlock.FLAG_MELEE_WEAPON: bool(stat_state.get("melee", false)),
 		StatBlock.FLAG_SHIELD: bool(stat_state.get("shield", false)),
 	}
-	block.set_state(_player.class_id, _player.race_id, int(stat_state.get("level", 1)), flags, mods)
+	block.set_state(_unit.get_stat_class_id(), _unit.get_stat_race_id(), int(stat_state.get("level", 1)),
+			flags, mods, _unit.get_stat_base_overrides())
 	if is_in_combat() != _was_in_combat:
 		_was_in_combat = is_in_combat()
 		combat_changed.emit(_was_in_combat)

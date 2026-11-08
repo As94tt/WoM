@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="UnitDevTools" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/unit_dev_tools.gd" id="1_dev"]
+
+[resource]
+script = ExtResource("1_dev")
+damage_percent = 10.0
+damage_flat = 1000.0
+heal_percent = 10.0
+damage_per_second = 500.0

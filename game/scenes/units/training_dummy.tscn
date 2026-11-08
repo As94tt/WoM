@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/units/training_dummy.gd" id="1_dummy"]
+[ext_resource type="Script" path="res://scripts/stats/character_stats.gd" id="2_stats"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material_post"]
+albedo_color = Color(0.45, 0.4, 0.35, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_post"]
+material = SubResource("Material_post")
+top_radius = 0.08
+bottom_radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_body"]
+albedo_color = Color(0.78, 0.74, 0.62, 1)
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+material = SubResource("Material_body")
+radius = 0.32
+height = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_arms"]
+material = SubResource("Material_post")
+size = Vector3(1.2, 0.12, 0.12)
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Material_body")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SceneReplicationConfig" id="Replication_server"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+properties/2/path = NodePath(".:dummy_id")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:rank_override")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath(".:meter_rate")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath(".:meter_total")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+
+[sub_resource type="SceneReplicationConfig" id="Replication_stats"]
+properties/0/path = NodePath("Stats:stat_state")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("Stats:health")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("Stats:max_health")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+
+[node name="TrainingDummy" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dummy")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("Shape_body")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Post" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.5, 0)
+mesh = SubResource("Mesh_post")
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 1.15, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="Arms" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 1.35, 0)
+mesh = SubResource("Mesh_arms")
+
+[node name="Head" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 1.82, 0)
+mesh = SubResource("Mesh_head")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("Replication_server")
+
+[node name="StatsSync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+delta_interval = 0.1
+replication_config = SubResource("Replication_stats")
