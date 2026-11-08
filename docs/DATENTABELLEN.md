@@ -243,7 +243,7 @@ Eindeutig: `id`.
 | --- | --- | --- | --- | --- | --- |
 | `id` | ID | ja |  |  | Feste ID, wird nie geändert (z. B. schadenspuppe_10). Die Aufstellpunkte im Trainingsbereich verweisen darauf. |
 | `name` | Text | ja |  |  | Anzeigename (Rahmen, Namensplakette). |
-| `art` | Auswahl | ja |  | `schaden`, `heilung` | schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung. |
+| `art` | Auswahl | ja |  | `schaden`, `heilung`, `angriff` | schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung. angriff (#35): wie schaden, greift aber den Spieler mit der höchsten Bedrohung in Nahkampfreichweite an (angriff_schaden, angriff_takt). |
 | `gesinnung` | Auswahl |  | feindlich | `feindlich`, `neutral`, `freundlich` | Gesinnung gegenüber Spielern. |
 | `stufe` | Ganzzahl | ja |  | 1 bis 100 | Stufe der Puppe (im Entwickler-Panel zur Laufzeit änderbar). |
 | `rang` | Auswahl |  | normal | `normal`, `elite`, `selten`, `boss` | Rang für die Kennzeichnung am Zielrahmen (wie bei Gegnern). |
@@ -257,6 +257,8 @@ Eindeutig: `id`.
 | `parieren` | Kommazahl |  |  | 0 bis 100 | Parierchance in Prozent (#34, nur Nahkampf von vorne). Leer = Wertesystem (ohne Nahkampfwaffe 0). |
 | `blocken` | Kommazahl |  |  | 0 bis 100 | Blockchance in Prozent (#34, nur Nah- und Fernkampf von vorne). Leer = Wertesystem (ohne Schild 0). |
 | `blockwert` | Kommazahl |  |  | ab 0 | Schaden, den ein Block abfängt (#34). Leer = Wertesystem (ohne Schild 0). |
+| `angriff_schaden` | Kommazahl |  | 0 | ab 0 | Nur Angriffspuppe (#35): fester Schaden je Schlag (körperlich, Nahkampfwurf: Ausweichen, Parieren, Blocken und Rüstung des Spielers wirken). |
+| `angriff_takt` | Kommazahl |  | 2 | 0,1 bis 60 | Nur Angriffspuppe (#35): Sekunden zwischen zwei Schlägen. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Welt

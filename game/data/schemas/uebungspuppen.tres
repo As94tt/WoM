@@ -23,8 +23,8 @@ script = ExtResource("1_upcol")
 name = "art"
 type = 5
 required = true
-choices = PackedStringArray("schaden", "heilung")
-description = "schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung."
+choices = PackedStringArray("schaden", "heilung", "angriff")
+description = "schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung. angriff (#35): wie schaden, greift aber den Spieler mit der höchsten Bedrohung in Nahkampfreichweite an (angriff_schaden, angriff_takt)."
 
 [sub_resource type="Resource" id="Resource_up_gesinnung"]
 script = ExtResource("1_upcol")
@@ -149,6 +149,27 @@ has_min = true
 choices = PackedStringArray()
 description = "Schaden, den ein Block abfängt (#34). Leer = Wertesystem (ohne Schild 0)."
 
+[sub_resource type="Resource" id="Resource_up_angriff_schaden"]
+script = ExtResource("1_upcol")
+name = "angriff_schaden"
+type = 3
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Nur Angriffspuppe (#35): fester Schaden je Schlag (körperlich, Nahkampfwurf: Ausweichen, Parieren, Blocken und Rüstung des Spielers wirken)."
+
+[sub_resource type="Resource" id="Resource_up_angriff_takt"]
+script = ExtResource("1_upcol")
+name = "angriff_takt"
+type = 3
+default_value = "2"
+has_min = true
+min_value = 0.1
+has_max = true
+max_value = 60.0
+choices = PackedStringArray()
+description = "Nur Angriffspuppe (#35): Sekunden zwischen zwei Schlägen."
+
 [resource]
 script = ExtResource("2_uptab")
 table = "uebungspuppen"
@@ -157,4 +178,4 @@ group = "Gegner"
 description = "Übungspuppen im Trainingsbereich (#31). Eine Zeile pro Puppentyp; aufgestellt werden sie über Aufstellpunkte (UnitSpawnPoint) in der Szene des Trainingsgeländes. Anzeigefenster und Rücksetzzeit stehen in spielkonstanten.csv."
 key_columns = PackedStringArray("id")
 order = 15
-columns = Array[ExtResource("1_upcol")]([SubResource("Resource_up_id"), SubResource("Resource_up_name"), SubResource("Resource_up_art"), SubResource("Resource_up_gesinnung"), SubResource("Resource_up_stufe"), SubResource("Resource_up_rang"), SubResource("Resource_up_leben"), SubResource("Resource_up_verlust"), SubResource("Resource_up_intervall"), SubResource("Resource_up_immun"), SubResource("Resource_up_ruestung"), SubResource("Resource_up_zauberschutz"), SubResource("Resource_up_ausweichen"), SubResource("Resource_up_parieren"), SubResource("Resource_up_blocken"), SubResource("Resource_up_blockwert")])
+columns = Array[ExtResource("1_upcol")]([SubResource("Resource_up_id"), SubResource("Resource_up_name"), SubResource("Resource_up_art"), SubResource("Resource_up_gesinnung"), SubResource("Resource_up_stufe"), SubResource("Resource_up_rang"), SubResource("Resource_up_leben"), SubResource("Resource_up_verlust"), SubResource("Resource_up_intervall"), SubResource("Resource_up_immun"), SubResource("Resource_up_ruestung"), SubResource("Resource_up_zauberschutz"), SubResource("Resource_up_ausweichen"), SubResource("Resource_up_parieren"), SubResource("Resource_up_blocken"), SubResource("Resource_up_blockwert"), SubResource("Resource_up_angriff_schaden"), SubResource("Resource_up_angriff_takt")])

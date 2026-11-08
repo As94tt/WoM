@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="1_aura"]
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="2_amount"]
+
+[sub_resource type="Resource" id="Resource_threat"]
+script = ExtResource("2_amount")
+kind = 4
+percent = 200.0
+
+[resource]
+script = ExtResource("1_aura")
+id = &"test_tankhaltung"
+display_name = "Testtankhaltung"
+description = "Dreifache Bedrohung, bis die Haltung wieder ausgeschaltet wird (wie Bollwerk, Bär, Eisenmönch). Testaura (#35)."
+amount_modifiers = Array[ExtResource("2_amount")]([SubResource("Resource_threat")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
