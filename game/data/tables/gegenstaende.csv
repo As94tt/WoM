@@ -1,0 +1,5 @@
+﻿# Gegenstände. Rüstung und Waffenschaden dürfen leer bleiben (werden dann berechnet).
+id;name;beschreibung;icon;typ;slot;seltenheit;gegenstandsstufe;mindeststufe;ruestungsklasse;waffentyp;handhabung;schaden_min;schaden_max;geschwindigkeit;ruestung;blockwert;staerke;gewandtheit;intellekt;ausdauer;willenskraft;praezision;verheerung;tempo;durchschlag;abwehr;eile;zauberschutz;effekte;klassen;einzigartig;einzigartig_angelegt;bindung;stapelgroesse;verkaufswert;taschenplaetze;herkunft;modell;notiz
+wolfsfell;Wolfsfell;Ein struppiges Fell.;;material;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;5;;;;Beispiel
+schwert_rostig;Rostiges Schwert;Hat schon bessere Tage gesehen.;;ausruestung;einhand;gewoehnlich;2;1;;schwert;einhand;;;2,6;;;1;;;;;;;;;;;;;warrior|rogue;nein;nein;beim_anlegen;1;12;;;;Beispiel, Schaden wird berechnet
+lederkappe;Lederkappe;;;ausruestung;helm;gewoehnlich;2;1;leder;;;;;;;;;1;;1;;;;;;;;;;;nein;nein;keine;1;8;;;;Beispiel

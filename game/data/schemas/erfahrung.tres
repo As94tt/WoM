@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_2pndu"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_wwbpl"]
+
+[sub_resource type="Resource" id="Resource_qeos3"]
+script = ExtResource("1_2pndu")
+name = "stufe"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Aktuelle Stufe."
+
+[sub_resource type="Resource" id="Resource_tth0x"]
+script = ExtResource("1_2pndu")
+name = "benoetigte_erfahrung"
+type = 2
+required = true
+has_min = true
+choices = PackedStringArray()
+description = "Erfahrung bis zur nächsten Stufe."
+
+[resource]
+script = ExtResource("2_wwbpl")
+table = "erfahrung"
+title = "Erfahrungskurve"
+group = "Charaktere"
+description = "Benötigte Erfahrung, um von einer Stufe zur nächsten aufzusteigen."
+key_columns = PackedStringArray("stufe")
+order = 52
+columns = Array[ExtResource("1_2pndu")]([SubResource("Resource_qeos3"), SubResource("Resource_tth0x")])

@@ -1,0 +1,106 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_5fjd1"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_msdgc"]
+
+[sub_resource type="Resource" id="Resource_kafqd"]
+script = ExtResource("1_5fjd1")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID, unter der Charaktere das Volk speichern (nie ändern!)."
+
+[sub_resource type="Resource" id="Resource_4eukl"]
+script = ExtResource("1_5fjd1")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename."
+
+[sub_resource type="Resource" id="Resource_5r17k"]
+script = ExtResource("1_5fjd1")
+name = "beschreibung"
+choices = PackedStringArray()
+description = "Kurzbeschreibung in der Charaktererstellung."
+
+[sub_resource type="Resource" id="Resource_n3sg4"]
+script = ExtResource("1_5fjd1")
+name = "koerperfamilie"
+type = 5
+required = true
+choices = PackedStringArray("normal", "kompakt", "massiv", "gross_gebeugt")
+description = "Körperfamilie laut GDD (Rig, Animationen, Ausrüstung)."
+
+[sub_resource type="Resource" id="Resource_g0xvq"]
+script = ExtResource("1_5fjd1")
+name = "groessenfaktor"
+type = 3
+default_value = "1"
+has_min = true
+min_value = 0.5
+has_max = true
+max_value = 2.0
+choices = PackedStringArray()
+description = "Größe des Platzhaltermodells (Mensch = 1)."
+
+[sub_resource type="Resource" id="Resource_2c6t0"]
+script = ExtResource("1_5fjd1")
+name = "reihenfolge"
+type = 2
+choices = PackedStringArray()
+description = "Reihenfolge in Listen."
+
+[sub_resource type="Resource" id="Resource_4jniw"]
+script = ExtResource("1_5fjd1")
+name = "staerke"
+type = 2
+choices = PackedStringArray()
+description = "Stärke-Bonus des Volks (bis zum Wertesystem 0)."
+
+[sub_resource type="Resource" id="Resource_dry2w"]
+script = ExtResource("1_5fjd1")
+name = "gewandtheit"
+type = 2
+choices = PackedStringArray()
+description = "Gewandtheit-Bonus des Volks (bis zum Wertesystem 0)."
+
+[sub_resource type="Resource" id="Resource_v6010"]
+script = ExtResource("1_5fjd1")
+name = "intellekt"
+type = 2
+choices = PackedStringArray()
+description = "Intellekt-Bonus des Volks (bis zum Wertesystem 0)."
+
+[sub_resource type="Resource" id="Resource_whv71"]
+script = ExtResource("1_5fjd1")
+name = "ausdauer"
+type = 2
+choices = PackedStringArray()
+description = "Ausdauer-Bonus des Volks (bis zum Wertesystem 0)."
+
+[sub_resource type="Resource" id="Resource_fts2m"]
+script = ExtResource("1_5fjd1")
+name = "willenskraft"
+type = 2
+choices = PackedStringArray()
+description = "Willenskraft-Bonus des Volks (bis zum Wertesystem 0)."
+
+[sub_resource type="Resource" id="Resource_80jdi"]
+script = ExtResource("1_5fjd1")
+name = "volksfaehigkeit"
+type = 6
+choices = PackedStringArray()
+ref_folder = "res://data/auras/"
+ref_label = "Aura"
+description = "Volksfähigkeit als dauerhafte Aura (ID der Aura-.tres)."
+
+[resource]
+script = ExtResource("2_msdgc")
+table = "voelker"
+title = "Völker"
+group = "Charaktere"
+description = "Die spielbaren Völker. Die ID darf nie geändert werden, weil gespeicherte Charaktere sie verwenden."
+key_columns = PackedStringArray("id")
+order = 50
+columns = Array[ExtResource("1_5fjd1")]([SubResource("Resource_kafqd"), SubResource("Resource_4eukl"), SubResource("Resource_5r17k"), SubResource("Resource_n3sg4"), SubResource("Resource_g0xvq"), SubResource("Resource_2c6t0"), SubResource("Resource_4jniw"), SubResource("Resource_dry2w"), SubResource("Resource_v6010"), SubResource("Resource_whv71"), SubResource("Resource_fts2m"), SubResource("Resource_80jdi")])

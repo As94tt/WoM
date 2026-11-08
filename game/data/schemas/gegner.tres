@@ -1,0 +1,226 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_7jfpk"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_f1pc0"]
+
+[sub_resource type="Resource" id="Resource_dkgbs"]
+script = ExtResource("1_7jfpk")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID, wird nie geändert (z. B. wolf_jung)."
+
+[sub_resource type="Resource" id="Resource_pgqkf"]
+script = ExtResource("1_7jfpk")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename."
+
+[sub_resource type="Resource" id="Resource_vy5fe"]
+script = ExtResource("1_7jfpk")
+name = "titel"
+choices = PackedStringArray()
+description = "Optionaler Titel unter dem Namen, z. B. <Anführer der Banditen>."
+
+[sub_resource type="Resource" id="Resource_y6745"]
+script = ExtResource("1_7jfpk")
+name = "familie"
+type = 5
+required = true
+choices = PackedStringArray("tier", "humanoid", "untoter", "elementar", "daemon", "riese")
+description = "Familie (für Talente, Fähigkeiten, Immunitäten, Familienbeute)."
+
+[sub_resource type="Resource" id="Resource_kdaq4"]
+script = ExtResource("1_7jfpk")
+name = "rang"
+type = 5
+default_value = "normal"
+choices = PackedStringArray("normal", "elite", "selten", "boss")
+description = "Rang; die Faktoren stehen in gegner_raenge.csv."
+
+[sub_resource type="Resource" id="Resource_arjm0"]
+script = ExtResource("1_7jfpk")
+name = "gesinnung"
+type = 5
+default_value = "feindlich"
+choices = PackedStringArray("feindlich", "neutral")
+description = "feindlich greift an, neutral erst wenn angegriffen."
+
+[sub_resource type="Resource" id="Resource_g4dgg"]
+script = ExtResource("1_7jfpk")
+name = "kampfart"
+type = 5
+default_value = "nahkampf"
+choices = PackedStringArray("nahkampf", "fernkampf", "zauberwirker")
+description = "Art des Kampfes."
+
+[sub_resource type="Resource" id="Resource_fwejw"]
+script = ExtResource("1_7jfpk")
+name = "angriffstempo"
+type = 3
+default_value = "2"
+has_min = true
+min_value = 0.1
+has_max = true
+max_value = 10.0
+choices = PackedStringArray()
+description = "Sekunden zwischen zwei automatischen Angriffen."
+
+[sub_resource type="Resource" id="Resource_3t6c1"]
+script = ExtResource("1_7jfpk")
+name = "schule"
+type = 5
+default_value = "physisch"
+choices = PackedStringArray("physisch", "feuer", "frost", "natur", "arkan", "schatten", "heilig")
+description = "Schadensschule des automatischen Angriffs (vorläufige Liste)."
+
+[sub_resource type="Resource" id="Resource_xyng1"]
+script = ExtResource("1_7jfpk")
+name = "leben_mod"
+type = 3
+default_value = "1"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Faktor auf das Leben aus Stufe und Rang (1 = unverändert)."
+
+[sub_resource type="Resource" id="Resource_rwx76"]
+script = ExtResource("1_7jfpk")
+name = "schaden_mod"
+type = 3
+default_value = "1"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Faktor auf den Schaden."
+
+[sub_resource type="Resource" id="Resource_w68jd"]
+script = ExtResource("1_7jfpk")
+name = "ruestung_mod"
+type = 3
+default_value = "1"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Faktor auf die Rüstung (1,5 = +50 %)."
+
+[sub_resource type="Resource" id="Resource_fhumn"]
+script = ExtResource("1_7jfpk")
+name = "zauberschutz_mod"
+type = 3
+default_value = "1"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Faktor auf den Zauberschutz."
+
+[sub_resource type="Resource" id="Resource_ub7ld"]
+script = ExtResource("1_7jfpk")
+name = "ausweichen"
+type = 3
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Ausweichchance in Prozent."
+
+[sub_resource type="Resource" id="Resource_n3rsm"]
+script = ExtResource("1_7jfpk")
+name = "parieren"
+type = 3
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Parierchance in Prozent."
+
+[sub_resource type="Resource" id="Resource_yitwx"]
+script = ExtResource("1_7jfpk")
+name = "blocken"
+type = 3
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Blockchance in Prozent."
+
+[sub_resource type="Resource" id="Resource_14axx"]
+script = ExtResource("1_7jfpk")
+name = "immunitaeten"
+type = 7
+choices = PackedStringArray()
+item_type = 1
+description = "Zustände oder Schulen, gegen die der Gegner immun ist (IDs, z. B. betaeubung|feuer)."
+
+[sub_resource type="Resource" id="Resource_4esxb"]
+script = ExtResource("1_7jfpk")
+name = "faehigkeiten"
+type = 7
+choices = PackedStringArray()
+ref_folder = "res://data/abilities/"
+ref_label = "Fähigkeit"
+item_type = 1
+description = "Fähigkeiten des Gegners (IDs der Fähigkeits-.tres)."
+
+[sub_resource type="Resource" id="Resource_7kgp7"]
+script = ExtResource("1_7jfpk")
+name = "ki_profil"
+type = 6
+choices = PackedStringArray()
+ref_folder = "res://data/ai_profiles/"
+ref_label = "KI-Profil"
+description = "Verhaltensprofil der KI (ID der KI-Profil-.tres)."
+
+[sub_resource type="Resource" id="Resource_febrb"]
+script = ExtResource("1_7jfpk")
+name = "beutetabelle"
+type = 6
+choices = PackedStringArray()
+ref_table = "beutetabellen"
+ref_column = "tabelle"
+ref_label = "Beutetabelle"
+description = "Optionale eigene Beute (Name in beutetabellen.csv)."
+
+[sub_resource type="Resource" id="Resource_2r67x"]
+script = ExtResource("1_7jfpk")
+name = "modell"
+choices = PackedStringArray()
+description = "Pfad zum 3D-Modell; leer = Platzhalter-Kapsel."
+
+[sub_resource type="Resource" id="Resource_g6ata"]
+script = ExtResource("1_7jfpk")
+name = "groesse"
+type = 3
+default_value = "1"
+has_min = true
+min_value = 0.1
+has_max = true
+max_value = 10.0
+choices = PackedStringArray()
+description = "Größenfaktor des Modells."
+
+[sub_resource type="Resource" id="Resource_1ldru"]
+script = ExtResource("1_7jfpk")
+name = "farbe"
+type = 9
+choices = PackedStringArray()
+description = "Platzhalterfarbe als Hex-Code; leer = Farbe der Familie."
+
+[resource]
+script = ExtResource("2_f1pc0")
+table = "gegner"
+title = "Gegner"
+group = "Gegner"
+description = "Ein Gegnertyp pro Zeile. Kein fester Lebenswert: Leben, Schaden usw. ergeben sich aus der Stufe (vom Spawn), dem Rang (gegner_raenge.csv) und den Modifikatoren."
+key_columns = PackedStringArray("id")
+order = 10
+columns = Array[ExtResource("1_7jfpk")]([SubResource("Resource_dkgbs"), SubResource("Resource_pgqkf"), SubResource("Resource_vy5fe"), SubResource("Resource_y6745"), SubResource("Resource_kdaq4"), SubResource("Resource_arjm0"), SubResource("Resource_g4dgg"), SubResource("Resource_fwejw"), SubResource("Resource_3t6c1"), SubResource("Resource_xyng1"), SubResource("Resource_rwx76"), SubResource("Resource_w68jd"), SubResource("Resource_fhumn"), SubResource("Resource_ub7ld"), SubResource("Resource_n3rsm"), SubResource("Resource_yitwx"), SubResource("Resource_14axx"), SubResource("Resource_4esxb"), SubResource("Resource_7kgp7"), SubResource("Resource_febrb"), SubResource("Resource_2r67x"), SubResource("Resource_g6ata"), SubResource("Resource_1ldru")])

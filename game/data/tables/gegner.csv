@@ -1,0 +1,5 @@
+﻿# Gegnertypen. Leben und Schaden ergeben sich aus Stufe (Spawn), Rang und Modifikatoren.
+id;name;titel;familie;rang;gesinnung;kampfart;angriffstempo;schule;leben_mod;schaden_mod;ruestung_mod;zauberschutz_mod;ausweichen;parieren;blocken;immunitaeten;faehigkeiten;ki_profil;beutetabelle;modell;groesse;farbe;notiz
+wolf_jung;Junger Wolf;;tier;normal;feindlich;nahkampf;2;physisch;1;1;1;1;5;0;0;;;;wolf_jung;;0,8;;Beispiel, in Rudeln
+bandit;Bandit;;humanoid;normal;feindlich;nahkampf;2;physisch;1;1;1;1;0;5;0;;;;;;1;;Beispiel
+grauschnauze;Grauschnauze;<Rudelführer>;tier;selten;feindlich;nahkampf;1,8;physisch;1;1;1,5;1;10;0;0;betaeubung;;;wolf_jung;;1,2;;Beispiel: +50 % Rüstung, immun gegen Betäubung

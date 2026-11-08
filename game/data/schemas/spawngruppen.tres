@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_r16qi"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_agdqy"]
+
+[sub_resource type="Resource" id="Resource_p1ssc"]
+script = ExtResource("1_r16qi")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID der Spawngruppe."
+
+[sub_resource type="Resource" id="Resource_ikw4j"]
+script = ExtResource("1_r16qi")
+name = "gebiet"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_table = "gebiete"
+ref_label = "Gebiet"
+description = "Gebiet der Gruppe."
+
+[sub_resource type="Resource" id="Resource_5qh4d"]
+script = ExtResource("1_r16qi")
+name = "gegner"
+type = 8
+required = true
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+ref_table = "gegner"
+ref_label = "Gegner"
+item_type = 2
+description = "Gegner-ID:Gewichtung, z. B. wolf_jung:3|grauschnauze:1."
+
+[sub_resource type="Resource" id="Resource_i53e4"]
+script = ExtResource("1_r16qi")
+name = "stufe_min"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Niedrigste Stufe der Gegner."
+
+[sub_resource type="Resource" id="Resource_auhna"]
+script = ExtResource("1_r16qi")
+name = "stufe_max"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Höchste Stufe der Gegner."
+
+[sub_resource type="Resource" id="Resource_e4nfc"]
+script = ExtResource("1_r16qi")
+name = "anzahl"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Wie viele Gegner gleichzeitig."
+
+[sub_resource type="Resource" id="Resource_e8sud"]
+script = ExtResource("1_r16qi")
+name = "respawn_s"
+type = 3
+default_value = "180"
+has_min = true
+choices = PackedStringArray()
+description = "Sekunden bis zum Wiedererscheinen."
+
+[sub_resource type="Resource" id="Resource_uxbwd"]
+script = ExtResource("1_r16qi")
+name = "gemeinsamer_angriff"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "ja = wird einer angegriffen, greifen alle an."
+
+[resource]
+script = ExtResource("2_agdqy")
+table = "spawngruppen"
+title = "Spawngruppen"
+group = "Welt"
+description = "Was in einem Spawnbereich erscheint. Die Spawnbereiche in der Welt bestimmen nur Ort, Radius bzw. feste Punkte und verweisen auf eine Spawngruppe."
+key_columns = PackedStringArray("id")
+order = 21
+columns = Array[ExtResource("1_r16qi")]([SubResource("Resource_p1ssc"), SubResource("Resource_ikw4j"), SubResource("Resource_5qh4d"), SubResource("Resource_i53e4"), SubResource("Resource_auhna"), SubResource("Resource_e4nfc"), SubResource("Resource_e8sud"), SubResource("Resource_uxbwd")])

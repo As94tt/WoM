@@ -1,0 +1,4 @@
+﻿# Waren der Händler. preis leer = Standardpreis, vorrat leer = unbegrenzt.
+haendler;gegenstand;preis;vorrat;auffuellen_s;notiz
+dorfhaendler;schwert_rostig;;;;Beispiel
+dorfhaendler;lederkappe;40;3;600;Beispiel mit Vorrat

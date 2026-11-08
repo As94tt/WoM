@@ -1,0 +1,315 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_8wunn"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_j583i"]
+
+[sub_resource type="Resource" id="Resource_heb3s"]
+script = ExtResource("1_8wunn")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID, wird nie geändert (z. B. schwert_rostig)."
+
+[sub_resource type="Resource" id="Resource_ef6l2"]
+script = ExtResource("1_8wunn")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename."
+
+[sub_resource type="Resource" id="Resource_htahj"]
+script = ExtResource("1_8wunn")
+name = "beschreibung"
+choices = PackedStringArray()
+description = "Beschreibung im Tooltip."
+
+[sub_resource type="Resource" id="Resource_255fs"]
+script = ExtResource("1_8wunn")
+name = "icon"
+choices = PackedStringArray()
+description = "Pfad zum Icon; leer = Platzhalter."
+
+[sub_resource type="Resource" id="Resource_5rxnh"]
+script = ExtResource("1_8wunn")
+name = "typ"
+type = 5
+required = true
+choices = PackedStringArray("tasche", "ausruestung", "verbrauchsgut", "material", "questgegenstand", "plunder")
+description = "Art des Gegenstands."
+
+[sub_resource type="Resource" id="Resource_qdp6b"]
+script = ExtResource("1_8wunn")
+name = "slot"
+type = 5
+choices = PackedStringArray("helm", "schulter", "brust", "guertel", "beine", "schuhe", "handschuhe", "armschienen", "umhang", "ring", "kette", "einhand", "zweihand", "schild", "zauberstab", "fokus", "fernkampfwaffe", "siegel", "talisman")
+description = "Ausrüstungsplatz (nur bei Ausrüstung)."
+
+[sub_resource type="Resource" id="Resource_hsle2"]
+script = ExtResource("1_8wunn")
+name = "seltenheit"
+type = 5
+default_value = "gewoehnlich"
+choices = PackedStringArray("gewoehnlich")
+description = "Seltenheit (Stufen legt der Projektverantwortliche fest)."
+
+[sub_resource type="Resource" id="Resource_ixsev"]
+script = ExtResource("1_8wunn")
+name = "gegenstandsstufe"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Bestimmt das Wertebudget."
+
+[sub_resource type="Resource" id="Resource_pnhxc"]
+script = ExtResource("1_8wunn")
+name = "mindeststufe"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Mindeststufe zum Anlegen."
+
+[sub_resource type="Resource" id="Resource_s2e3s"]
+script = ExtResource("1_8wunn")
+name = "ruestungsklasse"
+type = 5
+choices = PackedStringArray("stoff", "leder", "kette", "platte")
+description = "Nur Rüstungsteile."
+
+[sub_resource type="Resource" id="Resource_6q428"]
+script = ExtResource("1_8wunn")
+name = "waffentyp"
+type = 5
+choices = PackedStringArray("dolch", "schwert", "axt", "streitkolben", "faustwaffe", "zweihandschwert", "zweihandaxt", "kriegshammer", "kampfstab", "bogen", "langbogen", "kurzbogen", "armbrust", "zauberstab", "schild", "fokus")
+description = "Nur Waffen, Schilde und Fokusse."
+
+[sub_resource type="Resource" id="Resource_daoma"]
+script = ExtResource("1_8wunn")
+name = "handhabung"
+type = 5
+choices = PackedStringArray("haupthand", "nebenhand", "einhand", "zweihand", "fernkampf")
+description = "Nur Waffen."
+
+[sub_resource type="Resource" id="Resource_mu0yy"]
+script = ExtResource("1_8wunn")
+name = "schaden_min"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Kleinster Waffenschaden; leer = aus Gegenstandsstufe und Waffentyp berechnet."
+
+[sub_resource type="Resource" id="Resource_3fws6"]
+script = ExtResource("1_8wunn")
+name = "schaden_max"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Größter Waffenschaden; leer = berechnet."
+
+[sub_resource type="Resource" id="Resource_sruvw"]
+script = ExtResource("1_8wunn")
+name = "geschwindigkeit"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Sekunden pro Waffenschlag."
+
+[sub_resource type="Resource" id="Resource_a5ovi"]
+script = ExtResource("1_8wunn")
+name = "ruestung"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Rüstung; leer = aus Gegenstandsstufe, Slot und Rüstungsklasse berechnet."
+
+[sub_resource type="Resource" id="Resource_ftc4t"]
+script = ExtResource("1_8wunn")
+name = "blockwert"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Blockwert (Schilde)."
+
+[sub_resource type="Resource" id="Resource_22ess"]
+script = ExtResource("1_8wunn")
+name = "staerke"
+type = 2
+choices = PackedStringArray()
+description = "Stärke."
+
+[sub_resource type="Resource" id="Resource_xea0p"]
+script = ExtResource("1_8wunn")
+name = "gewandtheit"
+type = 2
+choices = PackedStringArray()
+description = "Gewandtheit."
+
+[sub_resource type="Resource" id="Resource_bgrjc"]
+script = ExtResource("1_8wunn")
+name = "intellekt"
+type = 2
+choices = PackedStringArray()
+description = "Intellekt."
+
+[sub_resource type="Resource" id="Resource_s2w7a"]
+script = ExtResource("1_8wunn")
+name = "ausdauer"
+type = 2
+choices = PackedStringArray()
+description = "Ausdauer."
+
+[sub_resource type="Resource" id="Resource_47ii1"]
+script = ExtResource("1_8wunn")
+name = "willenskraft"
+type = 2
+choices = PackedStringArray()
+description = "Willenskraft."
+
+[sub_resource type="Resource" id="Resource_terxn"]
+script = ExtResource("1_8wunn")
+name = "praezision"
+type = 2
+choices = PackedStringArray()
+description = "Präzision."
+
+[sub_resource type="Resource" id="Resource_5u6vy"]
+script = ExtResource("1_8wunn")
+name = "verheerung"
+type = 2
+choices = PackedStringArray()
+description = "Verheerung."
+
+[sub_resource type="Resource" id="Resource_e5sum"]
+script = ExtResource("1_8wunn")
+name = "tempo"
+type = 2
+choices = PackedStringArray()
+description = "Tempo."
+
+[sub_resource type="Resource" id="Resource_d2c2y"]
+script = ExtResource("1_8wunn")
+name = "durchschlag"
+type = 2
+choices = PackedStringArray()
+description = "Durchschlag."
+
+[sub_resource type="Resource" id="Resource_j4vo5"]
+script = ExtResource("1_8wunn")
+name = "abwehr"
+type = 2
+choices = PackedStringArray()
+description = "Abwehr."
+
+[sub_resource type="Resource" id="Resource_a68n6"]
+script = ExtResource("1_8wunn")
+name = "eile"
+type = 2
+choices = PackedStringArray()
+description = "Eile."
+
+[sub_resource type="Resource" id="Resource_ea2fd"]
+script = ExtResource("1_8wunn")
+name = "zauberschutz"
+type = 2
+choices = PackedStringArray()
+description = "Zauberschutz."
+
+[sub_resource type="Resource" id="Resource_sclwy"]
+script = ExtResource("1_8wunn")
+name = "effekte"
+type = 7
+choices = PackedStringArray()
+ref_folder = "res://data/auras/"
+ref_label = "Aura"
+item_type = 1
+description = "Auren, die der Gegenstand verleiht (IDs der Aura-.tres)."
+
+[sub_resource type="Resource" id="Resource_7qrlm"]
+script = ExtResource("1_8wunn")
+name = "klassen"
+type = 7
+choices = PackedStringArray()
+ref_folder = "res://data/classes/"
+ref_label = "Klasse"
+item_type = 1
+description = "Nur für diese Klassen; leer = alle."
+
+[sub_resource type="Resource" id="Resource_x48qd"]
+script = ExtResource("1_8wunn")
+name = "einzigartig"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Nur einmal im Besitz."
+
+[sub_resource type="Resource" id="Resource_15sri"]
+script = ExtResource("1_8wunn")
+name = "einzigartig_angelegt"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Nur einmal gleichzeitig angelegt."
+
+[sub_resource type="Resource" id="Resource_vumts"]
+script = ExtResource("1_8wunn")
+name = "bindung"
+type = 5
+default_value = "keine"
+choices = PackedStringArray("keine", "beim_aufheben", "beim_anlegen")
+description = "Bindung (vorerst nur Anzeige)."
+
+[sub_resource type="Resource" id="Resource_en7pj"]
+script = ExtResource("1_8wunn")
+name = "stapelgroesse"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Wie viele auf einem Platz."
+
+[sub_resource type="Resource" id="Resource_fd2xe"]
+script = ExtResource("1_8wunn")
+name = "verkaufswert"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Verkaufswert in Kupfer."
+
+[sub_resource type="Resource" id="Resource_bdhac"]
+script = ExtResource("1_8wunn")
+name = "taschenplaetze"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Nur Taschen: Anzahl Plätze."
+
+[sub_resource type="Resource" id="Resource_l8daj"]
+script = ExtResource("1_8wunn")
+name = "herkunft"
+choices = PackedStringArray()
+description = "Herkunftstext (Goldschrift im Tooltip)."
+
+[sub_resource type="Resource" id="Resource_rkr5h"]
+script = ExtResource("1_8wunn")
+name = "modell"
+choices = PackedStringArray()
+description = "Pfad zum 3D-Modell; leer = Platzhalter je Slot."
+
+[resource]
+script = ExtResource("2_j583i")
+table = "gegenstaende"
+title = "Gegenstände"
+group = "Gegenstände"
+description = "Ein Gegenstand pro Zeile. Rüstung und Waffenschaden dürfen leer bleiben; dann werden sie berechnet (Gegenstands-Ticket). Die Prüfung des Wertebudgets folgt mit dem Gegenstands-Ticket."
+key_columns = PackedStringArray("id")
+order = 40
+columns = Array[ExtResource("1_8wunn")]([SubResource("Resource_heb3s"), SubResource("Resource_ef6l2"), SubResource("Resource_htahj"), SubResource("Resource_255fs"), SubResource("Resource_5rxnh"), SubResource("Resource_qdp6b"), SubResource("Resource_hsle2"), SubResource("Resource_ixsev"), SubResource("Resource_pnhxc"), SubResource("Resource_s2e3s"), SubResource("Resource_6q428"), SubResource("Resource_daoma"), SubResource("Resource_mu0yy"), SubResource("Resource_3fws6"), SubResource("Resource_sruvw"), SubResource("Resource_a5ovi"), SubResource("Resource_ftc4t"), SubResource("Resource_22ess"), SubResource("Resource_xea0p"), SubResource("Resource_bgrjc"), SubResource("Resource_s2w7a"), SubResource("Resource_47ii1"), SubResource("Resource_terxn"), SubResource("Resource_5u6vy"), SubResource("Resource_e5sum"), SubResource("Resource_d2c2y"), SubResource("Resource_j4vo5"), SubResource("Resource_a68n6"), SubResource("Resource_ea2fd"), SubResource("Resource_sclwy"), SubResource("Resource_7qrlm"), SubResource("Resource_x48qd"), SubResource("Resource_15sri"), SubResource("Resource_vumts"), SubResource("Resource_en7pj"), SubResource("Resource_fd2xe"), SubResource("Resource_bdhac"), SubResource("Resource_l8daj"), SubResource("Resource_rkr5h")])

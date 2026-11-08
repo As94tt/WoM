@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_qekho"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_otorx"]
+
+[sub_resource type="Resource" id="Resource_mk6dt"]
+script = ExtResource("1_qekho")
+name = "rang"
+type = 5
+required = true
+choices = PackedStringArray("normal", "elite", "selten", "boss")
+description = "Rang des Gegners."
+
+[sub_resource type="Resource" id="Resource_4x35d"]
+script = ExtResource("1_qekho")
+name = "seltenheit"
+type = 5
+required = true
+choices = PackedStringArray("gewoehnlich")
+description = "Seltenheit (Stufen legt der Projektverantwortliche fest; bis dahin nur gewoehnlich)."
+
+[sub_resource type="Resource" id="Resource_1uyir"]
+script = ExtResource("1_qekho")
+name = "chance"
+type = 3
+required = true
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Chance in Prozent."
+
+[resource]
+script = ExtResource("2_otorx")
+table = "weltbeute"
+title = "Weltbeute"
+group = "Beute"
+description = "Zufällige Gegenstände passender Stufe, je Rang und Seltenheit. Beim Tod eines Gegners werden eigene Beute, Familienbeute, Gebietsbeute und Weltbeute zusammengeführt."
+key_columns = PackedStringArray("rang", "seltenheit")
+order = 32
+columns = Array[ExtResource("1_qekho")]([SubResource("Resource_mk6dt"), SubResource("Resource_4x35d"), SubResource("Resource_1uyir")])
