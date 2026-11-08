@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/style_preview.gd" id="1_preview"]
 [ext_resource type="PackedScene" path="res://scenes/ui/character_entry.tscn" id="2_entry"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/action_slot.tscn" id="3_slot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/hud_window.tscn" id="4_window"]
 
 [node name="StylePreview" type="Control"]
 layout_mode = 3
@@ -512,3 +514,96 @@ layout_mode = 2
 theme_type_variation = &"ErrorText"
 text = "Nur Buchstaben von A bis Z erlaubt, keine Leerzeichen, Zahlen, Umlaute oder Sonderzeichen."
 autowrap_mode = 3
+
+[node name="SectionHud" type="HSeparator" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+
+[node name="HudTitle" type="Label" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Interface im Spiel (Ticket #17)"
+
+[node name="HudGrid" type="GridContainer" parent="ScrollContainer/MarginContainer/Content"]
+layout_mode = 2
+columns = 2
+
+[node name="SlotsLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Aktionsslot: normal, Hover, Aufleuchten, Taste"
+vertical_alignment = 1
+
+[node name="Slots" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SlotRow"
+
+[node name="SlotNormal" parent="ScrollContainer/MarginContainer/Content/HudGrid/Slots" instance=ExtResource("3_slot")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SlotHover" parent="ScrollContainer/MarginContainer/Content/HudGrid/Slots" instance=ExtResource("3_slot")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SlotFlashing" parent="ScrollContainer/MarginContainer/Content/HudGrid/Slots" instance=ExtResource("3_slot")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SlotKey" parent="ScrollContainer/MarginContainer/Content/HudGrid/Slots" instance=ExtResource("3_slot")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MicroLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Menüleisten-Button (SlotButton, 40 px), deaktiviert"
+vertical_alignment = 1
+
+[node name="Micro" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SlotRow"
+
+[node name="MicroNormal" type="Button" parent="ScrollContainer/MarginContainer/Content/HudGrid/Micro"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+tooltip_text = "Charakter (C)"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "C"
+
+[node name="MicroDisabled" type="Button" parent="ScrollContainer/MarginContainer/Content/HudGrid/Micro"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_type_variation = &"SlotButton"
+text = "Z"
+
+[node name="TooltipLabelText" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Tooltip (TooltipPanel, TooltipLabel)"
+vertical_alignment = 1
+
+[node name="TooltipSample" type="PanelContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"TooltipPanel"
+
+[node name="Text" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/TooltipSample"]
+layout_mode = 2
+theme_type_variation = &"TooltipLabel"
+text = "Charakter (C)"
+
+[node name="WindowLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Fenster (hud_window.tscn): Titel, X, Inhalt"
+vertical_alignment = 1
+
+[node name="WindowSample" parent="ScrollContainer/MarginContainer/Content/HudGrid" instance=ExtResource("4_window")]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+size_flags_horizontal = 0
+title = "Charakter"

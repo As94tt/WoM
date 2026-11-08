@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6 und #8).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8 und #17).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -30,5 +30,10 @@ func _ready() -> void:
 	var choice_hover: Button = %ChoiceHover
 	choice_hover.add_theme_stylebox_override("normal", choice_hover.get_theme_stylebox("hover"))
 	choice_hover.add_theme_color_override("font_color", choice_hover.get_theme_color("font_hover_color"))
+
+	# Interface im Spiel (#17): Aktionsslots mit Hover, Aufleuchten und Taste.
+	%SlotHover.add_theme_stylebox_override("normal", %SlotHover.get_theme_stylebox("hover"))
+	%SlotFlashing.get_node("%Flash").visible = true
+	%SlotKey.input_action = &"action_bar_1_slot_1"
 
 	%FocusButton.grab_focus()

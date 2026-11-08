@@ -149,15 +149,39 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `ChoiceButton` | `Button` | wie `Button`; gedrückt und Hover+gedrückt nutzen die Ausgewählt-Fläche von `ListEntryButton`, Schrift im ausgewählten Zustand weiß | Auswahlbutton mit `toggle_mode` in einer `ButtonGroup` (Volk, Geschlecht, Klasse in der Charaktererstellung) |
 | `ChoiceGrid` | `GridContainer` | Abstand 12 px horizontal und vertikal | Raster aus Auswahlbuttons (z. B. Völker in zwei Spalten) |
 | `ErrorText` | `Label` | Schriftgröße 16 px, hellste Textfarbe (Graubox-Platzhalter, bis ein Warn-Token freigegeben ist) | Fehlermeldung unter einem Eingabefeld; ersetzt in derselben Zeile den `HintText` |
+| `SlotButton` | `Button` | quadratischer leerer Rahmen ohne Innenabstand: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert; Fokus wie `Button` | Aktionsleisten-Slot (48 × 48 px), Taschenplatz (48 × 48 px), Menüleisten-Button und Schließen-Button „X“ eines Fensters (40 × 40 px) |
+| `SlotFlash` | `Panel` | halbtransparente helle Fläche ohne Rahmen | kurzes Aufleuchten eines Aktionsslots bei Klick oder Taste (blendet in 0,25 s aus); fängt keine Mausklicks ab |
+| `SlotHotkey` | `Label` | Schriftgröße 14 px | Taste unten rechts im Aktionsslot (4 px Abstand zum Rand) |
+| `SlotRow` | `HBoxContainer` | Abstand 4 px | Slots einer Aktionsleiste, Menüleiste, Taschenleiste |
+| `SlotColumn` | `VBoxContainer` | Abstand 4 px | übereinanderliegende Aktionsleisten |
 
 **Basistypen ohne Variation:**
 
 - `Label`: Schriftgröße 16 px (wie `BodyText`).
 - `Button`: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert und Fokus. Fokus ist ein zusätzlicher heller Rahmen über dem jeweiligen Zustand. Innenabstand 16 px horizontal / 12 px vertikal; damit sind Buttons mit Standardschrift 47 px hoch und erfüllen die **Mindesthöhe von 40 px** aus Abschnitt 6.
 - `Panel` und `PanelContainer`: eine `StyleBoxFlat` mit 16 px Innenabstand.
+- `TooltipPanel` / `TooltipLabel`: Tooltip mit eigener `StyleBoxFlat` (8 px horizontal / 4 px vertikal Innenabstand, 1-px-Rahmen), Schriftgröße 16 px. Gilt für alle `tooltip_text` im Spiel (z. B. Menüleiste: „Charakter (C)“).
 - `LineEdit`: eigene `StyleBoxFlat` für normal und deaktiviert (`read_only`, bei `editable = false`), Fokus wie `Button`. Innenabstand 12 px horizontal / 8 px vertikal, Schriftgröße 16 px, gedämpfte Farbe für Platzhaltertext.
 
-**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“ und „Erstellen“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px, Namensfeld: 320 px, Meldungszeile unter dem Namensfeld: 480 × 44 px für zwei Zeilen).
+**Mindestbreiten** kann ein Theme nicht festlegen; sie stehen als `custom_minimum_size` in der Szene (Menü-Buttons: 240 px breit, „Welt betreten“ und „Erstellen“: 280 px, Dialog: 480 px, Dialog-Buttons: 160 px, Namensfeld: 320 px, Meldungszeile unter dem Namensfeld: 480 × 44 px für zwei Zeilen; Spielmenü-Buttons: 280 px; HUD siehe unten).
+
+### Basisgröße und Skalierung
+
+Die Basisgröße des Projekts ist **1920 × 1080** (`display/window/size/viewport_width/height`, Stretch-Modus `canvas_items`, Aspect `expand`). Alle Pixelangaben in diesem Dokument sind logische Pixel bei dieser Basisgröße; bei 1440p wird alles mit Faktor 1,33 skaliert. Das Testfenster startet mit 1280 × 720 (`window_width/height_override`), damit zwei Instanzen nebeneinander passen; dort wirkt alles entsprechend kleiner.
+
+### Interface im Spiel (HUD, Ticket #17)
+
+Szene `game/scenes/ui/hud.tscn` mit Teilen in `game/scenes/ui/hud/`. Außenrand `ScreenMargin` (32 px).
+
+| Element | Aufbau | Position |
+|---|---|---|
+| Aktionsleisten | 2 × 12 `SlotButton`-Slots à 48 × 48 px in `SlotRow`, Leisten in `SlotColumn`; Leiste 1 unten, Leiste 2 darüber | unten mittig |
+| Menüleiste | 5 `SlotButton` à 40 × 40 px mit Platzhalter-Buchstaben (C, Z, T, K, S), Tooltip „Name (Taste)“ | unten rechts, über der Taschenleiste |
+| Taschenleiste | 4 Taschenplätze + Rucksack („R“) à 48 × 48 px, Rucksack ganz rechts | unten rechts |
+| Fenster | `PanelContainer` mit `WindowTitle`, Schließen-Button „X“ (`SlotButton` 40 × 40 px) und Inhaltsbereich; leer mit `HintText` „Kommt bald“ | siehe unten |
+| Spielmenü | `DimOverlay` + `DialogPanel` mit `WindowTitle` und `ButtonList`; nicht belegte Punkte deaktiviert | Bildschirmmitte |
+
+Fenstergrößen und Plätze: Charakter und Zauberbuch 400 × 520 px links nebeneinander (feste Reihenfolge, 12 px Abstand, 128 px vom oberen Rand, unter Namens- und Infozeile); Talente 640 × 520 px mittig im Platz rechts davon; Karte ca. 70 % des Bildschirms mittig; Taschen 360 × 280 px unten rechts über Menü- und Taschenleiste. Bei 16:9 überlappen sich gleichzeitig offene Fenster nicht; die Karte schließt beim Öffnen alle anderen Fenster.
 
 **Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Dieselbe Farbe färbt in der Charakterauswahl und -erstellung auch das Platzhaltermodell (Kapsel) in der 3D-Vorschau. Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
 

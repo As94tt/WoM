@@ -199,6 +199,77 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dim_overlay"]
 bg_color = Color(0, 0, 0, 0.6)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_normal"]
+bg_color = Color(0.14, 0.14, 0.14, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.45, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_hover"]
+bg_color = Color(0.22, 0.22, 0.22, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75, 0.75, 0.75, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_pressed"]
+bg_color = Color(0.08, 0.08, 0.08, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75, 0.75, 0.75, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_disabled"]
+bg_color = Color(0.14, 0.14, 0.14, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.3, 0.3, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_flash"]
+bg_color = Color(1, 1, 1, 0.35)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tooltip"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.6, 0.6, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -281,5 +352,23 @@ SmallLabel/base_type = &"Label"
 SmallLabel/font_sizes/font_size = 14
 Subtitle/base_type = &"Label"
 Subtitle/font_sizes/font_size = 18
+SlotButton/base_type = &"Button"
+SlotButton/styles/disabled = SubResource("StyleBoxFlat_slot_disabled")
+SlotButton/styles/focus = SubResource("StyleBoxFlat_button_focus")
+SlotButton/styles/hover = SubResource("StyleBoxFlat_slot_hover")
+SlotButton/styles/hover_pressed = SubResource("StyleBoxFlat_slot_pressed")
+SlotButton/styles/normal = SubResource("StyleBoxFlat_slot_normal")
+SlotButton/styles/pressed = SubResource("StyleBoxFlat_slot_pressed")
+SlotColumn/base_type = &"VBoxContainer"
+SlotColumn/constants/separation = 4
+SlotFlash/base_type = &"Panel"
+SlotFlash/styles/panel = SubResource("StyleBoxFlat_slot_flash")
+SlotHotkey/base_type = &"Label"
+SlotHotkey/font_sizes/font_size = 14
+SlotRow/base_type = &"HBoxContainer"
+SlotRow/constants/separation = 4
+TooltipLabel/colors/font_color = Color(0.9, 0.9, 0.9, 1)
+TooltipLabel/font_sizes/font_size = 16
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_tooltip")
 WindowTitle/base_type = &"Label"
 WindowTitle/font_sizes/font_size = 24
