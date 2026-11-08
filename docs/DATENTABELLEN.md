@@ -82,6 +82,18 @@ In `faehigkeitswerte.csv` die Zeile der Fähigkeit suchen, z. B. `feuerball`:
 
 Die `.tres` der Fähigkeit beschreibt nur den Aufbau (welche Effekte), die Zahlen kommen aus dieser Tabelle. So stehen die Zahlen aller Klassen nebeneinander.
 
+### Werte der Charaktere anpassen (Wertesystem #19)
+
+Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welche Spalten nutzt, Namen und Tooltips der Werte) in `game/data/stats/stat_rules.tres`. Alle Zahlen sind Platzhalter.
+
+- **Grundwerte je Klasse und Stufe:** `klassenwachstum.csv`. Die Zeile mit Stufe 1 enthält die Grundwerte, jede weitere Zeile den Zuwachs beim Erreichen dieser Stufe. Beispiel: Ein Krieger auf Stufe 3 hat die Stärke aus den Zeilen 1, 2 und 3 zusammen.
+- **Volksboni:** Spalten `staerke` bis `willenskraft` in `voelker.csv`; sie werden zu den Klassenwerten addiert.
+- **Wertungen in Prozent:** `umrechnung.csv`. Die Spalte nennt, wie viele Punkte einer Wertung 1 % ergeben, z. B. `praezision` = 10 heißt 100 Präzision = 10 % kritische Trefferchance. `ruestung_konstante` ist die Rüstung, bei der der Schaden um 50 % sinkt (abnehmender Ertrag: Verringerung = Rüstung / (Rüstung + Konstante)).
+- **Faktoren, Grundwerte, Obergrenzen, Regeneration, Wut und Chi:** `spielkonstanten.csv`, Abschnitte „Wertesystem (#19)“, z. B. `leben_pro_ausdauer`, `obergrenze_krit`, `leben_regen_ausser_kampf`, `chi_verfall_pro_s`.
+- **Formeln (Platzhalter):** Leben = Grundleben + `leben_pro_ausdauer` × Ausdauer. Kampfkraft = Grund-Kampfkraft + `kampfkraft_pro_hauptattribut` × Hauptattribut. Zaubermacht = Grund-Zaubermacht + `zaubermacht_pro_intellekt` × Intellekt. Mana = Grundmana + `mana_pro_intellekt` × Intellekt. Prozentwerte = Grundwert + Wertung / Umrechnung, höchstens die Obergrenze. Verfehlen = `verfehlen_grund` + `verfehlen_pro_stufe` × Stufenunterschied, zwischen `verfehlen_min` und `verfehlen_max`.
+
+Testen: Im Spiel C drücken, im Charakterfenster „»“ klicken und im Entwickler-Panel (F10) unter „Werte“ Stufe, Testmodifikatoren usw. ändern. Nach dem Ändern einer Tabelle F6 drücken; die Werte werden sofort mit den neuen Zahlen neu berechnet.
+
 ## 4. Was tun bei Fehlermeldungen?
 
 Jede Meldung nennt Datei, Zeile, Spalte und Grund, z. B.:
@@ -120,6 +132,7 @@ Die Zeilennummer ist die Zeile in der Datei. Kommentar- und Kopfzeilen werden mi
 ## 6. Für Entwickler
 
 - **Zugriff** nur über den Autoload `Data`, kein System liest CSV-Dateien selbst. Beispiele: `Data.gegner(&"wolf_jung")`, `Data.konstante(&"gcd")`, `Data.faehigkeitswert(&"frostnova", "werte.radius")`, `Data.beutetabelle(&"wolf_jung")`, `Data.row("tabelle", schluessel)`. Zeilen sind `TableRow` mit Werten im Typ laut Schema. `row.is_blank("spalte")` sagt, ob die Zelle leer war.
+- **Wertesystem (#19):** `Data.klassenwerte(&"warrior", 5)` liefert die summierten Klassenwerte einer Stufe, `Data.umrechnung(5)` die Umrechnungszeile, `Data.hoechste_stufe()` die höchste Stufe in `umrechnung.csv`. Gerechnet wird nur in `StatBlock` (`game/scripts/stats/`).
 - **Völker** gibt es als `RaceData` über `GameData.get_races()` / `GameData.get_race(id)` bzw. `Data.voelker()`.
 - **Verweise auf `.tres`** (Auren, Fähigkeiten, KI-Profile, Klassen, Gebiete) gehen über das Feld `id` der Ressourcen im angegebenen Ordner. Liegen dort noch keine Daten, wird nur das Format der ID geprüft. Sobald es Daten gibt, wird jeder Verweis geprüft.
 - **Neue Tabelle:** Schema als `TableSchema` in `game/data/schemas/<name>.tres` anlegen, dazu `game/data/tables/<name>.csv` (Kopfzeile mit allen Spalten und `notiz`) und daneben `<name>.csv.import` mit dem Inhalt `[remap]` / `importer="keep"`. Ohne die `.import`-Datei hält Godot die CSV für eine Übersetzungstabelle und packt sie nicht ins exportierte Spiel. Danach die Spaltenübersicht neu erzeugen:
@@ -359,24 +372,24 @@ Eindeutig: `id`.
 | `koerperfamilie` | Auswahl | ja |  | `normal`, `kompakt`, `massiv`, `gross_gebeugt` | Körperfamilie laut GDD (Rig, Animationen, Ausrüstung). |
 | `groessenfaktor` | Kommazahl |  | 1 | 0,5 bis 2 | Größe des Platzhaltermodells (Mensch = 1). |
 | `reihenfolge` | Ganzzahl |  |  |  | Reihenfolge in Listen. |
-| `staerke` | Ganzzahl |  |  |  | Stärke-Bonus des Volks (bis zum Wertesystem 0). |
-| `gewandtheit` | Ganzzahl |  |  |  | Gewandtheit-Bonus des Volks (bis zum Wertesystem 0). |
-| `intellekt` | Ganzzahl |  |  |  | Intellekt-Bonus des Volks (bis zum Wertesystem 0). |
-| `ausdauer` | Ganzzahl |  |  |  | Ausdauer-Bonus des Volks (bis zum Wertesystem 0). |
-| `willenskraft` | Ganzzahl |  |  |  | Willenskraft-Bonus des Volks (bis zum Wertesystem 0). |
+| `staerke` | Ganzzahl |  |  |  | Stärke-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert). |
+| `gewandtheit` | Ganzzahl |  |  |  | Gewandtheit-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert). |
+| `intellekt` | Ganzzahl |  |  |  | Intellekt-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert). |
+| `ausdauer` | Ganzzahl |  |  |  | Ausdauer-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert). |
+| `willenskraft` | Ganzzahl |  |  |  | Willenskraft-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert). |
 | `volksfaehigkeit` | Verweis |  |  | Aura aus `res://data/auras/` | Volksfähigkeit als dauerhafte Aura (ID der Aura-.tres). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 #### klassenwachstum.csv – Klassenwachstum
 
-Wertezuwachs je Klasse und Stufe.
+Wertezuwachs je Klasse und Stufe. Die Zeile mit Stufe 1 enthält die Grundwerte; die Werte einer Stufe sind die Summe aller Zeilen bis zu dieser Stufe. Fehlende Stufen zählen als 0 (Wertesystem #19).
 
 Eindeutig: die Kombination `klasse` + `stufe`.
 
 | Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
 | --- | --- | --- | --- | --- | --- |
 | `klasse` | Verweis | ja |  | Klasse aus `res://data/classes/` | Klasse (ID wie in res://data/classes/). |
-| `stufe` | Ganzzahl | ja |  | 1 bis 100 | Stufe, die erreicht wird. |
+| `stufe` | Ganzzahl | ja |  | 1 bis 100 | Stufe, die erreicht wird (1 = Grundwerte). |
 | `staerke` | Ganzzahl |  |  |  | Stärke-Zuwachs. |
 | `gewandtheit` | Ganzzahl |  |  |  | Gewandtheit-Zuwachs. |
 | `intellekt` | Ganzzahl |  |  |  | Intellekt-Zuwachs. |
@@ -384,6 +397,8 @@ Eindeutig: die Kombination `klasse` + `stufe`.
 | `willenskraft` | Ganzzahl |  |  |  | Willenskraft-Zuwachs. |
 | `leben` | Ganzzahl |  |  |  | Lebenszuwachs. |
 | `mana` | Ganzzahl |  |  |  | Manazuwachs. |
+| `kampfkraft` | Ganzzahl |  |  |  | Zuwachs der Grund-Kampfkraft (Krieger, Schurke, Mönch; dazu kommt das Hauptattribut). |
+| `zaubermacht` | Ganzzahl |  |  |  | Zuwachs der Grund-Zaubermacht (Magier, Druide; dazu kommt der Intellekt). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 #### erfahrung.csv – Erfahrungskurve
@@ -396,6 +411,25 @@ Eindeutig: `stufe`.
 | --- | --- | --- | --- | --- | --- |
 | `stufe` | Ganzzahl | ja |  | 1 bis 100 | Aktuelle Stufe. |
 | `benoetigte_erfahrung` | Ganzzahl | ja |  | ab 0 | Erfahrung bis zur nächsten Stufe. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### umrechnung.csv – Umrechnung je Stufe
+
+Wie viele Wertungspunkte 1 % ergeben und wie stark Rüstung und Zauberschutz wirken, je Stufe des Charakters (Wertesystem #19). Prozent = Wertung / Spaltenwert der eigenen Stufe.
+
+Eindeutig: `stufe`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `stufe` | Ganzzahl | ja |  | 1 bis 100 | Stufe des Charakters. |
+| `praezision` | Kommazahl | ja |  | ab 0,1 | Präzision für 1 % kritische Trefferchance. |
+| `verheerung` | Kommazahl | ja |  | ab 0,1 | Verheerung für 1 % kritischen Schaden. |
+| `tempo` | Kommazahl | ja |  | ab 0,1 | Tempo für 1 % Tempo. |
+| `durchschlag` | Kommazahl | ja |  | ab 0,1 | Durchschlag für 1 % Durchschlag. |
+| `abwehr` | Kommazahl | ja |  | ab 0,1 | Abwehr für je 1 % Ausweichen, Parieren und Blocken. |
+| `eile` | Kommazahl | ja |  | ab 0,1 | Eile für 1 % Laufgeschwindigkeit. |
+| `ruestung_konstante` | Kommazahl | ja |  | ab 0,1 | Rüstungskonstante K: Verringerung = Rüstung / (Rüstung + K); bei Rüstung = K sind es 50 %. |
+| `zauberschutz_konstante` | Kommazahl | ja |  | ab 0,1 | Zauberschutzkonstante K, wie bei der Rüstung. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Fähigkeiten

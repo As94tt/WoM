@@ -1,0 +1,106 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_um19c"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_um19t"]
+
+[sub_resource type="Resource" id="Resource_um_stufe"]
+script = ExtResource("1_um19c")
+name = "stufe"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe des Charakters."
+
+[sub_resource type="Resource" id="Resource_um_praezision"]
+script = ExtResource("1_um19c")
+name = "praezision"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Präzision für 1 % kritische Trefferchance."
+
+[sub_resource type="Resource" id="Resource_um_verheerung"]
+script = ExtResource("1_um19c")
+name = "verheerung"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Verheerung für 1 % kritischen Schaden."
+
+[sub_resource type="Resource" id="Resource_um_tempo"]
+script = ExtResource("1_um19c")
+name = "tempo"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Tempo für 1 % Tempo."
+
+[sub_resource type="Resource" id="Resource_um_durchschlag"]
+script = ExtResource("1_um19c")
+name = "durchschlag"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Durchschlag für 1 % Durchschlag."
+
+[sub_resource type="Resource" id="Resource_um_abwehr"]
+script = ExtResource("1_um19c")
+name = "abwehr"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Abwehr für je 1 % Ausweichen, Parieren und Blocken."
+
+[sub_resource type="Resource" id="Resource_um_eile"]
+script = ExtResource("1_um19c")
+name = "eile"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Eile für 1 % Laufgeschwindigkeit."
+
+[sub_resource type="Resource" id="Resource_um_ruestung_konstante"]
+script = ExtResource("1_um19c")
+name = "ruestung_konstante"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Rüstungskonstante K: Verringerung = Rüstung / (Rüstung + K); bei Rüstung = K sind es 50 %."
+
+[sub_resource type="Resource" id="Resource_um_zauberschutz_konstante"]
+script = ExtResource("1_um19c")
+name = "zauberschutz_konstante"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Zauberschutzkonstante K, wie bei der Rüstung."
+
+[resource]
+script = ExtResource("2_um19t")
+table = "umrechnung"
+title = "Umrechnung je Stufe"
+group = "Charaktere"
+description = "Wie viele Wertungspunkte 1 % ergeben und wie stark Rüstung und Zauberschutz wirken, je Stufe des Charakters (Wertesystem #19). Prozent = Wertung / Spaltenwert der eigenen Stufe."
+key_columns = PackedStringArray("stufe")
+order = 53
+columns = Array[ExtResource("1_um19c")]([SubResource("Resource_um_stufe"), SubResource("Resource_um_praezision"), SubResource("Resource_um_verheerung"), SubResource("Resource_um_tempo"), SubResource("Resource_um_durchschlag"), SubResource("Resource_um_abwehr"), SubResource("Resource_um_eile"), SubResource("Resource_um_ruestung_konstante"), SubResource("Resource_um_zauberschutz_konstante")])

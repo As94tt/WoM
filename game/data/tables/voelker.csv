@@ -1,8 +1,8 @@
-﻿# Spielbare Völker (übernommen aus den früheren .tres in data/races/). Die id nie ändern: gespeicherte Charaktere verwenden sie.
+﻿# Spielbare Völker (übernommen aus den früheren .tres in data/races/). Die id nie ändern: gespeicherte Charaktere verwenden sie. Volksboni der Attribute sind Platzhalter (#19).
 id;name;beschreibung;koerperfamilie;groessenfaktor;reihenfolge;staerke;gewandtheit;intellekt;ausdauer;willenskraft;volksfaehigkeit;notiz
-human;Mensch;"Körperfamilie Normal. Ausgewogene Proportionen; an Mensch männlich und weiblich wird die ganze Pipeline gebaut.";normal;1;1;0;0;0;0;0;;Referenzpaar
-high_elf;Hochelf;Körperfamilie Normal. Ähnlich gebaut wie Menschen, aber schlanker und größer.;normal;1,1;2;0;0;0;0;0;;
-dark_elf;Dunkelelf;Körperfamilie Normal. Ähnlich gebaut wie Menschen, aber schlanker und größer.;normal;1,1;3;0;0;0;0;0;;
-dwarf;Zwerg;Körperfamilie Kompakt. Klein und breit, mit kurzen Beinen und großen Händen.;kompakt;0,8;4;0;0;0;0;0;;
-orc;Ork;Körperfamilie Massiv. Groß, mit breiten Schultern und muskulös.;massiv;1,2;5;0;0;0;0;0;;
-troll;Troll;Körperfamilie Groß und gebeugt. Lange Arme, gebückte Haltung und große Füße.;gross_gebeugt;1,35;6;0;0;0;0;0;;Härtetest für Rig und Ausrüstung
+human;Mensch;"Körperfamilie Normal. Ausgewogene Proportionen; an Mensch männlich und weiblich wird die ganze Pipeline gebaut.";normal;1;1;1;1;1;1;1;;Referenzpaar
+high_elf;Hochelf;Körperfamilie Normal. Ähnlich gebaut wie Menschen, aber schlanker und größer.;normal;1,1;2;0;1;3;0;1;;
+dark_elf;Dunkelelf;Körperfamilie Normal. Ähnlich gebaut wie Menschen, aber schlanker und größer.;normal;1,1;3;0;3;1;0;1;;
+dwarf;Zwerg;Körperfamilie Kompakt. Klein und breit, mit kurzen Beinen und großen Händen.;kompakt;0,8;4;1;0;0;3;1;;
+orc;Ork;Körperfamilie Massiv. Groß, mit breiten Schultern und muskulös.;massiv;1,2;5;3;0;0;2;0;;
+troll;Troll;Körperfamilie Groß und gebeugt. Lange Arme, gebückte Haltung und große Füße.;gross_gebeugt;1,35;6;2;1;0;2;0;;Härtetest für Rig und Ausrüstung
