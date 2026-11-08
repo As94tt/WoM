@@ -25,9 +25,11 @@ description = "Klasse; leer = keine (z. B. Gegnerfähigkeit)."
 [sub_resource type="Resource" id="Resource_ngec1"]
 script = ExtResource("1_3a856")
 name = "spezialisierung"
-type = 1
+type = 6
 choices = PackedStringArray()
-description = "Spezialisierung; leer = alle."
+ref_folder = "res://data/specializations/"
+ref_label = "Spezialisierung"
+description = "Spezialisierung (#20, nur zur Übersicht); leer = alle."
 
 [sub_resource type="Resource" id="Resource_xydcc"]
 script = ExtResource("1_3a856")

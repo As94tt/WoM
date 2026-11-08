@@ -85,3 +85,7 @@ nebenhand_faktor;0,5;Schaden der Nebenhand beim automatischen Angriff als Faktor
 kampfkraft_je_dps;14;Kampfkraft je 1 Schaden pro Sekunde beim automatischen Angriff (Schaden = Waffe + Kampfkraft / Wert × Tempo der Waffe)
 fehlermeldung_abstand;1;Dieselbe Fehlermeldung erscheint höchstens einmal in so vielen Sekunden
 fehlermeldung_dauer;2;Sekunden, die eine Fehlermeldung oben in der Mitte sichtbar bleibt
+# Spezialisierung und Talente (#20)
+spezialisierung_ab_stufe;10;Stufe, ab der ein Charakter eine Spezialisierung wählen kann
+talentpunkt_ab_stufe;11;Stufe, auf der es den ersten Talentpunkt gibt
+talentpunkte_je_stufe;1;Talentpunkte je Stufe ab talentpunkt_ab_stufe (Stufe 30 = 20 Punkte)

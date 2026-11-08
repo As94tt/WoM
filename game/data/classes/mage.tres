@@ -6,6 +6,10 @@
 [ext_resource type="Resource" path="res://data/abilities/frostnova.tres" id="3_frostnova"]
 [ext_resource type="Resource" path="res://data/abilities/passiv_magier.tres" id="4_passiv_magier"]
 [ext_resource type="Resource" path="res://data/abilities/gegenzauber.tres" id="5_gegenzauber"]
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="6_spec_script"]
+[ext_resource type="Resource" path="res://data/specializations/mage_feuer.tres" id="7_feuer"]
+[ext_resource type="Resource" path="res://data/specializations/mage_frost.tres" id="8_frost"]
+[ext_resource type="Resource" path="res://data/specializations/mage_arkan.tres" id="9_arkan"]
 
 [resource]
 script = ExtResource("1_class")
@@ -20,3 +24,4 @@ primary_attribute = &"intellect"
 power_stat = &"spell_power"
 resources = Array[StringName]([&"mana"])
 abilities = Array[ExtResource("ability_script")]([ExtResource("2_feuerball"), ExtResource("3_frostnova"), ExtResource("4_passiv_magier"), ExtResource("5_gegenzauber")])
+specializations = Array[ExtResource("6_spec_script")]([ExtResource("7_feuer"), ExtResource("8_frost"), ExtResource("9_arkan")])
