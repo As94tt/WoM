@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/stats/character_stats.gd" id="4_stats"]
 [ext_resource type="Script" path="res://scripts/abilities/player_abilities.gd" id="5_abilities"]
 [ext_resource type="Script" path="res://scripts/units/targeting.gd" id="6_targeting"]
+[ext_resource type="Script" path="res://scripts/combat/unit_combat.gd" id="7_combat"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -106,6 +107,12 @@ properties/10/replication_mode = 2
 properties/11/path = NodePath("Stats:chi_draining")
 properties/11/spawn = true
 properties/11/replication_mode = 2
+properties/12/path = NodePath("Combat:aura_state")
+properties/12/spawn = true
+properties/12/replication_mode = 2
+properties/13/path = NodePath("Combat:ability_mod_state")
+properties/13/spawn = true
+properties/13/replication_mode = 2
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
@@ -165,3 +172,6 @@ script = ExtResource("5_abilities")
 
 [node name="Targeting" type="Node" parent="."]
 script = ExtResource("6_targeting")
+
+[node name="Combat" type="Node" parent="."]
+script = ExtResource("7_combat")

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_7mopx"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_7xyej"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_upjyw"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_g0tvf"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="5_ndcw3"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="6_5enel"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="7_c8caa"]
+
+[sub_resource type="Resource" id="Resource_hq4x1"]
+script = ExtResource("7_c8caa")
+school = &"schatten"
+base_amount = 300.0
+
+[resource]
+script = ExtResource("3_upjyw")
+id = &"test_dot"
+display_name = "Schattenwunde"
+description = "Fügt alle 2 Sekunden 300 Schattenschaden zu. Testaura: Schaden über Zeit."
+is_debuff = true
+category = 1
+duration = 12.0
+tick_interval = 2.0
+tick_effects = Array[ExtResource("1_7mopx")]([SubResource("Resource_hq4x1")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

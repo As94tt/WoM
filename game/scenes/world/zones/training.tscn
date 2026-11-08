@@ -104,3 +104,8 @@ unit_id = &"schadenspuppe_30"
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -26, 0, -15.5)
 script = ExtResource("7_unit_spawn")
 unit_id = &"heilpuppe"
+
+[node name="Bosspuppe" type="Marker3D" parent="Dummies"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -32, 0, -15.5)
+script = ExtResource("7_unit_spawn")
+unit_id = &"bosspuppe"

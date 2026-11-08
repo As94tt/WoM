@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_l3hcn"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_bw5lq"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_bh6sy"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_f1ttq"]
+
+[resource]
+script = ExtResource("3_bh6sy")
+id = &"test_unverwundbar"
+display_name = "Steinhaut"
+description = "Unverwundbar: kein Schaden, keine feindlichen Auren. Testaura."
+category = 1
+duration = 6.0
+states = 64
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

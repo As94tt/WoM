@@ -8,3 +8,4 @@ id = &"feuerball"
 display_name = "Feuerball"
 description = "Schleudert eine Feuerkugel auf das Ziel und verursacht Feuerschaden. Das Ziel brennt kurz nach."
 class_id = &"mage"
+is_spell = true

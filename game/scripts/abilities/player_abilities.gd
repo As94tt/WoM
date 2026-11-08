@@ -27,6 +27,8 @@ signal learned_changed
 signal abilities_learned(abilities: Array[AbilityData])
 ## use_ability() wurde aufgerufen (vorerst nur Meldung, #33: Wunsch an Host).
 signal ability_used(ability: AbilityData)
+## use_ability() ging nicht (Zustand aus einer Aura, #32); reason ist ein Satz.
+signal ability_failed(ability: AbilityData, reason: String)
 
 ## Meldung, solange Fähigkeiten noch keine Wirkung haben (bis #33).
 const USE_MESSAGE := "Würde %s wirken"
@@ -126,8 +128,27 @@ func get_default_bar_abilities(level := 0) -> Array[AbilityData]:
 func use_ability(ability: AbilityData) -> void:
 	if not can_place(ability):
 		return
+	var reason := get_block_reason(ability)
+	if reason != "":
+		ability_failed.emit(ability, reason)
+		return
 	print(USE_MESSAGE % ability.display_name)
 	ability_used.emit(ability)
+
+
+## Warum die Fähigkeit gerade nicht geht (leer = geht): Zustände aus Auren
+## (#32). Betäubt oder umgeworfen: keine Aktionen; still: keine Zauber.
+## Der Host prüft dasselbe beim Wirken (#33).
+func get_block_reason(ability: AbilityData) -> String:
+	var combat := _player.get_combat() if _player != null else null
+	if combat == null or ability == null:
+		return ""
+	if not combat.can_act():
+		return "Du kannst gerade nicht handeln (%s)." % Combat.state_names(
+				combat.get_states() & (Combat.STATE_STUNNED | Combat.STATE_KNOCKED_DOWN))
+	if ability.is_spell and not combat.can_cast_spells():
+		return "Du kannst gerade nicht zaubern (Still)."
+	return ""
 
 
 func _on_level_changed(level: int, previous: int) -> void:

@@ -6,15 +6,20 @@ extends RefCounted
 ## Autoload „Data“; nach „Tabellen neu laden“ liefert get_races() den neuen Stand.
 ## Fähigkeiten (#21) sind .tres in res://data/abilities/ (get_ability), der
 ## Zauberbuch-Reiter „Allgemein“ liegt in res://data/spellbook/general.tres.
+## Auren (#32) sind .tres in res://data/auras/ (get_aura); Clients finden
+## übertragene Auren über ihre ID.
 
 const CLASSES_DIR := "res://data/classes/"
 const ABILITIES_DIR := "res://data/abilities/"
+const AURAS_DIR := "res://data/auras/"
 const GENERAL_TAB_PATH := "res://data/spellbook/general.tres"
 
 static var _classes: Array[ClassData] = []
 static var _loaded := false
 static var _abilities: Dictionary[StringName, AbilityData] = {}
 static var _abilities_loaded := false
+static var _auras: Dictionary[StringName, AuraData] = {}
+static var _auras_loaded := false
 
 
 ## Alle Völker, sortiert nach order (aus voelker.csv).
@@ -53,6 +58,37 @@ static func get_abilities() -> Array[AbilityData]:
 	var result: Array[AbilityData] = []
 	result.assign(_abilities.values())
 	return result
+
+
+## Aura zur ID oder null (#32).
+static func get_aura(aura_id: StringName) -> AuraData:
+	_ensure_auras_loaded()
+	return _auras.get(aura_id)
+
+
+## Alle Auren, nach ID sortiert.
+static func get_auras() -> Array[AuraData]:
+	_ensure_auras_loaded()
+	var ids := _auras.keys()
+	ids.sort()
+	var result: Array[AuraData] = []
+	for aura_id: StringName in ids:
+		result.append(_auras[aura_id])
+	return result
+
+
+static func _ensure_auras_loaded() -> void:
+	if _auras_loaded:
+		return
+	_auras_loaded = true
+	for res in _load_all(AURAS_DIR):
+		var aura := res as AuraData
+		if aura == null or aura.id == &"":
+			push_warning("GameData: %s ist keine Aura mit ID und wird übersprungen." % res.resource_path)
+			continue
+		if _auras.has(aura.id):
+			push_warning("GameData: Aura-ID %s gibt es doppelt (%s)." % [aura.id, res.resource_path])
+		_auras[aura.id] = aura
 
 
 ## Reiter „Allgemein“ des Zauberbuchs (Fähigkeiten für alle Klassen).

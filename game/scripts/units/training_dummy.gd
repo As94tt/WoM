@@ -16,8 +16,11 @@ extends Unit
 ## Netzwerk: Der Host erzeugt die Puppe (UnitSpawner der Welt), rechnet Leben,
 ## Anzeige und Rücksetzen. „ServerSync“ überträgt Kennung, Position, Rang
 ## und Anzeigewerte, „StatsSync“ wie bei Spielern Leben und Werte. Schaden und
-## Heilung kommen später aus #34 über apply_damage/apply_heal; bis dahin
-## nutzt das Entwickler-Panel (Abschnitt „Einheiten“) dieselben Funktionen.
+## Heilung kommen über Combat.deal_damage/Combat.heal (#32, Entwickler-Panel
+## „Einheiten“ und „Auren“), die am Ende apply_damage/apply_heal rufen. Den
+## Kampfzustand verwaltet seit #32 UnitCombat (Kindknoten „Combat“): Die
+## Puppe ist nach Schaden 5 s im Kampf; das Zurücksetzen der Anzeige bleibt
+## bei puppe_ruecksetzen_nach. „StatsSync“ überträgt auch ihre Auren.
 
 enum Kind { DAMAGE, HEALING }
 
@@ -125,6 +128,20 @@ func get_stat_base_overrides() -> Dictionary:
 	return {&"max_health": float(_row.get_value("leben", 1))} if _row != null else {}
 
 
+## Immunitäten aus uebungspuppen.csv (#32), z. B. die Bosspuppe.
+func get_base_immunities() -> PackedStringArray:
+	var result := PackedStringArray()
+	if _row != null:
+		for id: Variant in _row.get_value("immunitaeten", []):
+			result.append(str(id))
+	return result
+
+
+## Puppen stehen fest auf ihrem Pfosten (Rückstoß, Heranziehen wirken nicht).
+func can_be_moved() -> bool:
+	return false
+
+
 ## Über der Puppe, zweizeilig: „Schaden pro Sekunde: 120“ und
 ## „Gesamt: 3.400“ bzw. für die Heilpuppe Heilung pro Sekunde und Überheilung.
 func get_overhead_text() -> String:
@@ -140,7 +157,6 @@ func apply_damage(amount: float, source: Unit = null) -> float:
 	var dealt := super.apply_damage(amount, source)
 	if get_kind() == Kind.DAMAGE and amount > 0.0:
 		_record(amount, amount)
-		_stats.set_in_combat(true)
 		if _stats.health <= 0.0:
 			_stats.refill()
 	return dealt
@@ -202,7 +218,6 @@ func _reset() -> void:
 	meter_rate = 0
 	meter_total = 0
 	if get_kind() == Kind.DAMAGE:
-		_stats.set_in_combat(false)
 		_stats.refill()
 
 

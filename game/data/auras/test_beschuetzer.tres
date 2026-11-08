@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_afnpv"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_4id37"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_f8mwr"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_le226"]
+
+[resource]
+script = ExtResource("3_f8mwr")
+id = &"test_beschuetzer"
+display_name = "Beschützer"
+description = "30 % des erlittenen Schadens nimmt stattdessen der Wirker dieser Aura. Testaura: Schadensumleitung auf eine andere Einheit."
+category = 1
+duration = 30.0
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+redirect_mode = 2
+redirect_percent = 30.0

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_dpwfx"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_hhd41"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_bsvut"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_w66bu"]
+
+[resource]
+script = ExtResource("3_bsvut")
+id = &"test_verlangsamung_60"
+display_name = "Lähmgift"
+description = "Verlangsamt um 60 %. Zusammen mit Kälte gilt nur die stärkste Verlangsamung."
+is_debuff = true
+category = 2
+duration = 6.0
+states = 4
+slow_percent = 60.0
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

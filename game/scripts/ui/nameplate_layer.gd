@@ -76,7 +76,7 @@ func _process(_delta: float) -> void:
 		var anchor := unit.get_nameplate_position()
 		var hostile := unit.get_reaction_to(_player) != Unit.Reaction.FRIENDLY
 		var show_plate := show_enemies if hostile else show_friends
-		var shown := unit.is_unit_visible() and not camera.is_position_behind(anchor) \
+		var shown := unit.is_visible_to(_player) and not camera.is_position_behind(anchor) \
 				and _player.distance_to_unit(unit) <= max_range \
 				and (show_plate or unit.get_overhead_text() != "")
 		plate.visible = shown

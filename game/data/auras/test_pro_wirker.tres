@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_8sooc"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_y54up"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_mpnuh"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_ylm4r"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="5_0ju0v"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="6_17oa8"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="7_x2k44"]
+
+[sub_resource type="Resource" id="Resource_g8635"]
+script = ExtResource("7_x2k44")
+school = &"feuer"
+base_amount = 100.0
+
+[resource]
+script = ExtResource("3_mpnuh")
+id = &"test_pro_wirker"
+display_name = "Brennende Saat"
+description = "Fügt alle 2 Sekunden 100 Feuerschaden je Stapel zu; jeder Wirker hat eine eigene Instanz (bis 3 Stapel). Testaura: getrennte Instanz pro Wirker."
+is_debuff = true
+category = 1
+duration = 15.0
+max_stacks = 3
+stack_mode = 2
+tick_interval = 2.0
+tick_effects = Array[ExtResource("1_8sooc")]([SubResource("Resource_g8635")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

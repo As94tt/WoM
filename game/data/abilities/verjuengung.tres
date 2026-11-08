@@ -8,3 +8,4 @@ id = &"verjuengung"
 display_name = "Verjüngung"
 description = "Heilt das Ziel über einige Sekunden."
 class_id = &"druid"
+is_spell = true

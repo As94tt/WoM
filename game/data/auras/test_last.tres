@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_e1cxh"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_ww234"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_6p1ow"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_8gqc3"]
+
+[resource]
+script = ExtResource("3_6p1ow")
+id = &"test_last"
+display_name = "Abfedern"
+description = "50 % des erlittenen Schadens kommen verzögert über 6 Sekunden. Testaura: Schadensumleitung (Verzögerung)."
+duration = 30.0
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+redirect_mode = 1
+redirect_percent = 50.0

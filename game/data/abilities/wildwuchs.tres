@@ -9,3 +9,4 @@ display_name = "Wildwuchs"
 description = "Heilt mehrere Gruppenmitglieder in der Nähe des Ziels über einige Sekunden."
 class_id = &"druid"
 required_level = 4
+is_spell = true

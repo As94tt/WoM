@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_2c0gt"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_cyq64"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_m3fsw"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_rkl5k"]
+
+[sub_resource type="Resource" id="Resource_nasnn"]
+script = ExtResource("4_rkl5k")
+stat = &"strength"
+value = 50.0
+
+[sub_resource type="Resource" id="Resource_sojxb"]
+script = ExtResource("4_rkl5k")
+stat = &"attack_power"
+kind = 1
+value = 10.0
+
+[resource]
+script = ExtResource("3_m3fsw")
+id = &"test_staerke"
+display_name = "Segen der Stärke"
+description = "+50 Stärke und +10 % Kampfkraft. Testaura: Wert-Modifikatoren."
+category = 1
+duration = 30.0
+stat_modifiers = Array[ExtResource("4_rkl5k")]([SubResource("Resource_nasnn"), SubResource("Resource_sojxb")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

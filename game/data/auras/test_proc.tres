@@ -1,0 +1,127 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_be877"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_ct84h"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_yp7y4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_j2pof"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="5_gbf6j"]
+[ext_resource type="Script" path="res://scripts/combat/effects/heal_effect.gd" id="6_mbrr1"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="7_g4ia6"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_cdnd0"]
+[ext_resource type="Resource" path="res://data/auras/test_hot.tres" id="8_yp7y4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="9_j2pof"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_o32v5"]
+
+[sub_resource type="Resource" id="Resource_pd6n0"]
+script = ExtResource("5_gbf6j")
+school = &"arkan"
+base_amount = 250.0
+
+[sub_resource type="Resource" id="Resource_y7ekk"]
+script = ExtResource("2_ct84h")
+chance = 50.0
+internal_cooldown = 2.0
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_pd6n0")])
+
+[sub_resource type="Resource" id="Resource_7yhgt"]
+script = ExtResource("6_mbrr1")
+base_amount = 300.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_0sjps"]
+script = ExtResource("2_ct84h")
+event = 2
+internal_cooldown = 3.0
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_7yhgt")])
+
+[sub_resource type="Resource" id="Resource_l0qpd"]
+script = ExtResource("5_gbf6j")
+school = &"feuer"
+base_amount = 500.0
+
+[sub_resource type="Resource" id="Resource_n63eb"]
+script = ExtResource("2_ct84h")
+event = 1
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_l0qpd")])
+
+[sub_resource type="Resource" id="Resource_hynrk"]
+script = ExtResource("7_g4ia6")
+resource = &"rage"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_oskyt"]
+script = ExtResource("7_g4ia6")
+resource = &"energy"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_mawpv"]
+script = ExtResource("2_ct84h")
+event = 3
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_hynrk"), SubResource("Resource_oskyt")])
+
+[sub_resource type="Resource" id="Resource_ydtea"]
+script = ExtResource("7_g4ia6")
+resource = &"rage"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_eap4m"]
+script = ExtResource("7_g4ia6")
+resource = &"energy"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_8kcqx"]
+script = ExtResource("2_ct84h")
+event = 4
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_ydtea"), SubResource("Resource_eap4m")])
+
+[sub_resource type="Resource" id="Resource_8xbv8"]
+script = ExtResource("7_g4ia6")
+resource = &"rage"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_krwdq"]
+script = ExtResource("7_g4ia6")
+resource = &"energy"
+amount = 10.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_um35u"]
+script = ExtResource("2_ct84h")
+event = 5
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_8xbv8"), SubResource("Resource_krwdq")])
+
+[sub_resource type="Resource" id="Resource_gbf6j"]
+script = ExtResource("9_j2pof")
+aura = ExtResource("8_yp7y4")
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_vnlpk"]
+script = ExtResource("2_ct84h")
+event = 6
+ability_id = &"feuerball"
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_gbf6j")])
+
+[sub_resource type="Resource" id="Resource_26qp0"]
+script = ExtResource("6_mbrr1")
+base_amount = 1000.0
+target_mode = 1
+
+[sub_resource type="Resource" id="Resource_ancd0"]
+script = ExtResource("2_ct84h")
+event = 7
+effects = Array[ExtResource("1_be877")]([SubResource("Resource_26qp0")])
+
+[resource]
+script = ExtResource("8_cdnd0")
+id = &"test_proc"
+display_name = "Kampfrausch"
+description = "Treffer: 50 % Chance auf 250 Arkanschaden (alle 2 s). Erlittener Schaden: Heilung um 300 (alle 3 s). Kritischer Treffer: 500 Feuerschaden. Ausweichen, Parieren, Blocken: +10 Wut und +10 Energie. Feuerball gewirkt: Erneuerung. Tod des Ziels: Heilung um 1.000. Testaura: Auslöser."
+duration = 60.0
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("2_ct84h")]([SubResource("Resource_y7ekk"), SubResource("Resource_0sjps"), SubResource("Resource_n63eb"), SubResource("Resource_mawpv"), SubResource("Resource_8kcqx"), SubResource("Resource_um35u"), SubResource("Resource_vnlpk"), SubResource("Resource_ancd0")])
+absorb_schools = PackedStringArray()

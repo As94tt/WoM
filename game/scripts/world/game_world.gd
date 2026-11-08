@@ -27,7 +27,12 @@ extends Node3D
 ##   hat dafür den Abschnitt „Fähigkeiten“.
 ## - Abschnitt „Einheiten“ im Entwickler-Panel (#31): Leben, Stufe und Rang des
 ##   aktuellen Ziels ändern. Wünsche eines Clients gehen per RPC an den Host
-##   (_rpc_unit_dev_action), der wie bei echtem Schaden apply_damage nutzt.
+##   (_rpc_unit_dev_action), der seit #32 wie bei echtem Schaden
+##   Combat.deal_damage bzw. Combat.heal nutzt.
+## - Effects/EffectSpawner (#32): Flächen und Projektile, erzeugt vom Host.
+## - Abschnitt „Auren“ im Entwickler-Panel (#32): CombatDevSection (Kindknoten
+##   „CombatDev“). Den Schalter „Im Kampf“ aus #19/#31 gibt es nicht mehr;
+##   den Kampfzustand bestimmt UnitCombat.
 ##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
@@ -47,6 +52,8 @@ const SPELLBOOK_PANEL_SCENE := preload("res://scenes/ui/hud/spellbook_panel.tscn
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 const DUMMY_SCENE := preload("res://scenes/units/training_dummy.tscn")
 const UNIT_DEV_TOOLS: UnitDevTools = preload("res://data/units/dev_tools.tres")
+## Flächen und Projektile (#32), erzeugt vom Host unter „Effects“.
+const EFFECT_SCENES: Array[String] = [AreaEffect.AREA_SCENE, ProjectileEffect.PROJECTILE_SCENE]
 
 ## Weitere Spieler stehen im Kreis mit diesem Abstand um den Startpunkt, in
 ## Metern (#30).
@@ -87,6 +94,7 @@ var _unit_dev_dot_timer: Timer = null
 @onready var _spawner: MultiplayerSpawner = %PlayerSpawner
 @onready var _units: Node3D = %Units
 @onready var _unit_spawner: MultiplayerSpawner = %UnitSpawner
+@onready var _effect_spawner: MultiplayerSpawner = %EffectSpawner
 
 
 func _ready() -> void:
@@ -98,6 +106,8 @@ func _ready() -> void:
 	_zone_tracker.zone_changed.connect(_on_zone_changed)
 	_spawner.add_spawnable_scene(PLAYER_SCENE.resource_path)
 	_unit_spawner.add_spawnable_scene(DUMMY_SCENE.resource_path)
+	for scene_path in EFFECT_SCENES:
+		_effect_spawner.add_spawnable_scene(scene_path)
 	_players.child_entered_tree.connect(_on_player_node_added)
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
@@ -367,6 +377,8 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 	abilities.abilities_learned.connect(_on_abilities_learned.bind(abilities))
 	abilities.ability_used.connect(func(ability: AbilityData) -> void:
 		_hud.add_log_message(PlayerAbilities.USE_MESSAGE % ability.display_name))
+	abilities.ability_failed.connect(func(_ability: AbilityData, reason: String) -> void:
+		_hud.add_log_message(reason))
 
 
 ## Belegung in den Charakter schreiben und speichern (Testcharaktere nie).
@@ -539,6 +551,11 @@ func _setup_dev_panel() -> void:
 
 	_setup_unit_dev_section(panel)
 
+	# Auren (#32): Testeffekte und Testauren auf Ziel oder sich selbst.
+	var combat_dev := CombatDevSection.new()
+	add_child(combat_dev)
+	combat_dev.setup(panel, self)
+
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)
 	panel.add_toggle(display, "Gebietsgrenzen anzeigen", false, _set_bounds_visible)
@@ -563,15 +580,14 @@ func _on_data_reloaded(_ok: bool, lines: PackedStringArray) -> void:
 		_hud.add_log_message("… und %d weitere Fehler (siehe Konsole)." % (lines.size() - MAX_LOG_LINES))
 
 
-## Abschnitt „Werte“ (#19): Testmodifikatoren, Stufe, „Im Kampf“,
-## Nahkampfwaffe/Schild, Schaden und Ressourcen. Alles wirkt auf die eigene
-## Figur; auf einem Client geht es als Wunsch an den Host
-## (CharacterStats.request_dev_action), der die Werte bestimmt.
+## Abschnitt „Werte“ (#19): Testmodifikatoren, Stufe, Nahkampfwaffe/Schild,
+## Schaden und Ressourcen. Alles wirkt auf die eigene Figur; auf einem Client
+## geht es als Wunsch an den Host (CharacterStats.request_dev_action), der
+## die Werte bestimmt. Der Kampfzustand steht seit #32 nur noch als Infozeile
+## da (er entsteht durch Schaden und feindliche Auren, UnitCombat).
 func _setup_stat_dev_section(panel: DevPanel) -> void:
 	var section := panel.add_section("Werte")
 	_stat_dev_info = panel.add_info(section)
-	_stat_dev_toggles["combat"] = panel.add_toggle(section, "Im Kampf", false,
-			func(on: bool) -> void: _stat_dev_action("combat", on))
 	_stat_dev_toggles["melee"] = panel.add_toggle(section, "Nahkampfwaffe getragen", false,
 			func(on: bool) -> void: _stat_dev_action("melee", on))
 	_stat_dev_toggles["shield"] = panel.add_toggle(section, "Schild getragen", false,
@@ -617,7 +633,6 @@ func _connect_stat_dev(player: PlayerCharacter) -> void:
 
 ## Schalter und Regler auf den Stand der Figur setzen, ohne Aktionen auszulösen.
 func _sync_stat_dev(stats: CharacterStats) -> void:
-	_stat_dev_toggles["combat"].set_pressed_no_signal(stats.is_in_combat())
 	_stat_dev_toggles["melee"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_MELEE_WEAPON))
 	_stat_dev_toggles["shield"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_SHIELD))
 	for index in STAT_DEV_TOOLS.test_modifiers.size():
@@ -630,7 +645,8 @@ func _sync_stat_dev(stats: CharacterStats) -> void:
 
 func _update_stat_dev_info(stats: CharacterStats) -> void:
 	var lines: PackedStringArray = ["Leben: %s / %s" % [StatFormat.number(stats.health, 0),
-			StatFormat.number(stats.max_health, 0)]]
+			StatFormat.number(stats.max_health, 0)],
+			"Kampfzustand: %s" % ("im Kampf" if stats.is_in_combat() else "außerhalb des Kampfes")]
 	for resource_id in stats.get_resource_ids():
 		lines.append("%s: %s / %s" % [CharacterStats.RULES.get_resource_name(resource_id),
 				StatFormat.number(stats.get_resource(resource_id), 0),
@@ -653,8 +669,6 @@ func _setup_unit_dev_section(panel: DevPanel) -> void:
 	panel.add_button(section, "Ziel: Leben und Ressourcen auffüllen", _unit_dev_action.bind("refill", null))
 	panel.add_toggle(section, "Ziel: Dauerschaden (%s je Sekunde)" % StatFormat.grouped(
 			UNIT_DEV_TOOLS.damage_per_second), false, _set_unit_dev_dot)
-	panel.add_toggle(section, "Ziel: im Kampf", false,
-			func(on: bool) -> void: _unit_dev_action("combat", on))
 	_unit_dev_level_label = panel.add_info(section, "Stufe des Ziels: –")
 	_unit_dev_level_slider = panel.add_slider(section, 1.0, Data.hoechste_stufe(), 1.0, 1.0,
 			func(value: float) -> void:
@@ -747,23 +761,22 @@ func _rpc_unit_dev_action(target_path: NodePath, action: String, value: Variant)
 		_do_unit_dev_action(target, source, action, value)
 
 
-## Host: Aktion ausführen. Schaden und Heilung laufen über apply_damage bzw.
-## apply_heal, wie später echte Treffer (#34).
+## Host: Aktion ausführen. Schaden und Heilung laufen seit #32 über
+## Combat.deal_damage bzw. Combat.heal (physisch, ohne Rüstung und Würfel),
+## wie später echte Treffer (#34): Kampfzustand, Schilde, Auslöser, Kampftext.
 func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Variant) -> void:
 	var stats := target.get_stats()
 	if stats == null:
 		return
 	match action:
 		"damage":
-			target.apply_damage(float(value), source)
+			Combat.deal_damage(source, target, float(value), &"physisch")
 		"damage_percent":
-			target.apply_damage(stats.max_health * float(value) / 100.0, source)
+			Combat.deal_damage(source, target, stats.max_health * float(value) / 100.0, &"physisch")
 		"heal_percent":
-			target.apply_heal(stats.max_health * float(value) / 100.0, source)
+			Combat.heal(source, target, stats.max_health * float(value) / 100.0)
 		"refill":
 			stats.refill()
-		"combat":
-			stats.set_in_combat(bool(value))
 		"level":
 			stats.set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
 		"rank":

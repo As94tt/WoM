@@ -9,3 +9,4 @@ display_name = "Frostnova"
 description = "Entfesselt eine Welle aus Frost um den Magier, die nahe Gegner verletzt und am Boden festfriert."
 class_id = &"mage"
 required_level = 2
+is_spell = true
