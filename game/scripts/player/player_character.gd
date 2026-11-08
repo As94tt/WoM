@@ -26,6 +26,10 @@ extends CharacterBody3D
 ##
 ## Ohne Netzwerk (OfflineMultiplayerPeer) ist die eigene Peer-ID 1 und die
 ## Figur gehört standardmäßig Peer 1, also dem lokalen Spieler.
+##
+## Werte (#19): Kindknoten „Stats“ (CharacterStats) mit Attributen, Kampfwerten,
+## Leben und Ressourcen; „StatsSync“ (Authority Host) überträgt sie. Die
+## Laufgeschwindigkeit folgt dem Wert „movement_speed“ (Eile, später Auren).
 
 ## Wird gesendet, wenn die Figur anfängt oder aufhört, sich zu bewegen
 ## (für den Zauberabbruch bei Bewegung, #33).
@@ -81,8 +85,10 @@ var net_teleport_seq: int = 0
 ## dem Netz. Für spätere Animationen.
 var move_state: MoveState = MoveState.STANDING
 
-## Faktor auf alle Geschwindigkeiten. Auren wie Verlangsamung oder Sprint
-## (#32) verändern diesen Wert, Betäubung setzt ihn z. B. auf 0.
+## Faktor auf alle Geschwindigkeiten. Seit #19 aus dem Wert „movement_speed“
+## der Werte (Stats) gesetzt, auf jeder Instanz gleich: Eile erhöht ihn.
+## Auren wie Verlangsamung oder Sprint (#32) ändern ihn nicht direkt, sondern
+## über einen Modifikator auf „movement_speed“ (Betäubung z. B. −100 %).
 var speed_multiplier: float = 1.0
 
 ## Bewegungsabsicht, gesetzt von PlayerInput: x = seitwärts (+1 rechts),
@@ -126,6 +132,8 @@ var _body_material: StandardMaterial3D = null
 @onready var _level_label: Label3D = $Nameplate/LevelLabel
 @onready var _movement_sync: MultiplayerSynchronizer = $MovementSync
 @onready var _server_sync: MultiplayerSynchronizer = $ServerSync
+@onready var _stats_sync: MultiplayerSynchronizer = $StatsSync
+@onready var _stats: CharacterStats = $Stats
 
 ## Kleinste Geschwindigkeit, ab der die Figur als „in Bewegung“ gilt.
 const MOVING_THRESHOLD := 0.05
@@ -150,11 +158,13 @@ func _ready() -> void:
 	# Eigene Materialkopie, damit die Klassenfarbe nur diese Figur färbt.
 	_body_material = (_body.mesh as PrimitiveMesh).material.duplicate()
 	_body.material_override = _body_material
+	_stats.stats_changed.connect(_on_stats_changed)
 	_update_appearance()
+	_on_stats_changed()
 
 	_movement_sync.replication_interval = 1.0 / NETWORK_SETTINGS.sync_rate_hz
 	# Figuren nur an Peers senden, die die Welt geladen haben.
-	for sync in [_movement_sync, _server_sync]:
+	for sync in [_movement_sync, _server_sync, _stats_sync]:
 		sync.add_visibility_filter(Network.is_peer_in_world)
 	if is_multiplayer_authority():
 		_publish_snapshot(_make_snapshot())
@@ -177,7 +187,7 @@ func is_local() -> bool:
 ## Sendet die Figur ab jetzt auch an Peers, die inzwischen die Welt geladen
 ## haben (gerufen von GameWorld, wenn sich die Spielerliste ändert).
 func refresh_visibility() -> void:
-	for sync in [_movement_sync, _server_sync]:
+	for sync in [_movement_sync, _server_sync, _stats_sync]:
 		if sync.is_multiplayer_authority():
 			sync.update_visibility()
 
@@ -192,6 +202,17 @@ func setup_from_info(info: NetPlayerInfo) -> void:
 	level = info.level
 
 
+## Werte und Ressourcen der Figur (#19).
+func get_stats() -> CharacterStats:
+	return _stats
+
+
+## Stufe, mit der die Werte rechnen (inklusive „Stufe ändern“ im
+## Entwickler-Panel, das nur zur Laufzeit gilt).
+func get_level() -> int:
+	return _stats.get_level() if _stats != null and is_node_ready() else level
+
+
 ## Klassendaten der Figur oder null.
 func get_class_data() -> ClassData:
 	return GameData.get_class_data(class_id)
@@ -201,6 +222,7 @@ func get_class_data() -> ClassData:
 func _apply_authority() -> void:
 	set_multiplayer_authority(peer_id)
 	$ServerSync.set_multiplayer_authority(1)
+	$StatsSync.set_multiplayer_authority(1)
 
 
 ## Platzhaltermodell und Namensplakette: Größe nach Volk, Farbe nach Klasse
@@ -217,8 +239,17 @@ func _update_appearance() -> void:
 		_body_material.albedo_color = class_data.color
 		_name_label.modulate = class_data.color
 	_name_label.text = display_name
-	_level_label.text = "Stufe %d" % level
 	_nameplate.position.y = BASE_HEIGHT * factor + NAMEPLATE_OFFSET
+	# Klasse, Volk oder Stufe geändert: Werte neu rechnen (ruft
+	# _on_stats_changed, das die Stufe auf der Plakette setzt).
+	_stats.refresh_from_player()
+	_level_label.text = "Stufe %d" % get_level()
+
+
+## Werte haben sich geändert: Laufgeschwindigkeit (Eile) und Stufe übernehmen.
+func _on_stats_changed() -> void:
+	speed_multiplier = _stats.get_value(&"movement_speed") / 100.0
+	_level_label.text = "Stufe %d" % get_level()
 
 
 ## Laufgeschwindigkeit dieser Figur (Daten mal Aurenfaktor), in m/s.
