@@ -96,6 +96,17 @@ Die `.tres` der Fähigkeit beschreibt nur den Aufbau (welche Effekte), die Zahle
 2. In `faehigkeitswerte.csv` eine Zeile mit derselben `id` ergänzen (Kosten, Ressource, Zauberzeit, Abklingzeit, Reichweite …). Ohne Zeile meldet die Datenprüfung einen Fehler. `klasse` und `stufe` gleich wie in der `.tres` halten; bei Abweichung gilt die `.tres` (Warnung in der Konsole).
 3. Die Fähigkeit in die Liste `abilities` der Klasse (`game/data/classes/<klasse>.tres`) bzw. des Reiters „Allgemein“ (`game/data/spellbook/general.tres`) aufnehmen. Dann erscheint sie im Zauberbuch.
 
+### Spezialisierungen und Talente anlegen (#20)
+
+Spezialisierungen und Talentbäume sind **Struktur** und bleiben `.tres`; Zahlen kommen wie immer aus den Tabellen.
+
+1. **Spezialisierung:** In `game/data/specializations/` eine `.tres` vom Typ `SpecializationData` anlegen (z. B. `mage_feuer.tres` kopieren): `id` (nie ändern, Charaktere speichern sie), Name, Beschreibung (erste Zeile = Kurzbeschreibung), Reihenfolge, bevorzugte Werte (IDs aus `stat_rules.tres`, nur Anzeige), `locked` und `unlock_hint` für gesperrte Spezialisierungen, Verwandlungen (`AbilityTransformData`: Grundfähigkeit → Variante, optional), Talentbaum, optional eine Erweiterung der Klasse (`SpecializationExtension`).
+2. **Talentbaum:** In `game/data/talents/` eine `.tres` vom Typ `TalentTreeData` mit Reihen (`TalentRowData`: Art „Wahl“ oder „Ränge“, `required_points` = Punkte in den Reihen darüber) und Talenten (`TalentData`: `id`, Name, Beschreibung, Ränge 1–3, optional `requires`, Wirkung über `grants_abilities`, `effects` – z. B. „Fähigkeit verändern“ – und passive `auras`). Talent-Auren dauerhaft (Dauer 0), versteckt und nicht beendbar anlegen; mit „Werte × Stapel“ wirkt jeder Rang stärker.
+3. **Fähigkeiten:** Varianten und Talent-Fähigkeiten sind normale Fähigkeiten (`game/data/abilities/` + Zeile in `faehigkeitswerte.csv`). In der Spalte `spezialisierung` steht zur Übersicht die Spezialisierung (Verweis, wird geprüft). Varianten bekommen dieselbe `stufe` wie ihre Grundfähigkeit.
+4. Die Spezialisierung in die Liste `specializations` der Klasse (`game/data/classes/<klasse>.tres`) aufnehmen.
+
+Konstanten in `spielkonstanten.csv`, Abschnitt „Spezialisierung und Talente (#20)“: `spezialisierung_ab_stufe` (10), `talentpunkt_ab_stufe` (11), `talentpunkte_je_stufe` (1). Talentpunkte werden nicht gespeichert, sondern aus der Stufe berechnet. Testen: Entwickler-Panel (F10) → „Werte“ → Stufe, dann „Talente“ (entsperren, Punkte geben, zurücksetzen); Talentfenster mit N. `--tests` prüft die Bäume aller Klassen.
+
 ### Werte der Charaktere anpassen (Wertesystem #19)
 
 Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welche Spalten nutzt, Namen und Tooltips der Werte) in `game/data/stats/stat_rules.tres`. Alle Zahlen sind Platzhalter.
@@ -525,7 +536,7 @@ Zu jeder Ressource in `res://data/abilities/` muss es eine Zeile geben (sobald d
 | --- | --- | --- | --- | --- | --- |
 | `id` | Verweis | ja |  | Fähigkeit aus `res://data/abilities/` | ID der Fähigkeit (gleich der ID der Fähigkeits-.tres). |
 | `klasse` | Verweis |  |  | Klasse aus `res://data/classes/` | Klasse; leer = keine (z. B. Gegnerfähigkeit). |
-| `spezialisierung` | ID |  |  |  | Spezialisierung; leer = alle. |
+| `spezialisierung` | Verweis |  |  | Spezialisierung aus `res://data/specializations/` | Spezialisierung (#20, nur zur Übersicht); leer = alle. |
 | `stufe` | Ganzzahl |  | 1 | 1 bis 100 | Stufe, ab der die Fähigkeit gelernt wird. |
 | `kosten` | Kommazahl |  |  | ab 0 | Kosten in Einheiten der Ressource. |
 | `ressource` | Auswahl |  | keine | `keine`, `mana`, `wut`, `energie`, `chi` | Ressource der Kosten. |

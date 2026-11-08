@@ -7,6 +7,8 @@ extends RefCounted
 ##
 ## Die Zahlen kommen aus faehigkeitswerte.csv (AbilityData.get_cost() usw.),
 ## Aussehen nur über Theme-Variationen (TooltipPanel kommt vom Tooltip selbst).
+## Seit #20 optional mit caster: Dann stehen die Zahlen mit allen
+## Veränderungen durch Talente da (AbilityData.get_number_for).
 
 ## Breite der Beschreibung, damit lange Texte umbrechen.
 const DESCRIPTION_WIDTH := 320.0
@@ -14,14 +16,14 @@ const RULES: StatRules = preload("res://data/stats/stat_rules.tres")
 
 
 ## Inhalt für Control._make_custom_tooltip().
-static func create(ability: AbilityData, learned: bool) -> Control:
+static func create(ability: AbilityData, learned: bool, caster: Unit = null) -> Control:
 	var box := VBoxContainer.new()
 	box.theme_type_variation = &"SlotColumn"
 	box.add_child(_label(ability.display_name, &"Subtitle"))
 	if ability.passive:
 		box.add_child(_label("Passiv", &"SmallLabel"))
 	else:
-		for pair in _value_rows(ability):
+		for pair in _value_rows(ability, caster):
 			if pair[0] == "" and pair[1] == "":
 				continue
 			var row := HBoxContainer.new()
@@ -44,12 +46,12 @@ static func create(ability: AbilityData, learned: bool) -> Control:
 
 
 ## Derselbe Inhalt als Text (tooltip_text, z. B. für Tests und als Fallback).
-static func text(ability: AbilityData, learned: bool) -> String:
+static func text(ability: AbilityData, learned: bool, caster: Unit = null) -> String:
 	var lines: PackedStringArray = [ability.display_name]
 	if ability.passive:
 		lines.append("Passiv")
 	else:
-		for pair in _value_rows(ability):
+		for pair in _value_rows(ability, caster):
 			var parts: PackedStringArray = []
 			for part: String in pair:
 				if part != "":
@@ -68,8 +70,8 @@ static func required_level_text(ability: AbilityData) -> String:
 
 
 ## Kosten, z. B. „30 Mana“; leer ohne Kosten.
-static func cost_text(ability: AbilityData) -> String:
-	var cost := ability.get_cost()
+static func cost_text(ability: AbilityData, caster: Unit = null) -> String:
+	var cost := ability.get_number_for(caster, "kosten")
 	var resource_id := ability.get_cost_resource()
 	if cost <= 0.0 or resource_id == &"":
 		return ""
@@ -77,26 +79,26 @@ static func cost_text(ability: AbilityData) -> String:
 
 
 ## Reichweite, z. B. „30 m Reichweite“; 0 = „Nahkampfreichweite“.
-static func range_text(ability: AbilityData) -> String:
-	var distance := ability.get_range()
+static func range_text(ability: AbilityData, caster: Unit = null) -> String:
+	var distance := ability.get_number_for(caster, "reichweite")
 	if distance <= 0.0:
 		return "Nahkampfreichweite"
 	return "%s m Reichweite" % _number(distance)
 
 
 ## Zauberart: „Sofort“, „2,5 Sek. Zauberzeit“ oder „Kanalisiert (4 Sek.)“.
-static func cast_text(ability: AbilityData) -> String:
+static func cast_text(ability: AbilityData, caster: Unit = null) -> String:
 	match ability.get_cast_type():
 		AbilityData.CastType.CAST:
-			return "%s Sek. Zauberzeit" % _number(ability.get_cast_time())
+			return "%s Sek. Zauberzeit" % _number(ability.get_number_for(caster, "zauberzeit"))
 		AbilityData.CastType.CHANNELED:
-			return "Kanalisiert (%s Sek.)" % _number(ability.get_channel_time())
+			return "Kanalisiert (%s Sek.)" % _number(ability.get_number_for(caster, "kanalisierzeit"))
 	return "Sofort"
 
 
 ## Abklingzeit, z. B. „20 Sek. Abklingzeit“; leer ohne Abklingzeit.
-static func cooldown_text(ability: AbilityData) -> String:
-	var cooldown := ability.get_cooldown()
+static func cooldown_text(ability: AbilityData, caster: Unit = null) -> String:
+	var cooldown := ability.get_number_for(caster, "abklingzeit")
 	if cooldown <= 0.0:
 		return ""
 	if cooldown >= 60.0 and is_equal_approx(fmod(cooldown, 60.0), 0.0):
@@ -105,10 +107,10 @@ static func cooldown_text(ability: AbilityData) -> String:
 
 
 ## Zeilen links/rechts: [Kosten, Reichweite], [Zauberart, Abklingzeit].
-static func _value_rows(ability: AbilityData) -> Array:
+static func _value_rows(ability: AbilityData, caster: Unit = null) -> Array:
 	return [
-		[cost_text(ability), range_text(ability)],
-		[cast_text(ability), cooldown_text(ability)],
+		[cost_text(ability, caster), range_text(ability, caster)],
+		[cast_text(ability, caster), cooldown_text(ability, caster)],
 	]
 
 

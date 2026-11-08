@@ -9,6 +9,14 @@ feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1|brand
 frostnova;mage;;2;25;mana;0;0;20;1;0;10;0,2;zaubermacht;6;0;radius:8;Beispiel
 passiv_magier;mage;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
 gegenzauber;mage;;4;20;mana;0;0;24;1;30;0;0;;4;0;sperre:4;Platzhalter (#21), Unterbrechung (#33)
+# Magier: Varianten der Spezialisierungen und Talent-Fähigkeiten (Testdaten #20, werden durch die echten Magier-Inhalte ersetzt)
+glutball;mage;mage_feuer;1;30;mana;2;0;0;1;35;60;1,1;zaubermacht;8;2;brand_stapel:1|brand_schaden:15|flug:30;Variante von Feuerball (Spezialisierung Feuer)
+eiswelle;mage;mage_frost;2;25;mana;0;0;16;1;0;14;0,25;zaubermacht;6;0;radius:10;Variante von Frostnova (Spezialisierung Frost)
+flammenstoss;mage;mage_feuer;1;20;mana;0;0;8;1;30;40;0,6;zaubermacht;0;0;;Talent Flammenstoß (Feuer, Reihe 1)
+feuerring;mage;mage_feuer;2;30;mana;0;0;20;1;0;30;0,4;zaubermacht;0;0;radius:8;Talent Feuerring (Feuer, Reihe 3), ersetzt Frostnova
+eislanze;mage;mage_frost;1;20;mana;0;0;6;1;30;35;0,6;zaubermacht;0;0;;Talent Eislanze (Frost, Reihe 1)
+frostblitz;mage;mage_frost;1;25;mana;2;0;0;1;35;55;1;zaubermacht;0;0;flug:25;Talent Frostblitz (Frost, Reihe 3), ersetzt Feuerball
+arkanschlag;mage;mage_arkan;1;25;mana;0;0;5;1;30;45;0,7;zaubermacht;0;0;;Talent Arkanschlag (Arkan, gesperrt, Reihe 1)
 # Krieger
 schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;bedrohung:100;Beispiel, zusätzliche Bedrohung (#35)
 spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;;Platzhalter (#21)

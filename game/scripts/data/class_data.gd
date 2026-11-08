@@ -45,3 +45,27 @@ enum Role { DAMAGE, TANK, HEALER }
 ## Fähigkeiten der Klasse (Reiter mit dem Klassennamen im Zauberbuch). Die
 ## Reihenfolge ist egal; angezeigt wird nach benötigter Stufe.
 @export var abilities: Array[AbilityData] = []
+
+@export_group("Spezialisierungen (#20)")
+## Spezialisierungen der Klasse (Reiter im Talentfenster, sortiert nach
+## SpecializationData.order). Leer = Klasse ohne Spezialisierungen; das
+## Talentfenster zeigt dann nur einen Hinweis.
+@export var specializations: Array[SpecializationData] = []
+
+
+## Spezialisierungen sortiert nach order.
+func get_specializations() -> Array[SpecializationData]:
+	var result: Array[SpecializationData] = []
+	for spec in specializations:
+		if spec != null:
+			result.append(spec)
+	result.sort_custom(func(a: SpecializationData, b: SpecializationData) -> bool: return a.order < b.order)
+	return result
+
+
+## Spezialisierung dieser Klasse zur ID oder null.
+func get_specialization(spec_id: StringName) -> SpecializationData:
+	for spec in specializations:
+		if spec != null and spec.id == spec_id:
+			return spec
+	return null

@@ -37,6 +37,14 @@ extends Node3D
 ##   „CombatDev“). Den Schalter „Im Kampf“ aus #19/#31 gibt es nicht mehr;
 ##   den Kampfzustand bestimmt UnitCombat.
 ##
+## - Spezialisierung und Talente (#20): Inhalt des Talentfensters (N) ist
+##   TalentPanel mit der eigenen Figur; Rückfragen über Hud.ask, Ablehnungen
+##   des Hosts oben in der Mitte. Erreicht die eigene Figur Stufe 10 ohne
+##   Spezialisierung, erscheint ein Hinweis („Talente öffnen“); solange keine
+##   gewählt ist, trägt der Menüleisten-Button einen Hinweis-Punkt. Fähigkeiten
+##   aus Talenten verschwinden beim Zurücksetzen von den Leisten. Abschnitt
+##   „Talente“ im Entwickler-Panel (TalentDevSection).
+##
 ## - Tod und Wiederbelebung (#35): Kindknoten „Revival“ (RevivalService) für
 ##   Wiedereinstieg, Aufhelfen und gemeinsame Rückkehr; Wiedereinstiegspunkte
 ##   aus #15 (get_respawn_transform). unit_died meldet auf dem Host jeden Tod
@@ -57,6 +65,7 @@ const MAP_VIEW_SCENE := preload("res://scenes/ui/hud/map_view.tscn")
 const DEV_PANEL_SCENE := preload("res://scenes/ui/dev/dev_panel.tscn")
 const CHARACTER_PANEL_SCENE := preload("res://scenes/ui/hud/character_panel.tscn")
 const SPELLBOOK_PANEL_SCENE := preload("res://scenes/ui/hud/spellbook_panel.tscn")
+const TALENT_PANEL_SCENE := preload("res://scenes/ui/hud/talent_panel.tscn")
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 const DUMMY_SCENE := preload("res://scenes/units/training_dummy.tscn")
 const UNIT_DEV_TOOLS: UnitDevTools = preload("res://data/units/dev_tools.tres")
@@ -83,6 +92,7 @@ var _dev_info: Label = null
 var _map_view: MapView = null
 var _character_panel: CharacterPanel = null
 var _spellbook_panel: SpellbookPanel = null
+var _talent_panel: TalentPanel = null
 ## Belegung der Aktionsleisten des eigenen Charakters (#21).
 var _bar_layout: ActionBarLayout = null
 ## Entwickler-Panel, Abschnitt „Werte“ (#19): Infozeilen und Bedienelemente,
@@ -133,6 +143,7 @@ func _ready() -> void:
 	Data.reloaded.connect(_on_data_reloaded)
 	_setup_character_window()
 	_setup_spellbook_window()
+	_setup_talent_window()
 	_setup_map()
 	_start_autosave()
 	if OS.is_debug_build():
@@ -358,6 +369,7 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 		_hud.setup_death_window(player, _revival)
 		_connect_stat_dev(player)
 		_setup_abilities(player)
+		_setup_talents(player)
 		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
 		_hud.setup_local_player(player)
 		_connect_unit_dev(player)
@@ -428,6 +440,8 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 	if _spellbook_panel != null:
 		_spellbook_panel.setup(abilities)
 	abilities.abilities_learned.connect(_on_abilities_learned.bind(abilities))
+	# Talente (#20): weggefallene Talent-Fähigkeiten von den Leisten nehmen.
+	abilities.abilities_unlearned.connect(_on_abilities_unlearned)
 	# Fehlermeldungen oben in der Mitte (#33).
 	abilities.ability_failed.connect(func(_ability: AbilityData, reason: String) -> void:
 		_hud.show_error(reason))
@@ -452,6 +466,56 @@ func _on_abilities_learned(learned: Array[AbilityData], abilities: PlayerAbiliti
 			continue
 		_bar_layout.place_ability(ability.id)
 		_hud.add_log_message("Neue Fähigkeit erlernt: %s" % ability.display_name)
+
+
+func _on_abilities_unlearned(removed: Array[AbilityData]) -> void:
+	if _bar_layout == null:
+		return
+	for ability in removed:
+		if _bar_layout.remove_ability(ability.id) > 0:
+			_hud.add_log_message("Fähigkeit entfernt: %s" % ability.display_name)
+
+
+# --- Talente (#20) -----------------------------------------------------------
+
+func _setup_talent_window() -> void:
+	var window := _hud.get_hud_window(&"talents")
+	if window == null:
+		return
+	_talent_panel = TALENT_PANEL_SCENE.instantiate()
+	window.set_content(_talent_panel)
+	_talent_panel.confirm_handler = _hud.ask
+	_talent_panel.error.connect(_hud.show_error)
+
+
+## Eigene Figur ist da: Talentfenster, Fehlermeldungen des Hosts, Hinweis bei
+## Stufe 10 und Hinweis-Punkt an der Menüleiste.
+func _setup_talents(player: PlayerCharacter) -> void:
+	var talents := player.get_talents()
+	if talents == null:
+		return
+	if _talent_panel != null:
+		_talent_panel.setup(player)
+	talents.request_failed.connect(_hud.show_error)
+	talents.talents_changed.connect(_update_talent_hint.bind(talents))
+	player.get_stats().level_changed.connect(_on_local_level_changed.bind(talents))
+	_update_talent_hint(talents)
+
+
+## Hinweis-Punkt: Stufe reicht, aber noch keine Spezialisierung gewählt.
+func _update_talent_hint(talents: PlayerTalents) -> void:
+	_hud.set_window_hint(&"talents", talents.has_spec_level() and not talents.has_spec(),
+			"Spezialisierung wählbar")
+
+
+## Stufe von unter 10 auf 10 oder mehr (auch per Entwickler-Panel): Hinweis.
+## Beim Laden eines Charakters ab Stufe 10 erscheint er nicht (nur der Punkt).
+func _on_local_level_changed(level: int, previous: int, talents: PlayerTalents) -> void:
+	_update_talent_hint(talents)
+	var needed := TalentRules.spec_level()
+	if previous < needed and level >= needed and not talents.has_spec() 			and not talents.get_specializations().is_empty():
+		_hud.ask("Spezialisierung", "Du kannst jetzt eine Spezialisierung wählen.",
+				"Talente öffnen", "Später", func() -> void: _hud.open_window(&"talents"))
 
 
 # --- Einheiten (#31) ---------------------------------------------------------
@@ -616,6 +680,11 @@ func _setup_dev_panel() -> void:
 	var combat_dev := CombatDevSection.new()
 	add_child(combat_dev)
 	combat_dev.setup(panel, self)
+
+	# Talente (#20): entsperren, Bonuspunkte, Spezialisierung zurücksetzen.
+	var talent_dev := TalentDevSection.new()
+	add_child(talent_dev)
+	talent_dev.setup(panel, self)
 
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)

@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31 und #32).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31, #32 und #20).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -44,6 +44,7 @@ func _ready() -> void:
 	_add_unit_samples()
 	_add_combat_samples()
 	_add_casting_samples()
+	_add_talent_samples()
 
 	%FocusButton.grab_focus()
 
@@ -83,6 +84,69 @@ func _add_spellbook_samples() -> void:
 	tooltip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	tooltip.add_child(AbilityTooltip.create(gegenzauber, false))
 	grid.add_child(tooltip)
+
+
+## Talente (#20): Reiter (wählbar, gesperrt), Talente (leer, gelernt,
+## vorläufig, gesperrt) mit Pfeil für Voraussetzungen, Hinweis-Punkt am
+## Menüleisten-Button. Alles Platzhalter aus dem Theme.
+func _add_talent_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	_add_row(grid, "Talentfenster (#20): Reiter wählbar (ChoiceButton), gewählt, gesperrt (LockedChoiceButton)")
+	var tabs := HBoxContainer.new()
+	tabs.theme_type_variation = &"ButtonRow"
+	grid.add_child(tabs)
+	for sample: Array in [["Feuer (gewählt)", &"ChoiceButton", true], ["Frost", &"ChoiceButton", false],
+			["Arkan", &"LockedChoiceButton", false]]:
+		var tab := Button.new()
+		tab.text = sample[0]
+		tab.theme_type_variation = sample[1]
+		tab.toggle_mode = true
+		tab.button_pressed = sample[2]
+		tabs.add_child(tab)
+	_add_row(grid, "Talente: leer, gelernt (SlotActive), vorläufig (TalentPending), gesperrt; Pfeil für Voraussetzung (TalentArrows)")
+	var stack := MarginContainer.new()
+	grid.add_child(stack)
+	var nodes := HBoxContainer.new()
+	nodes.theme_type_variation = &"ButtonRow"
+	stack.add_child(nodes)
+	var talent := TalentData.new()
+	talent.display_name = "Glühende Kraft"
+	var buttons: Array[TalentNodeButton] = []
+	for sample: Array in [["0/3", false, false, false], ["2/3", true, false, false], ["1/3 (+1)", true, true, false],
+			["0/1", false, false, true]]:
+		var column := VBoxContainer.new()
+		column.theme_type_variation = &"SlotColumn"
+		var button := TalentNodeButton.new()
+		button.setup(talent, Callable())
+		button.set_marks(sample[1], sample[2])
+		button.disabled = sample[3]
+		column.add_child(button)
+		var rank := Label.new()
+		rank.theme_type_variation = &"SmallHintText" if sample[3] else &"SmallLabel"
+		rank.text = sample[0]
+		rank.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(rank)
+		nodes.add_child(column)
+		buttons.append(button)
+	var arrows := TalentArrows.new()
+	stack.add_child(arrows)
+	arrows.links = [[buttons[1], buttons[2], true]]
+	_add_row(grid, "Hinweis-Punkt an der Menüleiste (MenuHintDot), z. B. „Spezialisierung wählbar“")
+	var micro := Button.new()
+	micro.theme_type_variation = &"SlotButton"
+	micro.custom_minimum_size = Vector2(40, 40)
+	micro.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	micro.text = "T"
+	micro.tooltip_text = "Talente (N) – Spezialisierung wählbar"
+	var dot := Panel.new()
+	dot.theme_type_variation = &"MenuHintDot"
+	dot.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	dot.offset_left = -12.0
+	dot.offset_right = -2.0
+	dot.offset_top = 2.0
+	dot.offset_bottom = 12.0
+	micro.add_child(dot)
+	grid.add_child(micro)
 
 
 func _add_row(grid: GridContainer, text: String) -> void:

@@ -16,6 +16,16 @@ extends Node
 ##   Bodenziel-Fähigkeiten öffnen erst den Kreis am Mauszeiger
 ##   (GroundTargeting); „Automatischer Angriff“ schaltet über die Zielauswahl.
 ##
+## Spezialisierung und Talente (#20, Kindknoten „Talents“ der Figur):
+## - Ein zusätzlicher Reiter mit dem Namen der wirksamen Spezialisierung zeigt
+##   die Fähigkeiten aus Talenten (nur der Reiter der gewählten).
+## - Fähigkeiten aus Talenten gelten als erlernt, solange das Talent gelernt
+##   und wirksam ist; neue melden abilities_learned (→ erster freier Slot),
+##   weggefallene abilities_unlearned (→ verschwinden von den Leisten).
+## - resolve() liefert die aufgelöste Fähigkeit (Grundfähigkeit → Variante der
+##   Spezialisierung → Ersatz durch Talente), die Zauberbuch, Leisten und
+##   Tooltips anzeigen. Gespeichert wird weiter die Grundfähigkeit.
+##
 ## Netzwerk: Der Knoten existiert auf jeder Instanz für jede Figur. Die Stufe
 ## kommt über StatsSync (Host-Autorität) aus CharacterStats; die Schalter des
 ## Entwickler-Panels (learn_flags) setzt der Host und ServerSync überträgt
@@ -28,6 +38,8 @@ signal learned_changed
 ## Fähigkeiten wurden neu erlernt (Stufe gestiegen oder „Alle erlernen“).
 ## abilities ist nach benötigter Stufe sortiert.
 signal abilities_learned(abilities: Array[AbilityData])
+## Fähigkeiten aus Talenten sind weggefallen (#20: zurückgesetzt, gewechselt).
+signal abilities_unlearned(abilities: Array[AbilityData])
 ## Ein Wunsch wurde an den Host geschickt (bzw. auf dem Host ausgeführt).
 signal ability_used(ability: AbilityData)
 ## Eine Fähigkeit ging nicht (Prüfung beim Besitzer oder Ablehnung des
@@ -69,6 +81,14 @@ func _ready() -> void:
 		_stats.level_changed.connect(_on_level_changed)
 		# Erster Stand eines Clients kommt erst nach _ready per StatsSync.
 		_stats.stats_changed.connect(learned_changed.emit)
+	# Talente (#20): Reiter, „erlernt“ und Varianten ändern sich.
+	var talents := get_talents()
+	if talents != null:
+		talents.talents_changed.connect(learned_changed.emit)
+		talents.granted_changed.connect(_on_granted_changed)
+	var combat := _player.get_node_or_null(^"Combat") as UnitCombat if _player != null else null
+	if combat != null:
+		combat.ability_modifiers_changed.connect(learned_changed.emit)
 	var caster := get_caster()
 	if caster != null:
 		caster.failed.connect(func(code: int, param: String, ability: AbilityData) -> void:
@@ -85,12 +105,26 @@ func get_class_data() -> ClassData:
 	return _player.get_class_data() if _player != null else null
 
 
+## Spezialisierung und Talente (#20) oder null.
+func get_talents() -> PlayerTalents:
+	return _player.get_node_or_null(^"Talents") as PlayerTalents if _player != null else null
+
+
+## Aufgelöste Fähigkeit (#20): Variante der Spezialisierung bzw. Ersatz durch
+## Talente; ohne Veränderung die Fähigkeit selbst.
+func resolve(ability: AbilityData) -> AbilityData:
+	if ability == null or _player == null:
+		return ability
+	return ability.get_replacement_for(_player)
+
+
 ## Wirken (#33) oder null.
 func get_caster() -> UnitCaster:
 	return _player.get_node_or_null(^"Caster") as UnitCaster if _player != null else null
 
 
-## Reiter des Zauberbuchs in Anzeigereihenfolge: „Allgemein“ und die Klasse.
+## Reiter des Zauberbuchs in Anzeigereihenfolge: „Allgemein“, die Klasse
+## und (#20) die wirksame Spezialisierung mit den Fähigkeiten aus Talenten.
 ## Testfähigkeiten (dev_only) nur nach „Testfähigkeiten erlernen“.
 func get_spellbook_tabs() -> Array[SpellbookTabData]:
 	var tabs: Array[SpellbookTabData] = []
@@ -108,6 +142,15 @@ func get_spellbook_tabs() -> Array[SpellbookTabData]:
 	var class_data := get_class_data()
 	if class_data != null:
 		tabs.append(SpellbookTabData.from_class(class_data, 1))
+	var talents := get_talents()
+	if talents != null and talents.is_spec_active():
+		var spec := talents.get_spec()
+		var tab := SpellbookTabData.new()
+		tab.id = spec.id
+		tab.title = spec.display_name
+		tab.order = 2
+		tab.abilities = talents.get_granted_abilities()
+		tabs.append(tab)
 	tabs.sort_custom(func(a: SpellbookTabData, b: SpellbookTabData) -> bool: return a.order < b.order)
 	return tabs
 
@@ -123,9 +166,13 @@ func get_all_abilities() -> Array[AbilityData]:
 
 
 ## Ob die Fähigkeit erlernt ist (Stufe erreicht oder „Alle erlernen“).
+## Fähigkeiten aus Talenten (#20): nur, solange das Talent sie gibt.
 func is_learned(ability: AbilityData) -> bool:
 	if ability == null:
 		return false
+	var talents := get_talents()
+	if talents != null and talents.is_talent_ability(ability):
+		return talents.has_granted(ability)
 	if ability.dev_only:
 		return learn_flags & LEARN_TEST != 0
 	return learn_all or get_level() >= ability.required_level
@@ -334,6 +381,15 @@ func _on_level_changed(level: int, previous: int) -> void:
 	learned_changed.emit()
 	if not newly.is_empty():
 		abilities_learned.emit(_sorted_for_bar(newly))
+
+
+## Talente (#20): neue Fähigkeiten melden, weggefallene zum Entfernen.
+func _on_granted_changed(added: Array[AbilityData], removed: Array[AbilityData]) -> void:
+	learned_changed.emit()
+	if not removed.is_empty():
+		abilities_unlearned.emit(removed)
+	if not added.is_empty():
+		abilities_learned.emit(added)
 
 
 func _announce_learned(before: Array[AbilityData]) -> void:

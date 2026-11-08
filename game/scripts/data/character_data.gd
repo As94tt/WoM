@@ -3,6 +3,9 @@ extends Resource
 ## Ein gespeicherter Spielercharakter (Ticket #6). Liegt lokal unter
 ## user://characters/, eine Datei pro Charakter (siehe CharacterStore).
 ## Volk und Klasse sind nur als ID gespeichert; die Daten dazu liefert GameData.
+## Seit #20 auch Spezialisierung, Talentränge, freigeschaltete Spezialisierungen
+## und Bonuspunkte; sie gehen beim Beitreten mit to_dict() an den Host und
+## werden gespeichert, sobald der Host eine Änderung bestätigt (PlayerTalents).
 
 enum Gender { MALE, FEMALE }
 
@@ -19,6 +22,18 @@ enum Gender { MALE, FEMALE }
 ## Standardbelegung (neue und bestehende Charaktere). Bleibt lokal und wird
 ## nicht an den Host übertragen.
 @export var action_bars: Array[PackedStringArray] = []
+
+@export_group("Spezialisierung und Talente (#20)")
+## Gewählte Spezialisierung (SpecializationData.id, leer = keine).
+@export var specialization_id: StringName = &""
+## Ränge der Talente im Baum der Spezialisierung: Talent-ID → Rang.
+@export var talent_ranks: Dictionary = {}
+## Freigeschaltete gesperrte Spezialisierungen (vorerst nur über das
+## Entwickler-Panel).
+@export var unlocked_specializations: PackedStringArray = []
+## Zusätzliche Talentpunkte aus dem Entwickler-Panel.
+@export var bonus_talent_points: int = 0
+@export_group("")
 
 ## Datei, aus der der Charakter geladen bzw. in die er gespeichert wurde.
 ## Wird von CharacterStore gesetzt und nicht mitgespeichert.
@@ -62,7 +77,33 @@ func to_dict() -> Dictionary:
 		"class_id": String(class_id),
 		"level": level,
 		"last_played": last_played,
+		"talents": get_talent_dict(),
 	}
+
+
+## Spezialisierung und Talente (#20) im Format von PlayerTalents.talent_state:
+## {"spec", "ranks", "unlocked", "bonus"} – nur einfache Typen. Wird beim
+## Beitreten an den Host übertragen, der damit rechnet.
+func get_talent_dict() -> Dictionary:
+	return {
+		"spec": String(specialization_id),
+		"ranks": TalentRules.clean_ranks(talent_ranks),
+		"unlocked": Array(unlocked_specializations),
+		"bonus": maxi(0, bonus_talent_points),
+	}
+
+
+## Gegenstück zu get_talent_dict() (bestätigter Stand vom Host).
+func set_talent_dict(data: Dictionary) -> void:
+	specialization_id = StringName(str(data.get("spec", "")))
+	talent_ranks = TalentRules.clean_ranks(data.get("ranks", {}))
+	var unlocked := PackedStringArray()
+	var list: Variant = data.get("unlocked", [])
+	if list is Array or list is PackedStringArray:
+		for entry: Variant in list:
+			unlocked.append(str(entry))
+	unlocked_specializations = unlocked
+	bonus_talent_points = maxi(0, int(data.get("bonus", 0)))
 
 
 ## Gegenstück zu to_dict(). Fehlende Felder bekommen Standardwerte; Volk und
@@ -75,4 +116,7 @@ static func from_dict(data: Dictionary) -> CharacterData:
 	c.class_id = StringName(str(data.get("class_id", "")))
 	c.level = maxi(1, int(data.get("level", 1)))
 	c.last_played = maxi(0, int(data.get("last_played", 0)))
+	var talents: Variant = data.get("talents", {})
+	if talents is Dictionary:
+		c.set_talent_dict(talents)
 	return c

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="SpecializationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_spec"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_transform"]
+[ext_resource type="Resource" path="res://data/talents/mage_feuer.tres" id="3_tree"]
+[ext_resource type="Resource" path="res://data/abilities/feuerball.tres" id="b0"]
+[ext_resource type="Resource" path="res://data/abilities/glutball.tres" id="v0"]
+
+[sub_resource type="Resource" id="T0"]
+script = ExtResource("2_transform")
+base = ExtResource("b0")
+variant = ExtResource("v0")
+
+[resource]
+script = ExtResource("1_spec")
+id = &"mage_feuer"
+display_name = "Feuer"
+description = "Platzhalter (Testdaten #20): Der Magier entfesselt Flammen mit hohem Schaden.
+Verwandelt Feuerball in Glutball; Talente geben Flammenstoß und Feuerring."
+order = 1
+preferred_stats = Array[StringName]([&"precision", &"devastation"])
+transformations = Array[ExtResource("2_transform")]([SubResource("T0")])
+talent_tree = ExtResource("3_tree")

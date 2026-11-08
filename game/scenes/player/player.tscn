@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/combat/unit_combat.gd" id="7_combat"]
 [ext_resource type="Script" path="res://scripts/combat/unit_caster.gd" id="cst_caster"]
 [ext_resource type="Script" path="res://scripts/abilities/ground_targeting.gd" id="cst_ground"]
+[ext_resource type="Script" path="res://scripts/talents/player_talents.gd" id="tal_talents"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -57,6 +58,9 @@ properties/6/replication_mode = 2
 properties/7/path = NodePath("Abilities:learn_flags")
 properties/7/spawn = true
 properties/7/replication_mode = 2
+properties/8/path = NodePath("Talents:talent_state")
+properties/8/spawn = true
+properties/8/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="Replication_movement"]
 properties/0/path = NodePath(".:net_time")
@@ -204,3 +208,6 @@ replication_config = SubResource("Replication_cast")
 
 [node name="GroundTargeting" type="Node" parent="."]
 script = ExtResource("cst_ground")
+
+[node name="Talents" type="Node" parent="."]
+script = ExtResource("tal_talents")

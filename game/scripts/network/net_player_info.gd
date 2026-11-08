@@ -16,6 +16,10 @@ var race_id: StringName = &""
 var gender: int = CharacterData.Gender.MALE
 var class_id: StringName = &""
 var level: int = 1
+## Spezialisierung und Talente des mitgebrachten Charakters (#20,
+## CharacterData.get_talent_dict). Der Host gibt sie der Figur beim Erzeugen
+## mit (PlayerTalents.host_load); danach gilt der Stand der Figur.
+var talents: Dictionary = {}
 ## true, sobald der Spieler die Welt geladen hat und seine Figur existiert.
 var in_world := false
 ## Round-Trip-Zeit zum Host in Millisekunden (vom Host gemessen, 0 beim Host).
@@ -32,6 +36,7 @@ static func from_character(id: int, c: CharacterData) -> NetPlayerInfo:
 	info.gender = c.gender
 	info.class_id = c.class_id
 	info.level = c.level
+	info.talents = c.get_talent_dict()
 	return info
 
 
@@ -56,6 +61,7 @@ func to_dict() -> Dictionary:
 		"gender": gender,
 		"class_id": String(class_id),
 		"level": level,
+		"talents": talents,
 		"in_world": in_world,
 		"ping_ms": ping_ms,
 	}
@@ -70,6 +76,8 @@ static func from_dict(data: Dictionary) -> NetPlayerInfo:
 	info.gender = int(data.get("gender", CharacterData.Gender.MALE))
 	info.class_id = StringName(str(data.get("class_id", "")))
 	info.level = int(data.get("level", 1))
+	var talent_data: Variant = data.get("talents", {})
+	info.talents = talent_data.duplicate(true) if talent_data is Dictionary else {}
 	info.in_world = bool(data.get("in_world", false))
 	info.ping_ms = int(data.get("ping_ms", 0))
 	return info

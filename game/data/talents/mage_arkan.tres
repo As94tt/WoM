@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="TalentTreeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/talent_tree_data.gd" id="e1"]
+[ext_resource type="Script" path="res://scripts/talents/talent_row_data.gd" id="e2"]
+[ext_resource type="Script" path="res://scripts/talents/talent_data.gd" id="e3"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="e4"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="e5"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="e6"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="e7"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="e8"]
+[ext_resource type="Resource" path="res://data/abilities/arkanschlag.tres" id="e9"]
+[ext_resource type="Resource" path="res://data/auras/talent_arkane_einsicht.tres" id="e10"]
+[ext_resource type="Resource" path="res://data/auras/talent_arkane_macht.tres" id="e11"]
+
+[sub_resource type="Resource" id="S1"]
+script = ExtResource("e3")
+id = &"arkanschlag"
+display_name = "Arkanschlag"
+description = "Neue Fähigkeit: Arkanschlag."
+grants_abilities = Array[ExtResource("e7")]([ExtResource("e9")])
+
+[sub_resource type="Resource" id="S2"]
+script = ExtResource("e3")
+id = &"arkane_einsicht"
+display_name = "Arkane Einsicht"
+description = "Passiv: +20 Intellekt."
+auras = Array[ExtResource("e8")]([ExtResource("e10")])
+
+[sub_resource type="Resource" id="S3"]
+script = ExtResource("e2")
+kind = 0
+required_points = 0
+talents = Array[ExtResource("e3")]([SubResource("S1"), SubResource("S2")])
+
+[sub_resource type="Resource" id="S4"]
+script = ExtResource("e3")
+id = &"arkane_konzentration"
+display_name = "Arkane Konzentration"
+description = "Passiv: +5 % arkaner Schaden je Rang (Aura mit Stapeln)."
+max_ranks = 2
+auras = Array[ExtResource("e8")]([ExtResource("e11")])
+
+[sub_resource type="Resource" id="S5"]
+script = ExtResource("e2")
+kind = 1
+required_points = 1
+talents = Array[ExtResource("e3")]([SubResource("S4")])
+
+[sub_resource type="Resource" id="S6"]
+script = ExtResource("e5")
+ability_id = &"gegenzauber"
+value_key = "abklingzeit"
+add = -6.0
+
+[sub_resource type="Resource" id="S7"]
+script = ExtResource("e6")
+modifiers = Array[ExtResource("e5")]([SubResource("S6")])
+
+[sub_resource type="Resource" id="S8"]
+script = ExtResource("e3")
+id = &"schneller_gegenzauber"
+display_name = "Schneller Gegenzauber"
+description = "Gegenzauber hat 6 Sek. weniger Abklingzeit."
+effects = Array[ExtResource("e4")]([SubResource("S7")])
+
+[sub_resource type="Resource" id="S9"]
+script = ExtResource("e5")
+ability_id = &"arkanschlag"
+value_key = "kosten"
+add = -10.0
+
+[sub_resource type="Resource" id="S10"]
+script = ExtResource("e6")
+modifiers = Array[ExtResource("e5")]([SubResource("S9")])
+
+[sub_resource type="Resource" id="S11"]
+script = ExtResource("e3")
+id = &"arkane_effizienz"
+display_name = "Arkane Effizienz"
+description = "Arkanschlag kostet 10 Mana weniger."
+effects = Array[ExtResource("e4")]([SubResource("S10")])
+
+[sub_resource type="Resource" id="S12"]
+script = ExtResource("e2")
+kind = 0
+required_points = 2
+talents = Array[ExtResource("e3")]([SubResource("S8"), SubResource("S11")])
+
+[resource]
+script = ExtResource("e1")
+rows = Array[ExtResource("e2")]([SubResource("S3"), SubResource("S5"), SubResource("S12")])

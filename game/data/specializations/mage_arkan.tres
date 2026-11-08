@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SpecializationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_spec"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_transform"]
+[ext_resource type="Resource" path="res://data/talents/mage_arkan.tres" id="3_tree"]
+
+
+[resource]
+script = ExtResource("1_spec")
+id = &"mage_arkan"
+display_name = "Arkan"
+description = "Platzhalter (Testdaten #20): Der Magier formt reine arkane Energie.
+Verwandelt keine Grundfähigkeiten."
+order = 3
+preferred_stats = Array[StringName]([&"devastation", &"haste"])
+locked = true
+unlock_hint = "Wird später durch eine Klassenquest freigeschaltet (vorerst Entwickler-Panel: „Gesperrte Spezialisierungen entsperren“)."
+transformations = Array[ExtResource("2_transform")]([])
+talent_tree = ExtResource("3_tree")

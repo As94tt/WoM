@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="SpecializationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_spec"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_transform"]
+[ext_resource type="Resource" path="res://data/talents/mage_frost.tres" id="3_tree"]
+[ext_resource type="Resource" path="res://data/abilities/frostnova.tres" id="b0"]
+[ext_resource type="Resource" path="res://data/abilities/eiswelle.tres" id="v0"]
+
+[sub_resource type="Resource" id="T0"]
+script = ExtResource("2_transform")
+base = ExtResource("b0")
+variant = ExtResource("v0")
+
+[resource]
+script = ExtResource("1_spec")
+id = &"mage_frost"
+display_name = "Frost"
+description = "Platzhalter (Testdaten #20): Der Magier kontrolliert Gegner mit Eis und Kälte.
+Verwandelt Frostnova in Eiswelle; Talente geben Eislanze und Frostblitz."
+order = 2
+preferred_stats = Array[StringName]([&"haste", &"precision"])
+transformations = Array[ExtResource("2_transform")]([SubResource("T0")])
+talent_tree = ExtResource("3_tree")
