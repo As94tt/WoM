@@ -37,6 +37,8 @@ const RESOURCE_IDS := {
 }
 
 enum CastType { INSTANT, CAST, CHANNELED }
+## Längste Kette von Ersetzungen (#20: Variante, dann Talente).
+const MAX_REPLACEMENT_STEPS := 4
 ## Ziel der Fähigkeit (Prüfung 5 beim Einsetzen):
 ## NONE     – kein Ziel nötig (wirkt auf bzw. um den Wirker)
 ## ENEMY    – ein Feind (angreifbar: feindlich oder neutral), lebend
@@ -153,10 +155,24 @@ func get_number_for(caster: Unit, key: String) -> float:
 
 
 ## Ersatz durch Talente usw. (#32): die Fähigkeit, die statt dieser gilt.
+## Seit #20 als Kette in drei Schritten: Grundfähigkeit → Variante der
+## Spezialisierung (Quelle „spec:…“) → Ersatz durch Talente (Quelle
+## „talent:…“), die sich auf die Variante beziehen können. Höchstens
+## MAX_REPLACEMENT_STEPS Schritte (schützt vor Kreisen in den Daten).
 func get_replacement_for(caster: Unit) -> AbilityData:
 	var combat := caster.get_combat() if caster != null else null
-	var replacement := combat.get_ability_replacement(id) if combat != null else &""
-	return GameData.get_ability(replacement) if replacement != &"" else self
+	if combat == null:
+		return self
+	var current: AbilityData = self
+	for step in MAX_REPLACEMENT_STEPS:
+		var next_id := combat.get_ability_replacement(current.id)
+		if next_id == &"" or next_id == current.id:
+			break
+		var next := GameData.get_ability(next_id)
+		if next == null or next == self:
+			break
+		current = next
+	return current
 
 
 ## true für „Allgemein“ (keine Klasse).
