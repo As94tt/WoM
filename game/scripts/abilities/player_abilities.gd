@@ -38,6 +38,8 @@ signal ability_failed(ability: AbilityData, reason: String)
 ## Schalter aus dem Entwickler-Panel (nur diese Sitzung), Bits in learn_flags.
 const LEARN_ALL := 1
 const LEARN_TEST := 2
+## Angeborene Fähigkeit „Aufhelfen“ (#35, Taste F, Aktion „interact“).
+const HELP_ABILITY := &"aufhelfen"
 
 ## Vom Host gesetzt, über ServerSync übertragen (siehe oben).
 var learn_flags := 0:
@@ -207,6 +209,50 @@ func use_ability(ability: AbilityData) -> void:
 		ground.begin(ability)
 		return
 	caster.request_use(ability, target)
+
+
+## Aufhelfen (#35): Taste F gedrückt. Ziel ist das aktuelle Ziel, wenn es
+## ein toter Mitspieler in Reichweite ist, sonst der nächste tote Mitspieler
+## in Reichweite (Fähigkeit „aufhelfen“, Reichweite aus faehigkeitswerte.csv).
+## Danach wie jede Fähigkeit mit Zauberzeit (Prüfung, Vorhersage, Host).
+func start_help_up() -> void:
+	var caster := get_caster()
+	var ability := GameData.get_ability(HELP_ABILITY)
+	if caster == null or ability == null or _player == null:
+		return
+	var target := _find_help_target(caster, ability)
+	if target == null:
+		ability_failed.emit(ability, AbilityError.text(AbilityError.Code.NOBODY_TO_HELP))
+		return
+	caster.request_use(ability, target)
+
+
+## Taste F losgelassen: laufendes Aufhelfen abbrechen.
+func stop_help_up() -> void:
+	var caster := get_caster()
+	if caster == null:
+		return
+	var info := caster.get_cast_info()
+	if not info.is_empty() and (info["ability"] as AbilityData).id == HELP_ABILITY:
+		caster.request_cancel()
+
+
+func _find_help_target(caster: UnitCaster, ability: AbilityData) -> Unit:
+	var targeting := _player.get_targeting()
+	var current: Unit = targeting.target if targeting != null else null
+	if _is_help_target(caster, ability, current):
+		return current
+	var best: Unit = null
+	for unit in Unit.all_units(_player.get_tree()):
+		if _is_help_target(caster, ability, unit) and (best == null
+				or _player.distance_to_unit(unit) < _player.distance_to_unit(best)):
+			best = unit
+	return best
+
+
+func _is_help_target(caster: UnitCaster, ability: AbilityData, unit: Unit) -> bool:
+	return unit != null and is_instance_valid(unit) and unit != _player and unit.is_player_unit() \
+			and unit.is_dead() and caster.is_in_range(ability, unit)
 
 
 ## Warum die Fähigkeit gerade nicht geht (leer = geht), mit dem aktuellen

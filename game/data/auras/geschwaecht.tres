@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="1_aura"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="2_mod"]
+
+[sub_resource type="Resource" id="Resource_strength"]
+script = ExtResource("2_mod")
+stat = &"strength"
+kind = 1
+value = -25.0
+
+[sub_resource type="Resource" id="Resource_agility"]
+script = ExtResource("2_mod")
+stat = &"agility"
+kind = 1
+value = -25.0
+
+[sub_resource type="Resource" id="Resource_intellect"]
+script = ExtResource("2_mod")
+stat = &"intellect"
+kind = 1
+value = -25.0
+
+[sub_resource type="Resource" id="Resource_stamina"]
+script = ExtResource("2_mod")
+stat = &"stamina"
+kind = 1
+value = -25.0
+
+[sub_resource type="Resource" id="Resource_willpower"]
+script = ExtResource("2_mod")
+stat = &"willpower"
+kind = 1
+value = -25.0
+
+[resource]
+script = ExtResource("1_aura")
+id = &"geschwaecht"
+display_name = "Geschwächt"
+description = "Nach der Rückkehr am Wiedereinstiegspunkt: alle Attribute um 25 % verringert."
+is_debuff = true
+duration = 60.0
+cancelable = false
+stat_modifiers = Array[ExtResource("2_mod")]([SubResource("Resource_strength"), SubResource("Resource_agility"), SubResource("Resource_intellect"), SubResource("Resource_stamina"), SubResource("Resource_willpower")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

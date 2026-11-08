@@ -37,6 +37,11 @@ extends Node3D
 ##   „CombatDev“). Den Schalter „Im Kampf“ aus #19/#31 gibt es nicht mehr;
 ##   den Kampfzustand bestimmt UnitCombat.
 ##
+## - Tod und Wiederbelebung (#35): Kindknoten „Revival“ (RevivalService) für
+##   Wiedereinstieg, Aufhelfen und gemeinsame Rückkehr; Wiedereinstiegspunkte
+##   aus #15 (get_respawn_transform). unit_died meldet auf dem Host jeden Tod
+##   einer Einheit (Ereignis für spätere Systeme: Erfahrung, Beute, Respawn).
+##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
 ## Verbindung baut vorher der Autoload „Network“ auf. Ist die Welt geladen,
@@ -65,6 +70,9 @@ const NETWORK_SETTINGS: NetworkSettings = preload("res://data/network/network_se
 ## Teleportziele werden so weit über dem Boden gesetzt (Figur fällt kurz).
 const TELEPORT_LIFT := 0.3
 
+## Nur Host (#35): Eine Einheit (Spieler, Puppe, später Gegner) ist gestorben.
+signal unit_died(unit: Unit, killer: Unit)
+
 ## Weltdaten (Kartengröße).
 @export var world_data: WorldData
 
@@ -88,6 +96,8 @@ var _unit_dev_info: Label = null
 var _unit_dev_level_label: Label = null
 var _unit_dev_level_slider: HSlider = null
 var _unit_dev_dot_timer: Timer = null
+## Rückkehr nach dem Tod (#35).
+var _revival: RevivalService = null
 
 @onready var _players: Node3D = %Players
 @onready var _navigation: NavigationRegion3D = %Navigation
@@ -112,6 +122,11 @@ func _ready() -> void:
 	for scene_path in EFFECT_SCENES:
 		_effect_spawner.add_spawnable_scene(scene_path)
 	_players.child_entered_tree.connect(_on_player_node_added)
+	_players.child_entered_tree.connect(_on_unit_node_added)
+	_units.child_entered_tree.connect(_on_unit_node_added)
+	_revival = RevivalService.new()
+	add_child(_revival)
+	_revival.setup(self)
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
 	Network.players_changed.connect(_on_players_changed)
@@ -150,6 +165,28 @@ func get_start_transform(index := 0) -> Transform3D:
 		var angle := TAU * float((index - 1) % places) / float(places)
 		t.origin += (t.basis.x * cos(angle) + t.basis.z * sin(angle)) * START_SPACING
 	return _on_ground(t)
+
+
+## Alle Spielfiguren in der Welt (#35).
+func get_all_players() -> Array[PlayerCharacter]:
+	var result: Array[PlayerCharacter] = []
+	for node in _players.get_children():
+		var player := node as PlayerCharacter
+		if player != null and player.is_inside_tree() and not player.is_queued_for_deletion():
+			result.append(player)
+	return result
+
+
+## Rückkehr nach dem Tod (#35).
+func get_revival() -> RevivalService:
+	return _revival
+
+
+## Ort für die Rückkehr am nächsten Wiedereinstiegspunkt (#35); ohne Punkte
+## der Startpunkt.
+func get_respawn_transform(world_position: Vector3) -> Transform3D:
+	var point := get_nearest_respawn(world_position)
+	return _on_ground(point.global_transform) if point != null else get_start_transform(0)
 
 
 ## Alle Wiedereinstiegspunkte.
@@ -302,10 +339,23 @@ func _on_player_node_added(node: Node) -> void:
 		player.ready.connect(_on_player_ready.bind(player), CONNECT_ONE_SHOT)
 
 
+## Host (#35): Tod jeder Einheit als unit_died weitermelden.
+func _on_unit_node_added(node: Node) -> void:
+	var unit := node as Unit
+	if unit != null and not unit.died.is_connected(_on_unit_died):
+		unit.died.connect(_on_unit_died.bind(unit))
+
+
+func _on_unit_died(killer: Unit, unit: Unit) -> void:
+	unit_died.emit(unit, killer)
+
+
 func _on_player_ready(player: PlayerCharacter) -> void:
 	if player.is_local():
 		if _character_panel != null:
 			_character_panel.setup(player)
+		# Fenster „Ihr seid gestorben“ (#35).
+		_hud.setup_death_window(player, _revival)
 		_connect_stat_dev(player)
 		_setup_abilities(player)
 		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
@@ -515,7 +565,7 @@ func _setup_dev_panel() -> void:
 
 	var respawn := panel.add_section("Wiedereinstieg")
 	for point in get_respawn_points():
-		panel.add_button(respawn, "Wiedereinstieg: %s" % point.display_name,
+		panel.add_button(respawn, "Teleport zu Wiedereinstieg: %s" % point.display_name,
 				func() -> void: teleport_local_player(point.global_transform))
 	var to_nearest := func() -> void:
 		var player := get_local_player()
@@ -617,6 +667,8 @@ func _setup_stat_dev_section(panel: DevPanel) -> void:
 	_stat_dev_level_label.text = "Stufe (nur diese Sitzung): 1"
 	panel.add_button(section, "Schaden nehmen (%s %% Leben)" % StatFormat.number(
 			STAT_DEV_TOOLS.damage_taken_percent, 0), _stat_dev_action.bind("take_damage", null))
+	# Tod (#35): eigene Figur stirbt sofort (Leben 0).
+	panel.add_button(section, "Sterben (Leben auf 0)", _stat_dev_action.bind("die", null))
 	panel.add_button(section, "Schaden austeilen (%s, nur Wut)" % StatFormat.number(
 			STAT_DEV_TOOLS.damage_dealt, 0), _stat_dev_action.bind("deal_damage", null))
 	panel.add_button(section, "Mana/Energie verbrauchen (%s)" % StatFormat.number(
@@ -686,6 +738,8 @@ func _setup_unit_dev_section(panel: DevPanel) -> void:
 	panel.add_button(section, "Ziel: Heilung (%s %% Leben)" % StatFormat.number(
 			UNIT_DEV_TOOLS.heal_percent, 0), _unit_dev_action.bind("heal_percent", UNIT_DEV_TOOLS.heal_percent))
 	panel.add_button(section, "Ziel: Leben und Ressourcen auffüllen", _unit_dev_action.bind("refill", null))
+	# Tod (#35): Schaden in Höhe des Lebens (Übungspuppen füllen sich wieder auf).
+	panel.add_button(section, "Ziel: tödlicher Treffer", _unit_dev_action.bind("kill", null))
 	panel.add_toggle(section, "Ziel: Dauerschaden (%s je Sekunde)" % StatFormat.grouped(
 			UNIT_DEV_TOOLS.damage_per_second), false, _set_unit_dev_dot)
 	_unit_dev_level_label = panel.add_info(section, "Stufe des Ziels: –")
@@ -804,6 +858,8 @@ func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Vari
 			Combat.heal(source, target, stats.max_health * float(value) / 100.0)
 		"refill":
 			stats.refill()
+		"kill":
+			Combat.deal_damage(source, target, stats.health, &"physisch")
 		"level":
 			stats.set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
 		"rank":
