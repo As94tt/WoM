@@ -47,6 +47,10 @@ extends Control
 ## (ErrorMessages, show_error). Esc bricht zuerst ein offenes Bodenziel, dann
 ## den eigenen Zauber ab.
 ##
+## Bedrohung und Tod (#35): Bedrohungsanzeige im Zielrahmen (UnitFrame),
+## roter Rand an Namensplaketten für Tanks (UnitNameplate), Fenster „Ihr seid
+## gestorben“ oben mittig (DeathWindow, setup_death_window).
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -203,6 +207,11 @@ func setup_local_player(player: PlayerCharacter) -> void:
 	target_frame.set_unit(_targeting.target)
 	# Klick auf den eigenen Rahmen wählt sich selbst (wie F1).
 	player_frame.clicked.connect(func(unit: Unit) -> void: _targeting.select(unit))
+
+
+## Fenster „Ihr seid gestorben“ (#35) mit der eigenen Figur verbinden.
+func setup_death_window(player: PlayerCharacter, revival: RevivalService) -> void:
+	(%DeathWindow as DeathWindow).setup(player, revival)
 
 
 func get_player_frame() -> UnitFrame:

@@ -153,11 +153,12 @@ func _add_unit_samples() -> void:
 		badge.add_child(label)
 		badges.add_child(badge)
 
-	_add_row(grid, "Namensplakette: normal (NameplatePanel) und Ziel (NameplateTargetPanel), Text NameplateText")
+	_add_row(grid, "Namensplakette: normal (NameplatePanel), Ziel (NameplateTargetPanel), Tank-Hinweis greift jemand anderen an (NameplateWarningPanel, NameplateTargetWarningPanel, #35), Text NameplateText")
 	var plates := HBoxContainer.new()
 	plates.theme_type_variation = &"ButtonRow"
 	grid.add_child(plates)
-	for variation: StringName in [&"NameplatePanel", &"NameplateTargetPanel"]:
+	for variation: StringName in [&"NameplatePanel", &"NameplateTargetPanel", &"NameplateWarningPanel",
+			&"NameplateTargetWarningPanel"]:
 		var panel := PanelContainer.new()
 		panel.theme_type_variation = variation
 		var column := VBoxContainer.new()
@@ -184,6 +185,17 @@ func _add_unit_samples() -> void:
 		bar.value = 70.0
 		row.add_child(bar)
 		plates.add_child(panel)
+
+	_add_row(grid, "Bedrohung im Zielrahmen (#35): sicher (ThreatSafe), über 80 % (ThreatWarning), Aufmerksamkeit (ThreatAggro)")
+	var threat_row := HBoxContainer.new()
+	threat_row.theme_type_variation = &"ButtonRow"
+	grid.add_child(threat_row)
+	for sample: Array in [[&"ThreatSafe", "Bedrohung 45 %"], [&"ThreatWarning", "Bedrohung 85 % !"],
+			[&"ThreatAggro", "Bedrohung 100 % · greift Euch an"]]:
+		var threat := Label.new()
+		threat.theme_type_variation = sample[0]
+		threat.text = sample[1]
+		threat_row.add_child(threat)
 
 
 ## Auren und Kampftext (#32): Buff, Debuffs je Kategorie (AuraBuff,

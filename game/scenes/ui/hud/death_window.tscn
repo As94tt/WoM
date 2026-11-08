@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/death_window.gd" id="1_death"]
+
+[node name="DeathWindow" type="PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(440, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -220.0
+offset_top = 260.0
+offset_right = 220.0
+offset_bottom = 260.0
+grow_horizontal = 2
+theme_type_variation = &"DialogPanel"
+script = ExtResource("1_death")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="TitleLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Ihr seid gestorben"
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "Ein Mitspieler kann Euch aufhelfen."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OfferBox" type="VBoxContainer" parent="Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="OfferLabel" type="Label" parent="Content/OfferBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyText"
+text = "X möchte Euch aufhelfen."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OfferButtons" type="HBoxContainer" parent="Content/OfferBox"]
+layout_mode = 2
+theme_type_variation = &"ButtonRow"
+alignment = 1
+
+[node name="AcceptButton" type="Button" parent="Content/OfferBox/OfferButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Annehmen"
+
+[node name="DeclineButton" type="Button" parent="Content/OfferBox/OfferButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ablehnen"
+
+[node name="ReleaseButton" type="Button" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Am Wiedereinstiegspunkt erscheinen"

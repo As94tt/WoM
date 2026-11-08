@@ -16,6 +16,14 @@ extends PanelContainer
 ##   die Zauberleiste des Ziels unter den Balken (CastBar). Platz für
 ##   Combopunkte ist angelegt, aber leer.
 ##
+## - Bedrohung (#35, nur Zielrahmen): Steht man auf der Bedrohungsliste des
+##   Ziels, zeigt die Kopfzeile die eigene Bedrohung in Prozent der für den
+##   Zielwechsel nötigen (ThreatFormulas.display_percent; Schwelle 110 % in
+##   Nahkampfreichweite, sonst 130 %), grün (ThreatSafe), ab
+##   bedrohung_warnung_ab gelb (ThreatWarning, mit „!“), rot mit „greift
+##   Euch an“, wenn man selbst die Aufmerksamkeit hat (ThreatAggro). Wird
+##   jedes Bild aus dem übertragenen threat_state gerechnet.
+##
 ## Alles aktualisiert sich sofort über die Signale der Einheit
 ## (unit_changed) und ihrer Werte (resources_changed, stats_changed,
 ## combat_changed). Leben und Ressourcen kommen vom Host (StatsSync). Rein
@@ -31,6 +39,12 @@ const RANK_TEXTS := {
 	Unit.Rank.RARE: "Selten",
 	Unit.Rank.BOSS: "Boss",
 }
+## Theme-Variationen der Bedrohungsanzeige (#35).
+const THREAT_VARIATIONS := {
+	ThreatFormulas.Level.SAFE: &"ThreatSafe",
+	ThreatFormulas.Level.WARNING: &"ThreatWarning",
+	ThreatFormulas.Level.AGGRO: &"ThreatAggro",
+}
 
 @export var mode: Mode = Mode.PLAYER
 
@@ -43,6 +57,43 @@ var _viewer: Unit = null
 func _ready() -> void:
 	gui_input.connect(_on_gui_input)
 	visible = mode == Mode.PLAYER and _unit != null
+	set_process(mode == Mode.TARGET)
+
+
+func _process(_delta: float) -> void:
+	if visible:
+		_refresh_threat()
+
+
+## Bedrohungsanzeige (#35) aus dem übertragenen Stand der Liste des Ziels.
+func _refresh_threat() -> void:
+	var label: Label = %ThreatLabel
+	var combat := _unit.get_combat() if _unit != null and is_instance_valid(_unit) else null
+	if combat == null or _viewer == null or not is_instance_valid(_viewer) or not combat.holds_threat() \
+			or not combat.is_on_threat_list(_viewer):
+		label.visible = false
+		return
+	var target := combat.get_threat_target()
+	var is_target := target == _viewer
+	var target_threat := maxf(0.0, combat.get_threat_of(target)) if target != null else 0.0
+	var in_melee := _unit.distance_to_unit(_viewer) <= Data.konstante(&"nahkampf_reichweite", 5.0)
+	var percent := ThreatFormulas.display_percent(combat.get_threat_of(_viewer), target_threat, is_target,
+			in_melee, Data.konstante(&"bedrohung_schwelle_nahkampf", 110.0),
+			Data.konstante(&"bedrohung_schwelle_fernkampf", 130.0))
+	var level := ThreatFormulas.display_level(percent, is_target, Data.konstante(&"bedrohung_warnung_ab", 80.0))
+	var text := "Bedrohung %d %%" % floori(percent)
+	match level:
+		ThreatFormulas.Level.WARNING:
+			text += " !"
+		ThreatFormulas.Level.AGGRO:
+			text += " · greift Euch an"
+	label.text = text
+	label.tooltip_text = "Eigene Bedrohung in Prozent der Bedrohung, ab der %s das Ziel wechseln würde." \
+			% _unit.get_unit_name()
+	var variation: StringName = THREAT_VARIATIONS[level]
+	if label.theme_type_variation != variation:
+		label.theme_type_variation = variation
+	label.visible = true
 
 
 func get_unit() -> Unit:

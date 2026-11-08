@@ -564,6 +564,38 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate_warning"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.25, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate_target_warning"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.08, 0.08, 0.08, 0.6)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.25, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -735,6 +767,25 @@ NameplatePanel/base_type = &"PanelContainer"
 NameplatePanel/styles/panel = SubResource("StyleBoxFlat_nameplate")
 NameplateTargetPanel/base_type = &"PanelContainer"
 NameplateTargetPanel/styles/panel = SubResource("StyleBoxFlat_nameplate_target")
+NameplateWarningPanel/base_type = &"PanelContainer"
+NameplateWarningPanel/styles/panel = SubResource("StyleBoxFlat_nameplate_warning")
+NameplateTargetWarningPanel/base_type = &"PanelContainer"
+NameplateTargetWarningPanel/styles/panel = SubResource("StyleBoxFlat_nameplate_target_warning")
+ThreatSafe/base_type = &"Label"
+ThreatSafe/colors/font_color = Color(0.45, 0.8, 0.45, 1)
+ThreatSafe/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+ThreatSafe/constants/outline_size = 4
+ThreatSafe/font_sizes/font_size = 14
+ThreatWarning/base_type = &"Label"
+ThreatWarning/colors/font_color = Color(0.92, 0.8, 0.3, 1)
+ThreatWarning/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+ThreatWarning/constants/outline_size = 4
+ThreatWarning/font_sizes/font_size = 14
+ThreatAggro/base_type = &"Label"
+ThreatAggro/colors/font_color = Color(0.92, 0.35, 0.3, 1)
+ThreatAggro/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+ThreatAggro/constants/outline_size = 4
+ThreatAggro/font_sizes/font_size = 14
 NameplateColumn/base_type = &"VBoxContainer"
 NameplateColumn/constants/separation = 2
 NameplateText/base_type = &"Label"
