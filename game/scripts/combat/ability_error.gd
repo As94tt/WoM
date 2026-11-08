@@ -31,6 +31,9 @@ enum Code {
 	MOVING,           ## 8: in Bewegung (Zauberzeit, Kanalisieren)
 	INVALID_POINT,    ## Bodenziel: kein gültiger Ort
 	INTERRUPTED,      ## Zauber wurde unterbrochen
+	IN_COMBAT,        ## 8: nur außerhalb des Kampfes (#35, Aufhelfen)
+	TARGET_ALIVE,     ## 5: Ziel lebt (#35, Wiederbelebung)
+	NOBODY_TO_HELP,   ## Aufhelfen (F): kein toter Mitspieler in Reichweite (#35)
 }
 
 const WEAPON_TEXTS := {
@@ -91,6 +94,12 @@ static func text(code: int, param: String = "") -> String:
 			return "Dort könnt Ihr das nicht wirken."
 		Code.INTERRUPTED:
 			return "Unterbrochen."
+		Code.IN_COMBAT:
+			return "Das geht im Kampf nicht."
+		Code.TARGET_ALIVE:
+			return "Euer Ziel lebt noch."
+		Code.NOBODY_TO_HELP:
+			return "Hier ist niemand, dem Ihr aufhelfen könnt."
 	return "Das geht gerade nicht."
 
 

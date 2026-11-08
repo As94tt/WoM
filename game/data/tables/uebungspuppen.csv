@@ -1,7 +1,8 @@
-﻿# Übungspuppen im Trainingsbereich (#31). Leben und Verlust sind Platzhalterwerte. Abwehrwerte (#34): leer = Wertesystem (Ausweichen 3 %, sonst 0).
-id;name;art;gesinnung;stufe;rang;leben;verlust_prozent;verlust_intervall;immunitaeten;ruestung;zauberschutz;ausweichen;parieren;blocken;blockwert;notiz
-schadenspuppe_1;Schadenspuppe;schaden;feindlich;1;normal;100000;0;1;;;;;;;;Greift nie an, stirbt nie
-schadenspuppe_10;Schadenspuppe;schaden;feindlich;10;normal;250000;0;1;;;;;;;;
-schadenspuppe_30;Schadenspuppe;schaden;feindlich;30;normal;1000000;0;1;;;;;;;;
-heilpuppe;Heilpuppe;heilung;freundlich;1;normal;5000;2;1;;;;;;;;Verliert 2 % Leben je Sekunde
-bosspuppe;Bosspuppe;schaden;feindlich;12;boss;500000;0;1;betaeubung|verlangsamung|feuer;400;200;10;10;20;50;Immunitäten testen (#32), Rüstung, Zauberschutz, Ausweichen, Parieren, Blocken testen (#34)
+﻿# Übungspuppen im Trainingsbereich (#31), Angriffspuppe (#35). Leben und Verlust sind Platzhalterwerte. Abwehrwerte (#34): leer = Wertesystem (Ausweichen 3 %, sonst 0).
+id;name;art;gesinnung;stufe;rang;leben;verlust_prozent;verlust_intervall;immunitaeten;ruestung;zauberschutz;ausweichen;parieren;blocken;blockwert;angriff_schaden;angriff_takt;notiz
+schadenspuppe_1;Schadenspuppe;schaden;feindlich;1;normal;100000;0;1;;;;;;;;;;Greift nie an, stirbt nie
+schadenspuppe_10;Schadenspuppe;schaden;feindlich;10;normal;250000;0;1;;;;;;;;;;
+schadenspuppe_30;Schadenspuppe;schaden;feindlich;30;normal;1000000;0;1;;;;;;;;;;
+heilpuppe;Heilpuppe;heilung;freundlich;1;normal;5000;2;1;;;;;;;;;;Verliert 2 % Leben je Sekunde
+bosspuppe;Bosspuppe;schaden;feindlich;12;boss;500000;0;1;betaeubung|verlangsamung|feuer;400;200;10;10;20;50;;;Immunitäten testen (#32), Rüstung, Zauberschutz, Ausweichen, Parieren, Blocken testen (#34)
+angriffspuppe;Angriffspuppe;angriff;feindlich;1;normal;100000;0;1;;;;;;;;25;2;Greift den Spieler mit der höchsten Bedrohung im Nahkampf an, stirbt nie (#35)

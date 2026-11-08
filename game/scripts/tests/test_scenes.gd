@@ -9,11 +9,14 @@ const SCENES := [
 	"res://scenes/ui/hud/message_log.tscn",
 	"res://scenes/ui/hud/game_menu.tscn",
 	"res://scenes/ui/style_preview.tscn",
+	"res://scenes/ui/hud/death_window.tscn",
 ]
 const SCRIPTS := [
 	"res://scripts/world/game_world.gd",
 	"res://scripts/combat/unit_caster.gd",
 	"res://scripts/player/player_character.gd",
+	"res://scripts/combat/revival_service.gd",
+	"res://scripts/ui/death_window.gd",
 ]
 
 

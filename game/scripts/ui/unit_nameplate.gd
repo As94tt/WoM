@@ -9,6 +9,9 @@ extends VBoxContainer
 ##   Klassenfarbe, andere in der Farbe der Gesinnung).
 ## - Das aktuelle Ziel bekommt einen hervorgehobenen Rahmen
 ##   (NameplateTargetPanel) und wird etwas größer gezeichnet.
+## - Tank-Hinweis (#35): Ist die eigene Figur ein Tank (dreifache Bedrohung),
+##   bekommen Gegner, die gerade jemand anderen angreifen, einen roten,
+##   breiteren Rand (NameplateWarningPanel bzw. NameplateTargetWarningPanel).
 ## - Über Feinden: eigene Debuffs als kleine Symbole (#32, AuraBar).
 ## - Darunter die Zauberleiste der Einheit (#33, CastBar ohne Restzeit).
 ## - Darunter optional eine Anzeige (Übungspuppen: Schaden pro Sekunde),
@@ -35,7 +38,12 @@ func update_from(p_unit: Unit, viewer: Unit, is_target: bool, show_plate: bool) 
 	var reaction := unit.get_reaction_to(viewer)
 	var hostile := reaction != Unit.Reaction.FRIENDLY
 	%Plate.visible = show_plate
-	%Plate.theme_type_variation = &"NameplateTargetPanel" if is_target else &"NameplatePanel"
+	# Tank-Hinweis (#35): roter Rand, wenn der Gegner jemand anderen angreift.
+	var warn := hostile and _attacks_someone_else(unit, viewer)
+	if warn:
+		%Plate.theme_type_variation = &"NameplateTargetWarningPanel" if is_target else &"NameplateWarningPanel"
+	else:
+		%Plate.theme_type_variation = &"NameplateTargetPanel" if is_target else &"NameplatePanel"
 	%NameLabel.text = unit.get_unit_name()
 	var class_data := unit.get_class_data()
 	var name_color := class_data.color if unit.is_player_unit() and class_data != null \
@@ -61,6 +69,16 @@ func update_from(p_unit: Unit, viewer: Unit, is_target: bool, show_plate: bool) 
 	%MeterLabel.text = meter
 	var factor := TARGET_SCALE if is_target else 1.0
 	scale = Vector2(factor, factor)
+
+
+## Tank-Hinweis (#35): viewer ist Tank (Combat.is_tank, z. B. Tankhaltung)
+## und unit greift gerade einen anderen Spieler an (Ziel nach Bedrohung).
+static func _attacks_someone_else(p_unit: Unit, viewer: Unit) -> bool:
+	if viewer == null or p_unit.is_dead() or not Combat.is_tank(viewer):
+		return false
+	var combat := p_unit.get_combat()
+	var target := combat.get_threat_target() if combat != null else null
+	return target != null and target != viewer
 
 
 ## Setzt die Plakette so, dass ihre Unterkante mittig über screen_point liegt.

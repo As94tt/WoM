@@ -85,6 +85,15 @@ layout_mode = 2
 theme_type_variation = &"SmallLabel"
 text = "1"
 
+[node name="ThreatLabel" type="Label" parent="Row/Content/Header"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+theme_type_variation = &"ThreatSafe"
+text = "Bedrohung 0 %"
+
 [node name="HealthBar" type="ProgressBar" parent="Row/Content"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 22)

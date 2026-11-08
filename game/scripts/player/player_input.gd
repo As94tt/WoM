@@ -23,6 +23,9 @@ extends Node
 ## ohne nennenswerte Mausbewegung (klickweg_max in spielkonstanten.csv) ist ein
 ## Klick und geht an Targeting (Linksklick wählt, Rechtsklick wählt und greift
 ## an). Mit Bewegung bleibt es beim Drehen der Kamera.
+##
+## Aufhelfen (#35): Aktion „interact“ (F) gedrückt halten hilft einem toten
+## Mitspieler auf (PlayerAbilities.start_help_up), Loslassen bricht ab.
 
 ## Kamera der Figur.
 @export var camera: PlayerCamera
@@ -68,9 +71,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		_handle_mouse_press(event)
 		return
+	# Aufhelfen (#35): F gedrückt halten; Loslassen bricht ab (auch wenn die
+	# Tastatur inzwischen gesperrt ist).
+	if event.is_action_released("interact"):
+		_player.get_abilities().stop_help_up()
+		return
 	if _keyboard_blocked():
 		return
-	if event.is_action_pressed("jump"):
+	if event.is_action_pressed("interact"):
+		_player.get_abilities().start_help_up()
+	elif event.is_action_pressed("jump"):
 		_player.request_jump()
 	elif event.is_action_pressed("autorun_toggle"):
 		autorun = not autorun

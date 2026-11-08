@@ -18,10 +18,14 @@
 [ext_resource type="Resource" path="res://data/abilities/test_hinterhalt.tres" id="16_gw7re"]
 [ext_resource type="Resource" path="res://data/abilities/test_vergeltung.tres" id="17_echou"]
 [ext_resource type="Resource" path="res://data/abilities/test_manaschlag.tres" id="18_2og8t"]
+[ext_resource type="Resource" path="res://data/abilities/test_tankhaltung.tres" id="19_test_tankhaltung"]
+[ext_resource type="Resource" path="res://data/abilities/test_flaechenspott.tres" id="20_test_flaechenspott"]
+[ext_resource type="Resource" path="res://data/abilities/test_totstellen.tres" id="21_test_totstellen"]
+[ext_resource type="Resource" path="res://data/abilities/test_wiederbelebung.tres" id="22_test_wiederbelebung"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
 
 [resource]
 script = ExtResource("1_tab")
 id = &"general"
 title = "Allgemein"
-abilities = Array[ExtResource("ability_script")]([ExtResource("2_xq424"), ExtResource("3_wijk2"), ExtResource("4_bpfqa"), ExtResource("5_6q703"), ExtResource("6_wvv57"), ExtResource("7_u83k4"), ExtResource("8_jo4kj"), ExtResource("9_ijo14"), ExtResource("10_gm44r"), ExtResource("11_j1m0a"), ExtResource("12_8477l"), ExtResource("13_rfxi4"), ExtResource("14_ls6bv"), ExtResource("15_ciqm3"), ExtResource("16_gw7re"), ExtResource("17_echou"), ExtResource("18_2og8t")])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_xq424"), ExtResource("3_wijk2"), ExtResource("4_bpfqa"), ExtResource("5_6q703"), ExtResource("6_wvv57"), ExtResource("7_u83k4"), ExtResource("8_jo4kj"), ExtResource("9_ijo14"), ExtResource("10_gm44r"), ExtResource("11_j1m0a"), ExtResource("12_8477l"), ExtResource("13_rfxi4"), ExtResource("14_ls6bv"), ExtResource("15_ciqm3"), ExtResource("16_gw7re"), ExtResource("17_echou"), ExtResource("18_2og8t"), ExtResource("19_test_tankhaltung"), ExtResource("20_test_flaechenspott"), ExtResource("21_test_totstellen"), ExtResource("22_test_wiederbelebung")])

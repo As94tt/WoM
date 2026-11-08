@@ -41,6 +41,7 @@ enum CastType { INSTANT, CAST, CHANNELED }
 ## NONE     – kein Ziel nötig (wirkt auf bzw. um den Wirker)
 ## ENEMY    – ein Feind (angreifbar: feindlich oder neutral), lebend
 ## FRIENDLY – ein Freund, lebend; ohne passendes Ziel auf sich selbst
+##            (mit targets_dead: ein toter Mitspieler, #35)
 ## ANY      – Freund oder Feind
 ## GROUND   – Bodenziel: Kreis am Mauszeiger, Klick setzt den Punkt
 enum TargetKind { NONE, ENEMY, FRIENDLY, ANY, GROUND }
@@ -68,6 +69,10 @@ enum WeaponRequirement { NONE, MELEE, SHIELD, OFFHAND, RANGED }
 ## erlernt wurde („Testfähigkeiten erlernen“), und zählt nicht für „Alle
 ## Fähigkeiten der Klasse erlernen“.
 @export var dev_only := false
+
+## Angeboren (#35): Jede Spielfigur kann sie, ohne Zauberbuch und Stufe,
+## z. B. „Aufhelfen“ auf Taste F. Steht in keinem Zauberbuch.
+@export var innate := false
 
 @export_group("Wirkung")
 ## Zauber (Stille verhindert ihn, #32; Unterbrechen sperrt seine Schule, #33).
@@ -108,6 +113,12 @@ enum WeaponRequirement { NONE, MELEE, SHIELD, OFFHAND, RANGED }
 ## Schaltet den automatischen Angriff an bzw. aus (Fähigkeit „Automatischer
 ## Angriff“); hat sonst keine Wirkung.
 @export var toggles_auto_attack := false
+## Ziel ist ein toter Mitspieler (#35, nur mit FRIENDLY): Aufhelfen und
+## Wiederbelebungsfähigkeiten.
+@export var targets_dead := false
+## Erlittener Schaden bricht die Zauberzeit ab, statt sie zu verzögern (#35,
+## Aufhelfen).
+@export var cancelled_by_damage := false
 
 @export_group("Bedingungen")
 @export var required_weapon: WeaponRequirement = WeaponRequirement.NONE
@@ -117,6 +128,8 @@ enum WeaponRequirement { NONE, MELEE, SHIELD, OFFHAND, RANGED }
 @export var requires_behind := false
 ## Nur mit dieser Aura auf dem Wirker (z. B. „Rache nach Abwehren“).
 @export var required_aura: StringName = &""
+## Nur außerhalb des Kampfes einsetzbar (#35, Aufhelfen).
+@export var requires_out_of_combat := false
 ## Leuchtender Rand auf der Aktionsleiste, solange der Wirker eine dieser
 ## Auren hat (Proc, z. B. „Meteor sofort wirkbar“).
 @export var highlight_auras: PackedStringArray = []

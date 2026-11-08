@@ -41,7 +41,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 0
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
-properties/1/replication_mode = 0
+properties/1/replication_mode = 2
 properties/2/path = NodePath(".:dummy_id")
 properties/2/spawn = true
 properties/2/replication_mode = 2
@@ -71,6 +71,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath("Combat:ability_mod_state")
 properties/4/spawn = true
 properties/4/replication_mode = 2
+properties/5/path = NodePath("Combat:threat_state")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="Replication_cast"]
 properties/0/path = NodePath("Caster:cast_state")

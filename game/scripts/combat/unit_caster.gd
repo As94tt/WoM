@@ -360,7 +360,7 @@ func check(ability: AbilityData, target: Unit, point := Vector3.ZERO, has_point 
 	# 1. Bekannt und verfügbar
 	if _unit is PlayerCharacter:
 		var abilities := (_unit as PlayerCharacter).get_abilities()
-		if abilities != null and not abilities.knows(ability):
+		if abilities != null and not ability.innate and not abilities.knows(ability):
 			return _fail(AbilityError.Code.NOT_LEARNED)
 	# 2. Zustand
 	if _unit.is_dead():
@@ -412,6 +412,8 @@ func check(ability: AbilityData, target: Unit, point := Vector3.ZERO, has_point 
 		return _fail(AbilityError.Code.NEED_BEHIND)
 	if ability.required_aura != &"" and (combat == null or combat.get_stacks(ability.required_aura) <= 0):
 		return _fail(AbilityError.Code.NEED_AURA, String(ability.required_aura))
+	if ability.requires_out_of_combat and _unit.get_stats() != null and _unit.get_stats().is_in_combat():
+		return _fail(AbilityError.Code.IN_COMBAT)
 	if bool(view.get("moving", false)) and not ability.castable_while_moving \
 			and get_cast_type(ability) != AbilityData.CastType.INSTANT:
 		return _fail(AbilityError.Code.MOVING)
@@ -556,7 +558,13 @@ func interrupt(lock_duration: float) -> bool:
 ## einen Zauber mit Zauberzeit um zauber_verzoegerung Sekunden, höchstens
 ## zauber_verzoegerung_max mal. Kanalisieren wird nicht verzögert.
 func on_damage_taken() -> void:
-	if not Network.is_host() or _cast.is_empty() or bool(_cast["channel"]):
+	if not Network.is_host() or _cast.is_empty():
+		return
+	# Aufhelfen (#35): Schaden bricht ab statt zu verzögern.
+	if (_cast["ability"] as AbilityData).cancelled_by_damage:
+		_end_cast(Result.INTERRUPTED, AbilityError.Code.INTERRUPTED)
+		return
+	if bool(_cast["channel"]):
 		return
 	if int(_cast["pushbacks"]) >= int(Data.konstante(&"zauber_verzoegerung_max", 2.0)):
 		return
@@ -677,8 +685,10 @@ func _process_cast(now: float) -> void:
 	if _needs_unit_target(ability):
 		if target == null:
 			code = AbilityError.Code.INVALID_TARGET
-		elif target.is_dead():
+		elif target.is_dead() and not ability.targets_dead:
 			code = AbilityError.Code.TARGET_DEAD
+		elif not target.is_dead() and ability.targets_dead:
+			code = AbilityError.Code.TARGET_ALIVE
 	if code == AbilityError.Code.OK:
 		code = _check_range(ability, target, _cast["point"], _cast["has_point"], _host_view())
 	if code == AbilityError.Code.OK and not has_resource_for(ability):
@@ -1195,6 +1205,14 @@ func _resolve_target(ability: AbilityData, target: Unit) -> Array:
 		AbilityData.TargetKind.NONE, AbilityData.TargetKind.GROUND:
 			return [AbilityError.Code.OK, "", _unit]
 		AbilityData.TargetKind.FRIENDLY:
+			if ability.targets_dead:
+				# Wiederbelebung (#35): nur ein toter Mitspieler, nie man selbst.
+				if target == null or target == _unit or not target.is_player_unit() \
+						or _unit.get_reaction_to(target) != Unit.Reaction.FRIENDLY:
+					return _fail(AbilityError.Code.NO_TARGET)
+				if not target.is_dead():
+					return _fail(AbilityError.Code.TARGET_ALIVE)
+				return [AbilityError.Code.OK, "", target]
 			if target == null or _unit.get_reaction_to(target) != Unit.Reaction.FRIENDLY:
 				target = _unit
 			if target.is_dead():

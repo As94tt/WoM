@@ -12,13 +12,17 @@ extends Resource
 ## DAMAGE_TAKEN   – Schaden, den der Träger erleidet
 ## HEALING_DONE   – Heilung, die der Träger wirkt
 ## HEALING_TAKEN  – Heilung, die der Träger erhält („erhaltene Heilung“)
-enum Kind { DAMAGE_DONE, DAMAGE_TAKEN, HEALING_DONE, HEALING_TAKEN }
+## THREAT         – Bedrohung, die der Träger erzeugt (#35; Tankhaltungen
+##                  +200 = dreifach, Verborgene Stellung −50). Gilt für
+##                  Bedrohung aus Schaden, Heilung und „Bedrohung ändern“,
+##                  nicht für Spott.
+enum Kind { DAMAGE_DONE, DAMAGE_TAKEN, HEALING_DONE, HEALING_TAKEN, THREAT }
 
 @export var kind: Kind = Kind.DAMAGE_DONE
 ## Prozent (positiv = mehr, negativ = weniger).
 @export var percent := 0.0
 ## Nur für diese Schadensschulen (IDs aus schadensschulen.csv); leer = alle.
-## Bei Heilung ohne Bedeutung.
+## Bei Heilung und Bedrohung ohne Bedeutung.
 @export var schools: PackedStringArray = []
 ## Wert × Stapel der Aura.
 @export var scales_with_stacks := true
@@ -28,6 +32,8 @@ enum Kind { DAMAGE_DONE, DAMAGE_TAKEN, HEALING_DONE, HEALING_TAKEN }
 func applies_to(p_kind: Kind, school: StringName) -> bool:
 	if kind != p_kind:
 		return false
-	if p_kind == Kind.HEALING_DONE or p_kind == Kind.HEALING_TAKEN or schools.is_empty():
+	if p_kind != Kind.DAMAGE_DONE and p_kind != Kind.DAMAGE_TAKEN:
+		return true
+	if schools.is_empty():
 		return true
 	return schools.has(String(school))

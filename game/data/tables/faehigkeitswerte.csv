@@ -3,13 +3,14 @@
 id;klasse;spezialisierung;stufe;kosten;ressource;zauberzeit;kanalisierzeit;abklingzeit;aufladungen;reichweite;grundwert;faktor;faktor_quelle;dauer;tick;werte;notiz
 # Allgemein
 automatischer_angriff;;;1;0;keine;0;0;0;1;5;0;1;waffe;0;0;;Platzhalter (#21)
+aufhelfen;;;1;0;keine;5;0;0;1;3;0;0;;0;0;leben:30;Aufhelfen (#35): Taste F gedrückt halten, nur außerhalb des Kampfes, Leben (und Mana/Energie) in Prozent nach dem Aufstehen
 # Magier
 feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1|brand_schaden:10|flug:25;Beispiel (#33: Projektil, Brand über Zeit)
 frostnova;mage;;2;25;mana;0;0;20;1;0;10;0,2;zaubermacht;6;0;radius:8;Beispiel
 passiv_magier;mage;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
 gegenzauber;mage;;4;20;mana;0;0;24;1;30;0;0;;4;0;sperre:4;Platzhalter (#21), Unterbrechung (#33)
 # Krieger
-schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;;Beispiel
+schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;bedrohung:100;Beispiel, zusätzliche Bedrohung (#35)
 spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;;Platzhalter (#21)
 passiv_krieger;warrior;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
 kampfschrei;warrior;;4;10;wut;0;0;30;1;0;0;0;;60;0;radius:20;Platzhalter (#21)
@@ -47,3 +48,8 @@ test_vergeltung;;;1;0;keine;0;0;5;1;5;500;0;;0;0;;Nur mit der Aura „Segen der 
 test_manaschlag;;;1;50;mana;0;0;0;1;30;200;0;;0;0;;Kostet Mana (andere Klassen: „Nicht genug Mana“)
 test_puppenzauber;;;1;0;keine;3;0;0;1;0;100;0;;0;0;;Zauber der Übungspuppe (unterbrechbar)
 test_puppenzauber_schild;;;1;0;keine;3;0;0;1;0;100;0;;0;0;;Zauber der Übungspuppe (nicht unterbrechbar)
+# Testfähigkeiten (#35): Bedrohung und Wiederbelebung
+test_tankhaltung;;;1;0;keine;0;0;0;1;0;0;0;;0;0;;Umschalter: dreifache Bedrohung (wie Bollwerk, Bär, Eisenmönch)
+test_flaechenspott;;;1;0;keine;0;0;10;1;0;0;0;;3;0;radius:10;Flächenspott: alle Feinde im Umkreis greifen den Wirker für die Dauer an
+test_totstellen;;;1;0;keine;0;0;10;1;0;0;0;;0;0;radius:100;Bedrohung bei allen Feinden im Umkreis zurücksetzen (wie Totstellen)
+test_wiederbelebung;;;1;0;keine;3;0;0;1;30;0;0;;0;0;leben:30;Wiederbelebung eines toten Mitspielers, auch im Kampf (wie Wiedergeburt des Druiden)

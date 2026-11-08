@@ -11,7 +11,13 @@ extends Unit
 ## - Heilpuppe (art „heilung“): verliert alle verlust_intervall Sekunden
 ##   verlust_prozent ihres Lebens (nie unter 1). Zeigt Heilung pro Sekunde und
 ##   Überheilung; setzt die Anzeige nach derselben Zeit ohne Heilung zurück.
-## - Die Angriffspuppe ergänzt #35.
+## - Angriffspuppe (art „angriff“, #35): steht still, dreht sich zum Ziel und
+##   schlägt den Spieler mit der höchsten Bedrohung (Ziel nach
+##   UnitCombat.get_threat_target, also mit 110/130 % und Spott), sobald er in
+##   Nahkampfreichweite ist: alle angriff_takt Sekunden angriff_schaden
+##   körperlich (Nahkampfwurf: Ausweichen, Parieren, Blocken und Rüstung des
+##   Spielers wirken). Stirbt nie (füllt sich bei 0 auf wie die
+##   Schadenspuppe) und zeigt über sich Schaden pro Sekunde und ihr Ziel.
 ## - Entwickler-Panel (#33): „Ziel zaubert …“ lässt die Puppe einen
 ##   Testzauber immer wieder wirken (Kindknoten „Caster“, wie alle Einheiten).
 ##
@@ -24,7 +30,9 @@ extends Unit
 ## Puppe ist nach Schaden 5 s im Kampf; das Zurücksetzen der Anzeige bleibt
 ## bei puppe_ruecksetzen_nach. „StatsSync“ überträgt auch ihre Auren.
 
-enum Kind { DAMAGE, HEALING }
+enum Kind { DAMAGE, HEALING, ATTACK }
+
+const KIND_IDS := {"schaden": Kind.DAMAGE, "heilung": Kind.HEALING, "angriff": Kind.ATTACK}
 
 ## Spalte in uebungspuppen.csv → Wert im Wertesystem (#34).
 const DEFENSE_COLUMNS := {
@@ -74,6 +82,8 @@ var _total := 0.0
 ## Host: Zeitpunkt des letzten Schadens bzw. der letzten Heilung (s), −1 = keins.
 var _last_event_time := -1.0
 var _loss_elapsed := 0.0
+## Host (Angriffspuppe): nächster Schlag frühestens (s).
+var _next_attack := 0.0
 
 @onready var _stats: CharacterStats = $Stats
 @onready var _server_sync: MultiplayerSynchronizer = $ServerSync
@@ -101,6 +111,8 @@ func _process(delta: float) -> void:
 	_process_dev_cast(delta)
 	if get_kind() == Kind.HEALING:
 		_lose_health(delta)
+	elif get_kind() == Kind.ATTACK:
+		_process_attack(now)
 	if _last_event_time >= 0.0 and now - _last_event_time >= Data.konstante(&"puppe_ruecksetzen_nach", 10.0):
 		_reset()
 		return
@@ -130,8 +142,27 @@ func refresh_visibility() -> void:
 
 
 func get_kind() -> Kind:
-	return Kind.HEALING if _row != null and String(_row.get_value("art", "schaden")) == "heilung" \
-			else Kind.DAMAGE
+	if _row == null:
+		return Kind.DAMAGE
+	return KIND_IDS.get(String(_row.get_value("art", "schaden")), Kind.DAMAGE)
+
+
+## Host (Angriffspuppe): zum Ziel nach Bedrohung drehen und im Takt schlagen.
+func _process_attack(now: float) -> void:
+	var combat := get_combat()
+	var target := combat.get_threat_target() if combat != null else null
+	if target == null or target.is_dead() or is_dead():
+		return
+	var to := target.global_position - global_position
+	to.y = 0.0
+	if to.length_squared() > 0.0001:
+		rotation.y = atan2(-to.x, -to.z)
+	if now < _next_attack or distance_to_unit(target) > Data.konstante(&"nahkampf_reichweite", 5.0):
+		return
+	_next_attack = now + maxf(0.1, float(_row.get_value("angriff_takt", 2.0)))
+	var ctx := EffectContext.create(self, target, &"puppe:angriff", "Angriff")
+	Combat.roll_damage(self, target, float(_row.get_value("angriff_schaden", 0.0)), &"physisch",
+			HitFormulas.AttackKind.MELEE, ctx)
 
 
 # --- Einheit -----------------------------------------------------------------
@@ -192,14 +223,20 @@ func get_overhead_text() -> String:
 	if get_kind() == Kind.HEALING:
 		return "Heilung pro Sekunde: %s\nÜberheilung: %s" % [
 				StatFormat.grouped(meter_rate), StatFormat.grouped(meter_total)]
-	return "Schaden pro Sekunde: %s\nGesamt: %s" % [
+	var text := "Schaden pro Sekunde: %s\nGesamt: %s" % [
 			StatFormat.grouped(meter_rate), StatFormat.grouped(meter_total)]
+	if get_kind() == Kind.ATTACK:
+		var combat := get_combat()
+		var target := combat.get_threat_target() if combat != null else null
+		text += "\nGreift an: %s" % (target.get_unit_name() if target != null else "–")
+	return text
 
 
-## Host: Schaden. Bei 0 Leben füllt sich die Schadenspuppe sofort wieder auf.
+## Host: Schaden. Bei 0 Leben füllt sich die Schadens- bzw. Angriffspuppe
+## sofort wieder auf (sie stirbt nie).
 func apply_damage(amount: float, source: Unit = null) -> float:
 	var dealt := super.apply_damage(amount, source)
-	if get_kind() == Kind.DAMAGE and amount > 0.0:
+	if get_kind() != Kind.HEALING and amount > 0.0:
 		_record(amount, amount)
 		if _stats.health <= 0.0:
 			_stats.refill()
@@ -220,8 +257,9 @@ func _apply_data() -> void:
 	_row = Data.uebungspuppe(dummy_id)
 	if _row == null and dummy_id != &"":
 		push_warning("TrainingDummy: Übungspuppe „%s“ fehlt in uebungspuppen.csv." % dummy_id)
-	# Schadenspuppen gehen bis 0 (und füllen sich dann auf), Heilpuppen nie.
-	_stats.min_health = 0.0 if get_kind() == Kind.DAMAGE else CharacterStats.MIN_HEALTH
+	# Schadens- und Angriffspuppen gehen bis 0 (und füllen sich dann auf),
+	# Heilpuppen nie unter MIN_HEALTH.
+	_stats.min_health = CharacterStats.MIN_HEALTH if get_kind() == Kind.HEALING else 0.0
 	# Stufe und Grundwerte (Leben) aus den Daten übernehmen.
 	_stats.refresh_from_unit()
 	_stats.reapply()
@@ -261,7 +299,7 @@ func _reset() -> void:
 	_last_event_time = -1.0
 	meter_rate = 0
 	meter_total = 0
-	if get_kind() == Kind.DAMAGE:
+	if get_kind() != Kind.HEALING:
 		_stats.refill()
 
 

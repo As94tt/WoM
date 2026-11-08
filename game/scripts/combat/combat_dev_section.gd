@@ -9,8 +9,9 @@ extends Node
 ##
 ## Netzwerk: Auf einem Client geht jeder Button als Wunsch an den Host
 ## (_rpc_use, _rpc_event, _rpc_clear), der wie bei echten Fähigkeiten über
-## Combat entscheidet. Die Infozeilen lesen nur übertragene Daten; Restzeit
-## des Kampfzustands und Bedrohung kennt nur der Host.
+## Combat entscheidet. Die Infozeilen lesen nur übertragene Daten (seit #35
+## auch die Bedrohungsliste); die Restzeit des Kampfzustands kennt nur der
+## Host.
 
 const TOOLS: CombatDevTools = preload("res://data/combat/dev_tools.tres")
 const NAME := "CombatDev"
@@ -212,10 +213,17 @@ static func describe_unit(unit: Unit, title: String) -> PackedStringArray:
 			lines.append("  Fähigkeit: %s %s %s → %s" % [ability.display_name, key,
 					StatFormat.number(float(ability.get_value(key, 0.0)), 1),
 					StatFormat.number(ability.get_number_for(unit, key), 1)])
-	if Network.is_host():
-		var threat := combat.get_threat()
-		for path: String in threat:
+	# Bedrohungsliste (#35, übertragen): Ziel, Spott, Werte je Spieler.
+	if combat.holds_threat() and not combat.threat_state.is_empty():
+		var target := combat.get_threat_target()
+		var taunting := combat.get_taunting_unit()
+		lines.append("  Greift an: %s%s" % [target.get_unit_name() if target != null else "–",
+				" (Spott: %s)" % taunting.get_unit_name() if taunting != null else ""])
+		var list: Dictionary = combat.threat_state.get("l", {})
+		for path: String in list:
 			var source := Unit.from_path(unit.get_tree(), NodePath(path))
 			lines.append("  Bedrohung von %s: %s" % [source.get_unit_name() if source != null else path,
-					StatFormat.grouped(threat[path])])
+					StatFormat.grouped(float(list[path]))])
+	if unit.is_player_unit() and unit.is_dead():
+		lines.append("  Tot")
 	return lines
