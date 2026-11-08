@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_sscol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_sstab"]
+
+[sub_resource type="Resource" id="Resource_ss_id"]
+script = ExtResource("1_sscol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID der Schule (z. B. feuer). Effekte (.tres), Gegner und Immunitäten verweisen darauf; nie ändern."
+
+[sub_resource type="Resource" id="Resource_ss_name"]
+script = ExtResource("1_sscol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip, Kampftext, Entwickler-Panel)."
+
+[sub_resource type="Resource" id="Resource_ss_art"]
+script = ExtResource("1_sscol")
+name = "art"
+type = 5
+default_value = "magisch"
+choices = PackedStringArray("koerperlich", "magisch")
+description = "koerperlich: Rüstung verringert den Schaden; magisch: Zauberschutz verringert ihn (Trefferberechnung #34)."
+
+[sub_resource type="Resource" id="Resource_ss_reihenfolge"]
+script = ExtResource("1_sscol")
+name = "reihenfolge"
+type = 2
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Sortierung in Listen (kleiner = weiter vorn)."
+
+[resource]
+script = ExtResource("2_sstab")
+table = "schadensschulen"
+title = "Schadensschulen"
+group = "Kampf"
+description = "Schadensschulen (#32, Liste aus #39 um die Schulen aus #34 ergänzt). Schadenseffekte, Gegner (Spalte schule) und Immunitäten verweisen über die ID. Neue Schule = neue Zeile."
+key_columns = PackedStringArray("id")
+order = 55
+columns = Array[ExtResource("1_sscol")]([SubResource("Resource_ss_id"), SubResource("Resource_ss_name"), SubResource("Resource_ss_art"), SubResource("Resource_ss_reihenfolge")])

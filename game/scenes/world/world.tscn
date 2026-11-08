@@ -171,6 +171,13 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 spawn_path = NodePath("../Units")
 
+[node name="Effects" type="Node3D" parent="." groups=["combat_effects"]]
+unique_name_in_owner = true
+
+[node name="EffectSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+spawn_path = NodePath("../Effects")
+
 [node name="ZoneTracker" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_tracker")

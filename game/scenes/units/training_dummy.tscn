@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/units/training_dummy.gd" id="1_dummy"]
 [ext_resource type="Script" path="res://scripts/stats/character_stats.gd" id="2_stats"]
+[ext_resource type="Script" path="res://scripts/combat/unit_combat.gd" id="3_combat"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -63,6 +64,12 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath("Stats:max_health")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath("Combat:aura_state")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("Combat:ability_mod_state")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="TrainingDummy" type="CharacterBody3D"]
 collision_layer = 2
@@ -90,6 +97,9 @@ mesh = SubResource("Mesh_arms")
 [node name="Head" type="MeshInstance3D" parent="Model"]
 position = Vector3(0, 1.82, 0)
 mesh = SubResource("Mesh_head")
+
+[node name="Combat" type="Node" parent="."]
+script = ExtResource("3_combat")
 
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("2_stats")

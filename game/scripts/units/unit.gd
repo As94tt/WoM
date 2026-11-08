@@ -3,8 +3,13 @@ extends CharacterBody3D
 ## Gemeinsame Grundlage aller Einheiten (Ticket #31): Spielfiguren
 ## (PlayerCharacter), Übungspuppen (TrainingDummy), später NPCs und Gegner.
 ## Jede Einheit hat Name, Stufe, Leben und Ressourcen samt Werten (Kindknoten
-## „Stats“, CharacterStats aus #19), eine Gesinnung und einen Rang. Auren
-## (#32) und Bedrohung (#35) kommen als weitere Bausteine hier dazu.
+## „Stats“, CharacterStats aus #19), eine Gesinnung und einen Rang. Seit #32
+## dazu Auren, Zustände und Kampfzustand (Kindknoten „Combat“, UnitCombat);
+## Bedrohung (#35) kommt als weiterer Baustein dazu.
+##
+## Schaden und Heilung im Spiel laufen über Combat.deal_damage/Combat.heal
+## (Immunität, Umleitung, Absorption, Auslöser, Kampftext); apply_damage und
+## apply_heal unten ändern nur das Leben und sind der letzte Schritt davon.
 ##
 ## Unterklassen überschreiben die Funktionen im Abschnitt „Für Unterklassen“.
 ## Alles andere (Entfernung, Sichtlinie, Blickrichtung, Gesinnung zueinander)
@@ -137,6 +142,69 @@ func apply_heal(amount: float, _source: Unit = null) -> float:
 	return stats.heal(amount) if stats != null else 0.0
 
 
+## Immunitäten aus den Daten (IDs von Zuständen oder Schadensschulen, #32),
+## z. B. Bosse. Auren können weitere geben (UnitCombat.is_immune_to).
+func get_base_immunities() -> PackedStringArray:
+	return PackedStringArray()
+
+
+## Lässt sich die Einheit durch Effekte bewegen (Rückstoß, Heranziehen …)?
+func can_be_moved() -> bool:
+	return true
+
+
+## Host: Einheit an eine Stelle setzen (Effekt „Bewegung“). Spielfiguren
+## überschreiben das (ihr Besitzer bewegt sie).
+func host_move_to(target: Transform3D) -> void:
+	global_transform = target
+
+
+# --- Auren und Zustände (#32) -----------------------------------------------
+
+## Auren, Zustände und Kampfzustand (Kindknoten „Combat“) oder null.
+func get_combat() -> UnitCombat:
+	return get_node_or_null(^"Combat") as UnitCombat
+
+
+## Getarnt (Zustand aus einer Aura).
+func is_stealthed() -> bool:
+	var combat := get_combat()
+	return combat != null and combat.has_state(Combat.STATE_STEALTHED)
+
+
+## Sichtbar für viewer: getarnte Einheiten sehen nur Freunde.
+func is_visible_to(viewer: Unit) -> bool:
+	if not is_unit_visible():
+		return false
+	if is_stealthed() and viewer != null and viewer != self and get_reaction_to(viewer) != Reaction.FRIENDLY:
+		return false
+	return true
+
+
+## Von UnitCombat gerufen, wenn sich die Zustände geändert haben. Graubox der
+## Tarnung: Für Feinde des lokalen Spielers verschwindet das Modell, für
+## Freunde wird es halb durchsichtig.
+func on_states_changed() -> void:
+	var model := get_node_or_null(^"Model") as Node3D
+	if model != null:
+		var viewer := Unit.local_player(get_tree()) if is_inside_tree() else null
+		model.visible = is_visible_to(viewer)
+		var alpha := 0.5 if is_stealthed() else 0.0
+		for node in model.find_children("*", "GeometryInstance3D", true, false):
+			(node as GeometryInstance3D).transparency = alpha
+	unit_changed.emit()
+
+
+## Eigene Spielfigur dieser Instanz oder null.
+static func local_player(tree: SceneTree) -> Unit:
+	if tree == null:
+		return null
+	for unit in all_units(tree):
+		if unit.is_player_unit() and unit.is_multiplayer_authority():
+			return unit
+	return null
+
+
 # --- Zustand ----------------------------------------------------------------
 
 ## Tot (Leben 0). Tod und Wiedereinstieg folgen in #35.
@@ -145,8 +213,8 @@ func is_dead() -> bool:
 	return stats != null and stats.max_health > 0.0 and stats.health <= 0.0
 
 
-## Unsichtbare Einheiten (später Verstohlenheit, #33) können nicht per Tab
-## gewählt werden.
+## Unsichtbare Einheiten können nicht per Tab gewählt werden. Tarnung (#32)
+## prüft zusätzlich is_visible_to.
 func is_unit_visible() -> bool:
 	return is_visible_in_tree()
 

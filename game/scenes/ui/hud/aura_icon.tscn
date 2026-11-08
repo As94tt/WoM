@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/aura_icon.gd" id="1_icon"]
+
+[node name="AuraIcon" type="VBoxContainer"]
+offset_right = 32.0
+offset_bottom = 52.0
+theme_type_variation = &"NameplateColumn"
+script = ExtResource("1_icon")
+
+[node name="Frame" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"AuraBuff"
+
+[node name="Icon" type="TextureRect" parent="Frame"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Short" type="Label" parent="Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"AuraText"
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Stacks" type="Label" parent="Frame"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_type_variation = &"AuraText"
+horizontal_alignment = 2
+
+[node name="Time" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"AuraText"
+text = "12 s"
+horizontal_alignment = 1

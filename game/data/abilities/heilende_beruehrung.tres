@@ -9,3 +9,4 @@ display_name = "Heilende Berührung"
 description = "Eine langsame, kräftige Heilung auf ein einzelnes Ziel."
 class_id = &"druid"
 required_level = 2
+is_spell = true

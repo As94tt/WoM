@@ -7,8 +7,9 @@ extends Node
 ## Grundwerte (z. B. Leben einer Puppe) liefert die Einheit (Unit.get_stat_*).
 ##
 ## Netzwerk: Der Host ist die Autorität über die Werte aller Charaktere.
-## - Eingaben (Stufe, „Im Kampf“, „Nahkampfwaffe/Schild getragen“,
-##   Modifikatoren) stehen in stat_state. Nur der Host ändert sie; „StatsSync“
+## - Eingaben (Stufe, „Im Kampf“ – seit #32 gesetzt vom Kampfzustand in
+##   UnitCombat, nicht mehr vom Entwickler-Panel –, „Nahkampfwaffe/Schild
+##   getragen“, Modifikatoren) stehen in stat_state. Nur der Host ändert sie; „StatsSync“
 ##   (MultiplayerSynchronizer, Authority Host) überträgt sie an alle. Jede
 ##   Instanz rechnet daraus mit denselben Daten dieselben Werte (die
 ##   Prüfsumme der Tabellen ist beim Beitreten gleich, Neu laden ist mit
@@ -22,7 +23,8 @@ extends Node
 ## Schnittstelle für spätere Systeme (nur auf dem Host aufrufen):
 ##   add_modifier(StatModifier) / remove_source(&"aura:xyz")   – #29, #32
 ##   set_flag(StatBlock.FLAG_SHIELD, true)                      – #29
-##   set_in_combat(true)                                        – Kampf (M2)
+##   set_in_combat(true)        – nur UnitCombat (#32, Kampfzustand)
+##   change_resource(&"rage", -20)                              – #32 Effekte
 ##   take_damage(x), heal(x), register_damage_dealt(x)          – Kampf (M2)
 ##   spend_resource(&"mana", x), gain_resource(&"chi", x)       – Fähigkeiten
 ## Lesen geht überall: get_value(&"attack_power"), get_resource(&"energy"),
@@ -279,6 +281,21 @@ func spend_resource(resource_id: StringName, amount: float) -> bool:
 	return true
 
 
+## Ändert eine Ressource um delta (Effekt „Ressource ändern“, #32): positiv
+## wie gain_resource, negativ höchstens bis 0. Gibt die tatsächliche Änderung
+## zurück (negativ = entzogen).
+func change_resource(resource_id: StringName, delta: float) -> float:
+	if not _require_host("change_resource") or not RESOURCE_IDS.has(resource_id) \
+			or get_resource_max(resource_id) <= 0.0:
+		return 0.0
+	var before := get_resource(resource_id)
+	if delta > 0.0:
+		gain_resource(resource_id, delta)
+	elif delta < 0.0:
+		set(String(resource_id), maxf(0.0, before + delta))
+	return get_resource(resource_id) - before
+
+
 ## Fügt amount einer Ressource hinzu (bis zum Maximum). Chi entsteht nicht,
 ## solange es nach „Chi voll“ absinkt; erreicht es das Maximum, wird der
 ## Zustand „Chi voll“ ausgelöst.
@@ -346,8 +363,6 @@ func _do_dev_action(action: String, value: Variant) -> void:
 						dev_source(index), "Entwickler-Panel"))
 		"level":
 			set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
-		"combat":
-			set_in_combat(bool(value))
 		"melee":
 			set_flag(StatBlock.FLAG_MELEE_WEAPON, bool(value))
 		"shield":

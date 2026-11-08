@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_rodm6"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_m4pln"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_6nlnp"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_0bega"]
+
+[resource]
+script = ExtResource("3_6nlnp")
+id = &"test_verlangsamung_30"
+display_name = "Kälte"
+description = "Verlangsamt um 30 %. Testaura: Verlangsamung."
+is_debuff = true
+category = 1
+duration = 10.0
+states = 4
+slow_percent = 30.0
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

@@ -62,6 +62,9 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	# Getarnte Feinde (#32) verliert man als Ziel.
+	if target != null and is_instance_valid(target) and not target.is_visible_to(_player):
+		select(null)
 	_update_ring()
 
 
@@ -152,7 +155,8 @@ func get_tab_candidates() -> Array[Unit]:
 	var max_range := Data.konstante(&"zielwahl_reichweite", 40.0)
 	var distances := {}
 	for unit in Unit.all_units(get_tree()):
-		if unit == _player or not unit.is_tab_targetable() or not unit.can_be_attacked_by(_player):
+		if unit == _player or not unit.is_tab_targetable() or not unit.is_visible_to(_player) \
+				or not unit.can_be_attacked_by(_player):
 			continue
 		var distance := _player.distance_to_unit(unit)
 		if distance > max_range or not _player.is_in_front(unit) or not _player.has_line_of_sight_to(unit):
@@ -170,7 +174,7 @@ func get_tab_candidates() -> Array[Unit]:
 ## wählt die getroffene Einheit, Rechtsklick wählt sie und greift an.
 func handle_world_click(screen_position: Vector2, right_button: bool) -> void:
 	var unit := unit_at_screen_position(screen_position)
-	if unit == null:
+	if unit == null or not unit.is_visible_to(_player):
 		return
 	select(unit, right_button)
 
@@ -217,7 +221,7 @@ func _update_ring() -> void:
 	if _ring == null:
 		return
 	var show := target != null and is_instance_valid(target) and target.is_inside_tree() \
-			and target.is_unit_visible()
+			and target.is_visible_to(_player)
 	_ring.visible = show
 	if not show:
 		return

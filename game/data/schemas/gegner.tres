@@ -71,10 +71,12 @@ description = "Sekunden zwischen zwei automatischen Angriffen."
 [sub_resource type="Resource" id="Resource_3t6c1"]
 script = ExtResource("1_7jfpk")
 name = "schule"
-type = 5
+type = 6
 default_value = "physisch"
-choices = PackedStringArray("physisch", "feuer", "frost", "natur", "arkan", "schatten", "heilig")
-description = "Schadensschule des automatischen Angriffs (vorläufige Liste)."
+choices = PackedStringArray()
+ref_table = "schadensschulen"
+ref_label = "Schadensschule"
+description = "Schadensschule des automatischen Angriffs (ID aus schadensschulen.csv)."
 
 [sub_resource type="Resource" id="Resource_xyng1"]
 script = ExtResource("1_7jfpk")

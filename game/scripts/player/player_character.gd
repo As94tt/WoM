@@ -41,6 +41,12 @@ extends Unit
 ## automatischen Angriff per RPC an den Host (report_target), der es in
 ## current_target/auto_attacking führt. Die Namensplakette zeichnet seit #31
 ## das HUD (NameplateLayer), nicht mehr die Figur selbst.
+##
+## Auren (#32): Kindknoten „Combat“ (UnitCombat), übertragen über StatsSync.
+## Betäubt, festgehalten und umgeworfen sperren beim Besitzer Laufen und
+## Springen, betäubt und umgeworfen auch das Drehen; Verlangsamung wirkt über
+## den Wert „movement_speed“. Bewegungseffekte setzt der Host über
+## server_teleport (host_move_to).
 
 ## Wird gesendet, wenn die Figur anfängt oder aufhört, sich zu bewegen
 ## (für den Zauberabbruch bei Bewegung, #33).
@@ -95,7 +101,8 @@ var move_state: MoveState = MoveState.STANDING
 ## Faktor auf alle Geschwindigkeiten. Seit #19 aus dem Wert „movement_speed“
 ## der Werte (Stats) gesetzt, auf jeder Instanz gleich: Eile erhöht ihn.
 ## Auren wie Verlangsamung oder Sprint (#32) ändern ihn nicht direkt, sondern
-## über einen Modifikator auf „movement_speed“ (Betäubung z. B. −100 %).
+## über einen Modifikator auf „movement_speed“ (stärkste Verlangsamung als ein
+## Modifikator, siehe UnitCombat). Betäubung sperrt die Bewegung direkt.
 var speed_multiplier: float = 1.0
 
 ## Bewegungsabsicht, gesetzt von PlayerInput: x = seitwärts (+1 rechts),
@@ -379,9 +386,19 @@ func _rpc_apply_teleport(target: Transform3D) -> void:
 	teleport_to(target)
 
 
-## Dreht die Figur um die Hochachse (Bogenmaß, positiv = nach links).
+## Dreht die Figur um die Hochachse (Bogenmaß, positiv = nach links). Betäubt
+## oder umgeworfen (#32) dreht sie sich nicht.
 func add_yaw(radians: float) -> void:
+	var combat := get_combat()
+	if combat != null and not combat.can_turn():
+		return
 	rotation.y = wrapf(rotation.y + radians, -PI, PI)
+
+
+## Host: Effekt „Bewegung“ (#32) setzt die Figur über den Teleport-Weg, damit
+## Besitzer und Bewegungsprüfung Bescheid wissen.
+func host_move_to(target: Transform3D) -> void:
+	server_teleport(target)
 
 
 func _physics_process(delta: float) -> void:
@@ -390,14 +407,18 @@ func _physics_process(delta: float) -> void:
 	if turn_input != 0.0:
 		add_yaw(turn_input * deg_to_rad(movement.turn_speed_deg) * delta)
 
+	# Zustände aus Auren (#32): betäubt, festgehalten, umgeworfen = keine
+	# Bewegung und kein Sprung (übertragen vom Host, gelesen beim Besitzer).
+	var combat := get_combat()
+	var can_move := combat == null or combat.can_move()
 	var jumping := false
 	if is_on_floor():
 		# Am Boden folgt die Bewegung direkt der Eingabe.
-		_air_velocity = _ground_velocity()
+		_air_velocity = _ground_velocity() if can_move else Vector3.ZERO
 		velocity.x = _air_velocity.x
 		velocity.z = _air_velocity.z
 		velocity.y = 0.0
-		if _jump_requested:
+		if _jump_requested and can_move:
 			velocity.y = sqrt(2.0 * movement.gravity * movement.jump_height)
 			jumping = true
 	else:

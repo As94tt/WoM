@@ -9,6 +9,7 @@ extends VBoxContainer
 ##   Klassenfarbe, andere in der Farbe der Gesinnung).
 ## - Das aktuelle Ziel bekommt einen hervorgehobenen Rahmen
 ##   (NameplateTargetPanel) und wird etwas größer gezeichnet.
+## - Über Feinden: eigene Debuffs als kleine Symbole (#32, AuraBar).
 ## - Darunter optional eine Anzeige (Übungspuppen: Schaden pro Sekunde),
 ##   die auch bei ausgeblendeten Plaketten sichtbar bleibt.
 ##
@@ -40,6 +41,9 @@ func update_from(p_unit: Unit, viewer: Unit, is_target: bool, show_plate: bool) 
 			else UnitColors.reaction_color(reaction)
 	%NameLabel.add_theme_color_override("font_color", name_color)
 	%HealthRow.visible = hostile
+	# Eigene Debuffs auf Feinden als kleine Symbole darüber (#32).
+	%Auras.set_unit(unit, viewer)
+	%Auras.enabled = show_plate and hostile
 	if hostile:
 		var level := unit.get_level()
 		%LevelLabel.text = str(level)

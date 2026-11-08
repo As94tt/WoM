@@ -11,10 +11,11 @@ extends Resource
 ##   Data.faehigkeitswert() gelesen. Zu jeder .tres muss es dort eine Zeile
 ##   geben; die Datenprüfung meldet sonst einen Fehler.
 ##
-## Erweiterung ohne Umbau (#32/#33): Effekte (Liste von Effekt-Ressourcen),
-## Zielbestimmung, Bedingungen usw. kommen als zusätzliche @export-Felder in
-## eigenen Gruppen dazu; bestehende .tres bleiben gültig, weil fehlende Felder
-## ihren Standardwert bekommen. Zauberart, Abklingzeit, Aufladungen, Dauer und
+## Erweiterung ohne Umbau (#32/#33): Seit #32 gibt es die Gruppe „Wirkung“
+## mit der Effektliste (EffectData, inkl. Zielbestimmung, Bedingungen,
+## Skalierung) und is_spell; bestehende .tres bleiben gültig, weil fehlende
+## Felder ihren Standardwert bekommen. Zahlen mit Veränderungen durch Talente
+## liefert get_number_for(), angehängte Effekte get_effects_for(). Zauberart, Abklingzeit, Aufladungen, Dauer und
 ## Tick liefern die Funktionen unten bereits aus der Tabelle. Ausgelöst wird
 ## eine Fähigkeit nur über PlayerAbilities.use_ability() (später über den Host).
 
@@ -45,6 +46,37 @@ enum CastType { INSTANT, CAST, CHANNELED }
 ## Passive Fähigkeiten stehen im Zauberbuch, lassen sich aber nicht auf die
 ## Aktionsleisten ziehen und nicht auslösen (später: dauerhafte Aura, #32).
 @export var passive := false
+
+@export_group("Wirkung")
+## Zauber (Stille verhindert ihn, #32). Körperliche Fähigkeiten: false.
+@export var is_spell := false
+## Was die Fähigkeit bewirkt (#32): eine Liste von Effekten, ausgeführt vom
+## Host über Combat.execute (Wirken folgt in #33). Leer = noch ohne Wirkung.
+@export var effects: Array[EffectData] = []
+
+
+## Effekte inklusive der durch Talente usw. angehängten (Host).
+func get_effects_for(caster: Unit) -> Array[EffectData]:
+	var result: Array[EffectData] = effects.duplicate()
+	var combat := caster.get_combat() if caster != null else null
+	if combat != null:
+		result.append_array(combat.get_added_effects(id))
+	return result
+
+
+## Zahl aus faehigkeitswerte.csv mit allen Veränderungen des Wirkers
+## („Fähigkeit verändern“, #32), z. B. get_number_for(spieler, "kosten").
+func get_number_for(caster: Unit, key: String) -> float:
+	var base := _number(key)
+	var combat := caster.get_combat() if caster != null else null
+	return combat.get_ability_value(id, key, base) if combat != null else base
+
+
+## Ersatz durch Talente usw. (#32): die Fähigkeit, die statt dieser gilt.
+func get_replacement_for(caster: Unit) -> AbilityData:
+	var combat := caster.get_combat() if caster != null else null
+	var replacement := combat.get_ability_replacement(id) if combat != null else &""
+	return GameData.get_ability(replacement) if replacement != &"" else self
 
 
 ## true für „Allgemein“ (keine Klasse).

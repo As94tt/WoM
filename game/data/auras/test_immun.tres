@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_b55a8"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_gphim"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_0xutk"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_27gbl"]
+
+[resource]
+script = ExtResource("3_0xutk")
+id = &"test_immun"
+display_name = "Elementarschutz"
+description = "Immun gegen Betäubung und Feuer. Testaura: Immunität."
+category = 1
+duration = 20.0
+grants_immunities = PackedStringArray("betaeubung", "feuer")
+absorb_schools = PackedStringArray()

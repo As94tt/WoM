@@ -1,0 +1,11 @@
+﻿# Schadensschulen (#32): Liste aus #39 ergänzt um die Schulen aus #34. Neue Schule = neue Zeile.
+id;name;art;reihenfolge;notiz
+physisch;Physisch;koerperlich;1;Waffen, Klauen, Schläge
+arkan;Arkan;magisch;2;
+feuer;Feuer;magisch;3;
+frost;Frost;magisch;4;
+blitz;Blitz;magisch;5;Neu aus #34
+natur;Natur;magisch;6;
+chi;Chi;magisch;7;Neu aus #34 (Mönch)
+schatten;Schatten;magisch;8;
+heilig;Heilig;magisch;9;

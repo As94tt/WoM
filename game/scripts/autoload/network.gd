@@ -13,6 +13,9 @@ extends Node
 ##   Network.get_players()           – alle Spieler der Sitzung (NetPlayerInfo)
 ##   Network.get_player(peer_id)     – ein Spieler oder null
 ##   Signale player_entered_world / player_left_world / players_changed
+##   Network.host_time()             – Uhr des Hosts in Sekunden (#32), auf
+##                                     Clients geschätzt; für Restzeiten
+##                                     von Auren, Flächen usw.
 ##
 ## Ablauf Beitreten:
 ##   1. Client verbindet (join_game) und schickt _rpc_hello mit Spielversion,
@@ -74,6 +77,13 @@ var _ping_elapsed := 0.0
 var _stats_elapsed := 0.0
 var _bytes_sent_per_s := 0.0
 var _bytes_received_per_s := 0.0
+## Client: Abstand der Host-Uhr zur eigenen Uhr in Sekunden (#32).
+var _host_clock_offset := 0.0
+var _has_host_clock := false
+var _clock_elapsed := 0.0
+
+## Client: so oft wird die Host-Uhr neu abgeglichen (Sekunden).
+const CLOCK_SYNC_INTERVAL := 1.0
 
 
 func _ready() -> void:
@@ -147,6 +157,17 @@ func get_local_ping_ms() -> int:
 	var peer := _enet_peer()
 	var host_peer := peer.get_peer(1) if peer != null else null
 	return int(host_peer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)) if host_peer != null else 0
+
+
+## Uhr des Hosts in Sekunden (#32). Host und offline: eigene Laufzeit. Client:
+## eigene Laufzeit plus geschätzter Abstand (Abgleich per Ping-Pong jede
+## Sekunde, Laufzeit halbiert). Damit rechnen alle Instanzen Restzeiten aus
+## demselben Ablaufzeitpunkt (z. B. Auren: expires_at in Host-Zeit).
+func host_time() -> float:
+	var local := Time.get_ticks_usec() / 1000000.0
+	if is_host():
+		return local
+	return local + _host_clock_offset
 
 
 ## Gesendete und empfangene Bytes pro Sekunde (Netzwerk-Overlay).
@@ -303,6 +324,10 @@ func _process(delta: float) -> void:
 			if _ping_elapsed >= SETTINGS.ping_interval_s:
 				_ping_elapsed = 0.0
 				_broadcast_pings()
+		State.CONNECTED:
+			_clock_elapsed += delta
+			if _clock_elapsed >= CLOCK_SYNC_INTERVAL:
+				_request_host_clock()
 	_stats_elapsed += delta
 	if _stats_elapsed >= 1.0:
 		_update_traffic(_stats_elapsed)
@@ -483,6 +508,8 @@ func _close_peer() -> void:
 		peer.close()
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	state = State.OFFLINE
+	_has_host_clock = false
+	_host_clock_offset = 0.0
 	_pending.clear()
 	_local_character = null
 	if not _players.is_empty():
@@ -558,6 +585,7 @@ func _rpc_accepted(players: Array) -> void:
 	state = State.CONNECTED
 	_rpc_set_players(players)
 	print("Netzwerk: Vom Host angenommen als Peer %d." % get_local_peer_id())
+	_request_host_clock()
 	join_succeeded.emit()
 
 
@@ -593,3 +621,35 @@ func _rpc_session_ended() -> void:
 		_end_session_for_client("Der Host hat die Sitzung beendet.")
 	elif state == State.CONNECTING:
 		_fail_join("Der Host hat die Sitzung beendet.", false)
+
+
+# --- Host-Uhr (#32) ----------------------------------------------------------
+
+## Client: fragt die Uhr des Hosts ab (Antwort in _rpc_host_clock_reply).
+func _request_host_clock() -> void:
+	_clock_elapsed = 0.0
+	if state == State.CONNECTED:
+		_rpc_host_clock_request.rpc_id(1, Time.get_ticks_usec() / 1000000.0)
+
+
+## Host: antwortet mit der eigenen Uhr; client_time kommt unverändert zurück.
+@rpc("any_peer", "call_remote", "unreliable")
+func _rpc_host_clock_request(client_time: float) -> void:
+	if state == State.HOSTING:
+		_rpc_host_clock_reply.rpc_id(multiplayer.get_remote_sender_id(), client_time, host_time())
+
+
+## Client: Abstand aus der Antwort schätzen (Host-Zeit plus halbe Laufzeit).
+## Weich nachführen, damit einzelne langsame Pakete nicht springen lassen.
+@rpc("authority", "call_remote", "unreliable")
+func _rpc_host_clock_reply(client_time: float, host_clock: float) -> void:
+	if state != State.CONNECTED:
+		return
+	var now := Time.get_ticks_usec() / 1000000.0
+	var round_trip := maxf(0.0, now - client_time)
+	var sample := host_clock + round_trip / 2.0 - now
+	if not _has_host_clock:
+		_host_clock_offset = sample
+		_has_host_clock = true
+	else:
+		_host_clock_offset = lerpf(_host_clock_offset, sample, 0.3)

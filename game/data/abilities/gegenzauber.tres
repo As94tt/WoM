@@ -9,3 +9,4 @@ display_name = "Gegenzauber"
 description = "Unterbricht den Zauber des Ziels und sperrt kurz dessen Zauberschule."
 class_id = &"mage"
 required_level = 4
+is_spell = true
