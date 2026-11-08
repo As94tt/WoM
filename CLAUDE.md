@@ -20,6 +20,13 @@ Diese fünf Regeln gelten für jedes Feature (wörtlich aus dem GDD):
 
 Godot-Version: **4.7** (Standardversion, nicht .NET), Renderer **Forward+**.
 
+## Netzwerk: Der Host entscheidet
+
+- **Spielentscheidungen trifft der Host:** Schaden, Heilung, Beute, Erfahrung, Gegner-KI, Teleports, Wiedereinstieg. Clients senden Wünsche (RPC an den Host, Peer 1) und zeigen die Ergebnisse an, die der Host überträgt. Ein Client verändert nie selbst den Spielzustand anderer.
+- **Ausnahme Bewegung:** Jeder Client bewegt seine eigene Figur sofort selbst; der Host prüft sie grob und setzt sie bei Verstößen zurück.
+- **Zentrale Stelle ist der Autoload `Network`** (`game/scripts/autoload/network.gd`): `Network.is_host()`, `Network.get_local_peer_id()`, `Network.get_players()`, `Network.get_player(peer_id)`, Signale `player_entered_world`, `player_left_world`, `players_changed`. Neue Systeme bauen keine eigene Verbindung auf.
+- **Übertragen** wird über Godots Bausteine: Objekte erzeugt der Host unter einem `MultiplayerSpawner`, Zustand überträgt ein `MultiplayerSynchronizer` (Authority Host, außer der eigenen Bewegung), Wünsche und Ereignisse laufen über `@rpc`. Ohne Sitzung (offline) ist die eigene Instanz der Host; derselbe Code läuft dann ohne Netzwerk.
+
 ## Ordnerstruktur
 
 ```

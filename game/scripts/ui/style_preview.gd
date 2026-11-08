@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17 und #15).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15 und #30).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -35,5 +35,9 @@ func _ready() -> void:
 	%SlotHover.add_theme_stylebox_override("normal", %SlotHover.get_theme_stylebox("hover"))
 	%SlotFlashing.get_node("%Flash").visible = true
 	%SlotKey.input_action = &"action_bar_1_slot_1"
+
+	# Mitspieler auf der Karte (#30): Klassenfarbe aus den Daten.
+	if not classes.is_empty():
+		%MateMarker.fill_color = classes[0].color
 
 	%FocusButton.grab_focus()

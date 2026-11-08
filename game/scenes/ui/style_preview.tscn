@@ -669,3 +669,30 @@ layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Wiedereinstiegspunkt: Startdorf"
 kind = 1
+
+[node name="MateMarker" parent="ScrollContainer/MarginContainer/Content/WorldGrid/MapSample" instance=ExtResource("5_marker")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mitspieler"
+kind = 2
+
+[node name="LogLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Log-Bereich (LogText), Mitspieler auf der Karte (MapMarker, Klassenfarbe aus den Daten)"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="LogSample" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/WorldGrid"]
+layout_mode = 2
+
+[node name="Line1" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid/LogSample"]
+layout_mode = 2
+theme_type_variation = &"LogText"
+text = "Arthas hat die Welt betreten."
+
+[node name="Line2" type="Label" parent="ScrollContainer/MarginContainer/Content/WorldGrid/LogSample"]
+layout_mode = 2
+theme_type_variation = &"LogText"
+text = "Arthas (2) hat die Welt verlassen."
