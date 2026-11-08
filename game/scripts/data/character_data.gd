@@ -17,6 +17,9 @@ enum Gender { MALE, FEMALE }
 ## Datei, aus der der Charakter geladen bzw. in die er gespeichert wurde.
 ## Wird von CharacterStore gesetzt und nicht mitgespeichert.
 var storage_path: String = ""
+## Nur für diese Sitzung (Testcharakter der Startparameter, #30); wird nie
+## gespeichert.
+var is_temporary := false
 
 
 ## Volk-Daten oder null, wenn die ID unbekannt ist.
@@ -29,7 +32,21 @@ func get_class_data() -> ClassData:
 	return GameData.get_class_data(class_id)
 
 
-## Für die spätere Übertragung beim Beitreten (M1): nur einfache Typen,
+## Testcharakter für die Startparameter --host/--join ohne --character (#30):
+## Mensch, männlich, Magier, Stufe 1, Name „Test“ plus Zufallszahl. Wird nicht
+## gespeichert.
+static func make_test_character() -> CharacterData:
+	var c := CharacterData.new()
+	c.character_name = "Test%d" % randi_range(100, 999)
+	c.race_id = &"human"
+	c.gender = Gender.MALE
+	c.class_id = &"mage"
+	c.level = 1
+	c.is_temporary = true
+	return c
+
+
+## Für die Übertragung beim Beitreten (#30): nur einfache Typen,
 ## damit es per RPC verschickt werden kann.
 func to_dict() -> Dictionary:
 	return {

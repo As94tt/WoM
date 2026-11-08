@@ -98,6 +98,8 @@ Solange Graubox gilt, unterscheiden sich die Gebiete der Startwelt nur über ihr
 
 Platzhalter-Pfähle für fehlende Inhalte (NPC, Questgeber, Übungspuppe, Spawn, Gegner, Boss, Bereich) haben je Art eine eigene Farbe in `game/data/world/placeholders/*.tres` und tragen immer eine Beschriftung („NPC: Händlerin“), Farbe ist also nie das einzige Merkmal. Sie sind nur im Entwicklungsmodus sichtbar.
 
+Spielfiguren (#30) sind graue Kapseln mit „Nase“ (Blickrichtung), eingefärbt in der Klassenfarbe aus den Klassendaten (`ClassData.color`) und gleichmäßig mit dem Größenfaktor des Volks (`RaceData.height_factor`) skaliert, wie in der Charaktervorschau. Das Geschlecht ändert am Platzhalter nichts. Über fremden Figuren steht eine Namensplakette (Name in Klassenfarbe, darunter die Stufe; Werte im UI-Styleguide).
+
 Wahrzeichen zur Orientierung: hoher Turm im Startdorf, großer einzelner Baum auf der Wolfswiese, Wachturm im Banditenlager. Diese Rollen bleiben, wenn die Graubox durch echte Grafik ersetzt wird.
 
 ## 8. Kreaturen und Gegner

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/message_dialog.tscn" id="2_message"]
+[ext_resource type="PackedScene" path="res://scenes/ui/connect_dialog.tscn" id="3_connect"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -12,6 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_menu")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,3 +60,11 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Beenden"
+
+[node name="MessageDialog" parent="." instance=ExtResource("2_message")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="ConnectDialog" parent="." instance=ExtResource("3_connect")]
+unique_name_in_owner = true
+layout_mode = 1

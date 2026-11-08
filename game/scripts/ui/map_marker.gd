@@ -1,26 +1,33 @@
 class_name MapMarker
 extends Control
 ## Symbol auf der Karte (Ticket #15): eigene Position als Pfeil in
-## Blickrichtung oder Wiedereinstiegspunkt als Kreis mit Kreuz.
+## Blickrichtung, Wiedereinstiegspunkt als Kreis mit Kreuz, Mitspieler (#30)
+## als Punkt in Klassenfarbe.
 ## Farben und Größen kommen aus dem Theme (Typ „MapMarker“, siehe
-## UI-STYLEGUIDE); die Form ist zweites Erkennungsmerkmal neben der Farbe,
-## dazu ein Tooltip.
+## UI-STYLEGUIDE), nur die Klassenfarbe aus den Daten (ClassData.color); die
+## Form ist zweites Erkennungsmerkmal neben der Farbe, dazu ein Tooltip.
 
-enum Kind { PLAYER, RESPAWN }
+enum Kind { PLAYER, RESPAWN, MATE }
 
 const THEME_TYPE := &"MapMarker"
 
 @export var kind: Kind = Kind.PLAYER
+## Füllfarbe für Mitspieler (Klassenfarbe aus den Daten).
+var fill_color := Color.WHITE:
+	set(value):
+		fill_color = value
+		queue_redraw()
 
 
 func _ready() -> void:
-	var marker_size := get_theme_constant(
-			&"player_size" if kind == Kind.PLAYER else &"respawn_size", THEME_TYPE)
+	var size_name: StringName = [&"player_size", &"respawn_size", &"mate_size"][kind]
+	var marker_size := get_theme_constant(size_name, THEME_TYPE)
 	custom_minimum_size = Vector2(marker_size, marker_size)
 	size = custom_minimum_size
 	pivot_offset = size / 2.0
-	# Nur Wiedereinstiegspunkte zeigen einen Tooltip; der Pfeil liegt oft darüber.
-	mouse_filter = MOUSE_FILTER_STOP if kind == Kind.RESPAWN else MOUSE_FILTER_IGNORE
+	# Nur Wiedereinstiegspunkte und Mitspieler zeigen einen Tooltip; der Pfeil
+	# liegt oft darüber.
+	mouse_filter = MOUSE_FILTER_IGNORE if kind == Kind.PLAYER else MOUSE_FILTER_STOP
 
 
 ## Setzt die Mitte des Symbols auf point (Koordinaten des Elternknotens).
@@ -51,3 +58,6 @@ func _draw() -> void:
 			var arm := r * 0.5
 			draw_line(c + Vector2(-arm, 0.0), c + Vector2(arm, 0.0), outline, line)
 			draw_line(c + Vector2(0.0, -arm), c + Vector2(0.0, arm), outline, line)
+		Kind.MATE:
+			draw_circle(c, r - line / 2.0, fill_color)
+			draw_circle(c, r - line / 2.0, outline, false, line, true)

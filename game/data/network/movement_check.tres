@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MovementCheckData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/movement_check_data.gd" id="1_check"]
+
+[resource]
+script = ExtResource("1_check")
+speed_factor = 1.5
+teleport_threshold_m = 15.0
+tolerance_m = 0.5
+teleport_arrival_m = 3.0

@@ -76,6 +76,22 @@ func add_toggle(section: Container, text: String, pressed: bool, callback: Calla
 	return toggle
 
 
+## Schieberegler von min_value bis max_value, der callback(float) bei jeder
+## Änderung aufruft. Eine Beschriftung mit dem Wert legt der Aufrufer per
+## add_info() darüber an.
+func add_slider(section: Container, min_value: float, max_value: float, step: float,
+		value: float, callback: Callable) -> HSlider:
+	var slider := HSlider.new()
+	slider.min_value = min_value
+	slider.max_value = max_value
+	slider.step = step
+	slider.value = value
+	slider.focus_mode = Control.FOCUS_NONE
+	slider.value_changed.connect(callback)
+	section.add_child(slider)
+	return slider
+
+
 ## Textzeile, z. B. für laufend aktualisierte Werte.
 func add_info(section: Container, text := "") -> Label:
 	var label := Label.new()

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NetworkSettings" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/network_settings.gd" id="1_settings"]
+
+[resource]
+script = ExtResource("1_settings")
+default_port = 7777
+max_players = 5
+sync_rate_hz = 20.0
+interpolation_delay_ms = 100
+connect_timeout_s = 8.0
+handshake_timeout_s = 10.0
+autosave_interval_s = 60.0
+ping_interval_s = 1.0
+max_artificial_delay_ms = 300
+quick_join_attempts = 10

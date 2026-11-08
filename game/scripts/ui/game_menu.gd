@@ -5,9 +5,20 @@ extends Control
 ## abgedunkelte Hintergrund fängt alle Mausklicks ab; solange das Menü offen
 ## ist, sperrt die Gruppe „blocks_game_input“ Bewegungstasten (PlayerInput)
 ## und Tastenkürzel des HUD. Nur Esc oder „Zurück zum Spiel“ schließt es.
-## Rein lokal, nichts wird synchronisiert.
+##
+## Netzwerk (#30): „Zurück zur Charakterauswahl“ und „Spiel beenden“ speichern
+## den Charakter und trennen die Verbindung sauber (Network.leave_session).
+## Beim Host, solange Mitspieler da sind, erst nach Rückfrage, weil die
+## Sitzung dann für alle endet. Das Menü selbst ist rein lokal.
 
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
+const HOST_LEAVE_MESSAGE := "Du bist der Host. Wenn du die Welt verlässt, endet die Sitzung für alle Mitspieler."
+
+enum LeaveTarget { CHARACTER_SELECT, QUIT }
+
+var _leave_target: LeaveTarget = LeaveTarget.CHARACTER_SELECT
+
+@onready var _confirm_dialog: MessageDialog = %ConfirmDialog
 
 
 func _ready() -> void:
@@ -15,6 +26,8 @@ func _ready() -> void:
 	%ResumeButton.pressed.connect(close)
 	%CharacterSelectButton.pressed.connect(_on_character_select_pressed)
 	%QuitButton.pressed.connect(_on_quit_pressed)
+	_confirm_dialog.confirmed.connect(_leave)
+	_confirm_dialog.cancelled.connect(func() -> void: %ResumeButton.grab_focus())
 
 
 func open() -> void:
@@ -23,6 +36,8 @@ func open() -> void:
 
 
 func close() -> void:
+	if _confirm_dialog.visible:
+		return  # Erst die Rückfrage beantworten (Esc bricht sie ab).
 	visible = false
 	var focus := get_viewport().gui_get_focus_owner()
 	if focus != null and is_ancestor_of(focus):
@@ -30,11 +45,26 @@ func close() -> void:
 
 
 func _on_character_select_pressed() -> void:
-	# Wie bisher der Button „Zur Charakterauswahl“ der Testszene (#6).
-	# Ab M1 wird hier zusätzlich die Verbindung getrennt.
-	GameSession.selected_character = null
-	get_tree().change_scene_to_file(CHARACTER_SELECT_SCENE)
+	_request_leave(LeaveTarget.CHARACTER_SELECT)
 
 
 func _on_quit_pressed() -> void:
-	get_tree().quit()
+	_request_leave(LeaveTarget.QUIT)
+
+
+func _request_leave(target: LeaveTarget) -> void:
+	_leave_target = target
+	if Network.is_host() and Network.has_other_players():
+		var button := "Zur Charakterauswahl" if target == LeaveTarget.CHARACTER_SELECT else "Spiel beenden"
+		_confirm_dialog.open("Sitzung beenden?", HOST_LEAVE_MESSAGE, button, "Abbrechen")
+	else:
+		_leave()
+
+
+func _leave() -> void:
+	Network.leave_session()
+	if _leave_target == LeaveTarget.QUIT:
+		get_tree().quit()
+		return
+	GameSession.selected_character = null
+	get_tree().change_scene_to_file(CHARACTER_SELECT_SCENE)

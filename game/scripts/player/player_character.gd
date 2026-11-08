@@ -5,9 +5,24 @@ extends CharacterBody3D
 ##
 ## Die Figur bewegt sich nur auf der Instanz, die ihre Multiplayer-Authority
 ## hat (der Spieler, dem sie gehört). Die Eingabe kommt vom Kindknoten
-## PlayerInput, der nur dort aktiv ist. Position und Drehung liegen in den
-## normalen Eigenschaften position und rotation (Drehung nur um die Hochachse),
-## damit ein MultiplayerSynchronizer sie in M1 (#30) übertragen kann.
+## PlayerInput, der nur dort existiert; Kamera und Eingabe fremder Figuren
+## werden entfernt.
+##
+## Netzwerk (#30):
+## - Der Host erzeugt die Figur (MultiplayerSpawner der Welt). Der Knotenname
+##   ist die Peer-ID des Besitzers und bestimmt die Authority. Aussehen (Volk,
+##   Geschlecht, Klasse), Name, Stufe und Startposition überträgt „ServerSync“
+##   (Authority Host) beim Erzeugen bzw. bei Änderung.
+## - Der Besitzer bestimmt seine Bewegung selbst (sofort, ohne Verzögerung)
+##   und schreibt jeden Physikschritt einen Schnappschuss in die
+##   net_*-Eigenschaften, die „MovementSync“ (Authority Besitzer) etwa 20-mal
+##   pro Sekunde an alle sendet. Die künstliche Verzögerung (Entwickler-Panel)
+##   hält diese Schnappschüsse zurück.
+## - Alle anderen zeigen die Figur leicht in der Vergangenheit
+##   (NetworkSettings.interpolation_delay_ms) und interpolieren in _process
+##   weich zwischen zwei Schnappschüssen, also passend zur Bildrate.
+## - Der Host prüft fremde Figuren grob (MovementCheck) und setzt sie bei
+##   Verstößen zurück. Teleports befiehlt nur der Host (server_teleport).
 ##
 ## Ohne Netzwerk (OfflineMultiplayerPeer) ist die eigene Peer-ID 1 und die
 ## Figur gehört standardmäßig Peer 1, also dem lokalen Spieler.
@@ -16,14 +31,55 @@ extends CharacterBody3D
 ## (für den Zauberabbruch bei Bewegung, #33).
 signal moving_changed(moving: bool)
 
+enum MoveState { STANDING, RUNNING, JUMPING, FALLING }
+
+const NETWORK_SETTINGS: NetworkSettings = preload("res://data/network/network_settings.tres")
+const MOVEMENT_CHECK: MovementCheckData = preload("res://data/network/movement_check.tres")
+## Grundhöhe der Kapsel bei height_factor 1,0 (muss zur CapsuleMesh passen).
+const BASE_HEIGHT := 1.8
+## Abstand der Namensplakette über dem Kopf in Metern.
+const NAMEPLATE_OFFSET := 0.3
+
 ## Bewegungswerte aus res://data/movement/.
 @export var movement: MovementData = preload("res://data/movement/player_movement.tres")
 
-## Peer, dem die Figur gehört. Setzt die Multiplayer-Authority.
-@export var peer_id: int = 1:
+## Peer, dem die Figur gehört. Kommt aus dem Knotennamen (Peer-ID, siehe
+## _enter_tree) und bestimmt die Multiplayer-Authority.
+var peer_id: int = 1
+
+@export_group("Aussehen")
+## Name im Spiel (mit Zusatz bei gleichen Namen, siehe NetPlayerInfo).
+@export var display_name: String = "":
 	set(value):
-		peer_id = value
-		set_multiplayer_authority(value)
+		display_name = value
+		_update_appearance()
+@export var race_id: StringName = &"":
+	set(value):
+		race_id = value
+		_update_appearance()
+@export var gender: int = CharacterData.Gender.MALE
+@export var class_id: StringName = &"":
+	set(value):
+		class_id = value
+		_update_appearance()
+@export var level: int = 1:
+	set(value):
+		level = value
+		_update_appearance()
+@export_group("")
+
+## Schnappschuss für MovementSync, geschrieben vom Besitzer.
+var net_position := Vector3.ZERO
+var net_yaw := 0.0
+var net_state: int = MoveState.STANDING
+## Zeitstempel des Schnappschusses (Time.get_ticks_msec() beim Besitzer).
+var net_time: int = 0
+## Zählt Teleports; ändert er sich, springen die anderen ohne Interpolation.
+var net_teleport_seq: int = 0
+
+## Bewegungszustand (läuft, springt, steht, fällt), bei fremden Figuren aus
+## dem Netz. Für spätere Animationen.
+var move_state: MoveState = MoveState.STANDING
 
 ## Faktor auf alle Geschwindigkeiten. Auren wie Verlangsamung oder Sprint
 ## (#32) verändern diesen Wert, Betäubung setzt ihn z. B. auf 0.
@@ -50,18 +106,119 @@ var _jump_requested := false
 ## Waagerechter Schwung, der in der Luft erhalten bleibt.
 var _air_velocity := Vector3.ZERO
 
+## Besitzer: Schnappschüsse, die wegen künstlicher Verzögerung noch warten.
+var _outgoing: Array[Dictionary] = []
+## Andere: empfangene Schnappschüsse, nach Zeit sortiert.
+var _snapshots: Array[Dictionary] = []
+## Andere: geschätzter Abstand zwischen eigener Uhr und Uhr des Besitzers
+## (inklusive Laufzeit), in ms.
+var _clock_offset := 0.0
+var _has_clock_offset := false
+var _last_seq_seen := 0
+## Host: Prüfung fremder Figuren.
+var _check: MovementCheck = null
+var _body_material: StandardMaterial3D = null
+
+@onready var _model: Node3D = $Model
+@onready var _body: MeshInstance3D = $Model/Body
+@onready var _nameplate: Node3D = $Nameplate
+@onready var _name_label: Label3D = $Nameplate/NameLabel
+@onready var _level_label: Label3D = $Nameplate/LevelLabel
+@onready var _movement_sync: MultiplayerSynchronizer = $MovementSync
+@onready var _server_sync: MultiplayerSynchronizer = $ServerSync
+
 ## Kleinste Geschwindigkeit, ab der die Figur als „in Bewegung“ gilt.
 const MOVING_THRESHOLD := 0.05
 ## Wie weit beim Stufensteigen nach vorn geprüft wird (Kapselradius), in Metern.
 const STEP_PROBE_DISTANCE := 0.4
 
 
+## Authority vor dem Eintritt der Kindknoten setzen: Die Synchronizer dürfen
+## ihre Authority nicht mehr wechseln, sobald sie im Baum sind (sonst kann der
+## Spawner den Startzustand nicht zuordnen).
+func _enter_tree() -> void:
+	if String(name).is_valid_int():
+		peer_id = String(name).to_int()
+	_apply_authority()
+
+
 func _ready() -> void:
-	set_multiplayer_authority(peer_id)
 	floor_max_angle = deg_to_rad(movement.max_slope_deg)
 	floor_snap_length = movement.step_height
 	floor_constant_speed = true
 	floor_stop_on_slope = true
+	# Eigene Materialkopie, damit die Klassenfarbe nur diese Figur färbt.
+	_body_material = (_body.mesh as PrimitiveMesh).material.duplicate()
+	_body.material_override = _body_material
+	_update_appearance()
+
+	_movement_sync.replication_interval = 1.0 / NETWORK_SETTINGS.sync_rate_hz
+	# Figuren nur an Peers senden, die die Welt geladen haben.
+	for sync in [_movement_sync, _server_sync]:
+		sync.add_visibility_filter(Network.is_peer_in_world)
+	if is_multiplayer_authority():
+		_publish_snapshot(_make_snapshot())
+	else:
+		# Kamera und Eingabe gibt es nur beim Besitzer.
+		$CameraRig.queue_free()
+		$PlayerInput.queue_free()
+		_movement_sync.synchronized.connect(_on_movement_synchronized)
+		if multiplayer.is_server():
+			_check = MovementCheck.new(MOVEMENT_CHECK)
+	# Die eigene Plakette würde nur die Sicht verdecken (Name steht im HUD).
+	_nameplate.visible = not is_multiplayer_authority()
+
+
+## true, wenn dies die Figur des eigenen Spielers ist.
+func is_local() -> bool:
+	return is_multiplayer_authority()
+
+
+## Sendet die Figur ab jetzt auch an Peers, die inzwischen die Welt geladen
+## haben (gerufen von GameWorld, wenn sich die Spielerliste ändert).
+func refresh_visibility() -> void:
+	for sync in [_movement_sync, _server_sync]:
+		if sync.is_multiplayer_authority():
+			sync.update_visibility()
+
+
+## Übernimmt Aussehen, Name und Stufe aus der Spielerliste (Host, vor dem
+## Erzeugen bzw. wenn sich etwas ändert).
+func setup_from_info(info: NetPlayerInfo) -> void:
+	display_name = info.display_name
+	race_id = info.race_id
+	gender = info.gender
+	class_id = info.class_id
+	level = info.level
+
+
+## Klassendaten der Figur oder null.
+func get_class_data() -> ClassData:
+	return GameData.get_class_data(class_id)
+
+
+## Authority der Figur = Besitzer; ServerSync gehört immer dem Host.
+func _apply_authority() -> void:
+	set_multiplayer_authority(peer_id)
+	$ServerSync.set_multiplayer_authority(1)
+
+
+## Platzhaltermodell und Namensplakette: Größe nach Volk, Farbe nach Klasse
+## (ClassData.color, siehe UI-Styleguide „Klassenfarben“). Das Geschlecht
+## ändert am Platzhalter nichts, wie in der Charaktervorschau.
+func _update_appearance() -> void:
+	if not is_node_ready():
+		return
+	var race := GameData.get_race(race_id)
+	var factor := race.height_factor if race != null else 1.0
+	_model.scale = Vector3.ONE * factor
+	var class_data := get_class_data()
+	if class_data != null:
+		_body_material.albedo_color = class_data.color
+		_name_label.modulate = class_data.color
+	_name_label.text = display_name
+	_level_label.text = "Stufe %d" % level
+	_nameplate.position.y = BASE_HEIGHT * factor + NAMEPLATE_OFFSET
 
 
 ## Laufgeschwindigkeit dieser Figur (Daten mal Aurenfaktor), in m/s.
@@ -96,6 +253,34 @@ func teleport_to(target: Transform3D) -> void:
 	velocity = Vector3.ZERO
 	_air_velocity = Vector3.ZERO
 	_jump_requested = false
+	if is_multiplayer_authority():
+		net_teleport_seq += 1
+		# Wartende Schnappschüsse von vor dem Teleport verwerfen.
+		_outgoing.clear()
+		_publish_snapshot(_make_snapshot())
+
+
+## Nur auf dem Host: setzt die Figur an target. Die eigene Figur des Hosts
+## springt sofort; bei fremden Figuren bekommt der Besitzer den Befehl, und
+## die Bewegungsprüfung erwartet die Figur am Ziel.
+func server_teleport(target: Transform3D) -> void:
+	if not multiplayer.is_server():
+		push_warning("PlayerCharacter.server_teleport: nur der Host darf teleportieren.")
+		return
+	if is_multiplayer_authority():
+		teleport_to(target)
+		return
+	if _check != null:
+		_check.expect_teleport(target.origin)
+	_rpc_apply_teleport.rpc_id(peer_id, target)
+
+
+## Befehl des Hosts an den Besitzer: an target setzen.
+@rpc("any_peer", "call_remote", "reliable")
+func _rpc_apply_teleport(target: Transform3D) -> void:
+	if multiplayer.get_remote_sender_id() != 1 or not is_multiplayer_authority():
+		return
+	teleport_to(target)
 
 
 ## Dreht die Figur um die Hochachse (Bogenmaß, positiv = nach links).
@@ -137,6 +322,134 @@ func _physics_process(delta: float) -> void:
 
 	var real := get_real_velocity() if not stepped else velocity
 	is_moving = not is_on_floor() or Vector2(real.x, real.z).length() > MOVING_THRESHOLD
+	if not is_on_floor():
+		move_state = MoveState.JUMPING if velocity.y > 0.0 else MoveState.FALLING
+	else:
+		move_state = MoveState.RUNNING if is_moving else MoveState.STANDING
+	_queue_snapshot()
+
+
+# --- Netzwerk: Besitzer ------------------------------------------------------
+
+func _make_snapshot() -> Dictionary:
+	return {
+		"time": Time.get_ticks_msec(),
+		"position": global_position,
+		"yaw": rotation.y,
+		"state": move_state,
+		"seq": net_teleport_seq,
+	}
+
+
+## Merkt den aktuellen Stand vor und veröffentlicht den neuesten, der älter
+## als die künstliche Verzögerung ist (ohne Verzögerung: sofort).
+func _queue_snapshot() -> void:
+	_outgoing.append(_make_snapshot())
+	var cutoff := Time.get_ticks_msec() - Network.artificial_delay_ms
+	var ready_snapshot: Dictionary = {}
+	while not _outgoing.is_empty() and _outgoing[0]["time"] <= cutoff:
+		ready_snapshot = _outgoing.pop_front()
+	if not ready_snapshot.is_empty():
+		_publish_snapshot(ready_snapshot)
+
+
+func _publish_snapshot(snapshot: Dictionary) -> void:
+	net_time = snapshot["time"]
+	net_position = snapshot["position"]
+	net_yaw = snapshot["yaw"]
+	net_state = snapshot["state"]
+	net_teleport_seq = snapshot["seq"]
+
+
+# --- Netzwerk: andere Instanzen ----------------------------------------------
+
+## MovementSync hat einen neuen Schnappschuss des Besitzers empfangen.
+func _on_movement_synchronized() -> void:
+	var snapshot := {
+		"time": net_time,
+		"position": net_position,
+		"yaw": net_yaw,
+		"state": net_state,
+		"seq": net_teleport_seq,
+	}
+	if _check != null and not _host_check(snapshot):
+		return
+	# Uhrenabstand: steigt schnell (Verbindung langsamer geworden), sinkt
+	# langsam (gegen Ausreißer bei schwankender Laufzeit).
+	var sample := Time.get_ticks_usec() / 1000.0 - net_time
+	if not _has_clock_offset:
+		_clock_offset = sample
+		_has_clock_offset = true
+	else:
+		_clock_offset = lerpf(_clock_offset, sample, 0.2 if sample > _clock_offset else 0.02)
+	if net_teleport_seq != _last_seq_seen:
+		# Teleport: nicht durch die Welt gleiten, sondern springen.
+		_last_seq_seen = net_teleport_seq
+		_snapshots.clear()
+		_apply_snapshot(snapshot)
+	elif not _snapshots.is_empty() and net_time <= _snapshots[-1]["time"]:
+		return  # Veraltet oder doppelt.
+	_snapshots.append(snapshot)
+	# Mehr als ca. 1 s Vorrat braucht die Interpolation nicht.
+	while _snapshots.size() > int(NETWORK_SETTINGS.sync_rate_hz) + 2:
+		_snapshots.pop_front()
+
+
+## Host: Plausibilität prüfen. false = Meldung verworfen.
+func _host_check(snapshot: Dictionary) -> bool:
+	var result := _check.check(snapshot["position"], snapshot["yaw"], snapshot["time"],
+			snapshot["seq"], movement, get_run_speed())
+	if result == MovementCheck.Result.OK:
+		return true
+	if result == MovementCheck.Result.VIOLATION:
+		var target := _check.get_last_valid_transform()
+		push_warning("Bewegungsprüfung: %s (Peer %d) unplausibel bei %s, zurück nach %s." % [
+				display_name, peer_id, snapshot["position"], target.origin])
+		_check.expect_teleport(target.origin)
+		_rpc_apply_teleport.rpc_id(peer_id, target)
+		_snapshots.clear()
+		_apply_snapshot({"position": target.origin, "yaw": snapshot["yaw"], "state": MoveState.STANDING})
+	return false
+
+
+## Fremde Figuren weich zwischen zwei Schnappschüssen darstellen. Läuft pro
+## Bild (nicht im Physiktakt), damit es auch über 60 Hz nicht ruckelt.
+func _process(_delta: float) -> void:
+	if is_multiplayer_authority() or _snapshots.is_empty():
+		return
+	# Mikrosekunden statt Millisekunden: über 60 Hz liegen Bilder nur wenige ms
+	# auseinander, ganze ms würden die Bewegung sichtbar stufen.
+	var now_ms := Time.get_ticks_usec() / 1000.0
+	var render_time := now_ms - _clock_offset - NETWORK_SETTINGS.interpolation_delay_ms
+	var older: Dictionary = _snapshots[0]
+	var newer: Dictionary = {}
+	for snapshot in _snapshots:
+		if snapshot["time"] <= render_time:
+			older = snapshot
+		else:
+			newer = snapshot
+			break
+	if newer.is_empty():
+		_apply_snapshot(older)  # Nichts Neueres da: am letzten Stand warten.
+		return
+	if render_time <= older["time"]:
+		_apply_snapshot(older)  # Puffer läuft gerade an.
+		return
+	var t := clampf((render_time - older["time"]) / float(newer["time"] - older["time"]), 0.0, 1.0)
+	global_position = (older["position"] as Vector3).lerp(newer["position"], t)
+	rotation = Vector3(0.0, lerp_angle(older["yaw"], newer["yaw"], t), 0.0)
+	_set_remote_state(older["state"])
+
+
+func _apply_snapshot(snapshot: Dictionary) -> void:
+	global_position = snapshot["position"]
+	rotation = Vector3(0.0, snapshot["yaw"], 0.0)
+	_set_remote_state(snapshot["state"])
+
+
+func _set_remote_state(state: int) -> void:
+	move_state = state as MoveState
+	is_moving = move_state != MoveState.STANDING
 
 
 ## Bodengeschwindigkeit aus der Eingabe. Diagonal ist nicht schneller als

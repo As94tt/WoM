@@ -4,9 +4,9 @@ extends Control
 ## (MapRenderer), darüber Gebietsnamen, Wiedereinstiegspunkte und die eigene
 ## Position als Pfeil in Blickrichtung. Norden (-Z) ist oben.
 ##
-## Rein lokal: jeder Spieler sieht seine eigene Karte. Mitspieler als Punkte in
-## Klassenfarbe kommen mit der Netzwerkverbindung (#30) als weitere Art von
-## MapMarker dazu.
+## Rein lokal: jeder Spieler sieht seine eigene Karte. Mitspieler (#30)
+## erscheinen als Punkte in Klassenfarbe mit Namen als Tooltip; ihr Punkt
+## verschwindet, sobald ihre Figur die Welt verlässt.
 
 const MARKER_SCENE := preload("res://scenes/ui/hud/map_marker.tscn")
 
@@ -18,6 +18,8 @@ var _tracked: Node3D = null
 ## [Control, Welt-XZ] für alles, was beim Größenwechsel neu gesetzt wird.
 var _placed: Array[Array] = []
 var _player_marker: MapMarker = null
+## Figur eines Mitspielers → sein Punkt.
+var _mates: Dictionary[Node3D, MapMarker] = {}
 
 @onready var _image: TextureRect = %MapImage
 @onready var _overlay: Control = %Overlay
@@ -62,6 +64,28 @@ func add_respawn_marker(text: String, world_position: Vector2) -> void:
 	_layout()
 
 
+## Mitspieler als Punkt in color (Klassenfarbe), Name als Tooltip.
+func add_mate_marker(node: Node3D, display_name: String, color: Color) -> void:
+	if _mates.has(node):
+		return
+	var marker: MapMarker = MARKER_SCENE.instantiate()
+	marker.kind = MapMarker.Kind.MATE
+	marker.fill_color = color
+	marker.tooltip_text = display_name
+	marker.visible = false
+	_overlay.add_child(marker)
+	_overlay.move_child(_player_marker, -1)
+	_mates[node] = marker
+	node.tree_exiting.connect(_remove_mate.bind(node), CONNECT_ONE_SHOT)
+
+
+func _remove_mate(node: Node3D) -> void:
+	var marker: MapMarker = _mates.get(node)
+	_mates.erase(node)
+	if marker != null:
+		marker.queue_free()
+
+
 ## Figur, die als Pfeil angezeigt wird (die eigene).
 func set_tracked_node(node: Node3D) -> void:
 	_tracked = node
@@ -70,6 +94,10 @@ func set_tracked_node(node: Node3D) -> void:
 func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
+	for node: Node3D in _mates:
+		var mate := node.global_position
+		_mates[node].visible = true
+		_mates[node].place_at(world_to_map(Vector2(mate.x, mate.z)))
 	var has_player := is_instance_valid(_tracked) and _tracked.is_inside_tree()
 	_player_marker.visible = has_player
 	if not has_player:
