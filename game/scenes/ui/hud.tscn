@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/message_log.tscn" id="6_log"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/player_list.tscn" id="7_list"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/net_overlay.tscn" id="8_overlay"]
+[ext_resource type="Script" path="res://scripts/ui/nameplate_layer.gd" id="9_plates"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/unit_frame.tscn" id="10_frame"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -18,6 +20,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hud")
+
+[node name="NameplateLayer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("9_plates")
 
 [node name="SafeArea" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -33,12 +46,28 @@ theme_type_variation = &"ScreenMargin"
 layout_mode = 2
 mouse_filter = 2
 
+[node name="UnitFrames" type="HBoxContainer" parent="SafeArea/Layout"]
+layout_mode = 1
+offset_right = 692.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="PlayerFrame" parent="SafeArea/Layout/UnitFrames" instance=ExtResource("10_frame")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TargetFrame" parent="SafeArea/Layout/UnitFrames" instance=ExtResource("10_frame")]
+unique_name_in_owner = true
+layout_mode = 2
+mode = 1
+
 [node name="WindowRow" type="HBoxContainer" parent="SafeArea/Layout"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 96.0
-offset_bottom = 616.0
+offset_top = 112.0
+offset_bottom = 632.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_type_variation = &"ButtonRow"

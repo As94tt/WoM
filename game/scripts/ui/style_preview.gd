@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30 und #21).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21 und #31).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -41,6 +41,7 @@ func _ready() -> void:
 		%MateMarker.fill_color = classes[0].color
 
 	_add_spellbook_samples()
+	_add_unit_samples()
 
 	%FocusButton.grab_focus()
 
@@ -89,3 +90,95 @@ func _add_row(grid: GridContainer, text: String) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.custom_minimum_size.x = 240
 	grid.add_child(label)
+
+
+## Einheiten (#31): Bestandteile von Spieler- und Zielrahmen und der
+## Namensplaketten. Farben kommen aus dem Theme (UnitColors, *Bar).
+func _add_unit_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	_add_row(grid, "Rahmen-Bestandteile: Lebens- und Ressourcenbalken (HealthBar, ManaBar, RageBar, EnergyBar, ChiBar, Text BarText)")
+	var bars := VBoxContainer.new()
+	bars.theme_type_variation = &"SlotColumn"
+	bars.custom_minimum_size.x = 260
+	grid.add_child(bars)
+	for entry: Array in [[&"HealthBar", "1.250 / 2.000", 0.62], [&"ManaBar", "415 / 415", 1.0],
+			[&"RageBar", "40 / 100", 0.4], [&"EnergyBar", "80 / 100", 0.8], [&"ChiBar", "25 / 100", 0.25]]:
+		var bar := ProgressBar.new()
+		bar.theme_type_variation = entry[0]
+		bar.show_percentage = false
+		bar.custom_minimum_size.y = 22
+		bar.value = entry[2] * 100.0
+		var text := Label.new()
+		text.theme_type_variation = &"BarText"
+		text.text = entry[1]
+		text.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		bar.add_child(text)
+		bars.add_child(bar)
+
+	_add_row(grid, "Gesinnung (UnitColors: hostile, neutral, friendly) und Stufenunterschied (level_*), Kennzeichen (UnitBadge)")
+	var colors := VBoxContainer.new()
+	colors.theme_type_variation = &"SlotColumn"
+	grid.add_child(colors)
+	var reactions := HBoxContainer.new()
+	reactions.theme_type_variation = &"InlineRow"
+	colors.add_child(reactions)
+	for reaction: Unit.Reaction in UnitColors.REACTION_NAMES:
+		var label := Label.new()
+		label.theme_type_variation = &"BodyText"
+		label.text = UnitColors.REACTION_NAMES[reaction]
+		label.add_theme_color_override("font_color", UnitColors.reaction_color(reaction))
+		reactions.add_child(label)
+	var levels := HBoxContainer.new()
+	levels.theme_type_variation = &"InlineRow"
+	colors.add_child(levels)
+	for difficulty: UnitColors.Difficulty in UnitColors.DIFFICULTY_NAMES:
+		var label := Label.new()
+		label.theme_type_variation = &"SmallLabel"
+		label.text = UnitColors.DIFFICULTY_NAMES[difficulty]
+		label.add_theme_color_override("font_color", UnitColors.difficulty_color(difficulty))
+		levels.add_child(label)
+	var badges := HBoxContainer.new()
+	badges.theme_type_variation = &"InlineRow"
+	colors.add_child(badges)
+	for text: String in ["Elite", "Selten", "Boss", "Im Kampf"]:
+		var badge := PanelContainer.new()
+		badge.theme_type_variation = &"UnitBadge"
+		var label := Label.new()
+		label.theme_type_variation = &"SmallLabel"
+		label.text = text
+		badge.add_child(label)
+		badges.add_child(badge)
+
+	_add_row(grid, "Namensplakette: normal (NameplatePanel) und Ziel (NameplateTargetPanel), Text NameplateText")
+	var plates := HBoxContainer.new()
+	plates.theme_type_variation = &"ButtonRow"
+	grid.add_child(plates)
+	for variation: StringName in [&"NameplatePanel", &"NameplateTargetPanel"]:
+		var panel := PanelContainer.new()
+		panel.theme_type_variation = variation
+		var column := VBoxContainer.new()
+		column.theme_type_variation = &"NameplateColumn"
+		panel.add_child(column)
+		var plate_name := Label.new()
+		plate_name.theme_type_variation = &"NameplateText"
+		plate_name.text = "Schadenspuppe"
+		plate_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		plate_name.add_theme_color_override("font_color", UnitColors.reaction_color(Unit.Reaction.HOSTILE))
+		column.add_child(plate_name)
+		var row := HBoxContainer.new()
+		row.theme_type_variation = &"InlineRow"
+		column.add_child(row)
+		var level := Label.new()
+		level.theme_type_variation = &"NameplateText"
+		level.text = "10"
+		row.add_child(level)
+		var bar := ProgressBar.new()
+		bar.theme_type_variation = &"HealthBar"
+		bar.show_percentage = false
+		bar.custom_minimum_size = Vector2(120, 8)
+		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		bar.value = 70.0
+		row.add_child(bar)
+		plates.add_child(panel)

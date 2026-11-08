@@ -14,13 +14,20 @@ extends Node3D
 ## - ZoneTracker: aktuelles Gebiet jeder Figur; für die eigene Figur zeigt das
 ##   HUD den Gebietsnamen.
 ## - MapRenderer: Kartenbild von oben für das Kartenfenster (M).
-## - Hud: Name/Infozeile, Interface (#17), Entwickler-Panel (F10, nur Debug).
+## - Units: Einheiten außer Spielern (#31), z. B. Übungspuppen. Der Host
+##   erzeugt sie an den Aufstellpunkten (UnitSpawnPoint) der Gebiete, der
+##   UnitSpawner (MultiplayerSpawner) überträgt sie an alle.
+## - Hud: Interface (#17) mit Spieler- und Zielrahmen, Namensplaketten (#31)
+##   und Entwickler-Panel (F10, nur Debug).
 ##   Inhalt des Charakterfensters (C) ist CharacterPanel (#19) mit der eigenen
 ##   Figur; das Entwickler-Panel hat dafür den Abschnitt „Werte“.
 ##   Inhalt des Zauberbuchs (P) ist SpellbookPanel (#21). Die Belegung der
 ##   Aktionsleisten (ActionBarLayout) gehört dem eigenen Charakter und wird
 ##   mit ihm gespeichert (CharacterData.action_bars); das Entwickler-Panel
 ##   hat dafür den Abschnitt „Fähigkeiten“.
+## - Abschnitt „Einheiten“ im Entwickler-Panel (#31): Leben, Stufe und Rang des
+##   aktuellen Ziels ändern. Wünsche eines Clients gehen per RPC an den Host
+##   (_rpc_unit_dev_action), der wie bei echtem Schaden apply_damage nutzt.
 ##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
@@ -38,6 +45,8 @@ const DEV_PANEL_SCENE := preload("res://scenes/ui/dev/dev_panel.tscn")
 const CHARACTER_PANEL_SCENE := preload("res://scenes/ui/hud/character_panel.tscn")
 const SPELLBOOK_PANEL_SCENE := preload("res://scenes/ui/hud/spellbook_panel.tscn")
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
+const DUMMY_SCENE := preload("res://scenes/units/training_dummy.tscn")
+const UNIT_DEV_TOOLS: UnitDevTools = preload("res://data/units/dev_tools.tres")
 
 ## Weitere Spieler stehen im Kreis mit diesem Abstand um den Startpunkt, in
 ## Metern (#30).
@@ -64,6 +73,11 @@ var _stat_dev_info: Label = null
 var _stat_dev_level_label: Label = null
 var _stat_dev_level_slider: HSlider = null
 var _stat_dev_toggles: Dictionary[String, CheckBox] = {}
+## Entwickler-Panel, Abschnitt „Einheiten“ (#31).
+var _unit_dev_info: Label = null
+var _unit_dev_level_label: Label = null
+var _unit_dev_level_slider: HSlider = null
+var _unit_dev_dot_timer: Timer = null
 
 @onready var _players: Node3D = %Players
 @onready var _navigation: NavigationRegion3D = %Navigation
@@ -71,6 +85,8 @@ var _stat_dev_toggles: Dictionary[String, CheckBox] = {}
 @onready var _map_renderer: MapRenderer = %MapRenderer
 @onready var _hud: Hud = %GameHud
 @onready var _spawner: MultiplayerSpawner = %PlayerSpawner
+@onready var _units: Node3D = %Units
+@onready var _unit_spawner: MultiplayerSpawner = %UnitSpawner
 
 
 func _ready() -> void:
@@ -81,12 +97,12 @@ func _ready() -> void:
 	_zones.sort_custom(func(a: WorldZone, b: WorldZone) -> bool: return a.data.order < b.data.order)
 	_zone_tracker.zone_changed.connect(_on_zone_changed)
 	_spawner.add_spawnable_scene(PLAYER_SCENE.resource_path)
+	_unit_spawner.add_spawnable_scene(DUMMY_SCENE.resource_path)
 	_players.child_entered_tree.connect(_on_player_node_added)
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
 	Network.players_changed.connect(_on_players_changed)
 	Data.reloaded.connect(_on_data_reloaded)
-	_show_character_info()
 	_setup_character_window()
 	_setup_spellbook_window()
 	_setup_map()
@@ -94,6 +110,8 @@ func _ready() -> void:
 	if OS.is_debug_build():
 		_setup_dev_panel()
 	_bake_navigation.call_deferred()
+	if multiplayer.is_server():
+		_spawn_units()
 	# Host bzw. offline: eigene Figur entsteht sofort; Client: Host erzeugt sie.
 	Network.notify_world_ready()
 
@@ -199,25 +217,6 @@ func _on_ground(t: Transform3D) -> Transform3D:
 	return t
 
 
-func _show_character_info() -> void:
-	var c := GameSession.selected_character
-	if c == null:
-		%NameLabel.text = "Kein Charakter gewählt"
-		%InfoLabel.text = ""
-		return
-	var race := c.get_race()
-	var class_data := c.get_class_data()
-	# Name im Spiel, falls der Host einen Zusatz vergeben hat („Arthas (2)“).
-	var info := Network.get_local_player_info()
-	%NameLabel.text = info.display_name if info != null else c.character_name
-	var player := get_local_player()
-	%InfoLabel.text = "Stufe %d · %s · %s" % [
-		player.get_level() if player != null and player.is_node_ready() else c.level,
-		race.display_name if race != null else String(c.race_id),
-		class_data.display_name if class_data != null else String(c.class_id),
-	]
-
-
 # --- Spieler (Netzwerk, #30) -------------------------------------------------
 
 func _on_player_entered_world(peer_id: int) -> void:
@@ -277,7 +276,10 @@ func _on_players_changed() -> void:
 			var info := Network.get_player(player.peer_id)
 			if info != null:
 				player.setup_from_info(info)
-	_show_character_info()
+	# Ebenso die Einheiten (Übungspuppen).
+	for node in _units.get_children():
+		if node.has_method(&"refresh_visibility") and not node.is_queued_for_deletion():
+			node.refresh_visibility()
 
 
 ## Eine Figur ist unter Players aufgetaucht (selbst erzeugt oder vom Spawner).
@@ -293,10 +295,9 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 			_character_panel.setup(player)
 		_connect_stat_dev(player)
 		_setup_abilities(player)
-		# Infozeile oben links folgt der Stufe der Werte (#19, auch „Stufe
-		# ändern“ im Entwickler-Panel).
-		player.get_stats().stats_changed.connect(_show_character_info)
-		_show_character_info()
+		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
+		_hud.setup_local_player(player)
+		_connect_unit_dev(player)
 	if _map_view == null:
 		return
 	if player.is_local():
@@ -389,6 +390,30 @@ func _on_abilities_learned(learned: Array[AbilityData], abilities: PlayerAbiliti
 		_hud.add_log_message("Neue Fähigkeit erlernt: %s" % ability.display_name)
 
 
+# --- Einheiten (#31) ---------------------------------------------------------
+
+## Nur auf dem Host: an jedem Aufstellpunkt die Einheit erzeugen. Der
+## UnitSpawner überträgt sie an alle, die die Welt geladen haben (auch an
+## später Beitretende). Knotenname = Name des Aufstellpunkts, damit der Pfad
+## auf allen Instanzen gleich ist.
+func _spawn_units() -> void:
+	for node in get_tree().get_nodes_in_group(UnitSpawnPoint.GROUP):
+		var point := node as UnitSpawnPoint
+		if point == null or _units.has_node(NodePath(String(point.name))):
+			continue
+		match point.kind:
+			UnitSpawnPoint.Kind.TRAINING_DUMMY:
+				if Data.uebungspuppe(point.unit_id) == null:
+					push_warning("Aufstellpunkt %s: Übungspuppe „%s“ fehlt in uebungspuppen.csv." % [
+							point.name, point.unit_id])
+					continue
+				var dummy: TrainingDummy = DUMMY_SCENE.instantiate()
+				dummy.name = point.name
+				dummy.dummy_id = point.unit_id
+				dummy.transform = point.get_spawn_transform()
+				_units.add_child(dummy, true)
+
+
 # --- Karte -------------------------------------------------------------------
 
 func _setup_map() -> void:
@@ -406,10 +431,12 @@ func _setup_map() -> void:
 		var p := point.global_position
 		map_view.add_respawn_marker(point.display_name, Vector2(p.x, p.z))
 	# Die eigene Figur und Mitspieler kommen über _on_player_ready dazu.
-	# Spielfiguren gehören nicht ins Kartenbild.
+	# Spielfiguren und Einheiten gehören nicht ins Kartenbild.
 	_players.visible = false
+	_units.visible = false
 	var on_rendered := func(texture: Texture2D) -> void:
 		_players.visible = true
+		_units.visible = true
 		map_view.set_map_texture(texture)
 	_map_renderer.map_rendered.connect(on_rendered, CONNECT_ONE_SHOT)
 	_map_renderer.render(map_view.world_rect)
@@ -510,6 +537,8 @@ func _setup_dev_panel() -> void:
 		if player != null and _bar_layout != null:
 			_bar_layout.reset(player.get_abilities().get_default_bar_abilities()))
 
+	_setup_unit_dev_section(panel)
+
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)
 	panel.add_toggle(display, "Gebietsgrenzen anzeigen", false, _set_bounds_visible)
@@ -607,6 +636,141 @@ func _update_stat_dev_info(stats: CharacterStats) -> void:
 				StatFormat.number(stats.get_resource(resource_id), 0),
 				StatFormat.number(stats.get_resource_max(resource_id), 0)])
 	_stat_dev_info.text = "\n".join(lines)
+
+
+## Abschnitt „Einheiten“ (#31): wirkt auf das aktuelle Ziel der eigenen Figur.
+## Auf einem Client geht jede Aktion als Wunsch an den Host.
+func _setup_unit_dev_section(panel: DevPanel) -> void:
+	var section := panel.add_section("Einheiten")
+	_unit_dev_info = panel.add_info(section, "Kein Ziel (Tab, Klick oder F1)")
+	panel.add_button(section, "Ziel: Schaden (%s %% Leben)" % StatFormat.number(
+			UNIT_DEV_TOOLS.damage_percent, 0),
+			_unit_dev_action.bind("damage_percent", UNIT_DEV_TOOLS.damage_percent))
+	panel.add_button(section, "Ziel: Treffer (%s Schaden)" % StatFormat.grouped(UNIT_DEV_TOOLS.damage_flat),
+			_unit_dev_action.bind("damage", UNIT_DEV_TOOLS.damage_flat))
+	panel.add_button(section, "Ziel: Heilung (%s %% Leben)" % StatFormat.number(
+			UNIT_DEV_TOOLS.heal_percent, 0), _unit_dev_action.bind("heal_percent", UNIT_DEV_TOOLS.heal_percent))
+	panel.add_button(section, "Ziel: Leben und Ressourcen auffüllen", _unit_dev_action.bind("refill", null))
+	panel.add_toggle(section, "Ziel: Dauerschaden (%s je Sekunde)" % StatFormat.grouped(
+			UNIT_DEV_TOOLS.damage_per_second), false, _set_unit_dev_dot)
+	panel.add_toggle(section, "Ziel: im Kampf", false,
+			func(on: bool) -> void: _unit_dev_action("combat", on))
+	_unit_dev_level_label = panel.add_info(section, "Stufe des Ziels: –")
+	_unit_dev_level_slider = panel.add_slider(section, 1.0, Data.hoechste_stufe(), 1.0, 1.0,
+			func(value: float) -> void:
+				_unit_dev_level_label.text = "Stufe des Ziels: %d" % int(value)
+				_unit_dev_action("level", int(value)))
+	panel.add_info(section, "Rang des Ziels (nur Übungspuppen):")
+	for rank: String in Unit.RANK_IDS:
+		panel.add_button(section, "Rang: %s" % rank.capitalize(),
+				_unit_dev_action.bind("rank", Unit.RANK_IDS[rank]))
+	_unit_dev_dot_timer = Timer.new()
+	_unit_dev_dot_timer.wait_time = 1.0
+	_unit_dev_dot_timer.timeout.connect(func() -> void:
+		_unit_dev_action("damage", UNIT_DEV_TOOLS.damage_per_second))
+	panel.add_child(_unit_dev_dot_timer)
+	var info_timer := Timer.new()
+	info_timer.wait_time = 0.25
+	info_timer.autostart = true
+	info_timer.timeout.connect(_update_unit_dev_info)
+	panel.add_child(info_timer)
+
+
+## Eigene Figur ist da: Regler „Stufe des Ziels“ folgt dem gewählten Ziel.
+func _connect_unit_dev(player: PlayerCharacter) -> void:
+	var targeting := player.get_targeting()
+	if targeting == null or _unit_dev_level_slider == null:
+		return
+	targeting.target_changed.connect(func(target: Unit) -> void:
+		if target != null:
+			_unit_dev_level_slider.set_value_no_signal(target.get_level())
+			_unit_dev_level_label.text = "Stufe des Ziels: %d" % target.get_level()
+		else:
+			_unit_dev_level_label.text = "Stufe des Ziels: –")
+
+
+func _set_unit_dev_dot(on: bool) -> void:
+	if on:
+		_unit_dev_dot_timer.start()
+	else:
+		_unit_dev_dot_timer.stop()
+
+
+func _update_unit_dev_info() -> void:
+	if _unit_dev_info == null or not _unit_dev_info.is_visible_in_tree():
+		return
+	var target := _local_target()
+	if target == null:
+		_unit_dev_info.text = "Kein Ziel (Tab, Klick oder F1)"
+		return
+	var stats := target.get_stats()
+	var player := get_local_player()
+	var lines: PackedStringArray = ["Ziel: %s (Stufe %d, %s)" % [target.get_unit_name(), target.get_level(),
+			UnitColors.REACTION_NAMES[target.get_reaction_to(player)]]]
+	if stats != null:
+		lines.append("Leben: %s / %s" % [StatFormat.grouped(stats.health), StatFormat.grouped(stats.max_health)])
+	if player != null and target != player:
+		lines.append("Entfernung: %s m · Sichtlinie: %s" % [StatFormat.number(player.distance_to_unit(target), 1),
+				"ja" if player.has_line_of_sight_to(target) else "nein"])
+		lines.append("Ziel vor mir: %s · ich hinter dem Ziel: %s" % [
+				"ja" if player.is_in_front(target) else "nein", "ja" if player.is_behind(target) else "nein"])
+	_unit_dev_info.text = "\n".join(lines)
+
+
+func _local_target() -> Unit:
+	var player := get_local_player()
+	if player == null or player.get_targeting() == null:
+		return null
+	return player.get_targeting().target
+
+
+## Aktion auf das Ziel: auf dem Host sofort, sonst als Wunsch an ihn.
+func _unit_dev_action(action: String, value: Variant) -> void:
+	var target := _local_target()
+	if target == null:
+		return
+	if Network.is_host():
+		_do_unit_dev_action(target, get_local_player(), action, value)
+	else:
+		_rpc_unit_dev_action.rpc_id(1, target.get_path(), action, value)
+
+
+## Wunsch eines Clients aus dem Entwickler-Panel (nur wenn der Host ein
+## Debug-Build ist).
+@rpc("any_peer", "call_remote", "reliable")
+func _rpc_unit_dev_action(target_path: NodePath, action: String, value: Variant) -> void:
+	if not Network.is_host() or not OS.is_debug_build():
+		return
+	var target := Unit.from_path(get_tree(), target_path)
+	var source := get_player(multiplayer.get_remote_sender_id())
+	if target != null and source != null:
+		_do_unit_dev_action(target, source, action, value)
+
+
+## Host: Aktion ausführen. Schaden und Heilung laufen über apply_damage bzw.
+## apply_heal, wie später echte Treffer (#34).
+func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Variant) -> void:
+	var stats := target.get_stats()
+	if stats == null:
+		return
+	match action:
+		"damage":
+			target.apply_damage(float(value), source)
+		"damage_percent":
+			target.apply_damage(stats.max_health * float(value) / 100.0, source)
+		"heal_percent":
+			target.apply_heal(stats.max_health * float(value) / 100.0, source)
+		"refill":
+			stats.refill()
+		"combat":
+			stats.set_in_combat(bool(value))
+		"level":
+			stats.set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
+		"rank":
+			if target is TrainingDummy:
+				(target as TrainingDummy).rank_override = int(value)
+		_:
+			push_warning("GameWorld: unbekannte Einheiten-Aktion %s." % action)
 
 
 func _set_placeholders_visible(on: bool) -> void:

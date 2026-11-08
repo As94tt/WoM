@@ -270,6 +270,120 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_unit_frame"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.14, 0.14, 0.14, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_unit_portrait"]
+bg_color = Color(0.24, 0.24, 0.24, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.55, 0.55, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_unit_badge"]
+content_margin_left = 6.0
+content_margin_top = 0.0
+content_margin_right = 6.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75, 0.75, 0.75, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_background"]
+bg_color = Color(0.06, 0.06, 0.06, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.35, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_health"]
+bg_color = Color(0.3, 0.62, 0.3, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_mana"]
+bg_color = Color(0.3, 0.45, 0.82, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_rage"]
+bg_color = Color(0.72, 0.26, 0.22, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_energy"]
+bg_color = Color(0.82, 0.72, 0.26, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_chi"]
+bg_color = Color(0.32, 0.72, 0.64, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate_target"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.08, 0.08, 0.08, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.92, 0.92, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -411,3 +525,48 @@ LogText/colors/font_color = Color(0.9, 0.9, 0.9, 1)
 LogText/colors/font_outline_color = Color(0.08, 0.08, 0.08, 1)
 LogText/constants/outline_size = 4
 LogText/font_sizes/font_size = 16
+UnitFramePanel/base_type = &"PanelContainer"
+UnitFramePanel/styles/panel = SubResource("StyleBoxFlat_unit_frame")
+UnitPortrait/base_type = &"PanelContainer"
+UnitPortrait/styles/panel = SubResource("StyleBoxFlat_unit_portrait")
+UnitBadge/base_type = &"PanelContainer"
+UnitBadge/styles/panel = SubResource("StyleBoxFlat_unit_badge")
+BarText/base_type = &"Label"
+BarText/colors/font_color = Color(0.95, 0.95, 0.95, 1)
+BarText/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+BarText/constants/outline_size = 4
+BarText/font_sizes/font_size = 14
+HealthBar/base_type = &"ProgressBar"
+HealthBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+HealthBar/styles/fill = SubResource("StyleBoxFlat_bar_health")
+ManaBar/base_type = &"ProgressBar"
+ManaBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+ManaBar/styles/fill = SubResource("StyleBoxFlat_bar_mana")
+RageBar/base_type = &"ProgressBar"
+RageBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+RageBar/styles/fill = SubResource("StyleBoxFlat_bar_rage")
+EnergyBar/base_type = &"ProgressBar"
+EnergyBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+EnergyBar/styles/fill = SubResource("StyleBoxFlat_bar_energy")
+ChiBar/base_type = &"ProgressBar"
+ChiBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+ChiBar/styles/fill = SubResource("StyleBoxFlat_bar_chi")
+NameplatePanel/base_type = &"PanelContainer"
+NameplatePanel/styles/panel = SubResource("StyleBoxFlat_nameplate")
+NameplateTargetPanel/base_type = &"PanelContainer"
+NameplateTargetPanel/styles/panel = SubResource("StyleBoxFlat_nameplate_target")
+NameplateColumn/base_type = &"VBoxContainer"
+NameplateColumn/constants/separation = 2
+NameplateText/base_type = &"Label"
+NameplateText/colors/font_color = Color(0.92, 0.92, 0.92, 1)
+NameplateText/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+NameplateText/constants/outline_size = 4
+NameplateText/font_sizes/font_size = 14
+UnitColors/colors/hostile = Color(0.85, 0.3, 0.25, 1)
+UnitColors/colors/neutral = Color(0.9, 0.8, 0.3, 1)
+UnitColors/colors/friendly = Color(0.4, 0.8, 0.4, 1)
+UnitColors/colors/level_trivial = Color(0.6, 0.6, 0.6, 1)
+UnitColors/colors/level_easy = Color(0.4, 0.8, 0.4, 1)
+UnitColors/colors/level_even = Color(0.9, 0.8, 0.3, 1)
+UnitColors/colors/level_hard = Color(0.95, 0.55, 0.2, 1)
+UnitColors/colors/level_impossible = Color(0.85, 0.3, 0.25, 1)

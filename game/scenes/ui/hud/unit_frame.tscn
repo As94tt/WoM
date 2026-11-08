@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/unit_frame.gd" id="1_frame"]
+
+[node name="UnitFrame" type="PanelContainer"]
+custom_minimum_size = Vector2(340, 0)
+offset_right = 340.0
+offset_bottom = 92.0
+size_flags_vertical = 0
+theme_type_variation = &"UnitFramePanel"
+script = ExtResource("1_frame")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="Portrait" type="PanelContainer" parent="Row"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"UnitPortrait"
+
+[node name="PortraitLabel" type="Label" parent="Row/Portrait"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="Header" type="HBoxContainer" parent="Row/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="NameLabel" type="Label" parent="Row/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BodyText"
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="RankBadge" type="PanelContainer" parent="Row/Content/Header"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_type_variation = &"UnitBadge"
+
+[node name="RankLabel" type="Label" parent="Row/Content/Header/RankBadge"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Elite"
+
+[node name="CombatBadge" type="PanelContainer" parent="Row/Content/Header"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+tooltip_text = "Im Kampf"
+theme_type_variation = &"UnitBadge"
+
+[node name="CombatLabel" type="Label" parent="Row/Content/Header/CombatBadge"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Im Kampf"
+
+[node name="LevelLabel" type="Label" parent="Row/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "1"
+
+[node name="HealthBar" type="ProgressBar" parent="Row/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"HealthBar"
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="Row/Content/HealthBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"BarText"
+text = "1 / 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResourceBar" type="ProgressBar" parent="Row/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_type_variation = &"ManaBar"
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="ResourceText" type="Label" parent="Row/Content/ResourceBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"BarText"
+text = "1 / 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SecondaryBar" type="ProgressBar" parent="Row/Content"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_type_variation = &"ChiBar"
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="ClassResourceSlot" type="HBoxContainer" parent="Row/Content"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+
+[node name="AuraSlot" type="HBoxContainer" parent="Row/Content"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+
+[node name="CastBarSlot" type="VBoxContainer" parent="Row/Content"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
