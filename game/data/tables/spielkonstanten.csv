@@ -57,3 +57,8 @@ stufe_grau_bis;-8;Bis zu diesem Unterschied gilt das Ziel als „trivial“ (gra
 # Übungspuppen (#31)
 puppe_anzeige_fenster;60;Schaden bzw. Heilung pro Sekunde wird über so viele Sekunden gemittelt
 puppe_ruecksetzen_nach;10;Sekunden ohne Schaden bzw. Heilung, nach denen sich eine Puppe zurücksetzt
+# Effekte, Auren und Kampfzustand (#32)
+kampf_dauer;5;Sekunden nach dem letzten Schaden (zugefügt oder erlitten) bzw. der letzten feindlichen Aura, nach denen eine Einheit den Kampf verlässt
+verzoegerung_tick;0,5;Sekunden zwischen zwei Teilen verzögerten Schadens (Schadensumleitung „Verzögerung“, z. B. Last)
+kampftext_dauer;1,5;Sekunden, die eine Kampftext-Zahl sichtbar ist (steigt dabei auf und blendet aus)
+kampftext_steigen;60;Pixel, um die eine Kampftext-Zahl während ihrer Dauer aufsteigt

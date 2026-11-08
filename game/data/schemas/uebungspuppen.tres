@@ -87,6 +87,14 @@ max_value = 60.0
 choices = PackedStringArray()
 description = "Nur Heilpuppe: Sekunden zwischen zwei Lebensverlusten."
 
+[sub_resource type="Resource" id="Resource_up_immun"]
+script = ExtResource("1_upcol")
+name = "immunitaeten"
+type = 7
+choices = PackedStringArray()
+item_type = 1
+description = "Zustände oder Schadensschulen, gegen die die Puppe immun ist (#32), z. B. betaeubung|feuer. Zustände: betaeubung, festhalten, verlangsamung, stille, umwerfen, tarnung, unverwundbarkeit; Schulen: IDs aus schadensschulen.csv."
+
 [resource]
 script = ExtResource("2_uptab")
 table = "uebungspuppen"
@@ -95,4 +103,4 @@ group = "Gegner"
 description = "Übungspuppen im Trainingsbereich (#31). Eine Zeile pro Puppentyp; aufgestellt werden sie über Aufstellpunkte (UnitSpawnPoint) in der Szene des Trainingsgeländes. Anzeigefenster und Rücksetzzeit stehen in spielkonstanten.csv."
 key_columns = PackedStringArray("id")
 order = 15
-columns = Array[ExtResource("1_upcol")]([SubResource("Resource_up_id"), SubResource("Resource_up_name"), SubResource("Resource_up_art"), SubResource("Resource_up_gesinnung"), SubResource("Resource_up_stufe"), SubResource("Resource_up_rang"), SubResource("Resource_up_leben"), SubResource("Resource_up_verlust"), SubResource("Resource_up_intervall")])
+columns = Array[ExtResource("1_upcol")]([SubResource("Resource_up_id"), SubResource("Resource_up_name"), SubResource("Resource_up_art"), SubResource("Resource_up_gesinnung"), SubResource("Resource_up_stufe"), SubResource("Resource_up_rang"), SubResource("Resource_up_leben"), SubResource("Resource_up_verlust"), SubResource("Resource_up_intervall"), SubResource("Resource_up_immun")])

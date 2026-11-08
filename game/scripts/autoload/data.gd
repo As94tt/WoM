@@ -164,6 +164,26 @@ func uebungspuppe(id: StringName) -> TableRow:
 	return row("uebungspuppen", id)
 
 
+## Schadensschule (#32) aus schadensschulen.csv oder null.
+func schadensschule(id: StringName) -> TableRow:
+	return row("schadensschulen", id)
+
+
+## Anzeigename einer Schadensschule (die ID, falls sie fehlt).
+func schulname(id: StringName) -> String:
+	var r := schadensschule(id)
+	return String(r.get_value("name", id)) if r != null else String(id)
+
+
+## Alle Schadensschulen, sortiert nach Reihenfolge.
+func schadensschulen() -> Array[TableRow]:
+	var result: Array[TableRow] = []
+	result.assign(rows("schadensschulen"))
+	result.sort_custom(func(a: TableRow, b: TableRow) -> bool:
+		return int(a.get_value("reihenfolge", 0)) < int(b.get_value("reihenfolge", 0)))
+	return result
+
+
 func gebiet(id: StringName) -> TableRow:
 	return row("gebiete", id)
 
