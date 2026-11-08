@@ -21,6 +21,10 @@ extends Button
 ## bei einem Proc (SlotProcGlow), heller Rahmen bei aktivem Umschalter,
 ## automatischem Angriff oder vorgemerktem nächsten Schlag (SlotActive),
 ## Zahl der Aufladungen unten links.
+##
+## Spezialisierung und Talente (#20): Gespeichert ist die Grundfähigkeit,
+## gezeigt (Icon, Tooltip) wird die aufgelöste Variante (show_content mit
+## shown), Tooltip-Zahlen mit den Veränderungen der eigenen Figur (caster).
 
 ## Wird bei Klick oder Tastendruck ausgelöst (nicht bei ausgegrautem Slot).
 signal activated
@@ -42,6 +46,8 @@ var index := -1
 var _flash_tween: Tween
 var _content: ActionSlotContent = null
 var _ability: AbilityData = null
+## Wirker für die Zahlen im Tooltip (#20), null = Werte der Tabelle.
+var _caster: Unit = null
 var _learned := true
 ## Ziehen, das von diesem Slot ausging (für „ins Leere losgelassen“).
 var _outgoing: ActionDragData = null
@@ -62,14 +68,20 @@ func activate() -> void:
 	activated.emit()
 
 
-## Zeigt einen Inhalt (null = leer). learned = false graut ihn aus.
-func show_content(content: ActionSlotContent, learned: bool) -> void:
+## Zeigt einen Inhalt (null = leer). learned = false graut ihn aus. shown =
+## angezeigte Fähigkeit statt der gespeicherten (#20: Variante), caster =
+## eigene Figur für die Zahlen im Tooltip.
+func show_content(content: ActionSlotContent, learned: bool, shown: AbilityData = null,
+		caster: Unit = null) -> void:
 	_content = content
 	_ability = content.get_ability() if content != null else null
+	if _ability != null and shown != null:
+		_ability = shown
+	_caster = caster
 	_learned = learned
 	AbilityIcon.apply(self, _ability)
 	disabled = _ability != null and not learned
-	tooltip_text = AbilityTooltip.text(_ability, learned) if _ability != null else ""
+	tooltip_text = AbilityTooltip.text(_ability, learned, caster) if _ability != null else ""
 
 
 ## Zustand aus PlayerAbilities.get_slot_state (leer = nichts anzeigen).
@@ -102,10 +114,15 @@ func get_content() -> ActionSlotContent:
 	return _content
 
 
+## Angezeigte Fähigkeit (#20: aufgelöste Variante) oder null.
+func get_shown_ability() -> AbilityData:
+	return _ability
+
+
 func _make_custom_tooltip(_for_text: String) -> Object:
 	if _ability == null:
 		return null
-	return AbilityTooltip.create(_ability, _learned)
+	return AbilityTooltip.create(_ability, _learned, _caster if is_instance_valid(_caster) else null)
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:

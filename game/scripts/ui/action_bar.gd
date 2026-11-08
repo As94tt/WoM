@@ -133,9 +133,14 @@ func _hang_on_cursor(content: ActionSlotContent) -> void:
 func _refresh_slot(index: int) -> void:
 	var content := _layout.get_content(bar_index, index) if _layout != null else null
 	var learned := true
+	var shown: AbilityData = null
+	var caster: Unit = null
 	if content != null and content.is_ability() and _abilities != null:
 		learned = _abilities.is_learned(content.get_ability())
-	_slots[index].show_content(content, learned)
+		# #20: gespeichert ist die Grundfähigkeit, gezeigt die Variante.
+		shown = _abilities.resolve(content.get_ability())
+		caster = _abilities.get_parent() as Unit
+	_slots[index].show_content(content, learned, shown, caster)
 
 
 func _on_layout_slot_changed(bar: int, index: int) -> void:

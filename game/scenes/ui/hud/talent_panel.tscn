@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/talent_panel.gd" id="1_panel"]
+
+[node name="TalentPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+script = ExtResource("1_panel")
+
+[node name="TabRow" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="PointsLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+
+[node name="StatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_type_variation = &"HintText"
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Page" type="VBoxContainer" parent="Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="ChooseButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Spezialisierung wählen"
+
+[node name="ApplyButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Übernehmen"
+
+[node name="DiscardButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Verwerfen"
+
+[node name="ResetButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Talente zurücksetzen"
+
+[node name="SwitchButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Spezialisierung wechseln"

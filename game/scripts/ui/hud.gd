@@ -51,6 +51,11 @@ extends Control
 ## roter Rand an Namensplaketten für Tanks (UnitNameplate), Fenster „Ihr seid
 ## gestorben“ oben mittig (DeathWindow, setup_death_window).
 ##
+## Talente (#20): Inhalt des Talentfensters setzt GameWorld (TalentPanel).
+## set_window_hint() zeigt einen Hinweis-Punkt (MenuHintDot) am Menüleisten-
+## Button eines Fensters, mit Text im Tooltip als zweitem Signal (z. B.
+## „Spezialisierung wählbar“). ask() öffnet eine Rückfrage (MessageDialog).
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -68,6 +73,9 @@ const MICRO_MENU_WINDOWS := {
 	&"MapButton": &"map",
 }
 const GAME_MENU_ACTION := &"game_menu"
+const MESSAGE_DIALOG_SCENE := preload("res://scenes/ui/message_dialog.tscn")
+## Größe des Hinweis-Punkts am Menüleisten-Button (#20).
+const HINT_DOT_SIZE := 10.0
 const PLAYER_LIST_ACTION := &"player_list"
 
 ## Tastenkürzel des HUD an- oder abschalten (z. B. später für den Chat).
@@ -102,6 +110,58 @@ func _ready() -> void:
 	%BackpackButton.tooltip_text = _tooltip("Rucksack", bags.toggle_action)
 	%BackpackButton.pressed.connect(toggle_window.bind(&"bags"))
 	_update_layout()
+
+
+## Hinweis-Punkt am Menüleisten-Button des Fensters an/aus (#20); hint
+## ergänzt den Tooltip („Talente (N) – Spezialisierung wählbar“).
+func set_window_hint(window_id: StringName, on: bool, hint := "") -> void:
+	var button := _micro_button(window_id)
+	if button == null:
+		return
+	var dot := button.get_node_or_null(^"HintDot") as Panel
+	if dot == null and on:
+		dot = Panel.new()
+		dot.name = "HintDot"
+		dot.theme_type_variation = &"MenuHintDot"
+		dot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dot.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		dot.offset_left = -HINT_DOT_SIZE - 2.0
+		dot.offset_right = -2.0
+		dot.offset_top = 2.0
+		dot.offset_bottom = HINT_DOT_SIZE + 2.0
+		button.add_child(dot)
+	if dot != null:
+		dot.visible = on
+	var window := get_hud_window(window_id)
+	var base := _tooltip(window.title, window.toggle_action)
+	button.tooltip_text = base + (" – " + hint if on and hint != "" else "")
+
+
+func has_window_hint(window_id: StringName) -> bool:
+	var button := _micro_button(window_id)
+	var dot := button.get_node_or_null(^"HintDot") as Panel if button != null else null
+	return dot != null and dot.visible
+
+
+## Rückfrage mit zwei Buttons (#20, z. B. „Spezialisierung wählen“).
+## on_confirm wird nur bei Bestätigung gerufen. Gibt den Dialog zurück.
+func ask(title: String, message: String, confirm_text: String, cancel_text: String,
+		on_confirm: Callable) -> MessageDialog:
+	var dialog: MessageDialog = MESSAGE_DIALOG_SCENE.instantiate()
+	add_child(dialog)
+	dialog.confirmed.connect(func() -> void:
+		dialog.queue_free()
+		on_confirm.call())
+	dialog.cancelled.connect(dialog.queue_free)
+	dialog.open(title, message, confirm_text, cancel_text)
+	return dialog
+
+
+func _micro_button(window_id: StringName) -> Button:
+	for button_name: StringName in MICRO_MENU_WINDOWS:
+		if MICRO_MENU_WINDOWS[button_name] == window_id:
+			return %MicroMenu.get_node_or_null(NodePath(button_name)) as Button
+	return null
 
 
 func _process(_delta: float) -> void:
