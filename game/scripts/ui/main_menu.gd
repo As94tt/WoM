@@ -8,12 +8,18 @@ extends Control
 ##   beendet“) zeigt ein Hinweisdialog beim Öffnen.
 ## - Startparameter --host / --join <IP> [--port <Port>] [--character <Name>]
 ##   überspringen die Menüs einmal beim Programmstart (siehe QuickStart).
+##
+## Datentabellen (#39): Enthalten die Tabellen beim Start Fehler, zeigt das
+## Menü die Fehlerliste (DataErrorScreen) und startet nichts, bis sie
+## behoben und neu geladen sind. Bei --daten-pruefen / --daten-doku tut das
+## Menü nichts (das Programm beendet sich gleich wieder).
 
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const WORLD_SCENE := "res://scenes/world/world.tscn"
 
 @onready var _message_dialog: MessageDialog = %MessageDialog
 @onready var _connect_dialog: ConnectDialog = %ConnectDialog
+@onready var _data_errors: DataErrorScreen = %DataErrorScreen
 
 
 func _ready() -> void:
@@ -23,7 +29,18 @@ func _ready() -> void:
 	_message_dialog.confirmed.connect(_on_dialog_closed)
 	_connect_dialog.succeeded.connect(_on_quick_start_succeeded)
 	_connect_dialog.cancelled.connect(_on_quick_start_cancelled)
+	_data_errors.resolved.connect(_on_data_errors_resolved)
 	%HostButton.grab_focus()
+	if Data.command_line_mode:
+		return
+	if not Data.is_valid():
+		%MarginContainer.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+		_data_errors.open()
+		return
+	_after_data_ok()
+
+
+func _after_data_ok() -> void:
 	if Network.menu_message != "":
 		_show_message("Sitzung beendet", Network.menu_message)
 		Network.menu_message = ""
@@ -53,6 +70,11 @@ func _on_quit_pressed() -> void:
 func _show_message(title: String, message: String) -> void:
 	%MarginContainer.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
 	_message_dialog.open(title, message)
+
+
+func _on_data_errors_resolved() -> void:
+	_on_dialog_closed()
+	_after_data_ok()
 
 
 func _on_dialog_closed() -> void:

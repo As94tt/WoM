@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/message_dialog.tscn" id="2_message"]
 [ext_resource type="PackedScene" path="res://scenes/ui/connect_dialog.tscn" id="3_connect"]
+[ext_resource type="PackedScene" path="res://scenes/ui/data_error_screen.tscn" id="4_errors"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -66,5 +67,9 @@ unique_name_in_owner = true
 layout_mode = 1
 
 [node name="ConnectDialog" parent="." instance=ExtResource("3_connect")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="DataErrorScreen" parent="." instance=ExtResource("4_errors")]
 unique_name_in_owner = true
 layout_mode = 1

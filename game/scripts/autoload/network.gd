@@ -163,11 +163,12 @@ func get_game_version() -> String:
 	return str(ProjectSettings.get_setting("application/config/version", "0.0.0"))
 
 
-## Hash über die Spieldaten (res://data/), beim Beitreten mit dem Host
-## verglichen. PLATZHALTER: Den Inhalt liefert Ticket #39 (Datenprüfung beim
-## Verbinden). Bis dahin ist der Hash leer und stimmt immer überein.
+## Prüfsumme der Datentabellen (Ticket #39, Autoload „Data“), beim Beitreten
+## mit dem Host verglichen. Weicht sie ab, lehnt der Host mit „Unterschiedliche
+## Spieldaten“ ab. Neu laden ist gesperrt, solange Mitspieler verbunden sind,
+## daher bleibt sie während einer Sitzung gleich.
 func get_data_hash() -> String:
-	return ""
+	return Data.get_checksum()
 
 
 # --- Sitzung starten und beenden ---------------------------------------------
@@ -515,7 +516,8 @@ func _rpc_hello(version: String, data_hash: String, character: Dictionary) -> vo
 	if version != get_game_version():
 		_reject(id, "Unterschiedliche Spielversion: Host %s, du %s" % [get_game_version(), version])
 	elif data_hash != get_data_hash():
-		_reject(id, "Unterschiedliche Spieldaten: Host und du habt nicht denselben Stand.")
+		_reject(id, "Unterschiedliche Spieldaten: Host und du habt nicht denselben Stand der Tabellen (Prüfsumme Host %s, du %s)."
+				% [get_data_hash().substr(0, 8), data_hash.substr(0, 8)])
 	elif _players.size() >= SETTINGS.max_players:
 		_reject(id, "Die Sitzung ist voll.")
 	else:
