@@ -1,0 +1,6 @@
+﻿# Übungspuppen im Trainingsbereich (#31). Leben und Verlust sind Platzhalterwerte.
+id;name;art;gesinnung;stufe;rang;leben;verlust_prozent;verlust_intervall;notiz
+schadenspuppe_1;Schadenspuppe;schaden;feindlich;1;normal;100000;0;1;Greift nie an, stirbt nie
+schadenspuppe_10;Schadenspuppe;schaden;feindlich;10;normal;250000;0;1;
+schadenspuppe_30;Schadenspuppe;schaden;feindlich;30;normal;1000000;0;1;
+heilpuppe;Heilpuppe;heilung;freundlich;1;normal;5000;2;1;Verliert 2 % Leben je Sekunde

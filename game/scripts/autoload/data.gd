@@ -159,6 +159,11 @@ func gegner_rang(rang: String) -> TableRow:
 	return row("gegner_raenge", rang)
 
 
+## Übungspuppe (#31) aus uebungspuppen.csv oder null.
+func uebungspuppe(id: StringName) -> TableRow:
+	return row("uebungspuppen", id)
+
+
 func gebiet(id: StringName) -> TableRow:
 	return row("gebiete", id)
 
