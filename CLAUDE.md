@@ -14,11 +14,18 @@ Diese fünf Regeln gelten für jedes Feature (wörtlich aus dem GDD):
 
 1. **Engine: Godot 4 mit GDScript.** Szenen, Ressourcen und Skripte sind Textdateien, die Claude Code direkt lesen und bearbeiten kann.
 2. **Multiplayer von Anfang an.** Host-Client-Modell: Ein Spieler hostet, bis zu 4 treten bei. Kein eigener Server nötig. Jedes Feature wird netzwerkfähig gebaut, über Godots eingebaute Bausteine (MultiplayerSpawner, MultiplayerSynchronizer). Spielstände liegen beim Host bzw. lokal.
-3. **Datengetrieben.** Fähigkeiten, Auren, Gegenstände, Gegner, Klassen, Völker und Quests sind Daten (Godot-Resources, .tres), kein einzeln programmierter Code. Neue Inhalte entstehen ohne Code-Änderung.
+3. **Datengetrieben.** Fähigkeiten, Auren, Gegenstände, Gegner, Klassen, Völker und Quests sind Daten, kein einzeln programmierter Code. Flache Werte-Daten stehen als CSV-Tabellen mit Schema, strukturierte Daten (Effekte, Auren, Fähigkeitslogik, Gebiete) als .tres (Godot-Resources). Neue Inhalte entstehen ohne Code-Änderung.
 4. **Effekt- und Aura-System als Kern.** Eine Fähigkeit ist eine Liste von Effekten (Schaden, Heilung, Aura anwenden, Bedrohung, Ressource ändern). Buffs, Debuffs, Kontrolleffekte, Volksfähigkeiten, Talente, Siegel und Talismane sind Auren, auch solche, die auf Ereignisse reagieren (Procs). Talente können Fähigkeiten hinzufügen, verändern und ersetzen.
 5. **Graubox zuerst.** Technik wird mit Platzhaltern gebaut (Kapseln, Würfel, graue Blöcke). Grafik ersetzt Platzhalter erst, wenn das System funktioniert.
 
 Godot-Version: **4.7** (Standardversion, nicht .NET), Renderer **Forward+**.
+
+## Datentabellen
+
+- **Flache Spieldaten gehören in die Tabellen unter `game/data/tables/`** (siehe [docs/DATENTABELLEN.md](docs/DATENTABELLEN.md)). Verweise immer über IDs.
+- **Nach jeder Änderung an Tabellen `--daten-pruefen` ausführen:** `godot --headless --path game -- --daten-pruefen` (Rückgabewert 1 bei Fehlern). Nach Änderungen an Schemas außerdem `--daten-doku`, damit die Spaltenübersicht in `docs/DATENTABELLEN.md` stimmt.
+- **Struktur (Fähigkeiten, Auren, Talente) bleibt in .tres, Zahlen kommen aus den Tabellen.** Klassen und Gebiete bleiben ebenfalls .tres.
+- **Zugriff nur über den Autoload `Data`** (`game/scripts/autoload/data.gd`), z. B. `Data.gegner(&"wolf_jung")`, `Data.konstante(&"gcd")`. Kein System liest CSV-Dateien selbst.
 
 ## Netzwerk: Der Host entscheidet
 
@@ -33,12 +40,14 @@ Godot-Version: **4.7** (Standardversion, nicht .NET), Renderer **Forward+**.
 WoM/
 ├── CLAUDE.md          ← diese Regeln
 ├── .claude/agents/    ← Agenten: refiner (Tickets prüfen), umsetzer (Tickets umsetzen)
-├── docs/              ← GDD.md, UI-STYLEGUIDE.md, GAME-STYLEGUIDE.md, später Rig-Konvention
+├── docs/              ← GDD.md, UI-STYLEGUIDE.md, GAME-STYLEGUIDE.md, DATENTABELLEN.md, später Rig-Konvention
 ├── art-source/        ← Blender-Arbeitsdateien (.blend) – nur lesen!
 └── game/              ← Godot-Projekt (project.godot)
     ├── assets/        ← exportierte Modelle (.glb), Texturen, Audio
     │   └── ui/        ← theme.tres (zentrales UI-Theme), fonts/ (Schriften + Lizenzen)
-    ├── data/          ← Daten als .tres: Fähigkeiten, Auren, Gegenstände, Klassen, Völker, Gegner, Quests
+    ├── data/          ← Daten: strukturierte als .tres (Fähigkeiten, Auren, Klassen, Gebiete, Quests)
+    │   ├── tables/    ← flache Werte als CSV-Tabellen (Gegner, Gegenstände, Beute, Völker, Konstanten …)
+    │   └── schemas/   ← ein Schema (.tres) pro Tabelle
     ├── scenes/        ← Godot-Szenen (.tscn); UI-Szenen in scenes/ui/
     └── scripts/       ← GDScript-Code (.gd); UI-Skripte in scripts/ui/
 ```
