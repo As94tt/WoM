@@ -24,6 +24,13 @@ extends Control
 ## „player_list“), Netzwerk-Overlay mit F3. Sie lesen nur den Autoload
 ## „Network“; nichts davon wird synchronisiert.
 ##
+## Fähigkeiten (#21): setup_abilities() verbindet beide Aktionsleisten mit der
+## Belegung (ActionBarLayout) und den Fähigkeiten der eigenen Figur. Den
+## Inhalt des Zauberbuchs setzt GameWorld (SpellbookPanel). Während eine
+## Fähigkeit gezogen wird bzw. am Mauszeiger hängt, brechen Rechtsklick und
+## Esc das Ziehen ab (ActionDragData.cancelled), statt die Kamera zu drehen
+## bzw. das Spielmenü zu öffnen.
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -50,6 +57,7 @@ var _windows: Dictionary[StringName, HudWindow] = {}
 
 @onready var _game_menu: GameMenu = %GameMenu
 @onready var _action_bar_1: ActionBar = %ActionBar1
+@onready var _action_bar_2: ActionBar = %ActionBar2
 @onready var _player_list: PlayerList = %PlayerList
 
 
@@ -81,6 +89,30 @@ func _process(_delta: float) -> void:
 		mouse_behavior_recursive = behavior
 	# Spielerliste: nur solange die Taste gehalten wird.
 	_player_list.set_shown(_hotkeys_active() and Input.is_action_pressed(PLAYER_LIST_ACTION))
+
+
+## Abbruch des Ziehens mit Rechtsklick oder Esc (vor allen anderen
+## Eingaben, damit weder Kamera noch Spielmenü reagieren).
+func _input(event: InputEvent) -> void:
+	if not get_viewport().gui_is_dragging():
+		return
+	var data: Variant = get_viewport().gui_get_drag_data()
+	var press := event is InputEventMouseButton and (event as InputEventMouseButton).pressed
+	# Linksklick mit einer am Zeiger hängenden Fähigkeit (nur dann ist beim
+	# Ziehen eine Taste neu gedrückt) neben einen Slot: Godot beendet das
+	# Ziehen dort nicht selbst. Wie „ins Leere loslassen“ behandeln.
+	if press and event.button_index == MOUSE_BUTTON_LEFT:
+		if not get_viewport().gui_get_hovered_control() is ActionSlot:
+			get_viewport().gui_cancel_drag()
+			get_viewport().set_input_as_handled()
+		return
+	var right_click: bool = press and event.button_index == MOUSE_BUTTON_RIGHT
+	if not right_click and not event.is_action_pressed(GAME_MENU_ACTION):
+		return
+	if data is ActionDragData:
+		data.cancelled = true
+	get_viewport().gui_cancel_drag()
+	get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -119,6 +151,17 @@ func handle_cancel() -> void:
 	if close_all_windows():
 		return
 	_game_menu.open()
+
+
+## Verbindet die Aktionsleisten mit Belegung und Fähigkeiten der eigenen
+## Figur (#21).
+func setup_abilities(layout: ActionBarLayout, abilities: PlayerAbilities) -> void:
+	_action_bar_1.setup(layout, abilities)
+	_action_bar_2.setup(layout, abilities)
+
+
+func get_action_bar(bar_index: int) -> ActionBar:
+	return _action_bar_1 if bar_index == 0 else _action_bar_2
 
 
 ## Neue Zeile im Log-Bereich unten links.

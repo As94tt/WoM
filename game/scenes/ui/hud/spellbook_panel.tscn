@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/spellbook_panel.gd" id="1_panel"]
+
+[node name="SpellbookPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"ButtonList"
+script = ExtResource("1_panel")
+
+[node name="TabRow" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="Grid" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"SpellbookGrid"
+columns = 2
+
+[node name="Paging" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+alignment = 1
+
+[node name="PrevButton" type="Button" parent="Paging"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+tooltip_text = "Vorherige Seite"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "‹"
+
+[node name="PageLabel" type="Label" parent="Paging"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyText"
+text = "Seite 1 / 1"
+
+[node name="NextButton" type="Button" parent="Paging"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+tooltip_text = "Nächste Seite"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+text = "›"

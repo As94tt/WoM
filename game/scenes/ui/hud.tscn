@@ -58,6 +58,7 @@ toggle_action = &"toggle_character"
 
 [node name="SpellbookWindow" parent="SafeArea/Layout/WindowRow/LeftWindows" instance=ExtResource("3_window")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(480, 520)
 layout_mode = 2
 window_id = &"spellbook"
 title = "Zauberbuch"
@@ -109,6 +110,7 @@ layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"SlotRow"
 script = ExtResource("2_bar")
+bar_index = 1
 
 [node name="ActionBar1" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
 unique_name_in_owner = true
