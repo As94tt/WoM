@@ -479,6 +479,22 @@ Eindeutig: `id`.
 | `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Sortierung in Listen (kleiner = weiter vorn). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
+#### platzhalterwaffen.csv – Platzhalter-Waffen
+
+Waffenwerte für den automatischen Angriff (#33), bis Ausrüstung kommt (#29). Welche Zeile gilt, schaltet das Entwickler-Panel (Nahkampfwaffe, Nebenhand, Fernkampfwaffe).
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID: unbewaffnet, haupthand, nebenhand, fernkampf (der automatische Angriff fragt diese IDs ab). |
+| `name` | Text | ja |  |  | Anzeigename (Entwickler-Panel). |
+| `tempo` | Kommazahl | ja |  | ab 0,1 | Waffengeschwindigkeit: Sekunden zwischen zwei Schlägen bzw. Schüssen (vor Tempo). |
+| `schaden_min` | Kommazahl |  |  | ab 0 | Kleinster Waffenschaden je Schlag. |
+| `schaden_max` | Kommazahl |  |  | ab 0 | Größter Waffenschaden je Schlag. Dazu kommt Kampfkraft / kampfkraft_je_dps × tempo. |
+| `reichweite` | Kommazahl |  |  | ab 0 | Reichweite in Metern (nur Fernkampf; Nahkampf nutzt nahkampf_reichweite). |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
 ### Fähigkeiten
 
 #### faehigkeitswerte.csv – Fähigkeitswerte

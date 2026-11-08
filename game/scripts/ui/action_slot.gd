@@ -12,6 +12,15 @@ extends Button
 ## Abgelegt wird über die Leiste (ActionBar.drop_on_slot). Wird ins Leere
 ## losgelassen, leert sich der Slot; bei Abbruch (Rechtsklick/Esc) bleibt er.
 ## Rein lokal, nichts wird synchronisiert.
+##
+## Zustand (#33, update_state, jedes Bild von der Leiste): Abklingzeit bzw.
+## globaler Cooldown als Uhrzeiger-Abdunklung (CooldownSweep) mit Restzeit
+## (ab 2 s ganze Sekunden, darunter eine Nachkommastelle; beim globalen
+## Cooldown ohne Zahl), Tönung rot außer Reichweite bzw. bläulich ohne
+## genug Ressource (Farben aus dem Theme, AbilityColors), leuchtender Rand
+## bei einem Proc (SlotProcGlow), heller Rahmen bei aktivem Umschalter,
+## automatischem Angriff oder vorgemerktem nächsten Schlag (SlotActive),
+## Zahl der Aufladungen unten links.
 
 ## Wird bei Klick oder Tastendruck ausgelöst (nicht bei ausgegrautem Slot).
 signal activated
@@ -61,6 +70,32 @@ func show_content(content: ActionSlotContent, learned: bool) -> void:
 	AbilityIcon.apply(self, _ability)
 	disabled = _ability != null and not learned
 	tooltip_text = AbilityTooltip.text(_ability, learned) if _ability != null else ""
+
+
+## Zustand aus PlayerAbilities.get_slot_state (leer = nichts anzeigen).
+func update_state(state: Dictionary) -> void:
+	var cooldown: Vector2 = state.get("cooldown", Vector2.ZERO)
+	var gcd: Vector2 = state.get("gcd", Vector2.ZERO)
+	var shown := cooldown if cooldown.x >= gcd.x else gcd
+	var sweep: CooldownSweep = %Cooldown
+	sweep.fraction = shown.x / shown.y if shown.x > 0.0 and shown.y > 0.0 else 0.0
+	var text: Label = %CooldownText
+	text.visible = cooldown.x > 0.0 and cooldown.x >= gcd.x
+	if text.visible:
+		text.text = str(ceili(cooldown.x)) if cooldown.x >= 2.0 else StatFormat.number(cooldown.x, 1)
+	var tint := Color.WHITE
+	if bool(state.get("out_of_range", false)):
+		tint = CombatColors.ability_color(&"out_of_range")
+	elif bool(state.get("no_resource", false)):
+		tint = CombatColors.ability_color(&"no_resource")
+	if self_modulate != tint:
+		self_modulate = tint
+	%ProcGlow.visible = bool(state.get("highlight", false))
+	%Active.visible = bool(state.get("active", false))
+	var charges := int(state.get("charges", -1))
+	%Charges.visible = charges >= 0
+	if charges >= 0:
+		%Charges.text = str(charges)
 
 
 func get_content() -> ActionSlotContent:

@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/unit_frame.tscn" id="10_frame"]
 [ext_resource type="Script" path="res://scripts/ui/combat_text_layer.gd" id="11_text"]
 [ext_resource type="Script" path="res://scripts/ui/aura_bar.gd" id="12_auras"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/cast_bar.tscn" id="13_cast"]
+[ext_resource type="Script" path="res://scripts/ui/error_messages.gd" id="14_errors"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -176,6 +178,12 @@ grow_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"SlotColumn"
 
+[node name="PlayerCastBar" parent="SafeArea/Layout/ActionBars" instance=ExtResource("13_cast")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
 [node name="ActionBar2" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -297,6 +305,24 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"SlotButton"
 text = "R"
+
+[node name="ErrorMessages" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 96.0
+offset_right = 400.0
+offset_bottom = 96.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+script = ExtResource("14_errors")
+
+[node name="ErrorSound" type="AudioStreamPlayer" parent="ErrorMessages"]
+unique_name_in_owner = true
 
 [node name="ZoneBanner" parent="." instance=ExtResource("5_banner")]
 unique_name_in_owner = true

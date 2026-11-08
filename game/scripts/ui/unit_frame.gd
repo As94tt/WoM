@@ -12,8 +12,9 @@ extends PanelContainer
 ## - Zielrahmen (mode TARGET, rechts daneben, nur mit Ziel sichtbar): Name in
 ##   der Farbe der Gesinnung, Stufe in der Farbe des Stufenunterschieds, Leben
 ##   in Prozent, Ressource, Rang („Elite“, „Selten“, „Boss“), seit #32 die
-##   Auren des Ziels (AuraBar, eigene Debuffs größer und zuerst). Plätze für
-##   Zauberleiste (#33) und Combopunkte sind angelegt, aber leer.
+##   Auren des Ziels (AuraBar, eigene Debuffs größer und zuerst), seit #33
+##   die Zauberleiste des Ziels unter den Balken (CastBar). Platz für
+##   Combopunkte ist angelegt, aber leer.
 ##
 ## Alles aktualisiert sich sofort über die Signale der Einheit
 ## (unit_changed) und ihrer Werte (resources_changed, stats_changed,
@@ -73,6 +74,8 @@ func set_unit(unit: Unit) -> void:
 	# Auren des Ziels (#32); eigene Auren stehen oben rechts, nicht im Spielerrahmen.
 	if mode == Mode.TARGET:
 		%AuraSlot.set_unit(_unit, _viewer)
+		# Zauberleiste des Ziels (#33); die eigene steht unten mittig.
+		%CastBar.set_unit(_unit)
 	refresh()
 
 

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/unit_frame.gd" id="1_frame"]
 [ext_resource type="Script" path="res://scripts/ui/aura_bar.gd" id="2_auras"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/cast_bar.tscn" id="cb_cast"]
 
 [node name="UnitFrame" type="PanelContainer"]
 custom_minimum_size = Vector2(340, 0)
@@ -155,7 +156,7 @@ script = ExtResource("2_auras")
 filter = 2
 max_icons = 16
 
-[node name="CastBarSlot" type="VBoxContainer" parent="Row/Content"]
-visible = false
+[node name="CastBar" parent="Row/Content" instance=ExtResource("cb_cast")]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
+bar_height = 18.0

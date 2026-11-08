@@ -128,7 +128,11 @@ var _pred_cd: Dictionary = {}
 var _pred_charges: Dictionary = {}
 var _pred_cast: Dictionary = {}
 var _client_queue: Dictionary = {}
-var _owner_errors: Dictionary = {}
+## Wunsch-Nummer eines Zaubers, den der Besitzer selbst beendet hat (Ende
+## vom Host dann nicht noch einmal melden).
+var _locally_ended_req := -1
+## Wunsch-Nummern, deren Vorhersage beendet bzw. abgelehnt wurde (die letzten).
+var _dropped_reqs: Array[int] = []
 
 
 func _enter_tree() -> void:
@@ -178,7 +182,12 @@ func is_owner() -> bool:
 func get_cast_info() -> Dictionary:
 	if not _pred_cast.is_empty():
 		return _pred_cast
-	return _parse_cast(cast_state)
+	var info := _parse_cast(cast_state)
+	# Beim Besitzer: selbst beendete oder abgelehnte Zauber nicht wieder zeigen,
+	# bis der Host sie ebenfalls beendet hat.
+	if not info.is_empty() and is_owner() and not Network.is_host() and _dropped_reqs.has(int(info["req"])):
+		return {}
+	return info
 
 
 ## Zaubert gerade (für Prüfungen: Vorhersage endet beim Besitzer zur
@@ -444,8 +453,10 @@ func request_cancel(reason: int = AbilityError.Code.OK) -> bool:
 	var info := get_cast_info()
 	if info.is_empty():
 		return false
-	if not _pred_cast.is_empty():
-		var ability: AbilityData = _pred_cast["ability"]
+	if not Network.is_host():
+		var ability: AbilityData = info["ability"]
+		_locally_ended_req = int(info["req"])
+		_drop_req(_locally_ended_req)
 		_pred_cast = {}
 		cast_changed.emit()
 		cast_ended.emit(Result.CANCELLED, ability.id)
@@ -567,6 +578,20 @@ func host_reset_cooldowns() -> void:
 
 # --- Netzwerk ----------------------------------------------------------------
 
+## Entwickler-Panel: eigene Abklingzeiten zurücksetzen (Wunsch an den Host).
+func request_reset_cooldowns() -> void:
+	if Network.is_host():
+		host_reset_cooldowns()
+	else:
+		_rpc_reset_cooldowns.rpc_id(1)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func _rpc_reset_cooldowns() -> void:
+	if Network.is_host() and OS.is_debug_build() and _unit != null 			and multiplayer.get_remote_sender_id() == _unit.get_controlling_peer():
+		host_reset_cooldowns()
+
+
 @rpc("any_peer", "call_remote", "reliable")
 func _rpc_use(req_id: int, ability_id: String, target_path: NodePath, point: Vector3,
 		has_point: bool, pos: Vector3, yaw: float, moving: bool) -> void:
@@ -593,7 +618,8 @@ func _rpc_cancel(reason: int) -> void:
 	if multiplayer.get_remote_sender_id() != _unit.get_controlling_peer():
 		return
 	_queue = {}
-	host_cancel(Result.CANCELLED, AbilityError.Code.OK if reason == AbilityError.Code.OK else reason)
+	# Der Besitzer hat die Meldung schon selbst gezeigt.
+	host_cancel(Result.CANCELLED)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -884,8 +910,10 @@ func _process_auto_attack(now: float) -> void:
 	if row == null:
 		return
 	var reach := float(row.get_value("reichweite", melee_range)) if ranged else melee_range
-	var ready_at := _ranged_at if ranged else _main_at
-	if now < ready_at:
+	var offhand := not ranged and stats != null and stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON)
+	var main_ready := now >= (_ranged_at if ranged else _main_at)
+	var off_ready := offhand and now >= _off_at
+	if not main_ready and not off_ready:
 		return
 	if distance > reach + 0.001:
 		_auto_error(AbilityError.Code.OUT_OF_RANGE)
@@ -896,27 +924,25 @@ func _process_auto_attack(now: float) -> void:
 	if ranged and not _unit.has_line_of_sight_to(target):
 		_auto_error(AbilityError.Code.NO_LINE_OF_SIGHT)
 		return
-	var speed := maxf(0.1, float(row.get_value("tempo", 2.0))) / _haste_factor()
-	if ranged:
-		_ranged_at = now + speed
-		_swing(target, row, 1.0, &"auto:fernkampf", "Automatischer Schuss")
-		return
-	_main_at = now + speed
-	if not _next_swing.is_empty() and _try_next_swing(target):
-		pass
-	else:
-		_swing(target, row, 1.0, &"auto:haupthand", "Automatischer Angriff")
-	# Nebenhand: eigener Takt, halber Schaden.
-	if stats != null and stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON):
+	if main_ready:
+		var speed := maxf(0.1, float(row.get_value("tempo", 2.0))) / _haste_factor()
+		if ranged:
+			_ranged_at = now + speed
+			_swing(target, row, 1.0, &"auto:fernkampf", "Automatischer Schuss")
+		else:
+			_main_at = now + speed
+			if _next_swing.is_empty() or not _try_next_swing(target):
+				_swing(target, row, 1.0, &"auto:haupthand", "Automatischer Angriff")
+	# Nebenhand (Beidhändigkeit): eigener Takt, halber Schaden.
+	if off_ready:
 		var off_row := Data.platzhalterwaffe(&"nebenhand")
-		if off_row != null and now >= _off_at:
+		if off_row != null:
 			_off_at = now + maxf(0.1, float(off_row.get_value("tempo", 2.0))) / _haste_factor()
 			_swing(target, off_row, Data.konstante(&"nebenhand_faktor", 0.5), &"auto:nebenhand",
 					"Automatischer Angriff (Nebenhand)")
 
 
-## Nebenhand schlägt unabhängig von der Haupthand weiter, auch wenn die
-## Haupthand gerade wartet (eigener Takt).
+## Waffe der Haupthand (Platzhalter, bis Ausrüstung kommt).
 func _main_weapon_id() -> StringName:
 	var stats := _unit.get_stats()
 	if stats != null and stats.has_flag(StatBlock.FLAG_MELEE_WEAPON):
@@ -1041,6 +1067,7 @@ func _on_result(req: int, code: int, param: String) -> void:
 	_pending.erase(req)
 	if code == AbilityError.Code.OK:
 		return
+	_drop_req(req)
 	if not _pred_gcd.is_empty() and int(_pred_gcd[2]) == req:
 		_pred_gcd = []
 	for key: String in _pred_cd.keys():
@@ -1054,6 +1081,12 @@ func _on_result(req: int, code: int, param: String) -> void:
 		cast_ended.emit(Result.FAILED, cast_ability.id)
 	cooldowns_changed.emit()
 	_owner_fail(code, param, ability)
+
+
+func _drop_req(req: int) -> void:
+	_dropped_reqs.append(req)
+	if _dropped_reqs.size() > 8:
+		_dropped_reqs.pop_front()
 
 
 func _release_charge(req: int) -> void:
@@ -1123,6 +1156,8 @@ func _on_cast_end_received() -> void:
 			return
 		_pred_cast = {}
 		cast_changed.emit()
+	elif is_owner() and req == _locally_ended_req:
+		return
 	cast_ended.emit(result, ability_id)
 
 
