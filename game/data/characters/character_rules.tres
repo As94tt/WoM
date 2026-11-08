@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CharacterRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_rules.gd" id="1_rules"]
+
+[resource]
+script = ExtResource("1_rules")
+min_level = 1
+max_level = 60
+max_name_length = 16

@@ -1,8 +1,8 @@
 extends Node
 ## Autoload „GameSession“ (Ticket #6): hält, was zwischen den Bildschirmen
 ## weitergegeben wird. Rein lokal; jede Spielinstanz hat ihre eigene Sitzung.
-## In M1 entscheidet mode, ob die Welt als Host (create_server) oder als Client
-## (create_client) betreten wird.
+## mode entscheidet, ob „Welt betreten“ eine Sitzung als Host öffnet oder
+## einer beitritt (#30, Verbindung im Autoload „Network“).
 
 enum Mode { NONE, HOST, JOIN }
 
@@ -10,6 +10,9 @@ enum Mode { NONE, HOST, JOIN }
 var mode: Mode = Mode.NONE
 ## Der in der Charakterauswahl gewählte Charakter (null = keiner).
 var selected_character: CharacterData = null
+## Startparameter (--host/--join) wurden schon ausgewertet; sie gelten nur
+## einmal beim Programmstart, nicht nach der Rückkehr ins Hauptmenü.
+var quick_start_done := false
 
 
 ## Zurück auf den Zustand im Hauptmenü.
