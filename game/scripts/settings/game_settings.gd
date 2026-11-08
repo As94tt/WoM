@@ -5,12 +5,15 @@ extends RefCounted
 ## sind rein lokal (jede Spielinstanz hat ihre eigene Datei bzw. liest
 ## dieselbe Datei, wenn zwei Fenster auf einem PC laufen).
 ##
-## Vorerst nur „Aktionsleisten sperren“ (Spielmenü). Spätere Optionen
-## (Optionen-Menü) kommen als weitere Schlüssel dazu.
+## „Aktionsleisten sperren“ (Spielmenü, #21) und die Namensplaketten für
+## Feinde (V) und Freunde (Shift + V, #31). Spätere Optionen (Optionen-Menü)
+## kommen als weitere Schlüssel dazu.
 
 const PATH := "user://settings.cfg"
 const SECTION_INTERFACE := "interface"
 const KEY_ACTION_BARS_LOCKED := "action_bars_locked"
+const KEY_NAMEPLATES_ENEMY := "nameplates_enemy"
+const KEY_NAMEPLATES_FRIENDLY := "nameplates_friendly"
 
 static var _config: ConfigFile = null
 
@@ -23,6 +26,24 @@ static func is_action_bars_locked() -> bool:
 
 static func set_action_bars_locked(locked: bool) -> void:
 	_write(SECTION_INTERFACE, KEY_ACTION_BARS_LOCKED, locked)
+
+
+## Namensplaketten über feindlichen und neutralen Einheiten. Standard: an.
+static func is_enemy_nameplates_shown() -> bool:
+	return bool(_read(SECTION_INTERFACE, KEY_NAMEPLATES_ENEMY, true))
+
+
+static func set_enemy_nameplates_shown(shown: bool) -> void:
+	_write(SECTION_INTERFACE, KEY_NAMEPLATES_ENEMY, shown)
+
+
+## Namensplaketten über freundlichen Einheiten und Mitspielern. Standard: an.
+static func is_friendly_nameplates_shown() -> bool:
+	return bool(_read(SECTION_INTERFACE, KEY_NAMEPLATES_FRIENDLY, true))
+
+
+static func set_friendly_nameplates_shown(shown: bool) -> void:
+	_write(SECTION_INTERFACE, KEY_NAMEPLATES_FRIENDLY, shown)
 
 
 static func _read(section: String, key: String, fallback: Variant) -> Variant:

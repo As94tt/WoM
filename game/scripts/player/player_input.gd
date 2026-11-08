@@ -18,6 +18,11 @@ extends Node
 ## - Hat ein Textfeld (LineEdit/TextEdit) den Fokus, z. B. später der Chat,
 ##   oder ist ein Knoten der Gruppe „blocks_game_input“ sichtbar (z. B. das
 ##   Spielmenü aus #17), werden die Bewegungstasten ignoriert.
+##
+## Zielauswahl (#31): Drücken und Loslassen einer Maustaste in der Spielwelt
+## ohne nennenswerte Mausbewegung (klickweg_max in spielkonstanten.csv) ist ein
+## Klick und geht an Targeting (Linksklick wählt, Rechtsklick wählt und greift
+## an). Mit Bewegung bleibt es beim Drehen der Kamera.
 
 ## Kamera der Figur.
 @export var camera: PlayerCamera
@@ -35,6 +40,8 @@ var _look_held := false
 var _steer_held := false
 ## Position des Mauszeigers beim Ausblenden (Viewport-Koordinaten).
 var _cursor_position := Vector2.ZERO
+## Mausweg in Pixeln, seit die Taste gedrückt wurde (Klick oder Drehen?).
+var _drag_travel := 0.0
 
 
 func _ready() -> void:
@@ -82,9 +89,13 @@ func _handle_mouse_press(event: InputEventMouseButton) -> void:
 	elif event.is_action_pressed("camera_zoom_out"):
 		camera.zoom(1.0)
 	elif event.is_action_pressed("camera_look"):
+		if not _steer_held:
+			_drag_travel = 0.0
 		_look_held = true
 		_update_cursor()
 	elif event.is_action_pressed("camera_steer"):
+		if not _look_held:
+			_drag_travel = 0.0
 		_steer_held = true
 		_update_cursor()
 	else:
@@ -100,6 +111,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseMotion:
 		var sensitivity := deg_to_rad(camera.settings.mouse_sensitivity_deg)
+		_drag_travel += (event.screen_relative as Vector2).length()
 		var rel: Vector2 = event.screen_relative * sensitivity
 		if _steer_held:
 			_player.add_yaw(-rel.x)
@@ -108,14 +120,21 @@ func _input(event: InputEvent) -> void:
 		camera.add_pitch(-rel.y)
 		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseButton and not event.pressed:
+		var right := false
 		if _look_held and event.is_action_released("camera_look"):
 			_look_held = false
 		elif _steer_held and event.is_action_released("camera_steer"):
 			_steer_held = false
+			right = true
 		else:
 			return
+		var click := not (_look_held or _steer_held) \
+				and _drag_travel <= Data.konstante(&"klickweg_max", 6.0)
+		var click_position := _cursor_position
 		_update_cursor()
 		get_viewport().set_input_as_handled()
+		if click and _player.get_targeting() != null:
+			_player.get_targeting().handle_world_click(click_position, right)
 
 
 func _physics_process(_delta: float) -> void:
@@ -177,10 +196,15 @@ func _release_mouse_buttons() -> void:
 ## Tastatur für die Figur gesperrt: Textfeld mit Fokus oder ein sichtbares
 ## Element der Gruppe „blocks_game_input“ (z. B. das Spielmenü).
 func _keyboard_blocked() -> bool:
-	var focus := get_viewport().gui_get_focus_owner()
+	return is_keyboard_blocked(self)
+
+
+## Wie _keyboard_blocked, für andere Knoten der Spielfigur (Targeting, #31).
+static func is_keyboard_blocked(node: Node) -> bool:
+	var focus := node.get_viewport().gui_get_focus_owner()
 	if focus is LineEdit or focus is TextEdit:
 		return true
-	for node in get_tree().get_nodes_in_group(&"blocks_game_input"):
-		if node is CanvasItem and node.is_visible_in_tree():
+	for blocker in node.get_tree().get_nodes_in_group(&"blocks_game_input"):
+		if blocker is CanvasItem and blocker.is_visible_in_tree():
 			return true
 	return false

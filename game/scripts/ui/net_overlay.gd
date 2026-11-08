@@ -1,6 +1,6 @@
 class_name NetOverlay
 extends PanelContainer
-## Netzwerk-Overlay (Ticket #30), umschaltbar mit F3 (Aktion
+## Netzwerk-Overlay (Ticket #30), umschaltbar mit F9 (seit #31, vorher F3; Aktion
 ## „toggle_net_overlay“): eigene Peer-ID, Host ja/nein, Ping zum Host,
 ## gesendete und empfangene Daten pro Sekunde, Anzahl Spieler.
 ## Rein lokal; liest nur den Autoload „Network“.
