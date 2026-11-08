@@ -10,6 +10,7 @@ const SCENES := [
 	"res://scenes/ui/hud/game_menu.tscn",
 	"res://scenes/ui/style_preview.tscn",
 	"res://scenes/ui/hud/death_window.tscn",
+	"res://scenes/ui/hud/talent_panel.tscn",
 ]
 const SCRIPTS := [
 	"res://scripts/world/game_world.gd",
@@ -17,6 +18,9 @@ const SCRIPTS := [
 	"res://scripts/player/player_character.gd",
 	"res://scripts/combat/revival_service.gd",
 	"res://scripts/ui/death_window.gd",
+	"res://scripts/talents/player_talents.gd",
+	"res://scripts/talents/talent_dev_section.gd",
+	"res://scripts/ui/talent_panel.gd",
 ]
 
 
