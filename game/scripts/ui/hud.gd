@@ -19,6 +19,11 @@ extends Control
 ## Gebietsnamen-Einblendung (#15): show_zone_banner() zeigt den Namen eines
 ## neu betretenen Gebiets oben in der Mitte (ZoneBanner).
 ##
+## Netzwerk (#30): Log-Bereich unten links (add_log_message, z. B. „X hat die
+## Welt betreten“), Spielerliste solange O gehalten wird (Aktion
+## „player_list“), Netzwerk-Overlay mit F3. Sie lesen nur den Autoload
+## „Network“; nichts davon wird synchronisiert.
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -36,6 +41,7 @@ const MICRO_MENU_WINDOWS := {
 	&"MapButton": &"map",
 }
 const GAME_MENU_ACTION := &"game_menu"
+const PLAYER_LIST_ACTION := &"player_list"
 
 ## Tastenkürzel des HUD an- oder abschalten (z. B. später für den Chat).
 var hotkeys_enabled := true
@@ -44,6 +50,7 @@ var _windows: Dictionary[StringName, HudWindow] = {}
 
 @onready var _game_menu: GameMenu = %GameMenu
 @onready var _action_bar_1: ActionBar = %ActionBar1
+@onready var _player_list: PlayerList = %PlayerList
 
 
 func _ready() -> void:
@@ -72,6 +79,8 @@ func _process(_delta: float) -> void:
 	var behavior := MOUSE_BEHAVIOR_DISABLED if dragging else MOUSE_BEHAVIOR_INHERITED
 	if mouse_behavior_recursive != behavior:
 		mouse_behavior_recursive = behavior
+	# Spielerliste: nur solange die Taste gehalten wird.
+	_player_list.set_shown(_hotkeys_active() and Input.is_action_pressed(PLAYER_LIST_ACTION))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -110,6 +119,11 @@ func handle_cancel() -> void:
 	if close_all_windows():
 		return
 	_game_menu.open()
+
+
+## Neue Zeile im Log-Bereich unten links.
+func add_log_message(text: String) -> void:
+	%MessageLog.add_message(text)
 
 
 ## Blendet den Namen eines neu betretenen Gebiets kurz groß ein, darunter

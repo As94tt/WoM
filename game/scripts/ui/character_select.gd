@@ -1,9 +1,11 @@
 extends Control
 ## Charakterauswahl (Ticket #6). Zeigt die lokal gespeicherten Charaktere,
 ## das Platzhaltermodell des gewählten Charakters und führt in die Startwelt (#15).
-## Rein lokal: Charaktere liegen in user://characters/ auf dem eigenen PC,
-## nichts wird synchronisiert. In M1 überträgt der Client nur den gewählten
-## Charakter (CharacterData.to_dict()) an den Host.
+## Rein lokal: Charaktere liegen in user://characters/ auf dem eigenen PC.
+## „Welt betreten“ öffnet je nach Hauptmenü-Wahl den Port-Dialog (Hosten)
+## oder den IP/Port-Dialog (Beitreten, #30); erst wenn die Verbindung steht,
+## wird die Welt geladen. Beim Beitreten überträgt der Autoload „Network“ nur
+## den gewählten Charakter (CharacterData.to_dict()) an den Host.
 
 const CHARACTER_ENTRY := preload("res://scenes/ui/character_entry.tscn")
 const WORLD_SCENE := "res://scenes/world/world.tscn"
@@ -16,6 +18,7 @@ var _selected: CharacterEntry = null
 
 @onready var _preview: CharacterPreview = %Preview
 @onready var _dialog: DeleteCharacterDialog = %DeleteDialog
+@onready var _connect_dialog: ConnectDialog = %ConnectDialog
 
 
 func _ready() -> void:
@@ -26,6 +29,8 @@ func _ready() -> void:
 	%DeleteButton.pressed.connect(_on_delete_pressed)
 	_dialog.confirmed.connect(_on_delete_confirmed)
 	_dialog.cancelled.connect(_on_dialog_closed)
+	_connect_dialog.succeeded.connect(_load_world)
+	_connect_dialog.cancelled.connect(_on_dialog_closed)
 	# Entwicklerhilfe nur in Debug-Builds (Editor und Debug-Export).
 	%SampleButton.visible = OS.is_debug_build()
 	_reload()
@@ -119,6 +124,19 @@ func _enter_world() -> void:
 	c.last_played = int(Time.get_unix_time_from_system())
 	CharacterStore.save(c)
 	GameSession.selected_character = c
+	match GameSession.mode:
+		GameSession.Mode.HOST:
+			%Layout.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+			_connect_dialog.open_host(c)
+		GameSession.Mode.JOIN:
+			%Layout.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED
+			_connect_dialog.open_join(c)
+		_:
+			# Ohne Hauptmenü gestartet (z. B. Szene direkt im Editor): offline.
+			_load_world()
+
+
+func _load_world() -> void:
 	get_tree().change_scene_to_file(WORLD_SCENE)
 
 

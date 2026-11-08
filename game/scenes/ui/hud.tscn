@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/hud_window.tscn" id="3_window"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/game_menu.tscn" id="4_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/zone_banner.tscn" id="5_banner"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/message_log.tscn" id="6_log"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/player_list.tscn" id="7_list"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/net_overlay.tscn" id="8_overlay"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -222,6 +225,18 @@ theme_type_variation = &"SlotButton"
 text = "R"
 
 [node name="ZoneBanner" parent="." instance=ExtResource("5_banner")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="MessageLog" parent="." instance=ExtResource("6_log")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="PlayerList" parent="." instance=ExtResource("7_list")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="NetOverlay" parent="." instance=ExtResource("8_overlay")]
 unique_name_in_owner = true
 layout_mode = 1
 

@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/game_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/message_dialog.tscn" id="2_confirm"]
 
 [node name="GameMenu" type="Control" groups=["blocks_game_input"]]
 layout_mode = 3
@@ -75,3 +76,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Zurück zum Spiel"
+
+[node name="ConfirmDialog" parent="." instance=ExtResource("2_confirm")]
+unique_name_in_owner = true
+layout_mode = 1
