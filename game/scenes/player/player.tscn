@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/abilities/player_abilities.gd" id="5_abilities"]
 [ext_resource type="Script" path="res://scripts/units/targeting.gd" id="6_targeting"]
 [ext_resource type="Script" path="res://scripts/combat/unit_combat.gd" id="7_combat"]
+[ext_resource type="Script" path="res://scripts/combat/unit_caster.gd" id="cst_caster"]
+[ext_resource type="Script" path="res://scripts/abilities/ground_targeting.gd" id="cst_ground"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -52,6 +54,9 @@ properties/5/replication_mode = 2
 properties/6/path = NodePath(".:level")
 properties/6/spawn = true
 properties/6/replication_mode = 2
+properties/7/path = NodePath("Abilities:learn_flags")
+properties/7/spawn = true
+properties/7/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="Replication_movement"]
 properties/0/path = NodePath(".:net_time")
@@ -114,6 +119,20 @@ properties/13/path = NodePath("Combat:ability_mod_state")
 properties/13/spawn = true
 properties/13/replication_mode = 2
 
+[sub_resource type="SceneReplicationConfig" id="Replication_cast"]
+properties/0/path = NodePath("Caster:cast_state")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("Caster:cast_end")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("Caster:cooldown_state")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("Caster:auto_attack_on")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 5
@@ -175,3 +194,13 @@ script = ExtResource("6_targeting")
 
 [node name="Combat" type="Node" parent="."]
 script = ExtResource("7_combat")
+
+[node name="Caster" type="Node" parent="."]
+script = ExtResource("cst_caster")
+
+[node name="CastSync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("Replication_cast")
+
+[node name="GroundTargeting" type="Node" parent="."]
+script = ExtResource("cst_ground")

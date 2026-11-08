@@ -1,6 +1,27 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_cbojx"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_xihp8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_j8pn7"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_4g7t0"]
+[ext_resource type="Resource" path="res://data/auras/brand.tres" id="5_x5cn5"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="6_nouaf"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="7_8xg40"]
+
+[sub_resource type="Resource" id="Resource_o7716"]
+script = ExtResource("4_4g7t0")
+school = &"feuer"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_p0ial"]
+script = ExtResource("6_nouaf")
+aura = ExtResource("5_x5cn5")
+
+[sub_resource type="Resource" id="Resource_g3w30"]
+script = ExtResource("7_8xg40")
+speed_from_ability = true
+effects = Array[ExtResource("1_cbojx")]([SubResource("Resource_o7716"), SubResource("Resource_p0ial")])
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +30,6 @@ display_name = "Feuerball"
 description = "Schleudert eine Feuerkugel auf das Ziel und verursacht Feuerschaden. Das Ziel brennt kurz nach."
 class_id = &"mage"
 is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_cbojx")]([SubResource("Resource_g3w30")])
+highlight_auras = PackedStringArray()

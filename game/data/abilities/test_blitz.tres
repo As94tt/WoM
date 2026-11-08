@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_unavi"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_ek7u4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_2upuh"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_8u6e8"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_fdfac"]
+
+[sub_resource type="Resource" id="Resource_l10lm"]
+script = ExtResource("4_8u6e8")
+school = &"arkan"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_fdfac")
+id = &"test_blitz"
+display_name = "Testblitz"
+description = "Zauberzeit 2 s: Arkanschaden. Bewegung bricht ab, Schaden verzögert."
+dev_only = true
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_unavi")]([SubResource("Resource_l10lm")])
+highlight_auras = PackedStringArray()

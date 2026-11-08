@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_pwcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_pwtab"]
+
+[sub_resource type="Resource" id="Resource_pw_id"]
+script = ExtResource("1_pwcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID: unbewaffnet, haupthand, nebenhand, fernkampf (der automatische Angriff fragt diese IDs ab)."
+
+[sub_resource type="Resource" id="Resource_pw_name"]
+script = ExtResource("1_pwcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Entwickler-Panel)."
+
+[sub_resource type="Resource" id="Resource_pw_tempo"]
+script = ExtResource("1_pwcol")
+name = "tempo"
+type = 3
+required = true
+has_min = true
+min_value = 0.1
+choices = PackedStringArray()
+description = "Waffengeschwindigkeit: Sekunden zwischen zwei Schlägen bzw. Schüssen (vor Tempo)."
+
+[sub_resource type="Resource" id="Resource_pw_min"]
+script = ExtResource("1_pwcol")
+name = "schaden_min"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Kleinster Waffenschaden je Schlag."
+
+[sub_resource type="Resource" id="Resource_pw_max"]
+script = ExtResource("1_pwcol")
+name = "schaden_max"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Größter Waffenschaden je Schlag. Dazu kommt Kampfkraft / kampfkraft_je_dps × tempo."
+
+[sub_resource type="Resource" id="Resource_pw_reichweite"]
+script = ExtResource("1_pwcol")
+name = "reichweite"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Reichweite in Metern (nur Fernkampf; Nahkampf nutzt nahkampf_reichweite)."
+
+[resource]
+script = ExtResource("2_pwtab")
+table = "platzhalterwaffen"
+title = "Platzhalter-Waffen"
+group = "Kampf"
+description = "Waffenwerte für den automatischen Angriff (#33), bis Ausrüstung kommt (#29). Welche Zeile gilt, schaltet das Entwickler-Panel (Nahkampfwaffe, Nebenhand, Fernkampfwaffe)."
+key_columns = PackedStringArray("id")
+order = 56
+columns = Array[ExtResource("1_pwcol")]([SubResource("Resource_pw_id"), SubResource("Resource_pw_name"), SubResource("Resource_pw_tempo"), SubResource("Resource_pw_min"), SubResource("Resource_pw_max"), SubResource("Resource_pw_reichweite")])

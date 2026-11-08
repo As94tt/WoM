@@ -35,6 +35,18 @@ var _layout: ActionBarLayout = null
 var _abilities: PlayerAbilities = null
 
 
+## Zustand der Slots (#33): Abklingzeit, Reichweite, Ressource, Procs.
+func _process(_delta: float) -> void:
+	if _layout == null or _abilities == null or not is_visible_in_tree():
+		return
+	for i in _slots.size():
+		var content := _layout.get_content(bar_index, i)
+		var state := {}
+		if content != null and content.is_ability() and _abilities.is_learned(content.get_ability()):
+			state = _abilities.get_slot_state(content.get_ability())
+		_slots[i].update_state(state)
+
+
 func _ready() -> void:
 	for i in slot_count:
 		var slot: ActionSlot = SLOT_SCENE.instantiate()

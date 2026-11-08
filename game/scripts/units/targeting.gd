@@ -6,8 +6,9 @@ extends Node
 ## Eingaben (Input Map, project.godot):
 ## - Linksklick auf eine Einheit wählt sie (PlayerInput erkennt den Klick und
 ##   ruft handle_world_click); Rechtsklick auf eine angreifbare Einheit wählt
-##   sie und schaltet den automatischen Angriff ein (der Angriff selbst folgt
-##   in #34). Ein Klick ins Leere ändert das Ziel nicht.
+##   sie und schaltet den automatischen Angriff ein; ein erneuter Rechtsklick
+##   auf dasselbe Ziel schaltet ihn wieder aus (#33). Die Schläge führt der
+##   Host aus (UnitCaster). Ein Klick ins Leere ändert das Ziel nicht.
 ## - Tab (target_next): nächster Feind vor dem Spieler bis
 ##   zielwahl_reichweite, nach Entfernung sortiert; erneutes Drücken wechselt
 ##   zum nächstweiteren, nach dem letzten wieder zum nächsten.
@@ -53,6 +54,10 @@ var _ring_material: StandardMaterial3D = null
 
 func _ready() -> void:
 	_create_ring()
+	# Der Host beendet den automatischen Angriff (Ziel tot, verloren, #33).
+	var caster := _player.get_caster_node() if _player != null else null
+	if caster != null:
+		caster.auto_attack_changed.connect(_on_host_auto_attack_changed)
 
 
 func _exit_tree() -> void:
@@ -121,6 +126,25 @@ func select(unit: Unit, attack := false) -> void:
 	_player.report_target(target, auto_attack)
 
 
+## Automatischen Angriff an- bzw. ausschalten (Fähigkeit „Automatischer
+## Angriff“, #33). Einschalten nur mit angreifbarem Ziel.
+func toggle_auto_attack() -> void:
+	if auto_attack:
+		set_auto_attack(false)
+	elif target != null and target.can_be_attacked_by(_player):
+		select(target, true)
+
+
+## Automatischen Angriff setzen, ohne das Ziel zu wechseln.
+func set_auto_attack(on: bool) -> void:
+	on = on and target != null and target.can_be_attacked_by(_player)
+	if on == auto_attack:
+		return
+	auto_attack = on
+	auto_attack_changed.emit(on)
+	_player.report_target(target, auto_attack)
+
+
 ## Ziel aufheben (Esc). Gibt true zurück, wenn es ein Ziel gab.
 func clear() -> bool:
 	if target == null:
@@ -176,6 +200,10 @@ func handle_world_click(screen_position: Vector2, right_button: bool) -> void:
 	var unit := unit_at_screen_position(screen_position)
 	if unit == null or not unit.is_visible_to(_player):
 		return
+	# Erneuter Rechtsklick auf das angegriffene Ziel: Angriff aus (#33).
+	if right_button and unit == target and auto_attack:
+		set_auto_attack(false)
+		return
 	select(unit, right_button)
 
 
@@ -229,6 +257,17 @@ func _update_ring() -> void:
 	_ring.global_transform = Transform3D(Basis.from_scale(Vector3(radius, 0.3, radius)),
 			target.global_position + Vector3.UP * RING_LIFT)
 	_ring_material.albedo_color = UnitColors.reaction_color(target.get_reaction_to(_player))
+
+
+## Host hat den automatischen Angriff beendet bzw. begonnen (Nahkampffähigkeit).
+## Nur Änderungen übernehmen, nicht zurückmelden.
+func _on_host_auto_attack_changed(active: bool) -> void:
+	if active == auto_attack:
+		return
+	if active and (target == null or not target.can_be_attacked_by(_player)):
+		return
+	auto_attack = active
+	auto_attack_changed.emit(active)
 
 
 func _on_target_exiting() -> void:

@@ -10,6 +10,7 @@ extends VBoxContainer
 ## - Das aktuelle Ziel bekommt einen hervorgehobenen Rahmen
 ##   (NameplateTargetPanel) und wird etwas größer gezeichnet.
 ## - Über Feinden: eigene Debuffs als kleine Symbole (#32, AuraBar).
+## - Darunter die Zauberleiste der Einheit (#33, CastBar ohne Restzeit).
 ## - Darunter optional eine Anzeige (Übungspuppen: Schaden pro Sekunde),
 ##   die auch bei ausgeblendeten Plaketten sichtbar bleibt.
 ##
@@ -53,6 +54,8 @@ func update_from(p_unit: Unit, viewer: Unit, is_target: bool, show_plate: bool) 
 		var bar: ProgressBar = %HealthBar
 		bar.max_value = maxf(1.0, stats.max_health if stats != null else 1.0)
 		bar.value = stats.health if stats != null else 0.0
+	# Zauberleiste (#33) unter Name und Leben.
+	%CastBar.set_unit(unit if show_plate else null)
 	var meter := unit.get_overhead_text()
 	%MeterLabel.visible = meter != ""
 	%MeterLabel.text = meter

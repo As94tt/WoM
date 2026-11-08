@@ -18,6 +18,8 @@ const AREA_SCENE := "res://scenes/combat/ground_area.tscn"
 @export var area_filter: Filter = Filter.HOSTILE
 ## Ersten Tick sofort beim Erzeugen (sonst nach interval).
 @export var tick_on_create := false
+## Am Bodenpunkt des Kontexts (Bodenziel-Fähigkeiten, #33) statt am Ziel.
+@export var at_point := false
 @export var effects: Array[EffectData] = []
 
 
@@ -27,7 +29,8 @@ func _apply(ctx: EffectContext, target: Unit) -> void:
 		push_warning("AreaEffect: kein Behälter für Flächen (Gruppe %s)." % GroundArea.CONTAINER_GROUP)
 		return
 	var area: GroundArea = (load(AREA_SCENE) as PackedScene).instantiate()
-	area.setup(self, ctx.with_target(target), target.global_position)
+	var position := ctx.point if at_point and ctx.has_point else target.global_position
+	area.setup(self, ctx.with_target(target), position)
 	container.add_child(area, true)
 
 

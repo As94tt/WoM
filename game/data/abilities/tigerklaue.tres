@@ -1,6 +1,21 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_1jn01"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_muixm"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_lux0c"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_brj8u"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="5_cmmsd"]
+
+[sub_resource type="Resource" id="Resource_kgjty"]
+script = ExtResource("4_brj8u")
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_xvoq2"]
+script = ExtResource("5_cmmsd")
+resource = &"chi"
+amount = 20.0
+target_mode = 1
 
 [resource]
 script = ExtResource("1_ability")
@@ -8,3 +23,6 @@ id = &"tigerklaue"
 display_name = "Tigerklaue"
 description = "Ein schneller Schlag, der Schaden verursacht und Chi erzeugt."
 class_id = &"monk"
+effects = Array[ExtResource("1_1jn01")]([SubResource("Resource_kgjty"), SubResource("Resource_xvoq2")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray()

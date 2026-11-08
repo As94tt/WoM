@@ -12,6 +12,8 @@ extends Unit
 ##   verlust_prozent ihres Lebens (nie unter 1). Zeigt Heilung pro Sekunde und
 ##   Überheilung; setzt die Anzeige nach derselben Zeit ohne Heilung zurück.
 ## - Die Angriffspuppe ergänzt #35.
+## - Entwickler-Panel (#33): „Ziel zaubert …“ lässt die Puppe einen
+##   Testzauber immer wieder wirken (Kindknoten „Caster“, wie alle Einheiten).
 ##
 ## Netzwerk: Der Host erzeugt die Puppe (UnitSpawner der Welt), rechnet Leben,
 ## Anzeige und Rücksetzen. „ServerSync“ überträgt Kennung, Position, Rang
@@ -49,6 +51,11 @@ var meter_total: int = 0:
 		meter_total = value
 		unit_changed.emit()
 
+## Host: Entwickler-Panel (#33) – die Puppe wirkt diese Fähigkeit immer
+## wieder (leer = nicht), damit Unterbrechungen und Zauberleisten testbar sind.
+var dev_cast_ability: StringName = &""
+var _dev_cast_pause := 0.0
+
 var _row: TableRow = null
 ## Host: Ereignisse im Anzeigefenster als [Zeit in s, Betrag].
 var _events: Array[Array] = []
@@ -67,6 +74,7 @@ func _enter_tree() -> void:
 	# Die Synchronizer gehören immer dem Host.
 	$ServerSync.set_multiplayer_authority(1)
 	$StatsSync.set_multiplayer_authority(1)
+	$CastSync.set_multiplayer_authority(1)
 
 
 func _ready() -> void:
@@ -80,6 +88,7 @@ func _process(delta: float) -> void:
 	if not multiplayer.is_server() or _row == null:
 		return
 	var now := _now()
+	_process_dev_cast(delta)
 	if get_kind() == Kind.HEALING:
 		_lose_health(delta)
 	if _last_event_time >= 0.0 and now - _last_event_time >= Data.konstante(&"puppe_ruecksetzen_nach", 10.0):
@@ -88,9 +97,25 @@ func _process(delta: float) -> void:
 	_update_meter(now)
 
 
+## Host: Testzauber der Puppe wiederholen (eine Sekunde Pause dazwischen,
+## nach Unterbrechung so lange, wie die Schule gesperrt ist).
+func _process_dev_cast(delta: float) -> void:
+	var caster := get_caster_node()
+	if dev_cast_ability == &"" or caster == null or caster.is_casting():
+		_dev_cast_pause = 1.0
+		return
+	_dev_cast_pause -= delta
+	if _dev_cast_pause > 0.0:
+		return
+	_dev_cast_pause = 1.0
+	var ability := GameData.get_ability(dev_cast_ability)
+	if ability != null:
+		caster.host_use(ability, null)
+
+
 ## Sendet die Puppe auch an Peers, die inzwischen die Welt geladen haben.
 func refresh_visibility() -> void:
-	for sync in [_server_sync, _stats_sync]:
+	for sync in [_server_sync, _stats_sync, $CastSync]:
 		sync.update_visibility()
 
 

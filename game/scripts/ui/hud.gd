@@ -42,6 +42,11 @@ extends Control
 ## Debuffs auf Namensplaketten; CombatTextLayer über den Namensplaketten
 ## zeigt Kampftext. Rein lokal, Daten vom Host.
 ##
+## Fähigkeiten wirken (#33): eigene Zauberleiste unten mittig über den
+## Aktionsleisten (PlayerCastBar), Fehlermeldungen oben in der Mitte
+## (ErrorMessages, show_error). Esc bricht zuerst ein offenes Bodenziel, dann
+## den eigenen Zauber ab.
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -67,6 +72,8 @@ var hotkeys_enabled := true
 var _windows: Dictionary[StringName, HudWindow] = {}
 ## Zielauswahl der eigenen Figur (#31), null bis setup_local_player.
 var _targeting: Targeting = null
+## Eigene Figur (#33: Bodenziel und Zauber abbrechen).
+var _player: PlayerCharacter = null
 
 @onready var _game_menu: GameMenu = %GameMenu
 @onready var _action_bar_1: ActionBar = %ActionBar1
@@ -154,12 +161,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Esc und Menüleisten-Button „Spielmenü“. Die Reihenfolge steht bewusst nur
 ## hier, damit spätere Tickets einen Schritt einfügen können:
-## 1. offenes Spielmenü schließen, 2. offene Fenster schließen,
-## 3. Ziel aufheben (#31), 4. Spielmenü öffnen.
+## 1. offenes Spielmenü schließen, 2. Bodenziel abbrechen (#33),
+## 3. eigenen Zauber abbrechen (#33), 4. offene Fenster schließen,
+## 5. Ziel aufheben (#31), 6. Spielmenü öffnen.
 func handle_cancel() -> void:
 	if _game_menu.visible:
 		_game_menu.close()
 		return
+	if _player != null and is_instance_valid(_player):
+		var ground := _player.get_node_or_null(^"GroundTargeting") as GroundTargeting
+		if ground != null and ground.cancel():
+			return
+		var caster := _player.get_caster_node()
+		if caster != null and caster.request_cancel():
+			return
 	if close_all_windows():
 		return
 	if _targeting != null and is_instance_valid(_targeting) and _targeting.clear():
@@ -170,7 +185,9 @@ func handle_cancel() -> void:
 ## Eigene Figur ist da (#31): Rahmen, Namensplaketten und Esc mit ihrer
 ## Zielauswahl verbinden.
 func setup_local_player(player: PlayerCharacter) -> void:
+	_player = player
 	_targeting = player.get_targeting()
+	%PlayerCastBar.set_unit(player)
 	var player_frame: UnitFrame = %PlayerFrame
 	var target_frame: UnitFrame = %TargetFrame
 	player_frame.set_viewer(player)
@@ -205,6 +222,11 @@ func setup_abilities(layout: ActionBarLayout, abilities: PlayerAbilities) -> voi
 
 func get_action_bar(bar_index: int) -> ActionBar:
 	return _action_bar_1 if bar_index == 0 else _action_bar_2
+
+
+## Fehlermeldung oben in der Mitte (#33), höchstens einmal je Sekunde dieselbe.
+func show_error(text: String) -> void:
+	%ErrorMessages.show_error(text)
 
 
 ## Neue Zeile im Log-Bereich unten links.

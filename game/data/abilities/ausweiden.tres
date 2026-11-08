@@ -1,6 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_4g5bx"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_fvduj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_qo3jq"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_v5fft"]
+
+[sub_resource type="Resource" id="Resource_adee6"]
+script = ExtResource("4_v5fft")
+values_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +17,6 @@ display_name = "Ausweiden"
 description = "Finisher: verbraucht alle Combopunkte und verursacht je Punkt mehr Schaden."
 class_id = &"rogue"
 required_level = 2
+effects = Array[ExtResource("1_4g5bx")]([SubResource("Resource_adee6")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray()

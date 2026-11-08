@@ -20,6 +20,7 @@ extends RefCounted
 ##
 ## Einstiegspunkte für spätere Tickets:
 ##   Combat.execute(ability.get_effects_for(caster), ctx)   – #33 Fähigkeiten
+##     (ausgeführt von UnitCaster, Kindknoten „Caster“ jeder Einheit)
 ##   Combat.deal_damage(...) / Combat.heal(...)              – #34 Treffer
 ##   Combat.notify_event(unit, Combat.Event.CRIT, other)     – #34 Würfel
 ##   Combat.notify_ability_cast(caster, ability_id, target)  – #33
@@ -150,6 +151,10 @@ static func deal_damage(caster: Unit, target: Unit, amount: float, school: Strin
 		show_text(caster, target, TextKind.ABSORB, absorbed)
 	if target_combat != null and dealt + absorbed > 0.0:
 		target_combat.break_on_damage(ctx.aura if ctx != null else null)
+	# Zauberzeit verzögern (#33).
+	var target_caster := target.get_caster_node()
+	if target_caster != null and dealt > 0.0 and target != caster:
+		target_caster.on_damage_taken()
 	if flags & FLAG_NO_PROCS == 0 and amount > 0.0:
 		notify_event(target, Event.DAMAGE_TAKEN, caster, amount)
 		if caster != null and caster != target and flags & FLAG_PERIODIC == 0:

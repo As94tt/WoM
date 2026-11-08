@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_8gopi"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_gtn7p"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_curor"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_cnemj"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_u1me5"]
+
+[sub_resource type="Resource" id="Resource_1ktsm"]
+script = ExtResource("4_cnemj")
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_u1me5")
+id = &"test_hinterhalt"
+display_name = "Testhinterhalt"
+description = "Nur getarnt und hinter dem Ziel: starker Nahkampfschlag."
+dev_only = true
+effects = Array[ExtResource("1_8gopi")]([SubResource("Resource_1ktsm")])
+starts_auto_attack = true
+requires_stealth = true
+requires_behind = true
+highlight_auras = PackedStringArray()

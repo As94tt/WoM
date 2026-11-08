@@ -1,6 +1,18 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_n7qkf"]
+[ext_resource type="Resource" path="res://data/auras/wildwuchs.tres" id="2_vcb63"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_8cmee"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_8g3ml"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_jrjyx"]
+
+[sub_resource type="Resource" id="Resource_cmqwa"]
+script = ExtResource("5_jrjyx")
+aura = ExtResource("2_vcb63")
+target_mode = 8
+max_targets = 5
+radius_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -10,3 +22,7 @@ description = "Heilt mehrere Gruppenmitglieder in der Nähe des Ziels über eini
 class_id = &"druid"
 required_level = 4
 is_spell = true
+school = &"natur"
+effects = Array[ExtResource("1_n7qkf")]([SubResource("Resource_cmqwa")])
+target_kind = 2
+highlight_auras = PackedStringArray()

@@ -30,6 +30,9 @@ extends Node3D
 ##   (_rpc_unit_dev_action), der seit #32 wie bei echtem Schaden
 ##   Combat.deal_damage bzw. Combat.heal nutzt.
 ## - Effects/EffectSpawner (#32): Flächen und Projektile, erzeugt vom Host.
+## - Fähigkeiten wirken (#33): Fehlermeldungen oben in der Mitte; im
+##   Entwickler-Panel „Testfähigkeiten erlernen“, „Abklingzeiten
+##   zurücksetzen“, Waffenschalter (Nebenhand, Fernkampf) und „Ziel zaubert“.
 ## - Abschnitt „Auren“ im Entwickler-Panel (#32): CombatDevSection (Kindknoten
 ##   „CombatDev“). Den Schalter „Im Kampf“ aus #19/#31 gibt es nicht mehr;
 ##   den Kampfzustand bestimmt UnitCombat.
@@ -375,10 +378,9 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 	if _spellbook_panel != null:
 		_spellbook_panel.setup(abilities)
 	abilities.abilities_learned.connect(_on_abilities_learned.bind(abilities))
-	abilities.ability_used.connect(func(ability: AbilityData) -> void:
-		_hud.add_log_message(PlayerAbilities.USE_MESSAGE % ability.display_name))
+	# Fehlermeldungen oben in der Mitte (#33).
 	abilities.ability_failed.connect(func(_ability: AbilityData, reason: String) -> void:
-		_hud.add_log_message(reason))
+		_hud.show_error(reason))
 
 
 ## Belegung in den Charakter schreiben und speichern (Testcharaktere nie).
@@ -543,7 +545,16 @@ func _setup_dev_panel() -> void:
 	panel.add_button(ability_section, "Alle Fähigkeiten der Klasse erlernen", func() -> void:
 		var player := get_local_player()
 		if player != null:
-			player.get_abilities().learn_all = true)
+			player.get_abilities().request_learn(PlayerAbilities.LEARN_ALL, true))
+	# Testfähigkeiten (#33): Reiter „Allgemein“, wirken auf die Übungspuppen.
+	panel.add_button(ability_section, "Testfähigkeiten erlernen", func() -> void:
+		var player := get_local_player()
+		if player != null:
+			player.get_abilities().request_learn(PlayerAbilities.LEARN_TEST, true))
+	panel.add_button(ability_section, "Abklingzeiten zurücksetzen", func() -> void:
+		var player := get_local_player()
+		if player != null and player.get_caster_node() != null:
+			player.get_caster_node().request_reset_cooldowns())
 	panel.add_button(ability_section, "Aktionsleisten zurücksetzen", func() -> void:
 		var player := get_local_player()
 		if player != null and _bar_layout != null:
@@ -592,6 +603,12 @@ func _setup_stat_dev_section(panel: DevPanel) -> void:
 			func(on: bool) -> void: _stat_dev_action("melee", on))
 	_stat_dev_toggles["shield"] = panel.add_toggle(section, "Schild getragen", false,
 			func(on: bool) -> void: _stat_dev_action("shield", on))
+	# Waffen für den automatischen Angriff (#33): Platzhalter-Waffen aus
+	# platzhalterwaffen.csv; Nebenhand und Schild schließen sich aus.
+	_stat_dev_toggles["offhand"] = panel.add_toggle(section, "Nebenhandwaffe (beidhändig)", false,
+			func(on: bool) -> void: _stat_dev_action("offhand", on))
+	_stat_dev_toggles["ranged"] = panel.add_toggle(section, "Fernkampfwaffe getragen", false,
+			func(on: bool) -> void: _stat_dev_action("ranged", on))
 	_stat_dev_level_label = panel.add_info(section)
 	_stat_dev_level_slider = panel.add_slider(section, 1.0, Data.hoechste_stufe(), 1.0, 1.0,
 			func(value: float) -> void:
@@ -635,6 +652,8 @@ func _connect_stat_dev(player: PlayerCharacter) -> void:
 func _sync_stat_dev(stats: CharacterStats) -> void:
 	_stat_dev_toggles["melee"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_MELEE_WEAPON))
 	_stat_dev_toggles["shield"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_SHIELD))
+	_stat_dev_toggles["offhand"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON))
+	_stat_dev_toggles["ranged"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_RANGED_WEAPON))
 	for index in STAT_DEV_TOOLS.test_modifiers.size():
 		_stat_dev_toggles["modifier_%d" % index].set_pressed_no_signal(
 				stats.block.has_source(CharacterStats.dev_source(index)))
@@ -674,6 +693,13 @@ func _setup_unit_dev_section(panel: DevPanel) -> void:
 			func(value: float) -> void:
 				_unit_dev_level_label.text = "Stufe des Ziels: %d" % int(value)
 				_unit_dev_action("level", int(value)))
+	# Zauber der Puppe (#33): zum Testen von Unterbrechen und Zauberleisten.
+	panel.add_info(section, "Ziel zaubert immer wieder (nur Übungspuppen):")
+	panel.add_button(section, "Ziel zaubert: unterbrechbar",
+			_unit_dev_action.bind("dev_cast", "test_puppenzauber"))
+	panel.add_button(section, "Ziel zaubert: nicht unterbrechbar",
+			_unit_dev_action.bind("dev_cast", "test_puppenzauber_schild"))
+	panel.add_button(section, "Ziel zaubert nicht mehr", _unit_dev_action.bind("dev_cast", ""))
 	panel.add_info(section, "Rang des Ziels (nur Übungspuppen):")
 	for rank: String in Unit.RANK_IDS:
 		panel.add_button(section, "Rang: %s" % rank.capitalize(),
@@ -782,6 +808,11 @@ func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Vari
 		"rank":
 			if target is TrainingDummy:
 				(target as TrainingDummy).rank_override = int(value)
+		"dev_cast":
+			if target is TrainingDummy:
+				(target as TrainingDummy).dev_cast_ability = StringName(str(value))
+				if str(value) == "" and target.get_caster_node() != null:
+					target.get_caster_node().host_cancel()
 		_:
 			push_warning("GameWorld: unbekannte Einheiten-Aktion %s." % action)
 

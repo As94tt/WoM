@@ -1,6 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_xux1u"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_kphi2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_jddq8"]
+[ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="4_gpy7q"]
+
+[sub_resource type="Resource" id="Resource_7iyyc"]
+script = ExtResource("4_gpy7q")
+amount = 1000.0
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +17,6 @@ display_name = "Spott"
 description = "Zwingt das Ziel, den Krieger anzugreifen."
 class_id = &"warrior"
 required_level = 2
+effects = Array[ExtResource("1_xux1u")]([SubResource("Resource_7iyyc")])
+requires_facing = false
+highlight_auras = PackedStringArray()

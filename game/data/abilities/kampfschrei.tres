@@ -1,6 +1,17 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_8n82d"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Resource" path="res://data/auras/kampfschrei.tres" id="2_ags61"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_ifwru"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_g38pe"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_p81nh"]
+
+[sub_resource type="Resource" id="Resource_25q0b"]
+script = ExtResource("5_p81nh")
+aura = ExtResource("2_ags61")
+target_mode = 8
+radius_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +20,6 @@ display_name = "Kampfschrei"
 description = "Ein lauter Schrei, der die Gruppe in der Nähe stärkt."
 class_id = &"warrior"
 required_level = 4
+effects = Array[ExtResource("1_8n82d")]([SubResource("Resource_25q0b")])
+target_kind = 0
+highlight_auras = PackedStringArray()

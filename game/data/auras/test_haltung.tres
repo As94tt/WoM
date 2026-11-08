@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_w2tkp"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_covsg"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_fdcap"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_unsfx"]
+
+[sub_resource type="Resource" id="Resource_tjb7p"]
+script = ExtResource("4_unsfx")
+stat = &"strength"
+value = 50.0
+
+[resource]
+script = ExtResource("3_fdcap")
+id = &"test_haltung"
+display_name = "Testhaltung"
+description = "Stärke um 50 erhöht, bis die Haltung wieder ausgeschaltet wird. Testaura (#33): Umschalter."
+stat_modifiers = Array[ExtResource("4_unsfx")]([SubResource("Resource_tjb7p")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

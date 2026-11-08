@@ -1,6 +1,19 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_526h0"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_vluby"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_k4cek"]
+[ext_resource type="Script" path="res://scripts/combat/effects/movement_effect.gd" id="4_dkqa7"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="5_ssuy7"]
+
+[sub_resource type="Resource" id="Resource_8np0i"]
+script = ExtResource("4_dkqa7")
+kind = 0
+
+[sub_resource type="Resource" id="Resource_48q00"]
+script = ExtResource("5_ssuy7")
+values_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +22,6 @@ display_name = "Fliegender Tritt"
 description = "Der Mönch springt nach vorn und tritt alle Gegner auf seinem Weg."
 class_id = &"monk"
 required_level = 4
+effects = Array[ExtResource("1_526h0")]([SubResource("Resource_8np0i"), SubResource("Resource_48q00")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray()

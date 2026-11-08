@@ -12,7 +12,34 @@ extends EffectData
 const PROJECTILE_SCENE := "res://scenes/combat/projectile.tscn"
 
 @export var speed := 20.0
+## Fluggeschwindigkeit aus faehigkeitswerte.csv (werte.flug der Fähigkeit im
+## Kontext, #33) statt speed.
+@export var speed_from_ability := false
+## Schule für die Farbe der Kugel (leer = Schule der Fähigkeit bzw. des
+## ersten Schadenseffekts, #33).
+@export var school: StringName = &""
 @export var effects: Array[EffectData] = []
+
+
+## Geschwindigkeit in m/s (Feld oder Tabelle).
+func get_speed(ctx: EffectContext) -> float:
+	if speed_from_ability and ctx != null and ctx.ability != null:
+		var value := ctx.ability.get_number_for(ctx.get_caster(), "werte.flug")
+		if value > 0.0:
+			return value
+	return speed
+
+
+## Schule für die Farbe der Kugel.
+func get_school(ctx: EffectContext) -> StringName:
+	if school != &"":
+		return school
+	for effect in effects:
+		if effect is DamageEffect:
+			return (effect as DamageEffect).school
+	if ctx != null and ctx.ability != null:
+		return ctx.ability.get_school()
+	return &"physisch"
 
 
 func _apply(ctx: EffectContext, target: Unit) -> void:

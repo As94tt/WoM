@@ -42,6 +42,11 @@ extends Unit
 ## current_target/auto_attacking führt. Die Namensplakette zeichnet seit #31
 ## das HUD (NameplateLayer), nicht mehr die Figur selbst.
 ##
+## Wirken (#33): Kindknoten „Caster“ (UnitCaster) mit Zaubern, Abklingzeiten
+## und automatischem Angriff, übertragen über „CastSync“ (Authority Host,
+## jedes Bild bei Änderung). „GroundTargeting“ (Bodenziel) gibt es wie
+## „Targeting“ nur beim Besitzer. moving_changed bricht Zauber ab.
+##
 ## Auren (#32): Kindknoten „Combat“ (UnitCombat), übertragen über StatsSync.
 ## Betäubt, festgehalten und umgeworfen sperren beim Besitzer Laufen und
 ## Springen, betäubt und umgeworfen auch das Drehen; Verlangsamung wirkt über
@@ -186,6 +191,7 @@ func _ready() -> void:
 		$PlayerInput.queue_free()
 		_movement_sync.synchronized.connect(_on_movement_synchronized)
 		$Targeting.queue_free()
+		$GroundTargeting.queue_free()
 		if multiplayer.is_server():
 			_check = MovementCheck.new(MOVEMENT_CHECK)
 
@@ -198,7 +204,7 @@ func is_local() -> bool:
 ## Sendet die Figur ab jetzt auch an Peers, die inzwischen die Welt geladen
 ## haben (gerufen von GameWorld, wenn sich die Spielerliste ändert).
 func refresh_visibility() -> void:
-	for sync in [_movement_sync, _server_sync, _stats_sync]:
+	for sync in [_movement_sync, _server_sync, _stats_sync, $CastSync]:
 		if sync.is_multiplayer_authority():
 			sync.update_visibility()
 
@@ -299,6 +305,7 @@ func _apply_authority() -> void:
 	set_multiplayer_authority(peer_id)
 	$ServerSync.set_multiplayer_authority(1)
 	$StatsSync.set_multiplayer_authority(1)
+	$CastSync.set_multiplayer_authority(1)
 
 
 ## Platzhaltermodell: Größe nach Volk, Farbe nach Klasse (ClassData.color,

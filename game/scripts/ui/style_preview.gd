@@ -43,6 +43,7 @@ func _ready() -> void:
 	_add_spellbook_samples()
 	_add_unit_samples()
 	_add_combat_samples()
+	_add_casting_samples()
 
 	%FocusButton.grab_focus()
 
@@ -220,3 +221,65 @@ func _add_combat_samples() -> void:
 		label.theme_type_variation = CombatTextLayer.VARIATIONS[kind]
 		label.text = CombatTextLayer.text_for(kind, 1234.0)
 		texts.add_child(label)
+
+
+## Fähigkeiten wirken (#33): Aktionsslots mit Abklingzeit, Proc-Leuchten,
+## aktivem Umschalter, Tönungen (außer Reichweite, Ressource fehlt),
+## Aufladungen; Zauberleisten (füllen, kanalisieren, nicht unterbrechbar,
+## fertig, unterbrochen); Fehlermeldung; Schulfarben.
+func _add_casting_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	var ability := GameData.get_ability(&"test_meteor")
+	_add_row(grid, "Aktionsslots: Abklingzeit (CooldownSweep, SlotCooldownText), Proc (SlotProcGlow), aktiv (SlotActive), außer Reichweite, Ressource fehlt (AbilityColors), Aufladungen")
+	var slots := HBoxContainer.new()
+	slots.theme_type_variation = &"SlotRow"
+	grid.add_child(slots)
+	var states: Array[Dictionary] = [
+		{"cooldown": Vector2(7.0, 10.0)},
+		{"gcd": Vector2(0.6, 1.5)},
+		{"highlight": true},
+		{"active": true},
+		{"out_of_range": true},
+		{"no_resource": true},
+		{"charges": 2},
+	]
+	for state in states:
+		var slot: ActionSlot = preload("res://scenes/ui/hud/action_slot.tscn").instantiate()
+		slots.add_child(slot)
+		if ability != null:
+			slot.show_content(ActionSlotContent.ability(ability.id), true)
+		slot.update_state(state)
+	_add_row(grid, "Zauberleisten: Zauberzeit (CastBar), kanalisiert (CastBarChannel), nicht unterbrechbar (Schild), fertig (CastBarDone), unterbrochen (CastBarFailed)")
+	var bars := VBoxContainer.new()
+	bars.theme_type_variation = &"SlotColumn"
+	bars.custom_minimum_size = Vector2(360, 0)
+	grid.add_child(bars)
+	var samples := [[&"CastBar", "Testblitz  1,2 s", 0.6, false], [&"CastBarChannel", "Testkanal  2,0 s", 0.66, false],
+			[&"CastBar", "Puppenschild  2,4 s", 0.2, true], [&"CastBarDone", "Testblitz", 1.0, false],
+			[&"CastBarFailed", "Testblitz – Unterbrochen", 1.0, false]]
+	for sample: Array in samples:
+		var bar: CastBar = preload("res://scenes/ui/hud/cast_bar.tscn").instantiate()
+		bars.add_child(bar)
+		bar.set_process(false)
+		bar.visible = true
+		bar.get_node("%Shield").visible = sample[3]
+		var progress: ProgressBar = bar.get_node("%Bar")
+		progress.theme_type_variation = sample[0]
+		progress.max_value = 1.0
+		progress.value = sample[2]
+		bar.get_node("%Text").text = sample[1]
+	_add_row(grid, "Fehlermeldung oben in der Mitte (ErrorMessage)")
+	var error := Label.new()
+	error.theme_type_variation = &"ErrorMessage"
+	error.text = AbilityError.text(AbilityError.Code.NO_RESOURCE, "mana")
+	grid.add_child(error)
+	_add_row(grid, "Schulfarben (SchoolColors): Projektile, Leuchten beim Zaubern")
+	var schools := HFlowContainer.new()
+	schools.theme_type_variation = &"AuraFlow"
+	grid.add_child(schools)
+	for row in Data.schadensschulen():
+		var label := Label.new()
+		label.theme_type_variation = &"SmallLabel"
+		label.text = "● " + String(row.get_value("name", ""))
+		label.add_theme_color_override("font_color", CombatColors.school_color(StringName(str(row.get_value("id", "")))))
+		schools.add_child(label)

@@ -1,6 +1,16 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_oeeu8"]
+[ext_resource type="Resource" path="res://data/auras/verstohlenheit.tres" id="2_i4bf3"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_pv8ic"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_52m6j"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_ayk4v"]
+
+[sub_resource type="Resource" id="Resource_mld8g"]
+script = ExtResource("5_ayk4v")
+aura = ExtResource("2_i4bf3")
+target_mode = 1
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +19,8 @@ display_name = "Verstohlenheit"
 description = "Der Schurke wird unsichtbar und bewegt sich langsamer, bis er angreift."
 class_id = &"rogue"
 required_level = 4
+effects = Array[ExtResource("1_oeeu8")]([SubResource("Resource_mld8g")])
+target_kind = 0
+ignores_gcd = true
+toggle_aura = ExtResource("2_i4bf3")
+highlight_auras = PackedStringArray()

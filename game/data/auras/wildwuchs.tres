@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_4coa3"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_41yen"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_26lxd"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_u4012"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="5_ymbri"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="6_c1808"]
+[ext_resource type="Script" path="res://scripts/combat/effects/heal_effect.gd" id="7_oobr0"]
+
+[sub_resource type="Resource" id="Resource_n1qrm"]
+script = ExtResource("7_oobr0")
+values_from_ability = true
+
+[resource]
+script = ExtResource("3_26lxd")
+id = &"wildwuchs"
+display_name = "Wildwuchs"
+description = "Heilt jede Sekunde."
+duration = 7.0
+ability_id = &"wildwuchs"
+stack_mode = 2
+tick_interval = 1.0
+tick_effects = Array[ExtResource("1_4coa3")]([SubResource("Resource_n1qrm")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

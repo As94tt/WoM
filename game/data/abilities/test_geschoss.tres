@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_xu200"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_vg76o"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_1od8b"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_vtfkf"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="5_tlmgw"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_rculm"]
+
+[sub_resource type="Resource" id="Resource_40tso"]
+script = ExtResource("4_vtfkf")
+school = &"frost"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_fdin7"]
+script = ExtResource("5_tlmgw")
+speed_from_ability = true
+effects = Array[ExtResource("1_xu200")]([SubResource("Resource_40tso")])
+
+[resource]
+script = ExtResource("6_rculm")
+id = &"test_geschoss"
+display_name = "Testgeschoss"
+description = "Projektil: Frostkugel, Schaden erst beim Aufprall."
+dev_only = true
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_xu200")]([SubResource("Resource_fdin7")])
+highlight_auras = PackedStringArray()

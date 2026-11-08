@@ -1,6 +1,27 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_b008w"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_dlnka"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_w2hfw"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_1pjyd"]
+[ext_resource type="Resource" path="res://data/auras/frostnova_fessel.tres" id="5_oclxu"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="6_b5ia5"]
+
+[sub_resource type="Resource" id="Resource_syns2"]
+script = ExtResource("4_1pjyd")
+school = &"frost"
+values_from_ability = true
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_4ryet"]
+script = ExtResource("6_b5ia5")
+aura = ExtResource("5_oclxu")
+target_mode = 2
+filter = 2
+radius_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -10,3 +31,7 @@ description = "Entfesselt eine Welle aus Frost um den Magier, die nahe Gegner ve
 class_id = &"mage"
 required_level = 2
 is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_b008w")]([SubResource("Resource_syns2"), SubResource("Resource_4ryet")])
+target_kind = 0
+highlight_auras = PackedStringArray()

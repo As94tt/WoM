@@ -1,12 +1,27 @@
 [gd_resource type="Resource" script_class="SpellbookTabData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/spellbook_tab_data.gd" id="1_tab"]
+[ext_resource type="Resource" path="res://data/abilities/automatischer_angriff.tres" id="2_xq424"]
+[ext_resource type="Resource" path="res://data/abilities/test_schlag.tres" id="3_wijk2"]
+[ext_resource type="Resource" path="res://data/abilities/test_blitz.tres" id="4_bpfqa"]
+[ext_resource type="Resource" path="res://data/abilities/test_kanal.tres" id="5_6q703"]
+[ext_resource type="Resource" path="res://data/abilities/test_rolle.tres" id="6_wvv57"]
+[ext_resource type="Resource" path="res://data/abilities/test_feld.tres" id="7_u83k4"]
+[ext_resource type="Resource" path="res://data/abilities/test_geschoss.tres" id="8_jo4kj"]
+[ext_resource type="Resource" path="res://data/abilities/test_tritt.tres" id="9_ijo14"]
+[ext_resource type="Resource" path="res://data/abilities/test_meteor.tres" id="10_gm44r"]
+[ext_resource type="Resource" path="res://data/abilities/test_haltung.tres" id="11_j1m0a"]
+[ext_resource type="Resource" path="res://data/abilities/test_wucht.tres" id="12_8477l"]
+[ext_resource type="Resource" path="res://data/abilities/test_siegel_a.tres" id="13_rfxi4"]
+[ext_resource type="Resource" path="res://data/abilities/test_siegel_b.tres" id="14_ls6bv"]
+[ext_resource type="Resource" path="res://data/abilities/test_heilung.tres" id="15_ciqm3"]
+[ext_resource type="Resource" path="res://data/abilities/test_hinterhalt.tres" id="16_gw7re"]
+[ext_resource type="Resource" path="res://data/abilities/test_vergeltung.tres" id="17_echou"]
+[ext_resource type="Resource" path="res://data/abilities/test_manaschlag.tres" id="18_2og8t"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
-[ext_resource type="Resource" path="res://data/abilities/automatischer_angriff.tres" id="2_auto"]
 
 [resource]
 script = ExtResource("1_tab")
 id = &"general"
 title = "Allgemein"
-order = 0
-abilities = Array[ExtResource("ability_script")]([ExtResource("2_auto")])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_xq424"), ExtResource("3_wijk2"), ExtResource("4_bpfqa"), ExtResource("5_6q703"), ExtResource("6_wvv57"), ExtResource("7_u83k4"), ExtResource("8_jo4kj"), ExtResource("9_ijo14"), ExtResource("10_gm44r"), ExtResource("11_j1m0a"), ExtResource("12_8477l"), ExtResource("13_rfxi4"), ExtResource("14_ls6bv"), ExtResource("15_ciqm3"), ExtResource("16_gw7re"), ExtResource("17_echou"), ExtResource("18_2og8t")])

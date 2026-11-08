@@ -8,16 +8,19 @@ extends Node
 ## - Erlernt ist eine Fähigkeit, wenn die Stufe der Werte (CharacterStats,
 ##   inklusive „Stufe ändern“ im Entwickler-Panel) ihre benötigte Stufe
 ##   erreicht – oder für diese Sitzung „Alle Fähigkeiten erlernen“ im
-##   Entwickler-Panel aktiv ist.
-## - use_ability() ist die zentrale Funktion „Fähigkeit benutzen“. Vorerst
-##   meldet sie nur „Würde X wirken“ (Signal ability_used, Konsole). Mit dem
-##   Kampfsystem (#33) schickt sie den Wunsch an den Host, der Kosten,
-##   Abklingzeit, Ziel und Reichweite prüft und die Effekte ausführt.
+##   Entwickler-Panel aktiv ist. Testfähigkeiten (#33, AbilityData.dev_only)
+##   stehen im Reiter „Allgemein“ nur nach „Testfähigkeiten erlernen“.
+## - use_ability() ist die zentrale Funktion „Fähigkeit benutzen“. Seit #33
+##   geht sie an UnitCaster (Kindknoten „Caster“): sofortige Prüfung und
+##   Vorhersage beim Besitzer, Wunsch an den Host, der prüft und ausführt.
+##   Bodenziel-Fähigkeiten öffnen erst den Kreis am Mauszeiger
+##   (GroundTargeting); „Automatischer Angriff“ schaltet über die Zielauswahl.
 ##
-## Netzwerk: Der Knoten existiert auf jeder Instanz für jede Figur, wird aber
-## nicht synchronisiert. Die Stufe kommt über StatsSync (Host-Autorität) aus
-## CharacterStats. Zauberbuch und Aktionsleisten (ActionBarLayout) gibt es nur
-## für die eigene Figur (GameWorld).
+## Netzwerk: Der Knoten existiert auf jeder Instanz für jede Figur. Die Stufe
+## kommt über StatsSync (Host-Autorität) aus CharacterStats; die Schalter des
+## Entwickler-Panels (learn_flags) setzt der Host und ServerSync überträgt
+## sie, damit der Host weiß, was die Figur kann (Prüfung 1). Zauberbuch und
+## Aktionsleisten (ActionBarLayout) gibt es nur für die eigene Figur.
 
 ## Die Menge der erlernten Fähigkeiten hat sich geändert (Stufe, Entwickler-
 ## Panel). Anzeigen (Zauberbuch, Leisten) aktualisieren sich daraufhin.
@@ -25,22 +28,30 @@ signal learned_changed
 ## Fähigkeiten wurden neu erlernt (Stufe gestiegen oder „Alle erlernen“).
 ## abilities ist nach benötigter Stufe sortiert.
 signal abilities_learned(abilities: Array[AbilityData])
-## use_ability() wurde aufgerufen (vorerst nur Meldung, #33: Wunsch an Host).
+## Ein Wunsch wurde an den Host geschickt (bzw. auf dem Host ausgeführt).
 signal ability_used(ability: AbilityData)
-## use_ability() ging nicht (Zustand aus einer Aura, #32); reason ist ein Satz.
+## Eine Fähigkeit ging nicht (Prüfung beim Besitzer oder Ablehnung des
+## Hosts); reason ist die Meldung (AbilityError). ability kann null sein
+## (z. B. automatischer Angriff außer Reichweite).
 signal ability_failed(ability: AbilityData, reason: String)
 
-## Meldung, solange Fähigkeiten noch keine Wirkung haben (bis #33).
-const USE_MESSAGE := "Würde %s wirken"
+## Schalter aus dem Entwickler-Panel (nur diese Sitzung), Bits in learn_flags.
+const LEARN_ALL := 1
+const LEARN_TEST := 2
 
-## Nur diese Sitzung (Entwickler-Panel): alle Fähigkeiten gelten als erlernt.
-var learn_all := false:
+## Vom Host gesetzt, über ServerSync übertragen (siehe oben).
+var learn_flags := 0:
 	set(value):
-		if value == learn_all:
+		if value == learn_flags:
 			return
 		var before := get_learned_abilities()
-		learn_all = value
+		learn_flags = value
 		_announce_learned(before)
+## Nur diese Sitzung (Entwickler-Panel): alle Fähigkeiten der Klasse gelten
+## als erlernt.
+var learn_all: bool:
+	get:
+		return learn_flags & LEARN_ALL != 0
 
 @onready var _player: PlayerCharacter = get_parent() as PlayerCharacter
 
@@ -56,6 +67,11 @@ func _ready() -> void:
 		_stats.level_changed.connect(_on_level_changed)
 		# Erster Stand eines Clients kommt erst nach _ready per StatsSync.
 		_stats.stats_changed.connect(learned_changed.emit)
+	var caster := get_caster()
+	if caster != null:
+		caster.failed.connect(func(code: int, param: String, ability: AbilityData) -> void:
+			ability_failed.emit(ability, AbilityError.text(code, param)))
+		caster.requested.connect(ability_used.emit)
 
 
 ## Stufe, mit der „erlernt“ geprüft wird.
@@ -67,11 +83,25 @@ func get_class_data() -> ClassData:
 	return _player.get_class_data() if _player != null else null
 
 
+## Wirken (#33) oder null.
+func get_caster() -> UnitCaster:
+	return _player.get_node_or_null(^"Caster") as UnitCaster if _player != null else null
+
+
 ## Reiter des Zauberbuchs in Anzeigereihenfolge: „Allgemein“ und die Klasse.
+## Testfähigkeiten (dev_only) nur nach „Testfähigkeiten erlernen“.
 func get_spellbook_tabs() -> Array[SpellbookTabData]:
 	var tabs: Array[SpellbookTabData] = []
 	var general := GameData.get_general_tab()
 	if general != null:
+		if learn_flags & LEARN_TEST == 0:
+			var filtered := general.duplicate() as SpellbookTabData
+			var visible: Array[AbilityData] = []
+			for ability in general.abilities:
+				if ability != null and not ability.dev_only:
+					visible.append(ability)
+			filtered.abilities = visible
+			general = filtered
 		tabs.append(general)
 	var class_data := get_class_data()
 	if class_data != null:
@@ -92,7 +122,26 @@ func get_all_abilities() -> Array[AbilityData]:
 
 ## Ob die Fähigkeit erlernt ist (Stufe erreicht oder „Alle erlernen“).
 func is_learned(ability: AbilityData) -> bool:
-	return ability != null and (learn_all or get_level() >= ability.required_level)
+	if ability == null:
+		return false
+	if ability.dev_only:
+		return learn_flags & LEARN_TEST != 0
+	return learn_all or get_level() >= ability.required_level
+
+
+## Prüfung 1 beim Wirken (#33): Die Fähigkeit gehört zur Figur (Zauberbuch
+## oder Ersatz durch Talente) und ist erlernt.
+func knows(ability: AbilityData) -> bool:
+	if ability == null:
+		return false
+	var all := get_all_abilities()
+	if all.has(ability):
+		return is_learned(ability)
+	# Ersatz durch Talente/Auren: erlaubt, wenn eine bekannte Fähigkeit dazu wird.
+	for known in all:
+		if known.get_replacement_for(_player) == ability:
+			return is_learned(known)
+	return false
 
 
 ## Ob die Fähigkeit auf eine Aktionsleiste darf: erlernt und aktiv.
@@ -123,32 +172,110 @@ func get_default_bar_abilities(level := 0) -> Array[AbilityData]:
 
 
 ## Zentrale Funktion „Fähigkeit benutzen“ (Klick oder Taste auf einem Slot).
-## Nicht erlernte und passive Fähigkeiten lösen nichts aus.
-## Vorerst nur Meldung; ab #33 Wunsch an den Host (RPC), der entscheidet.
+## Nicht erlernte und passive Fähigkeiten lösen nichts aus. Seit #33:
+## - „Automatischer Angriff“ schaltet über die Zielauswahl (an/aus),
+## - Bodenziel öffnet den Kreis am Mauszeiger (GroundTargeting),
+## - alles andere geht an UnitCaster.request_use (Prüfung, Vorhersage,
+##   Wunsch an den Host).
 func use_ability(ability: AbilityData) -> void:
-	if not can_place(ability):
+	if not can_place(ability) or _player == null:
 		return
-	var reason := get_block_reason(ability)
-	if reason != "":
-		ability_failed.emit(ability, reason)
+	var caster := get_caster()
+	if caster == null:
 		return
-	print(USE_MESSAGE % ability.display_name)
-	ability_used.emit(ability)
+	ability = ability.get_replacement_for(_player)
+	var targeting := _player.get_targeting()
+	var target: Unit = targeting.target if targeting != null else null
+	if ability.toggles_auto_attack:
+		if targeting != null:
+			targeting.toggle_auto_attack()
+		return
+	if ability.target_kind == AbilityData.TargetKind.GROUND:
+		var ground := _player.get_node_or_null(^"GroundTargeting") as GroundTargeting
+		if ground == null:
+			return
+		if ground.is_active() and ground.get_ability() == ability:
+			ground.cancel()
+			return
+		# Erst prüfen, was ohne Ort schon feststeht (Abklingzeit, Ressource …).
+		var result := caster.check(ability, target)
+		var code: int = result[0]
+		if code != AbilityError.Code.OK and code != AbilityError.Code.INVALID_POINT \
+				and not AbilityError.is_queueable(code):
+			ability_failed.emit(ability, AbilityError.text(code, result[1]))
+			return
+		ground.begin(ability)
+		return
+	caster.request_use(ability, target)
 
 
-## Warum die Fähigkeit gerade nicht geht (leer = geht): Zustände aus Auren
-## (#32). Betäubt oder umgeworfen: keine Aktionen; still: keine Zauber.
-## Der Host prüft dasselbe beim Wirken (#33).
+## Warum die Fähigkeit gerade nicht geht (leer = geht), mit dem aktuellen
+## Ziel. Dieselbe Prüfung wie beim Wirken (UnitCaster.check, #33).
 func get_block_reason(ability: AbilityData) -> String:
-	var combat := _player.get_combat() if _player != null else null
-	if combat == null or ability == null:
+	var caster := get_caster()
+	if caster == null or ability == null:
 		return ""
-	if not combat.can_act():
-		return "Du kannst gerade nicht handeln (%s)." % Combat.state_names(
-				combat.get_states() & (Combat.STATE_STUNNED | Combat.STATE_KNOCKED_DOWN))
-	if ability.is_spell and not combat.can_cast_spells():
-		return "Du kannst gerade nicht zaubern (Still)."
-	return ""
+	var targeting := _player.get_targeting()
+	var result := caster.check(ability, targeting.target if targeting != null else null)
+	return AbilityError.text(result[0], result[1])
+
+
+## Zustand eines Aktionsslots (#33): {"cooldown": Vector2(Rest, Dauer),
+## "gcd": Vector2, "out_of_range", "no_resource", "highlight", "active",
+## "charges" (−1 = ohne Aufladungen)}.
+func get_slot_state(ability: AbilityData) -> Dictionary:
+	var caster := get_caster()
+	if caster == null or ability == null or _player == null:
+		return {}
+	ability = ability.get_replacement_for(_player)
+	var targeting := _player.get_targeting()
+	var target: Unit = targeting.target if targeting != null else null
+	var combat := _player.get_combat()
+	var highlight := false
+	if combat != null:
+		for aura_id in ability.highlight_auras:
+			if combat.get_stacks(StringName(aura_id), _player) > 0:
+				highlight = true
+				break
+	var active := false
+	if ability.toggle_aura != null and combat != null:
+		active = combat.get_stacks(ability.toggle_aura.id, _player) > 0
+	if ability.toggles_auto_attack and targeting != null:
+		active = targeting.auto_attack
+	if ability.on_next_swing and caster.get_next_swing_id() == ability.id:
+		active = true
+	var gcd := Vector2.ZERO if ability.ignores_gcd or ability.toggles_auto_attack else caster.get_gcd()
+	return {
+		"cooldown": caster.get_cooldown(ability),
+		"gcd": gcd,
+		"out_of_range": not caster.is_in_range(ability, target),
+		"no_resource": not caster.has_resource_for(ability),
+		"highlight": highlight,
+		"active": active,
+		"charges": caster.get_charges_left(ability) if ability.get_charges() > 1 else -1,
+	}
+
+
+## Entwickler-Panel: Schalter LEARN_ALL bzw. LEARN_TEST setzen. Auf dem Host
+## sofort, sonst als Wunsch an ihn (nur wenn er ein Debug-Build ist).
+func request_learn(flag: int, on: bool) -> void:
+	if Network.is_host():
+		_set_learn(flag, on)
+	else:
+		_rpc_request_learn.rpc_id(1, flag, on)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func _rpc_request_learn(flag: int, on: bool) -> void:
+	if not Network.is_host() or not OS.is_debug_build() or _player == null:
+		return
+	if multiplayer.get_remote_sender_id() != _player.get_controlling_peer():
+		return
+	_set_learn(flag, on)
+
+
+func _set_learn(flag: int, on: bool) -> void:
+	learn_flags = (learn_flags | flag) if on else (learn_flags & ~flag)
 
 
 func _on_level_changed(level: int, previous: int) -> void:

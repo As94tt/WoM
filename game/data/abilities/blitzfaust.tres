@@ -1,6 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_gap4f"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_v8oy8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_qtn1k"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_66o82"]
+
+[sub_resource type="Resource" id="Resource_sfian"]
+script = ExtResource("4_66o82")
+values_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +17,6 @@ display_name = "Blitzfaust"
 description = "Eine kanalisierte Folge von Schlägen, die Chi verbraucht. Geht auch in Bewegung."
 class_id = &"monk"
 required_level = 2
+effects = Array[ExtResource("1_gap4f")]([SubResource("Resource_sfian")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray()
