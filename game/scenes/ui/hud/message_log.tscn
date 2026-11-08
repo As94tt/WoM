@@ -16,3 +16,38 @@ grow_vertical = 0
 mouse_filter = 2
 alignment = 2
 script = ExtResource("1_log")
+
+[node name="GeneralLines" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="CombatLines" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="Tabs" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="GeneralTab" type="Button" parent="Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"LogTab"
+toggle_mode = true
+text = "Allgemein"
+
+[node name="CombatTab" type="Button" parent="Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Kampflog: alle Kampfereignisse der eigenen Figur mit Uhrzeit, Quelle, Fähigkeit, Ziel, Ergebnis und Menge."
+theme_type_variation = &"LogTab"
+toggle_mode = true
+text = "Kampf"

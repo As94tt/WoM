@@ -8,10 +8,14 @@ extends RefCounted
 ## - Theme-Typ „AbilityColors“: Tönung der Aktionsslots (out_of_range,
 ##   no_resource), Bodenziel (ground_valid, ground_invalid), Deckkraft des
 ##   Leuchtens (Konstante glow_alpha_percent).
+## - Theme-Typ „CombatTextSchool“ (#34): Färbung des Kampftexts für eigenen
+##   Schaden je Schule; fehlt eine Schule, bleibt die Farbe von
+##   CombatTextDamage (weiß).
 ## Alles Graubox-Platzhalter, die endgültigen Werte sind im UI-Styleguide OFFEN.
 
 const SCHOOL_TYPE := &"SchoolColors"
 const ABILITY_TYPE := &"AbilityColors"
+const COMBAT_TEXT_TYPE := &"CombatTextSchool"
 
 
 static func school_color(school: StringName) -> Color:
@@ -33,6 +37,16 @@ static func cast_glow_color(school: StringName) -> Color:
 		alpha = theme.get_constant(&"glow_alpha_percent", ABILITY_TYPE)
 	color.a = clampf(alpha / 100.0, 0.0, 1.0)
 	return color
+
+
+## Färbung des Kampftexts für eigenen Schaden einer Schule (#34, Theme-Typ
+## „CombatTextSchool“) oder null (keine Färbung, z. B. physisch: dann gilt
+## die Farbe von CombatTextDamage).
+static func combat_text_school_color(school: StringName) -> Variant:
+	var theme := ThemeDB.get_project_theme()
+	if school != &"" and theme != null and theme.has_color(school, COMBAT_TEXT_TYPE):
+		return theme.get_color(school, COMBAT_TEXT_TYPE)
+	return null
 
 
 static func ability_color(key: StringName) -> Color:

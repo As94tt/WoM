@@ -5,8 +5,9 @@ extends RefCounted
 ## sind rein lokal (jede Spielinstanz hat ihre eigene Datei bzw. liest
 ## dieselbe Datei, wenn zwei Fenster auf einem PC laufen).
 ##
-## „Aktionsleisten sperren“ (Spielmenü, #21) und die Namensplaketten für
-## Feinde (V) und Freunde (Shift + V, #31). Spätere Optionen (Optionen-Menü)
+## „Aktionsleisten sperren“ (Spielmenü, #21), die Namensplaketten für
+## Feinde (V) und Freunde (Shift + V, #31) und „Kampftext anzeigen“
+## (Spielmenü, #34). Spätere Optionen (Optionen-Menü)
 ## kommen als weitere Schlüssel dazu.
 
 const PATH := "user://settings.cfg"
@@ -14,6 +15,7 @@ const SECTION_INTERFACE := "interface"
 const KEY_ACTION_BARS_LOCKED := "action_bars_locked"
 const KEY_NAMEPLATES_ENEMY := "nameplates_enemy"
 const KEY_NAMEPLATES_FRIENDLY := "nameplates_friendly"
+const KEY_COMBAT_TEXT := "combat_text"
 
 static var _config: ConfigFile = null
 
@@ -44,6 +46,16 @@ static func is_friendly_nameplates_shown() -> bool:
 
 static func set_friendly_nameplates_shown(shown: bool) -> void:
 	_write(SECTION_INTERFACE, KEY_NAMEPLATES_FRIENDLY, shown)
+
+
+## Kampftext (schwebende Zahlen, #34) anzeigen. Der Kampflog läuft immer.
+## Standard: an.
+static func is_combat_text_shown() -> bool:
+	return bool(_read(SECTION_INTERFACE, KEY_COMBAT_TEXT, true))
+
+
+static func set_combat_text_shown(shown: bool) -> void:
+	_write(SECTION_INTERFACE, KEY_COMBAT_TEXT, shown)
 
 
 static func _read(section: String, key: String, fallback: Variant) -> Variant:
