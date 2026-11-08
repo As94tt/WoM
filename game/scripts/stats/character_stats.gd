@@ -32,6 +32,12 @@ signal stats_changed
 ## Leben oder eine Ressource (aktuell oder maximal) hat sich geändert.
 signal resources_changed
 signal combat_changed(in_combat: bool)
+## Die Stufe, mit der gerechnet wird, hat sich geändert (Charakter oder
+## „Stufe ändern“ im Entwickler-Panel; ab #27 auch Stufenaufstieg). Auf allen
+## Instanzen ausgelöst, sobald der neue Stand da ist; nicht beim ersten
+## Stand nach dem Erzeugen (previous wäre dort unbekannt). Ausgewertet z. B.
+## von PlayerAbilities (#21: neu erlernte Fähigkeiten).
+signal level_changed(level: int, previous: int)
 ## Chi hat 100 % erreicht: Zustand „Chi voll“ (vorerst ohne Wirkung; was er
 ## bewirkt, legt das Fähigkeits-Ticket des Mönchs fest). Danach sinkt Chi
 ## auf 0. Auf allen Instanzen ausgelöst.
@@ -84,6 +90,8 @@ var _level_override := 0
 ## Host: Leben und Ressourcen wurden einmal aufgefüllt.
 var _filled := false
 var _was_in_combat := false
+## Zuletzt gemeldete Stufe (0 = noch kein Stand, für level_changed).
+var _last_level := 0
 ## Zuletzt gemeldeter Stand von Leben und Ressourcen (für resources_changed).
 var _last_resources := PackedFloat32Array()
 
@@ -358,6 +366,22 @@ func _apply_state() -> void:
 	if is_in_combat() != _was_in_combat:
 		_was_in_combat = is_in_combat()
 		combat_changed.emit(_was_in_combat)
+	_check_level_changed()
+
+
+## level_changed melden, wenn sich die Stufe eines echten Stands geändert hat.
+## Ein leerer Stand (Client vor dem ersten StatsSync) zählt nicht.
+func _check_level_changed() -> void:
+	if stat_state.is_empty():
+		return
+	var level := int(stat_state.get("level", 1))
+	if _last_level == 0:
+		_last_level = level
+		return
+	if level != _last_level:
+		var previous := _last_level
+		_last_level = level
+		level_changed.emit(level, previous)
 
 
 func _on_block_changed() -> void:

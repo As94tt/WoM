@@ -17,6 +17,10 @@ extends Node3D
 ## - Hud: Name/Infozeile, Interface (#17), Entwickler-Panel (F10, nur Debug).
 ##   Inhalt des Charakterfensters (C) ist CharacterPanel (#19) mit der eigenen
 ##   Figur; das Entwickler-Panel hat dafür den Abschnitt „Werte“.
+##   Inhalt des Zauberbuchs (P) ist SpellbookPanel (#21). Die Belegung der
+##   Aktionsleisten (ActionBarLayout) gehört dem eigenen Charakter und wird
+##   mit ihm gespeichert (CharacterData.action_bars); das Entwickler-Panel
+##   hat dafür den Abschnitt „Fähigkeiten“.
 ##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
@@ -32,6 +36,7 @@ const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const MAP_VIEW_SCENE := preload("res://scenes/ui/hud/map_view.tscn")
 const DEV_PANEL_SCENE := preload("res://scenes/ui/dev/dev_panel.tscn")
 const CHARACTER_PANEL_SCENE := preload("res://scenes/ui/hud/character_panel.tscn")
+const SPELLBOOK_PANEL_SCENE := preload("res://scenes/ui/hud/spellbook_panel.tscn")
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 
 ## Weitere Spieler stehen im Kreis mit diesem Abstand um den Startpunkt, in
@@ -50,6 +55,9 @@ var _nav_status := "noch nicht gebacken"
 var _dev_info: Label = null
 var _map_view: MapView = null
 var _character_panel: CharacterPanel = null
+var _spellbook_panel: SpellbookPanel = null
+## Belegung der Aktionsleisten des eigenen Charakters (#21).
+var _bar_layout: ActionBarLayout = null
 ## Entwickler-Panel, Abschnitt „Werte“ (#19): Infozeilen und Bedienelemente,
 ## die dem Stand der eigenen Figur folgen.
 var _stat_dev_info: Label = null
@@ -80,6 +88,7 @@ func _ready() -> void:
 	Data.reloaded.connect(_on_data_reloaded)
 	_show_character_info()
 	_setup_character_window()
+	_setup_spellbook_window()
 	_setup_map()
 	_start_autosave()
 	if OS.is_debug_build():
@@ -283,6 +292,7 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 		if _character_panel != null:
 			_character_panel.setup(player)
 		_connect_stat_dev(player)
+		_setup_abilities(player)
 		# Infozeile oben links folgt der Stufe der Werte (#19, auch „Stufe
 		# ändern“ im Entwickler-Panel).
 		player.get_stats().stats_changed.connect(_show_character_info)
@@ -325,6 +335,58 @@ func _setup_character_window() -> void:
 		return
 	_character_panel = CHARACTER_PANEL_SCENE.instantiate()
 	window.set_content(_character_panel)
+
+
+# --- Zauberbuch und Aktionsleisten (#21) -------------------------------------
+
+func _setup_spellbook_window() -> void:
+	var window := _hud.get_hud_window(&"spellbook")
+	if window == null:
+		return
+	_spellbook_panel = SPELLBOOK_PANEL_SCENE.instantiate()
+	window.set_content(_spellbook_panel)
+
+
+## Eigene Figur ist da: Belegung laden (oder beim ersten Mal die
+## Standardbelegung mit der gespeicherten Stufe anlegen), Leisten und
+## Zauberbuch verbinden.
+func _setup_abilities(player: PlayerCharacter) -> void:
+	var abilities := player.get_abilities()
+	var c := Network.get_local_character()
+	_bar_layout = ActionBarLayout.new()
+	if c != null and not c.action_bars.is_empty():
+		_bar_layout.load_save(c.action_bars)
+	else:
+		_bar_layout.reset(abilities.get_default_bar_abilities(c.level if c != null else 1))
+	_bar_layout.changed.connect(_save_bar_layout)
+	_save_bar_layout()
+	_hud.setup_abilities(_bar_layout, abilities)
+	if _spellbook_panel != null:
+		_spellbook_panel.setup(abilities)
+	abilities.abilities_learned.connect(_on_abilities_learned.bind(abilities))
+	abilities.ability_used.connect(func(ability: AbilityData) -> void:
+		_hud.add_log_message(PlayerAbilities.USE_MESSAGE % ability.display_name))
+
+
+## Belegung in den Charakter schreiben und speichern (Testcharaktere nie).
+func _save_bar_layout() -> void:
+	var c := Network.get_local_character()
+	if c == null or _bar_layout == null:
+		return
+	c.action_bars = _bar_layout.to_save()
+	Network.save_local_character()
+
+
+## Neu erlernte, aktive Fähigkeiten in den ersten freien Slot (Leiste 1,
+## sonst Leiste 2), sofern sie nicht schon auf einer Leiste liegen.
+func _on_abilities_learned(learned: Array[AbilityData], abilities: PlayerAbilities) -> void:
+	if _bar_layout == null:
+		return
+	for ability in learned:
+		if not abilities.can_place(ability) or _bar_layout.has_ability(ability.id):
+			continue
+		_bar_layout.place_ability(ability.id)
+		_hud.add_log_message("Neue Fähigkeit erlernt: %s" % ability.display_name)
 
 
 # --- Karte -------------------------------------------------------------------
@@ -436,6 +498,17 @@ func _setup_dev_panel() -> void:
 			func() -> void: Data.reload_tables())
 
 	_setup_stat_dev_section(panel)
+
+	# Fähigkeiten (#21): nur diese Sitzung bzw. die eigene Belegung.
+	var ability_section := panel.add_section("Fähigkeiten")
+	panel.add_button(ability_section, "Alle Fähigkeiten der Klasse erlernen", func() -> void:
+		var player := get_local_player()
+		if player != null:
+			player.get_abilities().learn_all = true)
+	panel.add_button(ability_section, "Aktionsleisten zurücksetzen", func() -> void:
+		var player := get_local_player()
+		if player != null and _bar_layout != null:
+			_bar_layout.reset(player.get_abilities().get_default_bar_abilities()))
 
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)

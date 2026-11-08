@@ -30,6 +30,10 @@ extends CharacterBody3D
 ## Werte (#19): Kindknoten „Stats“ (CharacterStats) mit Attributen, Kampfwerten,
 ## Leben und Ressourcen; „StatsSync“ (Authority Host) überträgt sie. Die
 ## Laufgeschwindigkeit folgt dem Wert „movement_speed“ (Eile, später Auren).
+##
+## Fähigkeiten (#21): Kindknoten „Abilities“ (PlayerAbilities) mit Zauberbuch-
+## Reitern, „erlernt“ und der zentralen Funktion use_ability(). Nicht
+## synchronisiert; die Stufe kommt aus „Stats“.
 
 ## Wird gesendet, wenn die Figur anfängt oder aufhört, sich zu bewegen
 ## (für den Zauberabbruch bei Bewegung, #33).
@@ -134,6 +138,7 @@ var _body_material: StandardMaterial3D = null
 @onready var _server_sync: MultiplayerSynchronizer = $ServerSync
 @onready var _stats_sync: MultiplayerSynchronizer = $StatsSync
 @onready var _stats: CharacterStats = $Stats
+@onready var _abilities: PlayerAbilities = $Abilities
 
 ## Kleinste Geschwindigkeit, ab der die Figur als „in Bewegung“ gilt.
 const MOVING_THRESHOLD := 0.05
@@ -205,6 +210,11 @@ func setup_from_info(info: NetPlayerInfo) -> void:
 ## Werte und Ressourcen der Figur (#19).
 func get_stats() -> CharacterStats:
 	return _stats
+
+
+## Fähigkeiten der Figur (#21).
+func get_abilities() -> PlayerAbilities:
+	return _abilities
 
 
 ## Stufe, mit der die Werte rechnen (inklusive „Stufe ändern“ im

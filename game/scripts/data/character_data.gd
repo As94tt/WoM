@@ -13,6 +13,12 @@ enum Gender { MALE, FEMALE }
 @export var level: int = 1
 ## Unix-Zeit, zu der zuletzt mit dem Charakter gespielt wurde (0 = nie).
 @export var last_played: int = 0
+## Belegung der Aktionsleisten (#21, ActionBarLayout.to_save): je Leiste
+## 12 Einträge wie „ability:feuerball“ oder „“ (leer). Leer (keine Leisten)
+## = noch nie belegt; dann bekommt der Charakter beim Betreten der Welt die
+## Standardbelegung (neue und bestehende Charaktere). Bleibt lokal und wird
+## nicht an den Host übertragen.
+@export var action_bars: Array[PackedStringArray] = []
 
 ## Datei, aus der der Charakter geladen bzw. in die er gespeichert wurde.
 ## Wird von CharacterStore gesetzt und nicht mitgespeichert.

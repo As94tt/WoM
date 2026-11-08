@@ -10,6 +10,10 @@ extends Control
 ## den Charakter und trennen die Verbindung sauber (Network.leave_session).
 ## Beim Host, solange Mitspieler da sind, erst nach Rückfrage, weil die
 ## Sitzung dann für alle endet. Das Menü selbst ist rein lokal.
+##
+## „Aktionsleisten sperren“ (#21): Schalter direkt im Menü (über „Zurück zum
+## Spiel“), gespeichert für die ganze Installation in user://settings.cfg
+## (GameSettings). Standard: an.
 
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const HOST_LEAVE_MESSAGE := "Du bist der Host. Wenn du die Welt verlässt, endet die Sitzung für alle Mitspieler."
@@ -26,12 +30,16 @@ func _ready() -> void:
 	%ResumeButton.pressed.connect(close)
 	%CharacterSelectButton.pressed.connect(_on_character_select_pressed)
 	%QuitButton.pressed.connect(_on_quit_pressed)
+	%LockBarsCheck.button_pressed = GameSettings.is_action_bars_locked()
+	%LockBarsCheck.toggled.connect(GameSettings.set_action_bars_locked)
 	_confirm_dialog.confirmed.connect(_leave)
 	_confirm_dialog.cancelled.connect(func() -> void: %ResumeButton.grab_focus())
 
 
 func open() -> void:
 	visible = true
+	# Stand aus GameSettings übernehmen (z. B. nach Änderung an anderer Stelle).
+	%LockBarsCheck.set_pressed_no_signal(GameSettings.is_action_bars_locked())
 	%ResumeButton.grab_focus()
 
 

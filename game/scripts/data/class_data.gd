@@ -1,8 +1,12 @@
 class_name ClassData
 extends Resource
 ## Eine Grundklasse als Daten (Ticket #6). Die Datensätze liegen in
-## res://data/classes/ und werden über GameData geladen. Fähigkeiten und
-## Rüstungsklasse kommen später als zusätzliche Felder dazu.
+## res://data/classes/ und werden über GameData geladen. Rüstungsklasse kommt
+## später als zusätzliches Feld dazu.
+##
+## Fähigkeiten (#21): abilities ist die Liste für den Klassenreiter im
+## Zauberbuch. Die benötigte Stufe steht allein an der Fähigkeit
+## (AbilityData.required_level); das Levelsystem (#27) legt keine zweite Liste an.
 ##
 ## Wertesystem (#19): Hauptattribut, Kraftwert und Ressourcen legen fest,
 ## welche Formeln der Werte für die Klasse gelten (siehe StatRules). Die
@@ -36,3 +40,8 @@ enum Role { DAMAGE, TANK, HEALER }
 ## Ressourcen der Klasse in Anzeigereihenfolge (&"mana", &"rage", &"energy",
 ## &"chi"). Der Mönch hat zwei Leisten: Energie und Chi.
 @export var resources: Array[StringName] = []
+
+@export_group("Fähigkeiten (#21)")
+## Fähigkeiten der Klasse (Reiter mit dem Klassennamen im Zauberbuch). Die
+## Reihenfolge ist egal; angezeigt wird nach benötigter Stufe.
+@export var abilities: Array[AbilityData] = []
