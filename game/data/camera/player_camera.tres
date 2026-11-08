@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CameraSettings" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/camera_settings.gd" id="1_camera"]
+
+[resource]
+script = ExtResource("1_camera")
+mouse_sensitivity_deg = 0.25
+target_height = 1.6
+min_distance = 1.5
+max_distance = 15.0
+start_distance = 6.0
+zoom_step = 1.0
+zoom_smoothing = 10.0
+min_pitch_deg = -80.0
+max_pitch_deg = 60.0
+start_pitch_deg = -20.0
+return_speed = 8.0
