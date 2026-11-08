@@ -15,6 +15,8 @@ const MAX_LIFETIME := 15.0
 
 @export var target_path := NodePath()
 @export var speed := 20.0
+## Schadensschule für die Farbe (#33, CombatColors). Übertragen.
+@export var school: StringName = &"physisch"
 
 # --- nur Host ---
 var _effect: ProjectileEffect = null
@@ -27,12 +29,22 @@ func setup(effect: ProjectileEffect, ctx: EffectContext, start: Vector3, target:
 	_effect = effect
 	_ctx = ctx
 	position = start
-	speed = maxf(0.1, effect.speed)
+	speed = maxf(0.1, effect.get_speed(ctx))
+	school = effect.get_school(ctx)
 	target_path = target.get_path()
 
 
 func _ready() -> void:
 	$Sync.add_visibility_filter(Network.is_peer_in_world)
+	# Graubox (#33): kleine leuchtende Kugel in der Farbe der Schadensschule.
+	var ball := get_node_or_null(^"Ball") as MeshInstance3D
+	if ball != null:
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = CombatColors.school_color(school)
+		material.emission_enabled = true
+		material.emission = material.albedo_color
+		ball.material_override = material
 
 
 func _process(delta: float) -> void:

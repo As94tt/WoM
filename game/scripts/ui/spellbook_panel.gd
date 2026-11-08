@@ -39,14 +39,35 @@ func _ready() -> void:
 ## Zeigt die Fähigkeiten der eigenen Figur (GameWorld, sobald sie bereit ist).
 func setup(abilities: PlayerAbilities) -> void:
 	if _abilities != null:
-		_abilities.learned_changed.disconnect(_refresh_entries)
+		_abilities.learned_changed.disconnect(_reload_tabs)
 	_abilities = abilities
 	if _abilities != null:
-		_abilities.learned_changed.connect(_refresh_entries)
+		_abilities.learned_changed.connect(_reload_tabs)
 	_tabs = _abilities.get_spellbook_tabs() if _abilities != null else []
 	_tab_index = clampi(_tab_index, 0, maxi(0, _tabs.size() - 1))
 	_page = 0
 	_rebuild()
+
+
+## Erlernte Fähigkeiten geändert: Reiter neu holen (Testfähigkeiten
+## erscheinen erst nach „Testfähigkeiten erlernen“, #33), Seite behalten.
+func _reload_tabs() -> void:
+	var tabs: Array[SpellbookTabData] = []
+	if _abilities != null:
+		tabs = _abilities.get_spellbook_tabs()
+	if _tab_signature(tabs) == _tab_signature(_tabs):
+		_refresh_entries()
+		return
+	_tabs = tabs
+	_tab_index = clampi(_tab_index, 0, maxi(0, _tabs.size() - 1))
+	_rebuild()
+
+
+static func _tab_signature(tabs: Array) -> String:
+	var parts: PackedStringArray = []
+	for tab: SpellbookTabData in tabs:
+		parts.append("%s:%d" % [tab.id, tab.abilities.size()])
+	return ",".join(parts)
 
 
 ## Reiter anzeigen (Index in get_tabs()).

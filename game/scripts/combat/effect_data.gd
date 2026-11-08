@@ -40,6 +40,9 @@ enum Filter { ANY, FRIENDLY, HOSTILE }
 @export var cone_angle := 90.0
 ## Breite der Linie in Metern.
 @export var line_width := 2.0
+## Umkreis aus faehigkeitswerte.csv (werte.radius der Fähigkeit im Kontext,
+## #33) statt radius.
+@export var radius_from_ability := false
 ## Umkreis um den Wirker: Wirker selbst zählt mit.
 @export var include_caster := false
 ## Kette: Anzahl Sprünge nach dem ersten Ziel.
@@ -86,12 +89,12 @@ func resolve_targets(ctx: EffectContext) -> Array[Array]:
 				units.append(caster)
 		TargetMode.AROUND_CASTER:
 			if caster != null:
-				units = _in_radius(ctx, caster.global_position, radius, caster)
+				units = _in_radius(ctx, caster.global_position, get_radius(ctx), caster)
 		TargetMode.AROUND_TARGET:
 			if ctx.target != null and is_instance_valid(ctx.target):
-				units = _in_radius(ctx, ctx.target.global_position, radius, caster)
+				units = _in_radius(ctx, ctx.target.global_position, get_radius(ctx), caster)
 		TargetMode.AROUND_POINT:
-			units = _in_radius(ctx, ctx.get_point(), radius, caster)
+			units = _in_radius(ctx, ctx.get_point(), get_radius(ctx), caster)
 		TargetMode.CONE, TargetMode.LINE:
 			if caster != null:
 				units = _in_front(ctx, caster)
@@ -99,7 +102,7 @@ func resolve_targets(ctx: EffectContext) -> Array[Array]:
 			return _chain(ctx, caster)
 		TargetMode.PARTY:
 			if caster != null:
-				for unit in _in_radius(ctx, caster.global_position, radius, caster, true):
+				for unit in _in_radius(ctx, caster.global_position, get_radius(ctx), caster, true):
 					if unit.is_player_unit() and caster.get_reaction_to(unit) == Unit.Reaction.FRIENDLY:
 						units.append(unit)
 	if max_targets > 0 and units.size() > max_targets:
@@ -107,6 +110,15 @@ func resolve_targets(ctx: EffectContext) -> Array[Array]:
 	for unit in units:
 		result.append([unit, 1.0])
 	return result
+
+
+## Umkreis in Metern (Feld radius bzw. werte.radius der Fähigkeit).
+func get_radius(ctx: EffectContext) -> float:
+	if radius_from_ability and ctx != null and ctx.ability != null:
+		var value := ctx.ability.get_number_for(ctx.get_caster(), "werte.radius")
+		if value > 0.0:
+			return value
+	return radius
 
 
 ## true, wenn target für den Filter (aus Sicht des Wirkers) passt.
@@ -184,7 +196,7 @@ func _in_front(ctx: EffectContext, caster: Unit) -> Array[Unit]:
 	var result: Array[Unit] = []
 	var forward := caster.get_facing()
 	var right := Vector3(-forward.z, 0.0, forward.x)
-	for unit in _in_radius(ctx, caster.global_position, radius, caster):
+	for unit in _in_radius(ctx, caster.global_position, get_radius(ctx), caster):
 		var offset := unit.global_position - caster.global_position
 		offset.y = 0.0
 		if target_mode == TargetMode.CONE:
@@ -216,7 +228,7 @@ func _chain(ctx: EffectContext, caster: Unit) -> Array[Array]:
 			if hit.has(unit) or unit.is_dead() or unit == caster or not passes_filter(caster, unit):
 				continue
 			var distance := current.distance_to_unit(unit)
-			if distance <= radius and distance < best_distance:
+			if distance <= get_radius(ctx) and distance < best_distance:
 				best = unit
 				best_distance = distance
 		if best == null:

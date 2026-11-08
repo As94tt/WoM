@@ -84,6 +84,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _handle_mouse_press(event: InputEventMouseButton) -> void:
+	# Bodenziel (#33): Linksklick setzt den Zauber, Rechtsklick bricht ab.
+	var ground := _player.get_node_or_null(^"GroundTargeting") as GroundTargeting
+	if ground != null and ground.is_active() and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			ground.confirm(get_viewport().get_mouse_position())
+		else:
+			ground.cancel()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("camera_zoom_in"):
 		camera.zoom(-1.0)
 	elif event.is_action_pressed("camera_zoom_out"):

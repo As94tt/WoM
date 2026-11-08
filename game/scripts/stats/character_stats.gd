@@ -58,8 +58,9 @@ const MIN_HEALTH := 1.0
 
 ## Eingaben, vom Host gesetzt und von StatsSync übertragen:
 ## {"level": int, "combat": bool, "melee": bool, "shield": bool,
-##  "mods": [StatModifier.to_array(), …]}. Nie direkt ändern, sondern über
-## die Funktionen unten (Host).
+##  "offhand": bool, "ranged": bool, "mods": [StatModifier.to_array(), …]}
+## („offhand“/„ranged“ seit #33; fehlen sie, gelten sie als aus). Nie direkt
+## ändern, sondern über die Funktionen unten (Host).
 var stat_state: Dictionary = {}:
 	set(value):
 		stat_state = value
@@ -186,8 +187,11 @@ func set_in_combat(on: bool) -> void:
 		_set_state_value("combat", on)
 
 
-## Zustände „Nahkampfwaffe getragen“ (StatBlock.FLAG_MELEE_WEAPON) und
-## „Schild getragen“ (StatBlock.FLAG_SHIELD); später gesetzt von #29.
+## Zustände „Nahkampfwaffe getragen“ (StatBlock.FLAG_MELEE_WEAPON),
+## „Schild getragen“ (StatBlock.FLAG_SHIELD) und seit #33 „Nebenhandwaffe“
+## (Beidhändigkeit, FLAG_OFFHAND_WEAPON) und „Fernkampfwaffe“
+## (FLAG_RANGED_WEAPON); später gesetzt von #29. Schild und Nebenhandwaffe
+## schließen sich aus: Wer das eine anlegt, legt das andere ab.
 func set_flag(flag: StringName, on: bool) -> void:
 	if not _require_host("set_flag"):
 		return
@@ -196,6 +200,14 @@ func set_flag(flag: StringName, on: bool) -> void:
 			_set_state_value("melee", on)
 		StatBlock.FLAG_SHIELD:
 			_set_state_value("shield", on)
+			if on:
+				_set_state_value("offhand", false)
+		StatBlock.FLAG_OFFHAND_WEAPON:
+			_set_state_value("offhand", on)
+			if on:
+				_set_state_value("shield", false)
+		StatBlock.FLAG_RANGED_WEAPON:
+			_set_state_value("ranged", on)
 		_:
 			push_warning("CharacterStats.set_flag: unbekannter Zustand %s." % flag)
 
@@ -367,6 +379,10 @@ func _do_dev_action(action: String, value: Variant) -> void:
 			set_flag(StatBlock.FLAG_MELEE_WEAPON, bool(value))
 		"shield":
 			set_flag(StatBlock.FLAG_SHIELD, bool(value))
+		"offhand":
+			set_flag(StatBlock.FLAG_OFFHAND_WEAPON, bool(value))
+		"ranged":
+			set_flag(StatBlock.FLAG_RANGED_WEAPON, bool(value))
 		"take_damage":
 			take_damage(max_health * DEV_TOOLS.damage_taken_percent / 100.0)
 		"deal_damage":
@@ -416,6 +432,8 @@ func _apply_state() -> void:
 	var flags := {
 		StatBlock.FLAG_MELEE_WEAPON: bool(stat_state.get("melee", false)),
 		StatBlock.FLAG_SHIELD: bool(stat_state.get("shield", false)),
+		StatBlock.FLAG_OFFHAND_WEAPON: bool(stat_state.get("offhand", false)),
+		StatBlock.FLAG_RANGED_WEAPON: bool(stat_state.get("ranged", false)),
 	}
 	block.set_state(_unit.get_stat_class_id(), _unit.get_stat_race_id(), int(stat_state.get("level", 1)),
 			flags, mods, _unit.get_stat_base_overrides())

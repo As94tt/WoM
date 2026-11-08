@@ -27,6 +27,11 @@ const RULES: StatRules = preload("res://data/stats/stat_rules.tres")
 ## Zustände für requires_flag.
 const FLAG_MELEE_WEAPON := &"melee_weapon"
 const FLAG_SHIELD := &"shield"
+## Zweite Nahkampfwaffe in der Nebenhand (Beidhändigkeit, #33) und
+## Fernkampfwaffe (#33). Bis Ausrüstung kommt (#29), schaltet sie das
+## Entwickler-Panel; der automatische Angriff liest sie.
+const FLAG_OFFHAND_WEAPON := &"offhand_weapon"
+const FLAG_RANGED_WEAPON := &"ranged_weapon"
 ## Wert, mit dem scales_with_haste rechnet.
 const HASTE_STAT := &"haste_pct"
 

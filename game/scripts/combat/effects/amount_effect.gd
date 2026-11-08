@@ -31,6 +31,11 @@ const TABLE_SOURCES := {
 @export var power_source: PowerSource = PowerSource.NONE
 ## Zahlen aus faehigkeitswerte.csv statt aus den Feldern oben.
 @export var values_from_ability := false
+## Spalten bzw. „werte.<schlüssel>“ für Grundwert und Faktor (#33), damit eine
+## Fähigkeit mehrere Beträge in der Tabelle haben kann (z. B. Treffer und
+## Brand über Zeit).
+@export var base_key := "grundwert"
+@export var factor_key := "faktor"
 
 
 ## Menge ohne Skalierung, mit den Werten des Wirkers jetzt.
@@ -40,8 +45,8 @@ func compute_base(ctx: EffectContext) -> float:
 	var source := power_source
 	var caster := ctx.get_caster()
 	if values_from_ability and ctx.ability != null:
-		base = ctx.ability.get_number_for(caster, "grundwert")
-		factor = ctx.ability.get_number_for(caster, "faktor")
+		base = ctx.ability.get_number_for(caster, base_key)
+		factor = ctx.ability.get_number_for(caster, factor_key)
 		source = TABLE_SOURCES.get(str(ctx.ability.get_value("faktor_quelle", "")), PowerSource.NONE)
 	var power := 0.0
 	if caster != null and caster.get_stats() != null and POWER_STATS.has(source):

@@ -285,6 +285,12 @@ func faehigkeitswert(id: StringName, key: String, fallback: Variant = null) -> V
 	return r.get_value(key, fallback)
 
 
+## Platzhalter-Waffe (#33) aus platzhalterwaffen.csv oder null, bis
+## Ausrüstung kommt (#29): haupthand, nebenhand, fernkampf, unbewaffnet.
+func platzhalterwaffe(id: StringName) -> TableRow:
+	return row("platzhalterwaffen", id)
+
+
 ## Spielkonstante aus spielkonstanten.csv (z. B. „gcd“).
 func konstante(key: StringName, fallback := 0.0) -> float:
 	var r := row("spielkonstanten", key)

@@ -15,9 +15,17 @@ extends Resource
 ## mit der Effektliste (EffectData, inkl. Zielbestimmung, Bedingungen,
 ## Skalierung) und is_spell; bestehende .tres bleiben gültig, weil fehlende
 ## Felder ihren Standardwert bekommen. Zahlen mit Veränderungen durch Talente
-## liefert get_number_for(), angehängte Effekte get_effects_for(). Zauberart, Abklingzeit, Aufladungen, Dauer und
-## Tick liefern die Funktionen unten bereits aus der Tabelle. Ausgelöst wird
-## eine Fähigkeit nur über PlayerAbilities.use_ability() (später über den Host).
+## liefert get_number_for(), angehängte Effekte get_effects_for().
+##
+## Wirken (#33): Die Gruppe „Wirken“ beschreibt, wie die Fähigkeit eingesetzt
+## wird (Ziel, Blickrichtung, globaler Cooldown, geteilte Abklingzeit,
+## Bewegung, Unterbrechbarkeit, Bedingungen, Umschalter, nächster Schlag,
+## automatischer Angriff). Die Art ergibt sich aus den Zahlen der Tabelle:
+## kanalisierzeit > 0 = kanalisiert, zauberzeit > 0 = Zauberzeit, sonst
+## sofort; aufladungen > 1 = Aufladungen (je abklingzeit Sekunden eine). Wann
+## die Effekte wirken: sofort beim Einsetzen, bei Zauberzeit am Ende, beim
+## Kanalisieren je Tick (Spalte tick). Ausgelöst wird eine Fähigkeit nur über
+## PlayerAbilities.use_ability() → UnitCaster (Host prüft und führt aus).
 
 ## Ressourcen der Tabelle (Spalte „ressource“) → Ressourcen-ID des
 ## Wertesystems (CharacterStats.RESOURCE_IDS).
@@ -29,6 +37,15 @@ const RESOURCE_IDS := {
 }
 
 enum CastType { INSTANT, CAST, CHANNELED }
+## Ziel der Fähigkeit (Prüfung 5 beim Einsetzen):
+## NONE     – kein Ziel nötig (wirkt auf bzw. um den Wirker)
+## ENEMY    – ein Feind (angreifbar: feindlich oder neutral), lebend
+## FRIENDLY – ein Freund, lebend; ohne passendes Ziel auf sich selbst
+## ANY      – Freund oder Feind
+## GROUND   – Bodenziel: Kreis am Mauszeiger, Klick setzt den Punkt
+enum TargetKind { NONE, ENEMY, FRIENDLY, ANY, GROUND }
+## Benötigte Waffe (Prüfung 8).
+enum WeaponRequirement { NONE, MELEE, SHIELD, OFFHAND, RANGED }
 
 ## Feste ID (z. B. &"feuerball"); gleich der id in faehigkeitswerte.csv. Wird
 ## in gespeicherten Aktionsleisten verwendet und nie geändert.
@@ -47,12 +64,62 @@ enum CastType { INSTANT, CAST, CHANNELED }
 ## Aktionsleisten ziehen und nicht auslösen (später: dauerhafte Aura, #32).
 @export var passive := false
 
+## Testfähigkeit (#33): steht nur im Zauberbuch, wenn sie im Entwickler-Panel
+## erlernt wurde („Testfähigkeiten erlernen“), und zählt nicht für „Alle
+## Fähigkeiten der Klasse erlernen“.
+@export var dev_only := false
+
 @export_group("Wirkung")
-## Zauber (Stille verhindert ihn, #32). Körperliche Fähigkeiten: false.
+## Zauber (Stille verhindert ihn, #32; Unterbrechen sperrt seine Schule, #33).
+## Körperliche Fähigkeiten: false.
 @export var is_spell := false
+## Schadensschule (ID aus schadensschulen.csv) für Sperre nach Unterbrechung,
+## Leuchten beim Zaubern und Projektilfarbe. Leer = Schule des ersten
+## Schadenseffekts, sonst „physisch“.
+@export var school: StringName = &""
 ## Was die Fähigkeit bewirkt (#32): eine Liste von Effekten, ausgeführt vom
-## Host über Combat.execute (Wirken folgt in #33). Leer = noch ohne Wirkung.
+## Host über Combat.execute (#33: UnitCaster). Leer = ohne Wirkung.
 @export var effects: Array[EffectData] = []
+
+@export_group("Wirken")
+@export var target_kind: TargetKind = TargetKind.ENEMY
+## Das Ziel muss vor dem Wirker stehen (nur bei Feinden geprüft).
+@export var requires_facing := true
+## Das Ziel bzw. der Bodenpunkt muss in Sichtlinie sein.
+@export var requires_line_of_sight := true
+## Außerhalb des globalen Cooldowns (löst ihn nicht aus und wartet nicht auf
+## ihn), z. B. Unterbrechungen, Schutz-Cooldowns, automatischer Angriff.
+@export var ignores_gcd := false
+## Fähigkeiten mit derselben Gruppe teilen sich die Abklingzeit (leer = eigene).
+@export var cooldown_group: StringName = &""
+## Zauberzeit bzw. Kanalisieren in Bewegung möglich (sonst bricht Bewegung ab).
+@export var castable_while_moving := false
+## Unterbrechungen stoppen diesen Zauber (false = Schild-Symbol an der Leiste).
+@export var interruptible := true
+## Umschalter: Ist diese Aura auf dem Wirker, beendet erneutes Einsetzen sie
+## (ohne Kosten, Abklingzeit und globalen Cooldown); sonst wirken die
+## Effekte (die die Aura anwenden sollten).
+@export var toggle_aura: AuraData
+## Nächster Schlag: wird beim nächsten automatischen Angriff der Haupthand
+## statt des normalen Schlags ausgelöst (Kosten dann).
+@export var on_next_swing := false
+## Startet den automatischen Angriff auf das Ziel (Nahkampffähigkeiten).
+@export var starts_auto_attack := false
+## Schaltet den automatischen Angriff an bzw. aus (Fähigkeit „Automatischer
+## Angriff“); hat sonst keine Wirkung.
+@export var toggles_auto_attack := false
+
+@export_group("Bedingungen")
+@export var required_weapon: WeaponRequirement = WeaponRequirement.NONE
+## Nur getarnt einsetzbar.
+@export var requires_stealth := false
+## Nur hinter dem Ziel einsetzbar.
+@export var requires_behind := false
+## Nur mit dieser Aura auf dem Wirker (z. B. „Rache nach Abwehren“).
+@export var required_aura: StringName = &""
+## Leuchtender Rand auf der Aktionsleiste, solange der Wirker eine dieser
+## Auren hat (Proc, z. B. „Meteor sofort wirkbar“).
+@export var highlight_auras: PackedStringArray = []
 
 
 ## Effekte inklusive der durch Talente usw. angehängten (Host).
@@ -146,6 +213,48 @@ func get_cooldown() -> float:
 ## Reichweite in Metern (0 = Nahkampf bzw. selbst).
 func get_range() -> float:
 	return _number("reichweite")
+
+
+## Aufladungen (1 = keine Aufladungen, nur Abklingzeit).
+func get_charges() -> int:
+	return maxi(1, int(_number("aufladungen")))
+
+
+## Schlüssel der Abklingzeit (geteilte Gruppe oder eigene ID).
+func get_cooldown_key() -> StringName:
+	return cooldown_group if cooldown_group != &"" else id
+
+
+## Schadensschule (siehe Feld school).
+func get_school() -> StringName:
+	if school != &"":
+		return school
+	for effect in effects:
+		var found := _school_in(effect)
+		if found != &"":
+			return found
+	return &"physisch"
+
+
+## true für Hilfszauber, die ohne passendes Ziel auf den Wirker gehen.
+func targets_friends() -> bool:
+	return target_kind == TargetKind.FRIENDLY
+
+
+static func _school_in(effect: EffectData) -> StringName:
+	if effect is DamageEffect:
+		return (effect as DamageEffect).school
+	if effect is ProjectileEffect:
+		for inner in (effect as ProjectileEffect).effects:
+			var found := _school_in(inner)
+			if found != &"":
+				return found
+	if effect is AreaEffect:
+		for inner in (effect as AreaEffect).effects:
+			var found := _school_in(inner)
+			if found != &"":
+				return found
+	return &""
 
 
 func _number(key: String) -> float:

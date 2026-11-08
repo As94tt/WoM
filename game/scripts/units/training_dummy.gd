@@ -67,6 +67,7 @@ func _enter_tree() -> void:
 	# Die Synchronizer gehören immer dem Host.
 	$ServerSync.set_multiplayer_authority(1)
 	$StatsSync.set_multiplayer_authority(1)
+	$CastSync.set_multiplayer_authority(1)
 
 
 func _ready() -> void:
@@ -90,7 +91,7 @@ func _process(delta: float) -> void:
 
 ## Sendet die Puppe auch an Peers, die inzwischen die Welt geladen haben.
 func refresh_visibility() -> void:
-	for sync in [_server_sync, _stats_sync]:
+	for sync in [_server_sync, _stats_sync, $CastSync]:
 		sync.update_visibility()
 
 

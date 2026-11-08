@@ -54,7 +54,8 @@ var current_target: Unit = null:
 	get:
 		return current_target if is_instance_valid(current_target) else null
 ## Host: automatischer Angriff auf current_target ist eingeschaltet
-## (Rechtsklick auf einen Feind). Der Angriff selbst folgt in #34.
+## (Rechtsklick auf einen Feind, Nahkampffähigkeit). Die Schläge führt seit
+## #33 UnitCaster aus; Würfel und Rüstung folgen in #34.
 var auto_attacking := false
 
 
@@ -164,6 +165,11 @@ func host_move_to(target: Transform3D) -> void:
 ## Auren, Zustände und Kampfzustand (Kindknoten „Combat“) oder null.
 func get_combat() -> UnitCombat:
 	return get_node_or_null(^"Combat") as UnitCombat
+
+
+## Fähigkeiten wirken (Kindknoten „Caster“, UnitCaster, #33) oder null.
+func get_caster_node() -> UnitCaster:
+	return get_node_or_null(^"Caster") as UnitCaster
 
 
 ## Getarnt (Zustand aus einer Aura).
