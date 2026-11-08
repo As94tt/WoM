@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="1_feuer"]
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="2_feuer"]
+
+[sub_resource type="Resource" id="Resource_feuer_mod"]
+script = ExtResource("2_feuer")
+percent = 25.0
+schools = PackedStringArray("feuer")
+
+[resource]
+script = ExtResource("1_feuer")
+id = &"test_feuermacht"
+display_name = "Feuermacht"
+description = "+25 % verursachter Feuerschaden. Testaura: Schadensmodifikator je Schule (#34)."
+category = 1
+duration = 60.0
+amount_modifiers = Array[ExtResource("2_feuer")]([SubResource("Resource_feuer_mod")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

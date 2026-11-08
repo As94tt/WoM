@@ -10,7 +10,7 @@ zaubermacht_pro_intellekt;1;Zaubermacht je Punkt Intellekt (Magier, Druide)
 mana_pro_intellekt;15;Maximales Mana je Punkt Intellekt (Magier, Druide)
 # Wertesystem (#19): Grundwerte in Prozent
 krit_grundchance;5;Kritische Trefferchance ohne Präzision
-krit_grundschaden;150;Schaden eines kritischen Treffers in Prozent des normalen Schadens, ohne Verheerung
+krit_grundschaden;200;Schaden eines kritischen Treffers bzw. einer kritischen Heilung in Prozent des normalen Werts, ohne Verheerung (#34: 200 %)
 ausweichen_grund;3;Ausweichchance ohne Abwehr
 parieren_grund;3;Parierchance ohne Abwehr (nur mit Nahkampfwaffe)
 blocken_grund;5;Blockchance ohne Abwehr (nur mit Schild)
@@ -29,6 +29,7 @@ verfehlen_grund;5;Chance zu verfehlen bei gleicher Stufe
 verfehlen_pro_stufe;2;Zusätzliche Chance je Stufe, die das Ziel höher ist (bzw. weniger, wenn es niedriger ist)
 verfehlen_min;0;Kleinste Chance zu verfehlen
 verfehlen_max;60;Größte Chance zu verfehlen
+verfehlen_beidhaendig;19;Zusätzliche Chance zu verfehlen für automatische Angriffe mit zwei Waffen (Beidhändigkeit, #34)
 # Wertesystem (#19): Ressourcen und Regeneration
 leben_regen_im_kampf;0,2;Lebensregeneration im Kampf in Prozent des maximalen Lebens je Sekunde
 leben_regen_ausser_kampf;3;Lebensregeneration außerhalb des Kampfes in Prozent des maximalen Lebens je Sekunde
@@ -62,6 +63,7 @@ kampf_dauer;5;Sekunden nach dem letzten Schaden (zugefügt oder erlitten) bzw. d
 verzoegerung_tick;0,5;Sekunden zwischen zwei Teilen verzögerten Schadens (Schadensumleitung „Verzögerung“, z. B. Last)
 kampftext_dauer;1,5;Sekunden, die eine Kampftext-Zahl sichtbar ist (steigt dabei auf und blendet aus)
 kampftext_steigen;60;Pixel, um die eine Kampftext-Zahl während ihrer Dauer aufsteigt
+kampftext_abkuerzen_ab;10000;Kampftext-Zahlen über diesem Wert werden abgekürzt, z. B. „12,3 Tsd.“ (#34)
 # Fähigkeiten wirken (#33)
 gcd_min;0,75;Kürzester globaler Cooldown in Sekunden (gcd wird durch Tempo verkürzt, aber nie darunter)
 zauber_warteschlange;0,4;Wird eine Fähigkeit so viele Sekunden vor Ende von globalem Cooldown, Zauber oder Abklingzeit gedrückt, wird sie danach automatisch ausgelöst

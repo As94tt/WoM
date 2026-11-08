@@ -191,11 +191,11 @@ func recalculate() -> void:
 
 ## Chance zu verfehlen in Prozent (kein Trefferwert): Grundwert plus fester
 ## Anteil je Stufe, die das Ziel höher ist, begrenzt auf Minimum und Maximum
-## (spielkonstanten.csv).
+## (spielkonstanten.csv). Die Formel steht seit #34 in HitFormulas.miss_chance.
 static func miss_chance(attacker_level: int, target_level: int) -> float:
-	var chance := Data.konstante(&"verfehlen_grund") \
-			+ float(target_level - attacker_level) * Data.konstante(&"verfehlen_pro_stufe")
-	return clampf(chance, Data.konstante(&"verfehlen_min"), Data.konstante(&"verfehlen_max", 100.0))
+	return HitFormulas.miss_chance(attacker_level, target_level, Data.konstante(&"verfehlen_grund"),
+			Data.konstante(&"verfehlen_pro_stufe"), Data.konstante(&"verfehlen_min"),
+			Data.konstante(&"verfehlen_max", 100.0))
 
 
 ## Prozent aus einer Wertung auf einer Stufe (Spalte in umrechnung.csv).

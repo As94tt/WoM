@@ -905,8 +905,7 @@ func _process_auto_attack(now: float) -> void:
 	var melee_range := Data.konstante(&"nahkampf_reichweite", 5.0)
 	var distance := _unit.distance_to_unit(target)
 	var ranged := stats != null and stats.has_flag(StatBlock.FLAG_RANGED_WEAPON) and distance > melee_range
-	var weapon_id := &"fernkampf" if ranged else _main_weapon_id()
-	var row := Data.platzhalterwaffe(weapon_id)
+	var row := Combat.weapon_row(_unit, ranged)
 	if row == null:
 		return
 	var reach := float(row.get_value("reichweite", melee_range)) if ranged else melee_range
@@ -942,24 +941,18 @@ func _process_auto_attack(now: float) -> void:
 					"Automatischer Angriff (Nebenhand)")
 
 
-## Waffe der Haupthand (Platzhalter, bis Ausrüstung kommt).
-func _main_weapon_id() -> StringName:
-	var stats := _unit.get_stats()
-	if stats != null and stats.has_flag(StatBlock.FLAG_MELEE_WEAPON):
-		return &"haupthand"
-	return &"unbewaffnet"
-
-
+## Ein Schlag bzw. Schuss (#34: mit Trefferwürfel, Krit, Rüstung und Blocken).
+## Mit zwei Waffen (Beidhändigkeit) verfehlen beide Hände häufiger
+## (verfehlen_beidhaendig in spielkonstanten.csv).
 func _swing(target: Unit, row: TableRow, factor: float, source: StringName, source_name: String) -> void:
-	var low := float(row.get_value("schaden_min", 1.0))
-	var high := maxf(low, float(row.get_value("schaden_max", low)))
-	var speed := float(row.get_value("tempo", 2.0))
-	var stats := _unit.get_stats()
-	var power := stats.get_value(&"attack_power") if stats != null else 0.0
-	var per_second := maxf(1.0, Data.konstante(&"kampfkraft_je_dps", 14.0))
-	var amount := (randf_range(low, high) + power / per_second * speed) * factor
+	var amount := Combat.weapon_damage(_unit, row) * factor
 	var ctx := EffectContext.create(_unit, target, source, source_name)
-	Combat.deal_damage(_unit, target, amount, &"physisch", ctx)
+	var ranged := source == &"auto:fernkampf"
+	var stats := _unit.get_stats()
+	var flags := Combat.FLAG_DUAL_WIELD \
+			if not ranged and stats != null and stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON) else 0
+	Combat.roll_damage(_unit, target, amount, &"physisch",
+			HitFormulas.AttackKind.RANGED if ranged else HitFormulas.AttackKind.MELEE, ctx, flags)
 
 
 ## Nächster Schlag: statt des normalen Schlags die Fähigkeit (Kosten jetzt).

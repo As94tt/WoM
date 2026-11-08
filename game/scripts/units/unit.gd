@@ -55,7 +55,7 @@ var current_target: Unit = null:
 		return current_target if is_instance_valid(current_target) else null
 ## Host: automatischer Angriff auf current_target ist eingeschaltet
 ## (Rechtsklick auf einen Feind, Nahkampffähigkeit). Die Schläge führt seit
-## #33 UnitCaster aus; Würfel und Rüstung folgen in #34.
+## #33 UnitCaster aus; Würfel und Rüstung rechnet seit #34 Combat.roll_damage.
 var auto_attacking := false
 
 

@@ -78,6 +78,13 @@ layout_mode = 2
 tooltip_text = "Gesperrt lassen sich Fähigkeiten nur mit gedrückter Umschalttaste (Shift) aus den Aktionsleisten ziehen."
 text = "Aktionsleisten sperren"
 
+[node name="CombatTextCheck" type="CheckBox" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+tooltip_text = "Schwebende Zahlen und Wörter für Schaden, Heilung, Verfehlt, Geblockt usw. Der Kampflog (Reiter „Kampf“) läuft unabhängig davon weiter."
+text = "Kampftext anzeigen"
+
 [node name="ResumeButton" type="Button" parent="Center/Panel/Content"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 0)

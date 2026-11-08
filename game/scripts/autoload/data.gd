@@ -14,6 +14,8 @@ extends Node
 ##   --daten-pruefen   lädt und prüft alle Tabellen, gibt die Fehler aus und
 ##                     beendet das Programm (Rückgabewert 1 bei Fehlern)
 ##   --daten-doku      schreibt die Spaltenübersicht in docs/DATENTABELLEN.md
+##   --tests           startet die automatischen Tests (#34, scripts/tests/,
+##                     TestRunner) und beendet das Programm (1 bei Fehlern)
 ## Beispiel: godot --headless --path game -- --daten-pruefen
 ##
 ## Neu laden (nur Entwicklungsmodus): Taste F6 (Aktion „reload_tables“) oder
@@ -34,6 +36,8 @@ const DOC_PATH := "../docs/DATENTABELLEN.md"
 const RELOAD_ACTION := &"reload_tables"
 const ARG_CHECK := "--daten-pruefen"
 const ARG_DOC := "--daten-doku"
+## Automatische Tests (#34, TestRunner); --tests=<teil> nur passende Sammlungen.
+const ARG_TESTS := "--tests"
 
 ## true, wenn das Programm nur für --daten-pruefen / --daten-doku läuft.
 ## Das Hauptmenü startet dann nichts (kein Schnellstart, keine Fehleranzeige).
@@ -53,7 +57,12 @@ func _ready() -> void:
 	var args := PackedStringArray()
 	args.append_array(OS.get_cmdline_args())
 	args.append_array(OS.get_cmdline_user_args())
-	if args.has(ARG_CHECK) or args.has(ARG_DOC):
+	var tests: Variant = _tests_filter(args)
+	if tests != null:
+		# Erst nach allen Autoloads (Network), deshalb verzögert.
+		command_line_mode = true
+		_run_tests.call_deferred(str(tests))
+	elif args.has(ARG_CHECK) or args.has(ARG_DOC):
 		command_line_mode = true
 		_run_command_line(args.has(ARG_CHECK), args.has(ARG_DOC))
 
@@ -329,6 +338,25 @@ func _print_errors(errors: Array[DataError]) -> void:
 	printerr("Daten: %d Fehler in den Tabellen:" % errors.size())
 	for e in errors:
 		printerr("  " + e.to_text())
+
+
+## Filter für --tests (leer = alle) bzw. null, wenn keine Tests gewünscht sind.
+## --tests=hit_formulas startet nur Sammlungen mit diesem Teil im Dateinamen.
+func _tests_filter(args: PackedStringArray) -> Variant:
+	for arg in args:
+		if arg == ARG_TESTS:
+			return ""
+		if arg.begins_with(ARG_TESTS + "="):
+			return arg.substr(ARG_TESTS.length() + 1)
+	return null
+
+
+func _run_tests(filter: String) -> void:
+	if not _valid:
+		printerr("Tests: Die Tabellen enthalten Fehler (siehe oben), Tests nicht gestartet.")
+		get_tree().quit(1)
+		return
+	get_tree().quit(TestRunner.run(get_tree(), filter))
 
 
 func _run_command_line(check: bool, doc: bool) -> void:

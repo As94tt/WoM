@@ -212,15 +212,54 @@ func _add_combat_samples() -> void:
 		var icon: AuraIcon = preload("res://scenes/ui/hud/aura_icon.tscn").instantiate()
 		row.add_child(icon)
 		icon.setup(inst, null, 36)
-	_add_row(grid, "Kampftext: Schaden (CombatTextDamage), Heilung (CombatTextHeal), erlittener Schaden (CombatTextTaken), Immun/Absorbiert (CombatTextInfo)")
-	var texts := HBoxContainer.new()
-	texts.theme_type_variation = &"ButtonRow"
+	_add_row(grid, "Kampftext (#34): Schaden je Schule (CombatTextDamage + CombatTextSchool), kritisch (CombatTextCrit), über Zeit (CombatTextDamagePeriodic), Heilung (CombatTextHeal, CombatTextHealCrit, CombatTextHealPeriodic), erlittener Schaden (CombatTextTaken), Wörter (CombatTextInfo)")
+	var texts := HFlowContainer.new()
+	texts.theme_type_variation = &"AuraFlow"
 	grid.add_child(texts)
-	for kind: Combat.TextKind in CombatTextLayer.VARIATIONS:
-		var label := Label.new()
-		label.theme_type_variation = CombatTextLayer.VARIATIONS[kind]
-		label.text = CombatTextLayer.text_for(kind, 1234.0)
-		texts.add_child(label)
+	var me := NodePath("/root/Ich")
+	var other := NodePath("/root/Puppe")
+	var hits: Array[HitResult] = []
+	for school: TableRow in Data.schadensschulen():
+		hits.append(_hit_sample(me, other, StringName(String(school.get_value("id"))),
+				HitFormulas.Outcome.HIT, 1234.0))
+	hits.append(_hit_sample(me, other, &"feuer", HitFormulas.Outcome.CRIT, 2468.0))
+	var dot := _hit_sample(me, other, &"natur", HitFormulas.Outcome.HIT, 120.0)
+	dot.flags |= HitResult.FLAG_PERIODIC
+	hits.append(dot)
+	hits.append(_hit_sample(me, other, &"physisch", HitFormulas.Outcome.HIT, 12345.0))
+	var blocked := _hit_sample(me, other, &"physisch", HitFormulas.Outcome.BLOCK, 55.0)
+	blocked.blocked = 45.0
+	hits.append(blocked)
+	var absorbed := _hit_sample(me, other, &"frost", HitFormulas.Outcome.HIT, 0.0)
+	absorbed.absorbed = 300.0
+	hits.append(absorbed)
+	for outcome: HitFormulas.Outcome in [HitFormulas.Outcome.MISS, HitFormulas.Outcome.DODGE,
+			HitFormulas.Outcome.PARRY, HitFormulas.Outcome.IMMUNE]:
+		hits.append(_hit_sample(me, other, &"physisch", outcome, 0.0))
+	for outcome: HitFormulas.Outcome in [HitFormulas.Outcome.HIT, HitFormulas.Outcome.CRIT]:
+		var heal := _hit_sample(me, other, &"", outcome, 800.0)
+		heal.flags |= HitResult.FLAG_HEAL
+		hits.append(heal)
+	var hot := _hit_sample(me, other, &"", HitFormulas.Outcome.HIT, 90.0)
+	hot.flags |= HitResult.FLAG_HEAL | HitResult.FLAG_PERIODIC
+	hits.append(hot)
+	hits.append(_hit_sample(other, me, &"physisch", HitFormulas.Outcome.HIT, 321.0))
+	hits.append(_hit_sample(other, me, &"physisch", HitFormulas.Outcome.CRIT, 642.0))
+	for sample in hits:
+		for item in CombatTextLayer.describe(sample, me):
+			texts.add_child(CombatTextLayer.make_label(item))
+
+
+## Beispiel-Kampfereignis für die Vorschau.
+func _hit_sample(source: NodePath, target: NodePath, school: StringName,
+		outcome: HitFormulas.Outcome, amount: float) -> HitResult:
+	var result := HitResult.new()
+	result.source_path = source
+	result.target_path = target
+	result.school = school
+	result.outcome = outcome
+	result.amount = amount
+	return result
 
 
 ## Fähigkeiten wirken (#33): Aktionsslots mit Abklingzeit, Proc-Leuchten,

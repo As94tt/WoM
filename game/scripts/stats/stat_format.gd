@@ -52,6 +52,23 @@ static func grouped(amount: float) -> String:
 	return (MINUS if value < 0 else "") + ".".join(parts)
 
 
+## Ganze Zahl wie grouped(), aber über threshold abgekürzt (Kampftext, #34):
+## „9.999“, „12,3 Tsd.“, „123 Tsd.“, „1,2 Mio.“ (eine Nachkommastelle unter
+## 100, darüber keine).
+static func short_amount(amount: float, threshold := 10000.0) -> String:
+	var value := absf(roundf(amount))
+	if value <= threshold:
+		return grouped(amount)
+	var sign := MINUS if amount < 0.0 else ""
+	var unit := "Tsd."
+	var scaled := value / 1000.0
+	if value >= 1000000.0:
+		unit = "Mio."
+		scaled = value / 1000000.0
+	var text := grouped(floorf(scaled)) if scaled >= 100.0 else number(floorf(scaled * 10.0) / 10.0, 1)
+	return "%s%s %s" % [sign, text, unit]
+
+
 ## Kurzer Text eines Modifikators, z. B. „+50 Stärke“ oder „−20 % Kampfkraft“.
 static func modifier(stat_name: String, definition: StatDefinition, kind: StatModifier.Kind,
 		amount: float) -> String:

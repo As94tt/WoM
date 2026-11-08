@@ -2,21 +2,23 @@ class_name AmountEffect
 extends EffectData
 ## Gemeinsame Basis für Schaden und Heilung (Ticket #32): Menge = fester
 ## Grundwert + Faktor × Kampfkraft, Zaubermacht oder Waffenschaden des
-## Wirkers. Ohne Rüstung und Würfel (kommt mit #34).
+## Wirkers. Würfel, Krit, Modifikatoren und Rüstung rechnet danach Combat
+## (roll_damage/roll_heal, #34).
 ##
 ## values_from_ability: Grundwert, Faktor und Quelle kommen aus
 ## faehigkeitswerte.csv (Spalten grundwert, faktor, faktor_quelle) der
 ## Fähigkeit im Kontext, inklusive Veränderungen durch Talente („Fähigkeit
 ## verändern“). So bleiben die Zahlen von Fähigkeiten in der Tabelle (#33).
 
-## WEAPON: Waffenschaden gibt es erst mit Ausrüstung (#29) und Treffern (#34);
-## bis dahin zählt Kampfkraft.
+## WEAPON (#34): Waffenschaden eines Schlags – Wurf zwischen min und max der
+## Waffe plus Kampfkraft (Combat.weapon_damage); bis Ausrüstung kommt (#29)
+## die Platzhalter-Waffe aus platzhalterwaffen.csv (Fernkampf bei Fähigkeiten,
+## die eine Fernkampfwaffe brauchen).
 enum PowerSource { NONE, ATTACK_POWER, SPELL_POWER, WEAPON }
 
 const POWER_STATS := {
 	PowerSource.ATTACK_POWER: &"attack_power",
 	PowerSource.SPELL_POWER: &"spell_power",
-	PowerSource.WEAPON: &"attack_power",
 }
 ## faktor_quelle in faehigkeitswerte.csv → Quelle.
 const TABLE_SOURCES := {
@@ -49,7 +51,11 @@ func compute_base(ctx: EffectContext) -> float:
 		factor = ctx.ability.get_number_for(caster, factor_key)
 		source = TABLE_SOURCES.get(str(ctx.ability.get_value("faktor_quelle", "")), PowerSource.NONE)
 	var power := 0.0
-	if caster != null and caster.get_stats() != null and POWER_STATS.has(source):
+	if source == PowerSource.WEAPON:
+		var ranged := ctx.ability != null \
+				and ctx.ability.required_weapon == AbilityData.WeaponRequirement.RANGED
+		power = Combat.weapon_damage(caster, Combat.weapon_row(caster, ranged))
+	elif caster != null and caster.get_stats() != null and POWER_STATS.has(source):
 		power = caster.get_stats().get_value(POWER_STATS[source])
 	return base + factor * power
 

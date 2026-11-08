@@ -33,6 +33,14 @@ godot --headless --path game -- --daten-pruefen
 
 `godot` steht für das Godot-Programm, z. B. `Godot_v4.7.2-stable_win64_console.exe`. Die Ausgabe ist „alles in Ordnung“ oder eine Fehlerliste.
 
+**Automatische Tests (#34):** Die Formeln der Trefferberechnung (Würfel, Rüstung, Krit, Blocken, Heilung …) prüft ein eigener kleiner Test-Runner ohne Fenster. Nach Änderungen an Kampfkonstanten oder -formeln ausführen (Rückgabewert 1 bei Fehlern):
+
+```
+godot --headless --path game -- --tests
+```
+
+Nur eine Sammlung: `--tests=hit_formulas`. Die Tests liegen in `game/scripts/tests/` (`test_*.gd`).
+
 ## 2. So ist eine Tabelle aufgebaut
 
 - **Erste Zeile:** die Spaltennamen. Reihenfolge egal, Namen genau wie in der Übersicht unten.
@@ -243,6 +251,12 @@ Eindeutig: `id`.
 | `verlust_prozent` | Kommazahl |  | 0 | 0 bis 100 | Nur Heilpuppe: Lebensverlust je Intervall in Prozent des maximalen Lebens (0 = kein Verlust). |
 | `verlust_intervall` | Kommazahl |  | 1 | 0,1 bis 60 | Nur Heilpuppe: Sekunden zwischen zwei Lebensverlusten. |
 | `immunitaeten` | Liste (ID) |  |  |  | Zustände oder Schadensschulen, gegen die die Puppe immun ist (#32), z. B. betaeubung\|feuer. Zustände: betaeubung, festhalten, verlangsamung, stille, umwerfen, tarnung, unverwundbarkeit; Schulen: IDs aus schadensschulen.csv. |
+| `ruestung` | Kommazahl |  |  | ab 0 | Rüstung (#34, mindert körperlichen Schaden). Leer = Wertesystem (0). |
+| `zauberschutz` | Kommazahl |  |  | ab 0 | Zauberschutz (#34, mindert magischen Schaden). Leer = Wertesystem (0). |
+| `ausweichen` | Kommazahl |  |  | 0 bis 100 | Ausweichchance in Prozent (#34). Leer = Wertesystem (ausweichen_grund). |
+| `parieren` | Kommazahl |  |  | 0 bis 100 | Parierchance in Prozent (#34, nur Nahkampf von vorne). Leer = Wertesystem (ohne Nahkampfwaffe 0). |
+| `blocken` | Kommazahl |  |  | 0 bis 100 | Blockchance in Prozent (#34, nur Nah- und Fernkampf von vorne). Leer = Wertesystem (ohne Schild 0). |
+| `blockwert` | Kommazahl |  |  | ab 0 | Schaden, den ein Block abfängt (#34). Leer = Wertesystem (ohne Schild 0). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Welt

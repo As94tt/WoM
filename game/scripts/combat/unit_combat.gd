@@ -184,6 +184,18 @@ func get_immunities() -> PackedStringArray:
 	return result
 
 
+## Summe der prozentualen Modifikatoren einer Art (#34) aus allen Auren,
+## z. B. get_amount_percent(AmountModifierData.Kind.DAMAGE_DONE, &"feuer").
+## Überall gleich (Clients kennen Aura-Daten und Stapel).
+func get_amount_percent(kind: AmountModifierData.Kind, school: StringName = &"") -> float:
+	var total := 0.0
+	for inst in _auras:
+		for modifier in inst.data.amount_modifiers:
+			if modifier != null and modifier.applies_to(kind, school):
+				total += modifier.percent * (float(inst.stacks) if modifier.scales_with_stacks else 1.0)
+	return total
+
+
 ## Summe aller Schilde.
 func get_absorb_total() -> float:
 	var total := 0.0
@@ -256,7 +268,10 @@ func apply_aura(data: AuraData, caster: Unit, ctx: EffectContext = null, stacks 
 	caster = caster if caster != null and is_instance_valid(caster) and caster.is_inside_tree() else null
 	var hostile := Combat.is_hostile(caster, _unit)
 	if _blocked_by_immunity(data, hostile):
-		Combat.show_text(caster, _unit, Combat.TextKind.IMMUNE, 0.0)
+		var immune := Combat.make_result(caster, _unit, ctx, &"", HitFormulas.Outcome.IMMUNE)
+		if immune.ability_name == "":
+			immune.ability_name = data.display_name
+		Combat.report(immune)
 		return null
 	var now := Network.host_time()
 	var duration := duration_override if duration_override > 0.0 else data.get_duration()
@@ -314,6 +329,11 @@ func remove_instance(inst: AuraInstance, reason: RemoveReason = RemoveReason.REM
 		inst.data.logic.on_removed(inst, self, reason)
 	if reason == RemoveReason.EXPIRED:
 		_fire_expired(inst)
+	# Kreis Instanz ↔ Kontext (ctx.aura) auflösen, sonst bleiben beide im
+	# Speicher (gefunden mit den Tests aus #34).
+	if inst.ctx != null:
+		inst.ctx.aura = null
+		inst.ctx = null
 	_update_states()
 	_dirty = true
 
@@ -473,25 +493,35 @@ func get_threat() -> Dictionary:
 	return _threat.duplicate()
 
 
-# --- Kampftext ---------------------------------------------------------------
+# --- Kampftext und Kampflog --------------------------------------------------
 
-## Host: Kampftext an einen Spieler (peer) schicken; erscheint über dieser Einheit.
-func send_combat_text(peer: int, kind: Combat.TextKind, amount: float) -> void:
+## Gruppen, die ein Kampfereignis (HitResult) anzeigen: Kampftext
+## (CombatTextLayer.show_hit) und Kampflog (MessageLog.add_hit).
+const HIT_GROUPS := [&"combat_text", &"combat_log"]
+
+## Host: Kampfereignis (#34) an einen Spieler (peer) schicken. Gerufen über
+## die Einheit, die getroffen bzw. geheilt wurde.
+func send_hit(peer: int, result: HitResult) -> void:
 	if peer == multiplayer.get_unique_id():
-		_show_text(kind, amount)
+		_show_hit(result)
 	elif multiplayer.get_peers().has(peer) and Network.is_peer_in_world(peer):
-		_rpc_combat_text.rpc_id(peer, kind, amount)
+		_rpc_hit.rpc_id(peer, result.to_array())
 
 
 @rpc("any_peer", "call_remote", "reliable")
-func _rpc_combat_text(kind: int, amount: float) -> void:
-	if multiplayer.get_remote_sender_id() == 1:
-		_show_text(kind, amount)
+func _rpc_hit(data: Array) -> void:
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	var result := HitResult.from_array(data)
+	if result != null:
+		_show_hit(result)
 
 
-func _show_text(kind: int, amount: float) -> void:
-	if is_inside_tree() and _unit != null:
-		get_tree().call_group(&"combat_text", &"show_combat_text", _unit, kind, amount)
+func _show_hit(result: HitResult) -> void:
+	if not is_inside_tree():
+		return
+	for group: StringName in HIT_GROUPS:
+		get_tree().call_group(group, &"show_hit", result)
 
 
 # --- Intern ------------------------------------------------------------------

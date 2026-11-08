@@ -72,6 +72,9 @@ const CATEGORY_NAMES := {
 ## Modifikatoren über das Wertesystem, Quelle ist die Aura-Instanz.
 @export var stat_modifiers: Array[StatModifierData] = []
 @export var modifiers_scale_with_stacks := true
+## Prozentuale Modifikatoren auf verursachten bzw. erlittenen Schaden und
+## gewirkte bzw. erhaltene Heilung, optional je Schule (#34).
+@export var amount_modifiers: Array[AmountModifierData] = []
 
 @export_group("Zustände")
 @export_flags("Betäubt", "Festgehalten", "Verlangsamt", "Still", "Umgeworfen", "Getarnt", "Unverwundbar") var states := 0
