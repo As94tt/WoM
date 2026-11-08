@@ -53,7 +53,8 @@ const DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 const RESOURCE_IDS: Array[StringName] = [&"mana", &"rage", &"energy", &"chi"]
 ## Quelle der Testmodifikatoren aus dem Entwickler-Panel.
 const DEV_SOURCE_PREFIX := "dev:test_"
-## Leben sinkt durch „Schaden nehmen“ nicht unter diesen Wert (Tod kommt in M3).
+## Leben der Heilpuppe sinkt nie unter diesen Wert (seit #35 können alle
+## anderen Einheiten auf 0 fallen und sterben).
 const MIN_HEALTH := 1.0
 
 ## Eingaben, vom Host gesetzt und von StatsSync übertragen:
@@ -89,9 +90,10 @@ var chi_draining := false:
 ## Die Rechnung (überall gleich).
 var block := StatBlock.new()
 
-## Host: Leben sinkt durch Schaden nicht unter diesen Wert. Spieler: MIN_HEALTH
-## (Tod folgt in #35); Schadenspuppen: 0 (sie füllen sich danach selbst auf).
-var min_health := MIN_HEALTH
+## Host: Leben sinkt durch Schaden nicht unter diesen Wert. Seit #35 0 (bei 0
+## stirbt die Einheit); Schadens- und Angriffspuppen füllen sich bei 0 sofort
+## wieder auf, die Heilpuppe bleibt bei MIN_HEALTH.
+var min_health := 0.0
 ## Host: Leben und Ressourcen regenerieren sich (Übungspuppen: aus).
 var regeneration_enabled := true
 
@@ -238,7 +240,7 @@ func reapply() -> void:
 		_apply_state()
 
 
-## Schaden nehmen: Leben sinkt (nicht unter min_health, Tod folgt in #35),
+## Schaden nehmen: Leben sinkt (nicht unter min_health; bei 0 tot, #35),
 ## der Krieger bekommt Wut: Faktor × Schaden / maximales Leben. Gibt den
 ## tatsächlich abgezogenen Betrag zurück.
 func take_damage(amount: float) -> float:
@@ -271,6 +273,19 @@ func set_health(value: float) -> void:
 func refill() -> void:
 	if _require_host("refill"):
 		_fill_resources()
+
+
+## Host: Rückkehr nach dem Tod (#35): Leben health_percent, Mana und Energie
+## resource_percent Prozent des Maximums (mindestens 1 Leben), Wut und Chi 0.
+func revive(health_percent: float, resource_percent: float) -> void:
+	if not _require_host("revive"):
+		return
+	health = clampf(max_health * health_percent / 100.0, minf(1.0, max_health), max_health)
+	mana = clampf(max_mana * resource_percent / 100.0, 0.0, max_mana)
+	energy = clampf(max_energy * resource_percent / 100.0, 0.0, max_energy)
+	rage = 0.0
+	chi = 0.0
+	chi_draining = false
 
 
 ## Schaden ausgeteilt: der Krieger bekommt Wut (Faktor × Schaden).
@@ -385,6 +400,8 @@ func _do_dev_action(action: String, value: Variant) -> void:
 			set_flag(StatBlock.FLAG_RANGED_WEAPON, bool(value))
 		"take_damage":
 			take_damage(max_health * DEV_TOOLS.damage_taken_percent / 100.0)
+		"die":
+			set_health(0.0)
 		"deal_damage":
 			register_damage_dealt(DEV_TOOLS.damage_dealt)
 		"spend":
@@ -464,7 +481,8 @@ func _on_block_changed() -> void:
 		# der aktuelle Wert um denselben Betrag; sinkt es, wird nur begrenzt.
 		var new_max_health := block.get_value(&"max_health")
 		var new_max_mana := block.get_value(&"max_mana")
-		if _filled:
+		# Tote (#35) bleiben bei 0, auch wenn beim Tod ein Debuff auf Ausdauer endet.
+		if _filled and health > 0.0:
 			health += maxf(0.0, new_max_health - max_health)
 			mana += maxf(0.0, new_max_mana - max_mana)
 		max_health = new_max_health
@@ -497,6 +515,9 @@ func _clamp_resources() -> void:
 ## Host: Regeneration und Verfall je Bild. Alle Raten aus spielkonstanten.csv
 ## bzw. aus den Werten (Manaregeneration, Energieregeneration).
 func _regenerate(delta: float) -> void:
+	# Tote regenerieren nichts (#35).
+	if _unit != null and _unit.is_dead():
+		return
 	var combat := is_in_combat()
 	if health < max_health:
 		var percent := Data.konstante(&"leben_regen_im_kampf" if combat else &"leben_regen_ausser_kampf")

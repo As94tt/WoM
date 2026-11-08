@@ -24,6 +24,9 @@ extends RefCounted
 ##   Heilung (roll_damage, roll_heal; Reihenfolge siehe dort), danach
 ##   Kampfzustand, Auren, die durch Schaden enden, Auslöser (Procs) und
 ##   Kampftext/Kampflog (HitResult an die beteiligten Spieler).
+## - Seit #35 dazu Bedrohung (Schaden, Heilung, Spott, Zurücksetzen; Formeln
+##   in ThreatFormulas, Liste in UnitCombat) und der Tod (UnitCombat,
+##   RevivalService für Wiedereinstieg und Aufhelfen).
 ##
 ## Einstiegspunkte:
 ##   Combat.execute(ability.get_effects_for(caster), ctx)   – #33 Fähigkeiten
@@ -143,6 +146,7 @@ static func roll_damage(caster: Unit, target: Unit, base_amount: float, school: 
 	enter_combat(target)
 	if caster != null and caster != target:
 		enter_combat(caster)
+		list_pair(caster, target)
 	if is_immune(target, school):
 		result.outcome = HitFormulas.Outcome.IMMUNE
 		report(result)
@@ -188,6 +192,7 @@ static func deal_damage(caster: Unit, target: Unit, amount: float, school: Strin
 	enter_combat(target)
 	if caster != null and caster != target:
 		enter_combat(caster)
+		list_pair(caster, target)
 	if is_immune(target, school):
 		result.outcome = HitFormulas.Outcome.IMMUNE
 		report(result)
@@ -199,7 +204,8 @@ static func deal_damage(caster: Unit, target: Unit, amount: float, school: Strin
 ## Host: Heilung mit Würfel (#34): Grundheilung (base_amount, bereits mit
 ## Zaubermacht) × Modifikatoren (gewirkte Heilung des Wirkers, erhaltene
 ## Heilung des Ziels), kritisch × kritischer Heilwert (Wert „Kritischer
-## Schaden“). Überheilung steht im Ergebnis. Heilen bringt nicht in den Kampf.
+## Schaden“). Überheilung steht im Ergebnis. Heilt man jemanden im Kampf,
+## gerät man selbst hinein und erzeugt Bedrohung (#35, _finish_heal).
 static func roll_heal(caster: Unit, target: Unit, base_amount: float, ctx: EffectContext = null,
 		flags := 0) -> HitResult:
 	if not Network.is_host() or not _is_alive(target) or base_amount <= 0.0:
@@ -236,11 +242,54 @@ static func enter_combat(unit: Unit) -> void:
 		unit.get_combat().enter_combat()
 
 
-## Bedrohung ändern (Platzhalter bis #35): wird bei target mitgezählt und im
-## Entwickler-Panel angezeigt, hat aber noch keine Wirkung.
-static func add_threat(caster: Unit, target: Unit, amount: float) -> void:
+# --- Bedrohung (#35) ---------------------------------------------------------
+
+## Faktor auf die Bedrohung, die unit erzeugt (Auren mit Modifikator
+## „Bedrohung“: Tankhaltungen +200 % = dreifach, Verborgene Stellung −50 %).
+static func threat_factor(unit: Unit) -> float:
+	var combat := unit.get_combat() if unit != null and is_instance_valid(unit) else null
+	if combat == null:
+		return 1.0
+	return ThreatFormulas.modifier_factor(combat.get_amount_percent(AmountModifierData.Kind.THREAT))
+
+
+## true, wenn unit als Tank gilt: erzeugt mindestens tank_bedrohung_faktor-
+## fache Bedrohung (Tank-Hinweis an den Namensplaketten). Überall lesbar.
+static func is_tank(unit: Unit) -> bool:
+	return threat_factor(unit) >= Data.konstante(&"tank_bedrohung_faktor", 3.0) - 0.001
+
+
+## Host: Bedrohung von caster bei target ändern (Effekt „Bedrohung ändern“,
+## Schaden, Heilung). with_factor: mit dem Faktor des Verursachers.
+static func add_threat(caster: Unit, target: Unit, amount: float, with_factor := true) -> void:
+	if not Network.is_host() or not _is_alive(target) or caster == null or target.get_combat() == null:
+		return
+	target.get_combat().add_threat(caster, amount * (threat_factor(caster) if with_factor else 1.0))
+
+
+## Host: Spott – caster bekommt die höchste Bedrohung, target greift ihn
+## duration Sekunden an.
+static func taunt(caster: Unit, target: Unit, duration: float) -> void:
 	if Network.is_host() and _is_alive(target) and caster != null and target.get_combat() != null:
-		target.get_combat().add_threat(caster, amount)
+		target.get_combat().taunt(caster, duration)
+
+
+## Host: Bedrohung von caster bei target zurücksetzen (z. B. Totstellen):
+## caster verschwindet von der Liste, target wählt neu.
+static func reset_threat(caster: Unit, target: Unit) -> void:
+	if Network.is_host() and target != null and is_instance_valid(target) and target.get_combat() != null:
+		target.get_combat().remove_threat_source(caster)
+
+
+## Host: a und b sind miteinander im Kampf – wer eine Bedrohungsliste führt,
+## nimmt den anderen (Spieler) mit 0 auf (Treffer, Verfehlen, feindliche Aura).
+static func list_pair(a: Unit, b: Unit) -> void:
+	if a == null or b == null or a == b or not is_instance_valid(a) or not is_instance_valid(b):
+		return
+	if a.get_combat() != null:
+		a.get_combat().add_threat(b, 0.0)
+	if b.get_combat() != null:
+		b.get_combat().add_threat(a, 0.0)
 
 
 # --- Werte für die Formeln (aus Wertesystem und Tabellen) --------------------
@@ -484,10 +533,16 @@ static func _finish_damage(caster: Unit, target: Unit, amount: float, school: St
 	var remaining := after_redirect - absorbed
 	var stats := target.get_stats()
 	var before := stats.health if stats != null else 0.0
+	if target_combat != null and caster != null and caster != target:
+		target_combat.set_last_attacker(caster)
 	var dealt := target.apply_damage(remaining, caster) if remaining > 0.0 else 0.0
 	var killed := stats != null and before > 0.0 and dealt > 0.0 and dealt >= before - 0.001
 	if caster != null and caster.get_stats() != null and dealt > 0.0:
 		caster.get_stats().register_damage_dealt(dealt)
+	# Bedrohung (#35): Schaden am Gegner (nach Minderung, mit Absorption).
+	if caster != null and caster != target and amount > 0.0:
+		add_threat(caster, target, ThreatFormulas.damage_threat(amount,
+				Data.konstante(&"bedrohung_pro_schaden", 1.0), 1.0))
 	result.absorbed = absorbed
 	result.amount = maxf(0.0, amount - absorbed)
 	report(result)
@@ -503,13 +558,38 @@ static func _finish_damage(caster: Unit, target: Unit, amount: float, school: St
 			notify_event(caster, Event.HIT, target, amount)
 	if killed and caster != null and caster != target:
 		notify_event(caster, Event.KILL, target, dealt)
+	# Tod (#35) sofort bemerken, nicht erst im nächsten Bild.
+	if target_combat != null:
+		target_combat.check_death()
+		# Nur der tödliche Treffer nennt den Verursacher (sonst wäre ein späterer
+		# Tod ohne Schaden, z. B. Entwickler-Panel, einem alten Angreifer zugeordnet).
+		target_combat.set_last_attacker(null)
 	return dealt
 
 
 ## Heilung aufs Leben, Überheilung erfassen (Heilpuppe zählt sie selbst),
-## Kampftext und Kampflog.
+## Kampftext und Kampflog. Seit #35: Ist der Geheilte im Kampf, gerät der
+## Heiler auch hinein, und jeder Gegner, der mit dem Geheilten im Kampf ist,
+## bekommt Bedrohung (wirksame Heilung × bedrohung_heilfaktor, aufgeteilt).
 static func _finish_heal(caster: Unit, target: Unit, amount: float, result: HitResult) -> void:
 	var overheal := target.apply_heal(amount, caster)
 	result.amount = amount
 	result.overheal = overheal
 	report(result)
+	_heal_threat(caster, target, maxf(0.0, amount - overheal))
+
+
+static func _heal_threat(caster: Unit, target: Unit, effective: float) -> void:
+	if caster == null or not is_instance_valid(caster) or not caster.is_player_unit():
+		return
+	var target_stats := target.get_stats()
+	if caster != target and target_stats != null and target_stats.is_in_combat():
+		enter_combat(caster)
+	var target_combat := target.get_combat()
+	if target_combat == null:
+		return
+	var enemies := target_combat.get_enemies_in_combat()
+	var share := ThreatFormulas.heal_threat_per_enemy(effective, Data.konstante(&"bedrohung_heilfaktor", 0.5),
+			threat_factor(caster), enemies.size())
+	for enemy in enemies:
+		add_threat(caster, enemy, share, false)

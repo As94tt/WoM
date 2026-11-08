@@ -8,7 +8,8 @@
 
 [sub_resource type="Resource" id="Resource_7iyyc"]
 script = ExtResource("4_gpy7q")
-amount = 1000.0
+mode = 1
+duration_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")

@@ -5,10 +5,15 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_pwn1u"]
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_f8apk"]
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_6cjn8"]
+[ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="5_threat"]
 
 [sub_resource type="Resource" id="Resource_r2p5a"]
 script = ExtResource("4_6cjn8")
 values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_threat"]
+script = ExtResource("5_threat")
+amount_key = "werte.bedrohung"
 
 [resource]
 script = ExtResource("1_ability")
@@ -16,7 +21,7 @@ id = &"schildschlag"
 display_name = "Schildschlag"
 description = "Schlägt das Ziel mit dem Schild, verursacht Schaden und erzeugt viel Bedrohung."
 class_id = &"warrior"
-effects = Array[ExtResource("1_335uu")]([SubResource("Resource_r2p5a")])
+effects = Array[ExtResource("1_335uu")]([SubResource("Resource_r2p5a"), SubResource("Resource_threat")])
 starts_auto_attack = true
 required_weapon = 2
 highlight_auras = PackedStringArray()

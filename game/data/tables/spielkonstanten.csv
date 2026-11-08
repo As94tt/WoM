@@ -3,6 +3,15 @@ schluessel;wert;notiz
 gcd;1,5;Globaler Cooldown in Sekunden
 bedrohung_schwelle_nahkampf;110;Bedrohung in Prozent, ab der ein Gegner im Nahkampf das Ziel wechselt
 bedrohung_schwelle_fernkampf;130;Bedrohung in Prozent, ab der ein Gegner auf Abstand das Ziel wechselt
+# Bedrohung, Tod und Wiederbelebung (#35)
+bedrohung_pro_schaden;1;Bedrohung je Punkt Schaden am Gegner (nach Rüstung, mit Absorption)
+bedrohung_heilfaktor;0,5;Bedrohung je Punkt wirksamer Heilung (ohne Überheilung), aufgeteilt auf alle Gegner, die mit dem Geheilten im Kampf sind
+bedrohung_warnung_ab;80;Bedrohungsanzeige am Zielrahmen: ab so viel Prozent der für den Zielwechsel nötigen Bedrohung gelb statt grün
+tank_bedrohung_faktor;3;Ab diesem Faktor auf erzeugte Bedrohung (Auren) gilt ein Spieler als Tank: Namensplaketten von Gegnern, die jemand anderen angreifen, bekommen einen roten Rand
+wiedereinstieg_leben;50;Leben in Prozent nach „Am Wiedereinstiegspunkt erscheinen“
+wiedereinstieg_ressourcen;50;Mana und Energie in Prozent nach „Am Wiedereinstiegspunkt erscheinen“ (Wut und Chi 0)
+alle_tot_wartezeit;5;Sekunden, nach denen alle am Wiedereinstiegspunkt erscheinen, wenn alle Spieler einer Sitzung tot sind
+leiche_dauer;30;Sekunden, nach denen ein gestorbener Gegner verschwindet
 # Wertesystem (#19): Umrechnung von Attributen (Platzhalter, Balancing folgt)
 leben_pro_ausdauer;10;Maximales Leben je Punkt Ausdauer
 kampfkraft_pro_hauptattribut;2;Kampfkraft je Punkt Hauptattribut (Stärke beim Krieger, Gewandtheit bei Schurke und Mönch)

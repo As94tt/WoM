@@ -5,7 +5,7 @@ extends CharacterBody3D
 ## Jede Einheit hat Name, Stufe, Leben und Ressourcen samt Werten (Kindknoten
 ## „Stats“, CharacterStats aus #19), eine Gesinnung und einen Rang. Seit #32
 ## dazu Auren, Zustände und Kampfzustand (Kindknoten „Combat“, UnitCombat);
-## Bedrohung (#35) kommt als weiterer Baustein dazu.
+## seit #35 auch Bedrohungsliste und Tod (ebenfalls UnitCombat).
 ##
 ## Schaden und Heilung im Spiel laufen über Combat.deal_damage/Combat.heal
 ## (Immunität, Umleitung, Absorption, Auslöser, Kampftext); apply_damage und
@@ -30,6 +30,10 @@ extends CharacterBody3D
 ## Name, Stufe, Gesinnung, Rang oder Sichtbarkeit haben sich geändert
 ## (Rahmen und Namensplaketten aktualisieren sich).
 signal unit_changed
+## Nur Host (#35): Die Einheit ist gestorben; killer = wer zuletzt Schaden
+## gemacht hat (oder null). Ereignis für andere Systeme (später Erfahrung,
+## Beute, Respawn, Quests). GameWorld meldet es zusätzlich als unit_died.
+signal died(killer: Unit)
 
 ## Gesinnung gegenüber einer anderen Einheit. Farben im Theme (UnitColors).
 enum Reaction { HOSTILE, NEUTRAL, FRIENDLY }
@@ -201,6 +205,21 @@ func on_states_changed() -> void:
 	unit_changed.emit()
 
 
+## Von UnitCombat gerufen, wenn die Einheit stirbt bzw. wieder lebt (#35,
+## auf allen Instanzen). Graubox: Das Modell kippt nach hinten um.
+func on_death_changed(dead: bool) -> void:
+	var model := get_node_or_null(^"Model") as Node3D
+	if model != null:
+		model.rotation.x = -PI / 2.0 if dead else 0.0
+	unit_changed.emit()
+
+
+## Host (#35): Verschwindet die Einheit nach dem Tod nach leiche_dauer
+## Sekunden? Gegner ja, Spielfiguren nie (sie kehren zurück).
+func removes_corpse() -> bool:
+	return not is_player_unit()
+
+
 ## Eigene Spielfigur dieser Instanz oder null.
 static func local_player(tree: SceneTree) -> Unit:
 	if tree == null:
@@ -213,7 +232,7 @@ static func local_player(tree: SceneTree) -> Unit:
 
 # --- Zustand ----------------------------------------------------------------
 
-## Tot (Leben 0). Tod und Wiedereinstieg folgen in #35.
+## Tot (Leben 0, #35). Überall gleich, weil das Leben übertragen wird.
 func is_dead() -> bool:
 	var stats := get_stats()
 	return stats != null and stats.max_health > 0.0 and stats.health <= 0.0
