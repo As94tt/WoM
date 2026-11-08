@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="StatDevTools" format=3]
+
+[ext_resource type="Script" path="res://scripts/stats/stat_dev_tools.gd" id="1_dev"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="2_mod"]
+
+[sub_resource type="Resource" id="Mod_0"]
+script = ExtResource("2_mod")
+stat = &"strength"
+value = 50.0
+
+[sub_resource type="Resource" id="Mod_1"]
+script = ExtResource("2_mod")
+stat = &"agility"
+value = 50.0
+
+[sub_resource type="Resource" id="Mod_2"]
+script = ExtResource("2_mod")
+stat = &"intellect"
+value = 50.0
+
+[sub_resource type="Resource" id="Mod_3"]
+script = ExtResource("2_mod")
+stat = &"stamina"
+value = 50.0
+
+[sub_resource type="Resource" id="Mod_4"]
+script = ExtResource("2_mod")
+stat = &"precision"
+value = 100.0
+
+[sub_resource type="Resource" id="Mod_5"]
+script = ExtResource("2_mod")
+stat = &"devastation"
+value = 100.0
+
+[sub_resource type="Resource" id="Mod_6"]
+script = ExtResource("2_mod")
+stat = &"haste"
+value = 100.0
+
+[sub_resource type="Resource" id="Mod_7"]
+script = ExtResource("2_mod")
+stat = &"penetration"
+value = 100.0
+
+[sub_resource type="Resource" id="Mod_8"]
+script = ExtResource("2_mod")
+stat = &"swiftness"
+value = 200.0
+
+[sub_resource type="Resource" id="Mod_9"]
+script = ExtResource("2_mod")
+stat = &"avoidance"
+value = 100.0
+
+[sub_resource type="Resource" id="Mod_10"]
+script = ExtResource("2_mod")
+stat = &"armor"
+value = 500.0
+
+[sub_resource type="Resource" id="Mod_11"]
+script = ExtResource("2_mod")
+stat = &"spell_ward"
+value = 500.0
+
+[sub_resource type="Resource" id="Mod_12"]
+script = ExtResource("2_mod")
+stat = &"block_value"
+value = 50.0
+
+[sub_resource type="Resource" id="Mod_13"]
+script = ExtResource("2_mod")
+stat = &"attack_power"
+kind = 1
+value = -20.0
+
+[sub_resource type="Resource" id="Mod_14"]
+script = ExtResource("2_mod")
+stat = &"spell_power"
+kind = 1
+value = -20.0
+
+[resource]
+script = ExtResource("1_dev")
+test_modifiers = Array[ExtResource("2_mod")]([SubResource("Mod_0"), SubResource("Mod_1"), SubResource("Mod_2"), SubResource("Mod_3"), SubResource("Mod_4"), SubResource("Mod_5"), SubResource("Mod_6"), SubResource("Mod_7"), SubResource("Mod_8"), SubResource("Mod_9"), SubResource("Mod_10"), SubResource("Mod_11"), SubResource("Mod_12"), SubResource("Mod_13"), SubResource("Mod_14")])

@@ -11,3 +11,6 @@ role = 0
 role_name = "Schaden"
 color = Color(0.35, 0.6, 1, 1)
 order = 1
+primary_attribute = &"intellect"
+power_stat = &"spell_power"
+resources = Array[StringName]([&"mana"])

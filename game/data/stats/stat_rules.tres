@@ -1,0 +1,372 @@
+[gd_resource type="Resource" script_class="StatRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/stats/stat_rules.gd" id="1_rules"]
+[ext_resource type="Script" path="res://scripts/stats/stat_definition.gd" id="2_def"]
+
+[sub_resource type="Resource" id="Stat_strength"]
+script = ExtResource("2_def")
+id = &"strength"
+display_name = "Stärke"
+description = "Erhöht die Kampfkraft. Hauptattribut des Kriegers."
+category = 0
+level_column = "staerke"
+race_column = "staerke"
+requires_primary = true
+
+[sub_resource type="Resource" id="Stat_agility"]
+script = ExtResource("2_def")
+id = &"agility"
+display_name = "Gewandtheit"
+description = "Erhöht die Kampfkraft. Hauptattribut von Schurke und Mönch."
+category = 0
+level_column = "gewandtheit"
+race_column = "gewandtheit"
+requires_primary = true
+
+[sub_resource type="Resource" id="Stat_intellect"]
+script = ExtResource("2_def")
+id = &"intellect"
+display_name = "Intellekt"
+description = "Erhöht Zaubermacht und maximales Mana. Hauptattribut von Magier und Druide."
+category = 0
+level_column = "intellekt"
+race_column = "intellekt"
+requires_primary = true
+
+[sub_resource type="Resource" id="Stat_stamina"]
+script = ExtResource("2_def")
+id = &"stamina"
+display_name = "Ausdauer"
+description = "Erhöht das maximale Leben."
+category = 0
+level_column = "ausdauer"
+race_column = "ausdauer"
+
+[sub_resource type="Resource" id="Stat_willpower"]
+script = ExtResource("2_def")
+id = &"willpower"
+display_name = "Willenskraft"
+description = "Erhöht die Manaregeneration."
+category = 0
+level_column = "willenskraft"
+race_column = "willenskraft"
+requires_resource = &"mana"
+
+[sub_resource type="Resource" id="Stat_precision"]
+script = ExtResource("2_def")
+id = &"precision"
+display_name = "Präzision"
+description = "Wertung: erhöht die Chance auf kritische Treffer und Heilungen."
+
+[sub_resource type="Resource" id="Stat_devastation"]
+script = ExtResource("2_def")
+id = &"devastation"
+display_name = "Verheerung"
+description = "Wertung: erhöht die Stärke kritischer Treffer und Heilungen."
+
+[sub_resource type="Resource" id="Stat_haste"]
+script = ExtResource("2_def")
+id = &"haste"
+display_name = "Tempo"
+description = "Wertung: schnellere Angriffe, kürzere Zauberzeit und globaler Cooldown, schnellere Energieregeneration."
+
+[sub_resource type="Resource" id="Stat_penetration"]
+script = ExtResource("2_def")
+id = &"penetration"
+display_name = "Durchschlag"
+description = "Wertung: ignoriert einen Teil von Rüstung bzw. Zauberschutz des Ziels."
+
+[sub_resource type="Resource" id="Stat_avoidance"]
+script = ExtResource("2_def")
+id = &"avoidance"
+display_name = "Abwehr"
+description = "Wertung: erhöht Ausweichen, Parieren und Blocken."
+
+[sub_resource type="Resource" id="Stat_swiftness"]
+script = ExtResource("2_def")
+id = &"swiftness"
+display_name = "Eile"
+description = "Wertung: erhöht die Laufgeschwindigkeit."
+
+[sub_resource type="Resource" id="Stat_armor"]
+script = ExtResource("2_def")
+id = &"armor"
+display_name = "Rüstung"
+description = "Verringert erlittenen körperlichen Schaden. Mehr Rüstung hilft immer, aber jeder Punkt etwas weniger."
+category = 2
+display_order = 1
+
+[sub_resource type="Resource" id="Stat_spell_ward"]
+script = ExtResource("2_def")
+id = &"spell_ward"
+display_name = "Zauberschutz"
+description = "Verringert erlittenen magischen Schaden. Mehr Zauberschutz hilft immer, aber jeder Punkt etwas weniger."
+category = 2
+display_order = 3
+
+[sub_resource type="Resource" id="Stat_block_value"]
+script = ExtResource("2_def")
+id = &"block_value"
+display_name = "Blockwert"
+description = "Schaden, den ein erfolgreicher Block abfängt (nur mit Schild)."
+category = 2
+display_order = 8
+requires_flag = &"shield"
+
+[sub_resource type="Resource" id="Stat_max_health"]
+script = ExtResource("2_def")
+id = &"max_health"
+display_name = "Leben"
+description = "Maximales Leben. Regeneriert außerhalb des Kampfes deutlich schneller als im Kampf."
+category = 3
+formula = 1
+level_column = "leben"
+source = &"stamina"
+factor_key = "leben_pro_ausdauer"
+
+[sub_resource type="Resource" id="Stat_attack_power"]
+script = ExtResource("2_def")
+id = &"attack_power"
+display_name = "Kampfkraft"
+description = "Erhöht den Schaden von Waffenangriffen und Fähigkeiten. Beim Mönch auch den seiner Sofortzauber."
+category = 1
+formula = 1
+level_column = "kampfkraft"
+source = &"primary_attribute"
+factor_key = "kampfkraft_pro_hauptattribut"
+requires_power = &"attack_power"
+
+[sub_resource type="Resource" id="Stat_spell_power"]
+script = ExtResource("2_def")
+id = &"spell_power"
+display_name = "Zaubermacht"
+description = "Erhöht Schaden und Heilung von Zaubern."
+category = 1
+formula = 1
+level_column = "zaubermacht"
+source = &"intellect"
+factor_key = "zaubermacht_pro_intellekt"
+requires_power = &"spell_power"
+
+[sub_resource type="Resource" id="Stat_crit_chance"]
+script = ExtResource("2_def")
+id = &"crit_chance"
+display_name = "Kritische Trefferchance"
+description = "Chance auf kritische Treffer und kritische Heilungen. Erhöht durch Präzision."
+category = 1
+display = 1
+formula = 2
+base_key = "krit_grundchance"
+source = &"precision"
+conversion_column = "praezision"
+cap_key = "obergrenze_krit"
+
+[sub_resource type="Resource" id="Stat_crit_damage"]
+script = ExtResource("2_def")
+id = &"crit_damage"
+display_name = "Kritischer Schaden"
+description = "Stärke kritischer Treffer und Heilungen in Prozent des normalen Werts. Erhöht durch Verheerung."
+category = 1
+display = 1
+formula = 2
+base_key = "krit_grundschaden"
+source = &"devastation"
+conversion_column = "verheerung"
+
+[sub_resource type="Resource" id="Stat_haste_pct"]
+script = ExtResource("2_def")
+id = &"haste_pct"
+display_name = "Tempo"
+description = "Schnellere Angriffe, kürzere Zauberzeit und globaler Cooldown, schnellere Energieregeneration."
+category = 1
+display = 1
+formula = 2
+source = &"haste"
+conversion_column = "tempo"
+
+[sub_resource type="Resource" id="Stat_penetration_pct"]
+script = ExtResource("2_def")
+id = &"penetration_pct"
+display_name = "Durchschlag"
+description = "Ignoriert diesen Anteil von Rüstung bzw. Zauberschutz des Ziels."
+category = 1
+display = 1
+formula = 2
+source = &"penetration"
+conversion_column = "durchschlag"
+cap_key = "obergrenze_durchschlag"
+
+[sub_resource type="Resource" id="Stat_swiftness_pct"]
+script = ExtResource("2_def")
+id = &"swiftness_pct"
+display_name = "Eile"
+description = "Erhöht die Laufgeschwindigkeit um diesen Anteil."
+category = 1
+display = 1
+formula = 2
+source = &"swiftness"
+conversion_column = "eile"
+
+[sub_resource type="Resource" id="Stat_movement_speed"]
+script = ExtResource("2_def")
+id = &"movement_speed"
+display_name = "Laufgeschwindigkeit"
+description = "Laufgeschwindigkeit in Prozent des Grundwerts (Eile, später auch Auren wie Verlangsamung oder Sprint)."
+display = 1
+formula = 1
+base_key = "bewegung_grund"
+source = &"swiftness_pct"
+cap_key = "obergrenze_bewegung"
+
+[sub_resource type="Resource" id="Stat_armor_reduction"]
+script = ExtResource("2_def")
+id = &"armor_reduction"
+display_name = "Verringerung durch Rüstung"
+description = "Um so viel wird erlittener körperlicher Schaden verringert."
+category = 2
+display = 1
+display_order = 2
+formula = 3
+source = &"armor"
+conversion_column = "ruestung_konstante"
+cap_key = "obergrenze_ruestung"
+
+[sub_resource type="Resource" id="Stat_ward_reduction"]
+script = ExtResource("2_def")
+id = &"ward_reduction"
+display_name = "Verringerung durch Zauberschutz"
+description = "Um so viel wird erlittener magischer Schaden verringert."
+category = 2
+display = 1
+display_order = 4
+formula = 3
+source = &"spell_ward"
+conversion_column = "zauberschutz_konstante"
+cap_key = "obergrenze_zauberschutz"
+
+[sub_resource type="Resource" id="Stat_dodge"]
+script = ExtResource("2_def")
+id = &"dodge"
+display_name = "Ausweichen"
+description = "Chance, einem Angriff auszuweichen. Erhöht durch Abwehr."
+category = 2
+display = 1
+display_order = 5
+formula = 2
+base_key = "ausweichen_grund"
+source = &"avoidance"
+conversion_column = "abwehr"
+cap_key = "obergrenze_ausweichen"
+
+[sub_resource type="Resource" id="Stat_parry"]
+script = ExtResource("2_def")
+id = &"parry"
+display_name = "Parieren"
+description = "Chance, einen Nahkampfangriff zu parieren (nur mit Nahkampfwaffe). Erhöht durch Abwehr."
+category = 2
+display = 1
+display_order = 6
+formula = 2
+base_key = "parieren_grund"
+source = &"avoidance"
+conversion_column = "abwehr"
+cap_key = "obergrenze_parieren"
+requires_flag = &"melee_weapon"
+
+[sub_resource type="Resource" id="Stat_block"]
+script = ExtResource("2_def")
+id = &"block"
+display_name = "Blocken"
+description = "Chance, einen Angriff zu blocken (nur mit Schild). Erhöht durch Abwehr."
+category = 2
+display = 1
+display_order = 7
+formula = 2
+base_key = "blocken_grund"
+source = &"avoidance"
+conversion_column = "abwehr"
+cap_key = "obergrenze_blocken"
+requires_flag = &"shield"
+
+[sub_resource type="Resource" id="Stat_max_mana"]
+script = ExtResource("2_def")
+id = &"max_mana"
+display_name = "Mana"
+description = "Mana für Zauber. Regeneriert ständig, außerhalb des Kampfes schneller."
+category = 3
+display_order = 1
+formula = 1
+level_column = "mana"
+source = &"intellect"
+factor_key = "mana_pro_intellekt"
+requires_resource = &"mana"
+
+[sub_resource type="Resource" id="Stat_mana_regen"]
+script = ExtResource("2_def")
+id = &"mana_regen"
+display_name = "Manaregeneration"
+description = "Mana je Sekunde im Kampf. Außerhalb des Kampfes regeneriert Mana schneller."
+category = 3
+display = 2
+display_order = 2
+formula = 1
+base_key = "mana_regen_grund"
+source = &"willpower"
+factor_key = "mana_regen_pro_willenskraft"
+requires_resource = &"mana"
+
+[sub_resource type="Resource" id="Stat_max_rage"]
+script = ExtResource("2_def")
+id = &"max_rage"
+display_name = "Wut"
+description = "Wut entsteht durch ausgeteilten und erlittenen Schaden und verfällt außerhalb des Kampfes."
+category = 3
+display_order = 3
+formula = 1
+base_key = "wut_max"
+requires_resource = &"rage"
+
+[sub_resource type="Resource" id="Stat_max_energy"]
+script = ExtResource("2_def")
+id = &"max_energy"
+display_name = "Energie"
+description = "Energie regeneriert schnell, mit Tempo noch schneller."
+category = 3
+display_order = 4
+formula = 1
+base_key = "energie_max"
+requires_resource = &"energy"
+
+[sub_resource type="Resource" id="Stat_energy_regen"]
+script = ExtResource("2_def")
+id = &"energy_regen"
+display_name = "Energieregeneration"
+description = "Energie je Sekunde. Erhöht durch Tempo."
+category = 3
+display = 2
+display_order = 5
+formula = 1
+base_key = "energie_regen_pro_s"
+scales_with_haste = true
+requires_resource = &"energy"
+
+[sub_resource type="Resource" id="Stat_max_chi"]
+script = ExtResource("2_def")
+id = &"max_chi"
+display_name = "Chi"
+description = "Chi wird durch Fähigkeiten aufgebaut. Bei vollem Chi wird ein Zustand ausgelöst, danach sinkt Chi langsam auf 0 und muss neu aufgebaut werden."
+category = 3
+display_order = 6
+formula = 1
+base_key = "chi_max"
+requires_resource = &"chi"
+
+[resource]
+script = ExtResource("1_rules")
+stats = Array[ExtResource("2_def")]([SubResource("Stat_strength"), SubResource("Stat_agility"), SubResource("Stat_intellect"), SubResource("Stat_stamina"), SubResource("Stat_willpower"), SubResource("Stat_precision"), SubResource("Stat_devastation"), SubResource("Stat_haste"), SubResource("Stat_penetration"), SubResource("Stat_avoidance"), SubResource("Stat_swiftness"), SubResource("Stat_armor"), SubResource("Stat_spell_ward"), SubResource("Stat_block_value"), SubResource("Stat_max_health"), SubResource("Stat_attack_power"), SubResource("Stat_spell_power"), SubResource("Stat_crit_chance"), SubResource("Stat_crit_damage"), SubResource("Stat_haste_pct"), SubResource("Stat_penetration_pct"), SubResource("Stat_swiftness_pct"), SubResource("Stat_movement_speed"), SubResource("Stat_armor_reduction"), SubResource("Stat_ward_reduction"), SubResource("Stat_dodge"), SubResource("Stat_parry"), SubResource("Stat_block"), SubResource("Stat_max_mana"), SubResource("Stat_mana_regen"), SubResource("Stat_max_rage"), SubResource("Stat_max_energy"), SubResource("Stat_energy_regen"), SubResource("Stat_max_chi")])
+resource_names = Dictionary[StringName, String]({
+&"chi": "Chi",
+&"energy": "Energie",
+&"mana": "Mana",
+&"rage": "Wut"
+})
