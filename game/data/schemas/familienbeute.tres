@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_8guri"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_pwfp1"]
+
+[sub_resource type="Resource" id="Resource_bqqt3"]
+script = ExtResource("1_8guri")
+name = "familie"
+type = 5
+required = true
+choices = PackedStringArray("tier", "humanoid", "untoter", "elementar", "daemon", "riese")
+description = "Familie."
+
+[sub_resource type="Resource" id="Resource_dg1hc"]
+script = ExtResource("1_8guri")
+name = "beutetabelle"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_table = "beutetabellen"
+ref_column = "tabelle"
+ref_label = "Beutetabelle"
+description = "Beutetabelle der Familie."
+
+[resource]
+script = ExtResource("2_pwfp1")
+table = "familienbeute"
+title = "Familienbeute"
+group = "Beute"
+description = "Beute, die alle Gegner einer Familie zusätzlich haben können."
+key_columns = PackedStringArray("familie")
+order = 31
+columns = Array[ExtResource("1_8guri")]([SubResource("Resource_bqqt3"), SubResource("Resource_dg1hc")])

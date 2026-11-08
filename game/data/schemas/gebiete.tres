@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_ncuwg"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_uaojn"]
+
+[sub_resource type="Resource" id="Resource_ugswb"]
+script = ExtResource("1_ncuwg")
+name = "id"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_folder = "res://data/zones/"
+ref_label = "Gebiet"
+description = "ID des Gebiets (wie in res://data/zones/)."
+
+[sub_resource type="Resource" id="Resource_2om3b"]
+script = ExtResource("1_ncuwg")
+name = "gebietsbeute"
+type = 6
+choices = PackedStringArray()
+ref_table = "beutetabellen"
+ref_column = "tabelle"
+ref_label = "Beutetabelle"
+description = "Beutetabelle für alle Gegner im Gebiet."
+
+[resource]
+script = ExtResource("2_uaojn")
+table = "gebiete"
+title = "Gebiete"
+group = "Welt"
+description = "Flache Werte zu den Gebieten. Die Gebiete selbst (Name, Stufenbereich, Bodenfarbe) bleiben als .tres in res://data/zones/; die ID muss dort existieren."
+key_columns = PackedStringArray("id")
+order = 20
+columns = Array[ExtResource("1_ncuwg")]([SubResource("Resource_ugswb"), SubResource("Resource_2om3b")])

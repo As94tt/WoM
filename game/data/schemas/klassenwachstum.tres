@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_sxqff"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_ydk2p"]
+
+[sub_resource type="Resource" id="Resource_m40lw"]
+script = ExtResource("1_sxqff")
+name = "klasse"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_folder = "res://data/classes/"
+ref_label = "Klasse"
+description = "Klasse (ID wie in res://data/classes/)."
+
+[sub_resource type="Resource" id="Resource_dea6l"]
+script = ExtResource("1_sxqff")
+name = "stufe"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe, die erreicht wird."
+
+[sub_resource type="Resource" id="Resource_hqpgn"]
+script = ExtResource("1_sxqff")
+name = "staerke"
+type = 2
+choices = PackedStringArray()
+description = "Stärke-Zuwachs."
+
+[sub_resource type="Resource" id="Resource_hy5aw"]
+script = ExtResource("1_sxqff")
+name = "gewandtheit"
+type = 2
+choices = PackedStringArray()
+description = "Gewandtheit-Zuwachs."
+
+[sub_resource type="Resource" id="Resource_s35jd"]
+script = ExtResource("1_sxqff")
+name = "intellekt"
+type = 2
+choices = PackedStringArray()
+description = "Intellekt-Zuwachs."
+
+[sub_resource type="Resource" id="Resource_10017"]
+script = ExtResource("1_sxqff")
+name = "ausdauer"
+type = 2
+choices = PackedStringArray()
+description = "Ausdauer-Zuwachs."
+
+[sub_resource type="Resource" id="Resource_hkx8b"]
+script = ExtResource("1_sxqff")
+name = "willenskraft"
+type = 2
+choices = PackedStringArray()
+description = "Willenskraft-Zuwachs."
+
+[sub_resource type="Resource" id="Resource_hcykb"]
+script = ExtResource("1_sxqff")
+name = "leben"
+type = 2
+choices = PackedStringArray()
+description = "Lebenszuwachs."
+
+[sub_resource type="Resource" id="Resource_7mteu"]
+script = ExtResource("1_sxqff")
+name = "mana"
+type = 2
+choices = PackedStringArray()
+description = "Manazuwachs."
+
+[resource]
+script = ExtResource("2_ydk2p")
+table = "klassenwachstum"
+title = "Klassenwachstum"
+group = "Charaktere"
+description = "Wertezuwachs je Klasse und Stufe."
+key_columns = PackedStringArray("klasse", "stufe")
+order = 51
+columns = Array[ExtResource("1_sxqff")]([SubResource("Resource_m40lw"), SubResource("Resource_dea6l"), SubResource("Resource_hqpgn"), SubResource("Resource_hy5aw"), SubResource("Resource_s35jd"), SubResource("Resource_10017"), SubResource("Resource_hkx8b"), SubResource("Resource_hcykb"), SubResource("Resource_7mteu")])

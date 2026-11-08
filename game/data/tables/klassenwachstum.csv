@@ -1,0 +1,4 @@
+﻿# Wertezuwachs je Klasse und Stufe (Platzhalterzahlen bis zum Wertesystem #19).
+klasse;stufe;staerke;gewandtheit;intellekt;ausdauer;willenskraft;leben;mana;notiz
+warrior;2;2;1;0;2;0;10;0;Beispiel
+mage;2;0;0;2;1;1;6;15;Beispiel

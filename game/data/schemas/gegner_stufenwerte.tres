@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_83stm"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_6h32r"]
+
+[sub_resource type="Resource" id="Resource_7ly33"]
+script = ExtResource("1_83stm")
+name = "stufe"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe des Gegners."
+
+[sub_resource type="Resource" id="Resource_s1jjg"]
+script = ExtResource("1_83stm")
+name = "leben"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Lebenspunkte."
+
+[sub_resource type="Resource" id="Resource_ns1ai"]
+script = ExtResource("1_83stm")
+name = "schaden_min"
+type = 2
+required = true
+has_min = true
+choices = PackedStringArray()
+description = "Kleinster Schaden eines automatischen Angriffs."
+
+[sub_resource type="Resource" id="Resource_uxp3b"]
+script = ExtResource("1_83stm")
+name = "schaden_max"
+type = 2
+required = true
+has_min = true
+choices = PackedStringArray()
+description = "Größter Schaden eines automatischen Angriffs."
+
+[sub_resource type="Resource" id="Resource_xbp3m"]
+script = ExtResource("1_83stm")
+name = "ruestung"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Rüstung."
+
+[sub_resource type="Resource" id="Resource_akabt"]
+script = ExtResource("1_83stm")
+name = "zauberschutz"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Zauberschutz."
+
+[sub_resource type="Resource" id="Resource_usqba"]
+script = ExtResource("1_83stm")
+name = "erfahrung"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Erfahrung für den Sieg."
+
+[sub_resource type="Resource" id="Resource_8ml3x"]
+script = ExtResource("1_83stm")
+name = "geld_min"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Kleinste Geldbeute in Kupfer."
+
+[sub_resource type="Resource" id="Resource_xpjjq"]
+script = ExtResource("1_83stm")
+name = "geld_max"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Größte Geldbeute in Kupfer."
+
+[resource]
+script = ExtResource("2_6h32r")
+table = "gegner_stufenwerte"
+title = "Gegnerwerte pro Stufe"
+group = "Gegner"
+description = "Grundwerte eines normalen Gegners je Stufe. Rang (gegner_raenge.csv) und Modifikatoren (gegner.csv) werden darauf angewendet."
+key_columns = PackedStringArray("stufe")
+order = 11
+columns = Array[ExtResource("1_83stm")]([SubResource("Resource_7ly33"), SubResource("Resource_s1jjg"), SubResource("Resource_ns1ai"), SubResource("Resource_uxp3b"), SubResource("Resource_xbp3m"), SubResource("Resource_akabt"), SubResource("Resource_usqba"), SubResource("Resource_8ml3x"), SubResource("Resource_xpjjq")])

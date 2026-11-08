@@ -1,0 +1,157 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_3a856"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_jeebx"]
+
+[sub_resource type="Resource" id="Resource_nnqtn"]
+script = ExtResource("1_3a856")
+name = "id"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_folder = "res://data/abilities/"
+ref_label = "Fähigkeit"
+description = "ID der Fähigkeit (gleich der ID der Fähigkeits-.tres)."
+
+[sub_resource type="Resource" id="Resource_gl5tk"]
+script = ExtResource("1_3a856")
+name = "klasse"
+type = 6
+choices = PackedStringArray()
+ref_folder = "res://data/classes/"
+ref_label = "Klasse"
+description = "Klasse; leer = keine (z. B. Gegnerfähigkeit)."
+
+[sub_resource type="Resource" id="Resource_ngec1"]
+script = ExtResource("1_3a856")
+name = "spezialisierung"
+type = 1
+choices = PackedStringArray()
+description = "Spezialisierung; leer = alle."
+
+[sub_resource type="Resource" id="Resource_xydcc"]
+script = ExtResource("1_3a856")
+name = "stufe"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe, ab der die Fähigkeit gelernt wird."
+
+[sub_resource type="Resource" id="Resource_bbvcv"]
+script = ExtResource("1_3a856")
+name = "kosten"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Kosten in Einheiten der Ressource."
+
+[sub_resource type="Resource" id="Resource_tfylj"]
+script = ExtResource("1_3a856")
+name = "ressource"
+type = 5
+default_value = "keine"
+choices = PackedStringArray("keine", "mana", "wut", "energie", "chi")
+description = "Ressource der Kosten."
+
+[sub_resource type="Resource" id="Resource_55sjr"]
+script = ExtResource("1_3a856")
+name = "zauberzeit"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Zauberzeit in Sekunden; 0 = sofort."
+
+[sub_resource type="Resource" id="Resource_1qh0d"]
+script = ExtResource("1_3a856")
+name = "kanalisierzeit"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Kanalisierzeit in Sekunden."
+
+[sub_resource type="Resource" id="Resource_7ya7s"]
+script = ExtResource("1_3a856")
+name = "abklingzeit"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Abklingzeit in Sekunden."
+
+[sub_resource type="Resource" id="Resource_srwo8"]
+script = ExtResource("1_3a856")
+name = "aufladungen"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Aufladungen."
+
+[sub_resource type="Resource" id="Resource_4ddkl"]
+script = ExtResource("1_3a856")
+name = "reichweite"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Reichweite in Metern; 0 = Nahkampf bzw. selbst."
+
+[sub_resource type="Resource" id="Resource_uokpe"]
+script = ExtResource("1_3a856")
+name = "grundwert"
+type = 3
+choices = PackedStringArray()
+description = "Fester Grundwert (Schaden oder Heilung)."
+
+[sub_resource type="Resource" id="Resource_h7xhf"]
+script = ExtResource("1_3a856")
+name = "faktor"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Faktor auf die Quelle (faktor_quelle)."
+
+[sub_resource type="Resource" id="Resource_tp8k8"]
+script = ExtResource("1_3a856")
+name = "faktor_quelle"
+type = 5
+choices = PackedStringArray("kampfkraft", "zaubermacht", "waffe")
+description = "Wovon der Faktor abhängt."
+
+[sub_resource type="Resource" id="Resource_mo6rt"]
+script = ExtResource("1_3a856")
+name = "dauer"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Dauer in Sekunden (Auren, Effekte über Zeit)."
+
+[sub_resource type="Resource" id="Resource_dq7bn"]
+script = ExtResource("1_3a856")
+name = "tick"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Abstand der Ticks in Sekunden."
+
+[sub_resource type="Resource" id="Resource_h0xxa"]
+script = ExtResource("1_3a856")
+name = "werte"
+type = 8
+choices = PackedStringArray()
+item_type = 3
+description = "Alles Weitere als Werte-Paare, z. B. brand_stapel:1|radius:8."
+
+[resource]
+script = ExtResource("2_jeebx")
+table = "faehigkeitswerte"
+title = "Fähigkeitswerte"
+group = "Fähigkeiten"
+description = "Die Zahlen aller Fähigkeiten nebeneinander, für das Balancing. Die .tres einer Fähigkeit beschreibt den Aufbau (Effekte, Bedingungen) und liest ihre Zahlen hier, z. B. Data.faehigkeitswert(\"feuerball\", \"werte.radius\")."
+key_columns = PackedStringArray("id")
+covers_folder = "res://data/abilities/"
+order = 60
+columns = Array[ExtResource("1_3a856")]([SubResource("Resource_nnqtn"), SubResource("Resource_gl5tk"), SubResource("Resource_ngec1"), SubResource("Resource_xydcc"), SubResource("Resource_bbvcv"), SubResource("Resource_tfylj"), SubResource("Resource_55sjr"), SubResource("Resource_1qh0d"), SubResource("Resource_7ya7s"), SubResource("Resource_srwo8"), SubResource("Resource_4ddkl"), SubResource("Resource_uokpe"), SubResource("Resource_h7xhf"), SubResource("Resource_tp8k8"), SubResource("Resource_mo6rt"), SubResource("Resource_dq7bn"), SubResource("Resource_h0xxa")])

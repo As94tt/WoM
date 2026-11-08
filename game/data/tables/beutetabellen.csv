@@ -1,0 +1,5 @@
+﻿# Eine Zeile pro Eintrag; gleiche Spalte „tabelle“ = eine Beutetabelle. tabelle:<id> verschachtelt Tabellen.
+tabelle;eintrag;chance;anzahl_min;anzahl_max;gruppe;bedingung;notiz
+wolf_jung;wolfsfell;60;1;2;;;Beispiel
+wolf_jung;tabelle:tier_plunder;100;1;1;;;Beispiel für eine verschachtelte Tabelle
+tier_plunder;schwert_rostig;5;1;1;;stufe>=2;bedingung wird ab #38 ausgewertet

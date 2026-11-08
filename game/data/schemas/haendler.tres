@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_p05vx"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_hx4fj"]
+
+[sub_resource type="Resource" id="Resource_cqo6s"]
+script = ExtResource("1_p05vx")
+name = "haendler"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "ID des Händlers."
+
+[sub_resource type="Resource" id="Resource_lgog8"]
+script = ExtResource("1_p05vx")
+name = "gegenstand"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_table = "gegenstaende"
+ref_label = "Gegenstand"
+description = "Angebotener Gegenstand."
+
+[sub_resource type="Resource" id="Resource_gwor2"]
+script = ExtResource("1_p05vx")
+name = "preis"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Preis in Kupfer; leer = Standardpreis."
+
+[sub_resource type="Resource" id="Resource_wfm3n"]
+script = ExtResource("1_p05vx")
+name = "vorrat"
+type = 2
+has_min = true
+choices = PackedStringArray()
+description = "Vorrat; leer = unbegrenzt."
+
+[sub_resource type="Resource" id="Resource_d8u8y"]
+script = ExtResource("1_p05vx")
+name = "auffuellen_s"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Sekunden, bis der Vorrat wieder aufgefüllt ist."
+
+[resource]
+script = ExtResource("2_hx4fj")
+table = "haendler"
+title = "Händler"
+group = "Gegenstände"
+description = "Waren der Händler, eine Zeile pro Händler und Gegenstand."
+key_columns = PackedStringArray("haendler", "gegenstand")
+order = 41
+columns = Array[ExtResource("1_p05vx")]([SubResource("Resource_cqo6s"), SubResource("Resource_lgog8"), SubResource("Resource_gwor2"), SubResource("Resource_wfm3n"), SubResource("Resource_d8u8y")])

@@ -74,7 +74,7 @@ func _build_race_buttons() -> void:
 		%RaceGrid.add_child(button)
 		_race_buttons.append(button)
 	if _races.is_empty():
-		push_warning("CharacterCreation: Keine Völker in %s gefunden." % GameData.RACES_DIR)
+		push_warning("CharacterCreation: Keine Völker in voelker.csv gefunden.")
 
 
 func _build_class_buttons() -> void:

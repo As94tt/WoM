@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_q0ucc"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_pok2v"]
+
+[sub_resource type="Resource" id="Resource_2114u"]
+script = ExtResource("1_q0ucc")
+name = "rang"
+type = 5
+required = true
+choices = PackedStringArray("normal", "elite", "selten", "boss")
+description = "Rang."
+
+[sub_resource type="Resource" id="Resource_cxero"]
+script = ExtResource("1_q0ucc")
+name = "leben_faktor"
+type = 3
+default_value = "1"
+has_min = true
+choices = PackedStringArray()
+description = "Faktor auf das Leben."
+
+[sub_resource type="Resource" id="Resource_te3d8"]
+script = ExtResource("1_q0ucc")
+name = "schaden_faktor"
+type = 3
+default_value = "1"
+has_min = true
+choices = PackedStringArray()
+description = "Faktor auf den Schaden."
+
+[sub_resource type="Resource" id="Resource_g84bq"]
+script = ExtResource("1_q0ucc")
+name = "erfahrung_faktor"
+type = 3
+default_value = "1"
+has_min = true
+choices = PackedStringArray()
+description = "Faktor auf die Erfahrung."
+
+[sub_resource type="Resource" id="Resource_85xuu"]
+script = ExtResource("1_q0ucc")
+name = "geld_faktor"
+type = 3
+default_value = "1"
+has_min = true
+choices = PackedStringArray()
+description = "Faktor auf die Geldbeute."
+
+[resource]
+script = ExtResource("2_pok2v")
+table = "gegner_raenge"
+title = "Gegnerränge"
+group = "Gegner"
+description = "Faktoren je Rang, mit denen die Stufenwerte multipliziert werden."
+key_columns = PackedStringArray("rang")
+order = 12
+columns = Array[ExtResource("1_q0ucc")]([SubResource("Resource_2114u"), SubResource("Resource_cxero"), SubResource("Resource_te3d8"), SubResource("Resource_g84bq"), SubResource("Resource_85xuu")])

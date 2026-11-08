@@ -66,6 +66,7 @@ func _ready() -> void:
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
 	Network.players_changed.connect(_on_players_changed)
+	Data.reloaded.connect(_on_data_reloaded)
 	_show_character_info()
 	_setup_map()
 	_start_autosave()
@@ -398,6 +399,11 @@ func _setup_dev_panel() -> void:
 			Network.artificial_delay_ms, on_delay)
 	on_delay.call(Network.artificial_delay_ms)
 
+	# Datentabellen (#39): neu laden wie mit F6; gesperrt mit Mitspielern.
+	var data := panel.add_section("Daten")
+	panel.add_button(data, "Tabellen neu laden (%s)" % InputLabels.for_action(Data.RELOAD_ACTION),
+			func() -> void: Data.reload_tables())
+
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)
 	panel.add_toggle(display, "Gebietsgrenzen anzeigen", false, _set_bounds_visible)
@@ -410,6 +416,16 @@ func _setup_dev_panel() -> void:
 	timer.autostart = true
 	timer.timeout.connect(_update_dev_info)
 	panel.add_child(timer)
+
+
+## Ergebnis von „Tabellen neu laden“ (F6 oder Entwickler-Panel) im Log.
+## Bei Fehlern stehen die ersten Fehler im Log, alle in der Konsole.
+func _on_data_reloaded(_ok: bool, lines: PackedStringArray) -> void:
+	const MAX_LOG_LINES := 8
+	for i in mini(lines.size(), MAX_LOG_LINES):
+		_hud.add_log_message(lines[i])
+	if lines.size() > MAX_LOG_LINES:
+		_hud.add_log_message("… und %d weitere Fehler (siehe Konsole)." % (lines.size() - MAX_LOG_LINES))
 
 
 func _set_placeholders_visible(on: bool) -> void:

@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_yrf8l"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_ot4o2"]
+
+[sub_resource type="Resource" id="Resource_by12k"]
+script = ExtResource("1_yrf8l")
+name = "tabelle"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Name der Beutetabelle."
+
+[sub_resource type="Resource" id="Resource_ta5na"]
+script = ExtResource("1_yrf8l")
+name = "eintrag"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_table = "gegenstaende"
+ref_label = "Gegenstand"
+ref_prefix = "tabelle"
+prefix_table = "beutetabellen"
+prefix_column = "tabelle"
+description = "Gegenstands-ID oder tabelle:<id> für eine verschachtelte Beutetabelle."
+
+[sub_resource type="Resource" id="Resource_e443g"]
+script = ExtResource("1_yrf8l")
+name = "chance"
+type = 3
+default_value = "100"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Chance in Prozent."
+
+[sub_resource type="Resource" id="Resource_1paa2"]
+script = ExtResource("1_yrf8l")
+name = "anzahl_min"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Kleinste Anzahl."
+
+[sub_resource type="Resource" id="Resource_colkl"]
+script = ExtResource("1_yrf8l")
+name = "anzahl_max"
+type = 2
+default_value = "1"
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Größte Anzahl."
+
+[sub_resource type="Resource" id="Resource_hl66g"]
+script = ExtResource("1_yrf8l")
+name = "gruppe"
+type = 1
+choices = PackedStringArray()
+description = "Einträge mit gleicher Gruppe: genau einer davon fällt."
+
+[sub_resource type="Resource" id="Resource_xaac8"]
+script = ExtResource("1_yrf8l")
+name = "bedingung"
+choices = PackedStringArray()
+description = "Bedingung, z. B. stufe>=5 (wird ab #38 ausgewertet)."
+
+[resource]
+script = ExtResource("2_ot4o2")
+table = "beutetabellen"
+title = "Beutetabellen"
+group = "Beute"
+description = "Eine Zeile pro Eintrag; alle Zeilen mit gleicher Spalte tabelle bilden eine Beutetabelle. Ein Eintrag ist ein Gegenstand oder eine andere Beutetabelle (tabelle:<id>). Die Spalte bedingung wird gespeichert, aber erst mit dem Beute-Ticket (#38) ausgewertet."
+key_columns = PackedStringArray()
+order = 30
+columns = Array[ExtResource("1_yrf8l")]([SubResource("Resource_by12k"), SubResource("Resource_ta5na"), SubResource("Resource_e443g"), SubResource("Resource_1paa2"), SubResource("Resource_colkl"), SubResource("Resource_hl66g"), SubResource("Resource_xaac8")])

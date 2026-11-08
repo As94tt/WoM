@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/data_error_screen.gd" id="1_errors"]
+
+[node name="DataErrorScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_errors")
+
+[node name="Dim" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"DimOverlay"
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(960, 640)
+layout_mode = 2
+theme_type_variation = &"DialogPanel"
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_type_variation = &"ButtonList"
+
+[node name="TitleLabel" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_type_variation = &"WindowTitle"
+text = "Fehler in den Spieldaten"
+
+[node name="CountLabel" type="Label" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(912, 0)
+layout_mode = 2
+theme_type_variation = &"HintText"
+text = "Fehler gefunden."
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ErrorList" type="VBoxContainer" parent="Center/Panel/Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ButtonList"
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+alignment = 2
+theme_type_variation = &"ButtonRow"
+
+[node name="QuitButton" type="Button" parent="Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Beenden"
+
+[node name="ReloadButton" type="Button" parent="Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Neu laden"

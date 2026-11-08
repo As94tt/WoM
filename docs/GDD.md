@@ -19,7 +19,7 @@ Diese fünf Regeln gelten für jedes Feature und gehören wörtlich in die CLAUD
 
 1. **Engine: Godot 4 mit GDScript.** Szenen, Ressourcen und Skripte sind Textdateien, die Claude Code direkt lesen und bearbeiten kann.
 2. **Multiplayer von Anfang an.** Host-Client-Modell: Ein Spieler hostet, bis zu 4 treten bei. Kein eigener Server nötig. Jedes Feature wird netzwerkfähig gebaut, über Godots eingebaute Bausteine (MultiplayerSpawner, MultiplayerSynchronizer). Spielstände liegen beim Host bzw. lokal.
-3. **Datengetrieben.** Fähigkeiten, Auren, Gegenstände, Gegner, Klassen, Völker und Quests sind Daten (Godot-Resources, .tres), kein einzeln programmierter Code. Neue Inhalte entstehen ohne Code-Änderung.
+3. **Datengetrieben.** Fähigkeiten, Auren, Gegenstände, Gegner, Klassen, Völker und Quests sind Daten, kein einzeln programmierter Code. Flache Werte-Daten stehen als CSV-Tabellen mit Schema, strukturierte Daten (Effekte, Auren, Fähigkeitslogik, Gebiete) als .tres (Godot-Resources). Neue Inhalte entstehen ohne Code-Änderung.
 4. **Effekt- und Aura-System als Kern.** Eine Fähigkeit ist eine Liste von Effekten (Schaden, Heilung, Aura anwenden, Bedrohung, Ressource ändern). Buffs, Debuffs, Kontrolleffekte, Volksfähigkeiten, Talente, Siegel und Talismane sind Auren, auch solche, die auf Ereignisse reagieren (Procs). Talente können Fähigkeiten hinzufügen, verändern und ersetzen.
 5. **Graubox zuerst.** Technik wird mit Platzhaltern gebaut (Kapseln, Würfel, graue Blöcke). Grafik ersetzt Platzhalter erst, wenn das System funktioniert.
 
@@ -166,7 +166,7 @@ mein-spiel/
 ├── art-source/        ← Blender-Arbeitsdateien
 └── game/              ← Godot-Projekt
     ├── assets/        ← exportierte Modelle (.glb), Texturen
-    ├── data/          ← Fähigkeiten, Gegenstände, Klassen (.tres)
+    ├── data/          ← Fähigkeiten, Auren, Klassen (.tres); flache Werte als CSV-Tabellen
     ├── scenes/
     └── scripts/
 ```

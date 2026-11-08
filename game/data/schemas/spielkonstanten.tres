@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_tboxs"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_k64u3"]
+
+[sub_resource type="Resource" id="Resource_5iyon"]
+script = ExtResource("1_tboxs")
+name = "schluessel"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Name der Konstante."
+
+[sub_resource type="Resource" id="Resource_ybhgt"]
+script = ExtResource("1_tboxs")
+name = "wert"
+type = 3
+required = true
+choices = PackedStringArray()
+description = "Wert."
+
+[resource]
+script = ExtResource("2_k64u3")
+table = "spielkonstanten"
+title = "Spielkonstanten"
+group = "Konstanten"
+description = "Alle einzelnen Stellschrauben an einem Ort (z. B. globaler Cooldown, Bedrohungsschwellen, Aggro-Radius)."
+key_columns = PackedStringArray("schluessel")
+order = 70
+columns = Array[ExtResource("1_tboxs")]([SubResource("Resource_5iyon"), SubResource("Resource_ybhgt")])

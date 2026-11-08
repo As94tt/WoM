@@ -1,0 +1,5 @@
+﻿# Zahlen der Fähigkeiten; die .tres der Fähigkeit liest sie über ihre id. Platzhalterzahlen.
+id;klasse;spezialisierung;stufe;kosten;ressource;zauberzeit;kanalisierzeit;abklingzeit;aufladungen;reichweite;grundwert;faktor;faktor_quelle;dauer;tick;werte;notiz
+feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1;Beispiel
+frostnova;mage;;1;25;mana;0;0;20;1;0;10;0,2;zaubermacht;6;0;radius:8;Beispiel
+schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;;Beispiel
