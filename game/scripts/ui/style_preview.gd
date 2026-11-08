@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21 und #31).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31 und #32).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -42,6 +42,7 @@ func _ready() -> void:
 
 	_add_spellbook_samples()
 	_add_unit_samples()
+	_add_combat_samples()
 
 	%FocusButton.grab_focus()
 
@@ -182,3 +183,40 @@ func _add_unit_samples() -> void:
 		bar.value = 70.0
 		row.add_child(bar)
 		plates.add_child(panel)
+
+
+## Auren und Kampftext (#32): Buff, Debuffs je Kategorie (AuraBuff,
+## AuraDebuff*), Stapelzahl, Restzeit (AuraText) und die Kampftext-Arten.
+func _add_combat_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	_add_row(grid, "Aura-Symbole: Buff (AuraBuff), Debuffs ohne Kategorie, Magie, Gift, Krankheit, Fluch, körperlich (AuraDebuff*), Stapel und Restzeit (AuraText)")
+	var row := HFlowContainer.new()
+	row.theme_type_variation = &"AuraFlow"
+	grid.add_child(row)
+	var samples: Array[Array] = [[false, AuraData.Category.MAGIC, 1], [true, AuraData.Category.NONE, 1],
+			[true, AuraData.Category.MAGIC, 3], [true, AuraData.Category.POISON, 1],
+			[true, AuraData.Category.DISEASE, 1], [true, AuraData.Category.CURSE, 1],
+			[true, AuraData.Category.PHYSICAL, 5]]
+	for sample in samples:
+		var data := AuraData.new()
+		data.id = &"vorschau"
+		data.display_name = "Vorschau Aura"
+		data.is_debuff = sample[0]
+		data.category = sample[1]
+		data.duration = 12.0
+		var inst := AuraInstance.new()
+		inst.data = data
+		inst.stacks = sample[2]
+		inst.expires_at = Network.host_time() + 12.0
+		var icon: AuraIcon = preload("res://scenes/ui/hud/aura_icon.tscn").instantiate()
+		row.add_child(icon)
+		icon.setup(inst, null, 36)
+	_add_row(grid, "Kampftext: Schaden (CombatTextDamage), Heilung (CombatTextHeal), erlittener Schaden (CombatTextTaken), Immun/Absorbiert (CombatTextInfo)")
+	var texts := HBoxContainer.new()
+	texts.theme_type_variation = &"ButtonRow"
+	grid.add_child(texts)
+	for kind: Combat.TextKind in CombatTextLayer.VARIATIONS:
+		var label := Label.new()
+		label.theme_type_variation = CombatTextLayer.VARIATIONS[kind]
+		label.text = CombatTextLayer.text_for(kind, 1234.0)
+		texts.add_child(label)

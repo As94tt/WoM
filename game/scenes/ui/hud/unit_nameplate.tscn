@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/unit_nameplate.gd" id="1_plate"]
+[ext_resource type="Script" path="res://scripts/ui/aura_bar.gd" id="2_auras"]
 
 [node name="UnitNameplate" type="VBoxContainer"]
 offset_right = 140.0
@@ -8,6 +9,22 @@ offset_bottom = 48.0
 mouse_filter = 2
 theme_type_variation = &"NameplateColumn"
 script = ExtResource("1_plate")
+
+[node name="Auras" type="HFlowContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"AuraFlow"
+alignment = 1
+script = ExtResource("2_auras")
+filter = 3
+icon_size = 20
+show_time = false
+interactive = false
+max_icons = 8
 
 [node name="Plate" type="PanelContainer" parent="."]
 unique_name_in_owner = true

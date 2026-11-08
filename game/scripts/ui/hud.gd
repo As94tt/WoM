@@ -37,6 +37,11 @@ extends Control
 ## (NameplateLayer, unter allen Fenstern) mit der eigenen Figur und ihrer
 ## Zielauswahl (Targeting). Esc hebt nach den Fenstern das Ziel auf.
 ##
+## Auren und Kampftext (#32): eigene Auren oben rechts (PlayerAuras: BuffBar,
+## darunter DebuffBar, AuraBar), Auren des Ziels im Zielrahmen, eigene
+## Debuffs auf Namensplaketten; CombatTextLayer über den Namensplaketten
+## zeigt Kampftext. Rein lokal, Daten vom Host.
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -170,6 +175,9 @@ func setup_local_player(player: PlayerCharacter) -> void:
 	var target_frame: UnitFrame = %TargetFrame
 	player_frame.set_viewer(player)
 	player_frame.set_unit(player)
+	# Eigene Auren oben rechts (#32): Buffs, darunter Debuffs.
+	%BuffBar.set_unit(player, player)
+	%DebuffBar.set_unit(player, player)
 	target_frame.set_viewer(player)
 	%NameplateLayer.setup(player)
 	if _targeting == null:
