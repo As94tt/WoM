@@ -62,3 +62,15 @@ kampf_dauer;5;Sekunden nach dem letzten Schaden (zugefügt oder erlitten) bzw. d
 verzoegerung_tick;0,5;Sekunden zwischen zwei Teilen verzögerten Schadens (Schadensumleitung „Verzögerung“, z. B. Last)
 kampftext_dauer;1,5;Sekunden, die eine Kampftext-Zahl sichtbar ist (steigt dabei auf und blendet aus)
 kampftext_steigen;60;Pixel, um die eine Kampftext-Zahl während ihrer Dauer aufsteigt
+# Fähigkeiten wirken (#33)
+gcd_min;0,75;Kürzester globaler Cooldown in Sekunden (gcd wird durch Tempo verkürzt, aber nie darunter)
+zauber_warteschlange;0,4;Wird eine Fähigkeit so viele Sekunden vor Ende von globalem Cooldown, Zauber oder Abklingzeit gedrückt, wird sie danach automatisch ausgelöst
+zauber_verzoegerung;0,5;Sekunden, um die erlittener Schaden einen Zauber mit Zauberzeit verzögert
+zauber_verzoegerung_max;2;So oft verzögert Schaden einen Zauber höchstens
+zauber_bewegung_toleranz;1;Host: So viele Meter darf sich eine fremde Figur während eines Zaubers bewegen, bevor der Host ihn abbricht (der Besitzer bricht schon beim ersten Schritt ab)
+reichweite_toleranz;1;Host: Zusätzliche Meter Reichweite für Wünsche von Clients (Laufzeit, Interpolation)
+nahkampf_reichweite;5;Nahkampfreichweite in Metern von Rand zu Rand (automatischer Angriff, Fähigkeiten mit Reichweite 0)
+nebenhand_faktor;0,5;Schaden der Nebenhand beim automatischen Angriff als Faktor
+kampfkraft_je_dps;14;Kampfkraft je 1 Schaden pro Sekunde beim automatischen Angriff (Schaden = Waffe + Kampfkraft / Wert × Tempo der Waffe)
+fehlermeldung_abstand;1;Dieselbe Fehlermeldung erscheint höchstens einmal in so vielen Sekunden
+fehlermeldung_dauer;2;Sekunden, die eine Fehlermeldung oben in der Mitte sichtbar bleibt

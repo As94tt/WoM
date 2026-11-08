@@ -1,0 +1,6 @@
+﻿# Platzhalter-Waffen (#33) bis Ausrüstung kommt (#29). Der automatische Angriff liest sie; das Entwickler-Panel schaltet sie.
+id;name;tempo;schaden_min;schaden_max;reichweite;notiz
+unbewaffnet;Fäuste;2;1;3;0;Ohne Nahkampfwaffe
+haupthand;Platzhalter-Schwert;2,6;10;20;0;Schalter „Nahkampfwaffe getragen“
+nebenhand;Platzhalter-Dolch;1,8;6;12;0;Schalter „Nebenhandwaffe (beidhändig)“, halber Schaden (nebenhand_faktor)
+fernkampf;Platzhalter-Bogen;2,8;12;22;30;Schalter „Fernkampfwaffe getragen“, schießt nur außerhalb der Nahkampfreichweite

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_olc8a"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_1xmre"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="3_dynu8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_olclb"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="5_3pd75"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="6_5k737"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="7_f4rv8"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="8_djw3b"]
+
+[sub_resource type="Resource" id="Resource_v32gl"]
+script = ExtResource("3_dynu8")
+ability_id = &"test_meteor"
+value_key = "zauberzeit"
+percent = -100.0
+
+[sub_resource type="Resource" id="Resource_0hmcr"]
+script = ExtResource("5_3pd75")
+modifiers = Array[ExtResource("3_dynu8")]([SubResource("Resource_v32gl")])
+
+[sub_resource type="Resource" id="Resource_q8wqs"]
+script = ExtResource("6_5k737")
+event = 6
+ability_id = &"test_meteor"
+remove_aura = true
+
+[resource]
+script = ExtResource("7_f4rv8")
+id = &"test_meteor_bereit"
+display_name = "Meteor bereit"
+description = "Der nächste Testmeteor wirkt sofort. Testaura (#33): Proc-Leuchten auf der Aktionsleiste."
+duration = 10.0
+apply_effects = Array[ExtResource("1_olc8a")]([SubResource("Resource_0hmcr")])
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("6_5k737")]([SubResource("Resource_q8wqs")])
+absorb_schools = PackedStringArray()

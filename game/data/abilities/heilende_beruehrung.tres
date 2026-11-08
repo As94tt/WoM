@@ -1,6 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_fver6"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_byt1o"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_kg7fh"]
+[ext_resource type="Script" path="res://scripts/combat/effects/heal_effect.gd" id="4_vu7om"]
+
+[sub_resource type="Resource" id="Resource_8cqan"]
+script = ExtResource("4_vu7om")
+values_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -10,3 +18,7 @@ description = "Eine langsame, kräftige Heilung auf ein einzelnes Ziel."
 class_id = &"druid"
 required_level = 2
 is_spell = true
+school = &"natur"
+effects = Array[ExtResource("1_fver6")]([SubResource("Resource_8cqan")])
+target_kind = 2
+highlight_auras = PackedStringArray()

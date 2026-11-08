@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_wqvl5"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_uc44i"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_xjmhk"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_qlrib"]
+[ext_resource type="Script" path="res://scripts/combat/effects/area_effect.gd" id="5_pu7nc"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_bw8gy"]
+
+[sub_resource type="Resource" id="Resource_83vhi"]
+script = ExtResource("4_qlrib")
+school = &"feuer"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_mpntr"]
+script = ExtResource("5_pu7nc")
+duration = 6.0
+tick_on_create = true
+at_point = true
+effects = Array[ExtResource("1_wqvl5")]([SubResource("Resource_83vhi")])
+target_mode = 1
+
+[resource]
+script = ExtResource("6_bw8gy")
+id = &"test_feld"
+display_name = "Testfeld"
+description = "Bodenziel: Feuerfläche (6 m) für 6 s, jede Sekunde Feuerschaden an Feinden."
+dev_only = true
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_wqvl5")]([SubResource("Resource_mpntr")])
+target_kind = 4
+highlight_auras = PackedStringArray()

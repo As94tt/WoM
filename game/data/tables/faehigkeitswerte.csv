@@ -4,10 +4,10 @@ id;klasse;spezialisierung;stufe;kosten;ressource;zauberzeit;kanalisierzeit;abkli
 # Allgemein
 automatischer_angriff;;;1;0;keine;0;0;0;1;5;0;1;waffe;0;0;;Platzhalter (#21)
 # Magier
-feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1;Beispiel
+feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1|brand_schaden:10|flug:25;Beispiel (#33: Projektil, Brand über Zeit)
 frostnova;mage;;2;25;mana;0;0;20;1;0;10;0,2;zaubermacht;6;0;radius:8;Beispiel
 passiv_magier;mage;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
-gegenzauber;mage;;4;20;mana;0;0;24;1;30;0;0;;4;0;;Platzhalter (#21)
+gegenzauber;mage;;4;20;mana;0;0;24;1;30;0;0;;4;0;sperre:4;Platzhalter (#21), Unterbrechung (#33)
 # Krieger
 schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;;Beispiel
 spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;;Platzhalter (#21)
@@ -28,3 +28,22 @@ tigerklaue;monk;;1;50;energie;0;0;0;1;5;10;1;waffe;0;0;chi:20;Platzhalter (#21)
 blitzfaust;monk;;2;30;chi;0;4;20;1;5;15;0,5;kampfkraft;0;1;;Platzhalter (#21), kanalisiert
 passiv_moench;monk;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
 fliegender_tritt;monk;;4;0;keine;0;0;25;1;20;10;0,5;kampfkraft;0;0;;Platzhalter (#21)
+# Testfähigkeiten (#33): nur über das Entwickler-Panel erlernbar, für die Übungspuppen
+test_schlag;;;1;0;keine;0;0;0;1;5;300;0;;0;0;;Sofort, Nahkampf, startet den automatischen Angriff, gibt „Meteor bereit“
+test_blitz;;;1;0;keine;2;0;0;1;30;500;0;;0;0;;Zauberzeit
+test_kanal;;;1;0;keine;0;3;0;1;30;150;0;;0;1;;Kanalisiert, drei Ticks
+test_rolle;;;1;0;keine;0;0;8;2;0;0;0;;0;0;;Zwei Aufladungen, außerhalb des globalen Cooldowns
+test_feld;;;1;0;keine;0;0;10;1;30;100;0;;0;0;radius:6;Bodenziel
+test_geschoss;;;1;0;keine;0;0;3;1;40;400;0;;0;0;flug:12;Projektil (langsam, damit der Aufprall sichtbar ist)
+test_tritt;;;1;0;keine;0;0;10;1;30;0;0;;0;0;sperre:4;Unterbrechung, außerhalb des globalen Cooldowns
+test_meteor;;;1;0;keine;3;0;0;1;40;800;0;;0;0;;Zauberzeit, mit „Meteor bereit“ sofort (Proc-Leuchten)
+test_haltung;;;1;0;keine;0;0;0;1;0;0;0;;0;0;;Umschalter
+test_wucht;;;1;0;keine;0;0;0;1;5;400;0;;0;0;;Nächster Schlag
+test_siegel_a;;;1;0;keine;0;0;6;1;0;200;0;;0;0;;Geteilte Abklingzeit mit test_siegel_b
+test_siegel_b;;;1;0;keine;0;0;6;1;0;300;0;;0;0;;Geteilte Abklingzeit mit test_siegel_a
+test_heilung;;;1;0;keine;1,5;0;0;1;40;500;0;;0;0;;Hilfszauber mit Zauberzeit, ohne Freund als Ziel auf sich selbst
+test_hinterhalt;;;1;0;keine;0;0;0;1;5;600;0;;0;0;;Nur getarnt und hinter dem Ziel
+test_vergeltung;;;1;0;keine;0;0;5;1;5;500;0;;0;0;;Nur mit der Aura „Segen der Stärke“ (test_staerke)
+test_manaschlag;;;1;50;mana;0;0;0;1;30;200;0;;0;0;;Kostet Mana (andere Klassen: „Nicht genug Mana“)
+test_puppenzauber;;;1;0;keine;3;0;0;1;0;100;0;;0;0;;Zauber der Übungspuppe (unterbrechbar)
+test_puppenzauber_schild;;;1;0;keine;3;0;0;1;0;100;0;;0;0;;Zauber der Übungspuppe (nicht unterbrechbar)

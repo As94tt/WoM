@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_y876j"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_112pu"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_qrj73"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_hu3nw"]
+[ext_resource type="Resource" path="res://data/auras/test_meteor_bereit.tres" id="5_7fstx"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="6_cc3q2"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="7_2ol7i"]
+
+[sub_resource type="Resource" id="Resource_b5ced"]
+script = ExtResource("4_hu3nw")
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_c56hd"]
+script = ExtResource("6_cc3q2")
+aura = ExtResource("5_7fstx")
+target_mode = 1
+
+[resource]
+script = ExtResource("7_2ol7i")
+id = &"test_schlag"
+display_name = "Testschlag"
+description = "Sofort: Nahkampfschlag, startet den automatischen Angriff. Gibt „Meteor bereit“."
+dev_only = true
+effects = Array[ExtResource("1_y876j")]([SubResource("Resource_b5ced"), SubResource("Resource_c56hd")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray()

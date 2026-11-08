@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_cmkus"]
+[ext_resource type="Resource" path="res://data/auras/test_haltung.tres" id="2_5fgql"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_rp4uj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_ghi1w"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_u8jh0"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_vs4ij"]
+
+[sub_resource type="Resource" id="Resource_6itr2"]
+script = ExtResource("5_u8jh0")
+aura = ExtResource("2_5fgql")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_vs4ij")
+id = &"test_haltung"
+display_name = "Testhaltung"
+description = "Umschalter: an (+50 Stärke) bzw. wieder aus."
+dev_only = true
+effects = Array[ExtResource("1_cmkus")]([SubResource("Resource_6itr2")])
+target_kind = 0
+ignores_gcd = true
+toggle_aura = ExtResource("2_5fgql")
+highlight_auras = PackedStringArray()

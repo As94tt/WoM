@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cqqfcd382ewe1"
+
+[deps]
+
+source_file="res://data/tables/platzhalterwaffen.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

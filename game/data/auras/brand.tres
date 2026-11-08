@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_5uj2r"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_ttsmg"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_n7wwl"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_qkeuo"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="5_mepuo"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="6_eci6a"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="7_dkiiu"]
+
+[sub_resource type="Resource" id="Resource_uclxm"]
+script = ExtResource("7_dkiiu")
+school = &"feuer"
+values_from_ability = true
+base_key = "werte.brand_schaden"
+factor_key = "werte.brand_faktor"
+
+[resource]
+script = ExtResource("3_n7wwl")
+id = &"brand"
+display_name = "Brand"
+description = "Brennt und erleidet alle 2 Sekunden Feuerschaden (Feuerball)."
+is_debuff = true
+category = 1
+duration = 8.0
+ability_id = &"feuerball"
+tick_interval = 2.0
+tick_effects = Array[ExtResource("1_5uj2r")]([SubResource("Resource_uclxm")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_6yl6s"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_lba0h"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_e50ym"]
+[ext_resource type="Script" path="res://scripts/combat/effects/movement_effect.gd" id="4_nqiti"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_j58gb"]
+
+[sub_resource type="Resource" id="Resource_61uxv"]
+script = ExtResource("4_nqiti")
+distance = 8.0
+target_mode = 1
+
+[resource]
+script = ExtResource("5_j58gb")
+id = &"test_rolle"
+display_name = "Testrolle"
+description = "Zwei Aufladungen: springt 8 m nach vorn. Außerhalb des globalen Cooldowns."
+dev_only = true
+effects = Array[ExtResource("1_6yl6s")]([SubResource("Resource_61uxv")])
+target_kind = 0
+ignores_gcd = true
+highlight_auras = PackedStringArray()

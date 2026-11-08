@@ -1,9 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_0r1wa"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
 
 [resource]
 script = ExtResource("1_ability")
 id = &"automatischer_angriff"
 display_name = "Automatischer Angriff"
-description = "Greift das Ziel im Nahkampf automatisch an, solange ein Feind anvisiert ist."
+description = "Schaltet den automatischen Angriff auf das Ziel ein oder aus (auch Rechtsklick auf einen Feind)."
+requires_facing = false
+ignores_gcd = true
+toggles_auto_attack = true
+highlight_auras = PackedStringArray()

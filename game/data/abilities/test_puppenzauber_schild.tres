@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_47yov"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_irf2s"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_tmxxv"]
+[ext_resource type="Script" path="res://scripts/combat/effects/heal_effect.gd" id="4_6rfar"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_xoikf"]
+
+[sub_resource type="Resource" id="Resource_i01ct"]
+script = ExtResource("4_6rfar")
+values_from_ability = true
+target_mode = 1
+
+[resource]
+script = ExtResource("5_xoikf")
+id = &"test_puppenzauber_schild"
+display_name = "Puppenschild"
+description = "Zauber der Übungspuppe (Entwickler-Panel, Einheiten)."
+dev_only = true
+is_spell = true
+school = &"schatten"
+effects = Array[ExtResource("1_47yov")]([SubResource("Resource_i01ct")])
+target_kind = 0
+interruptible = false
+highlight_auras = PackedStringArray()

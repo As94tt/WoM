@@ -1,6 +1,15 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_4s4ea"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Resource" path="res://data/auras/verjuengung.tres" id="2_6ajoj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_hfsid"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_dtfel"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_ki4ho"]
+
+[sub_resource type="Resource" id="Resource_6iols"]
+script = ExtResource("5_ki4ho")
+aura = ExtResource("2_6ajoj")
 
 [resource]
 script = ExtResource("1_ability")
@@ -9,3 +18,7 @@ display_name = "Verjüngung"
 description = "Heilt das Ziel über einige Sekunden."
 class_id = &"druid"
 is_spell = true
+school = &"natur"
+effects = Array[ExtResource("1_4s4ea")]([SubResource("Resource_6iols")])
+target_kind = 2
+highlight_auras = PackedStringArray()

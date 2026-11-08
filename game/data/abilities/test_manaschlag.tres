@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_w7y0f"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_ejhkf"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_i2e4b"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_ecggg"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_y6ccb"]
+
+[sub_resource type="Resource" id="Resource_2nywv"]
+script = ExtResource("4_ecggg")
+school = &"arkan"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_y6ccb")
+id = &"test_manaschlag"
+display_name = "Testmanaschlag"
+description = "Kostet 50 Mana: Arkanschaden (andere Klassen: „Nicht genug Mana“)."
+dev_only = true
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_w7y0f")]([SubResource("Resource_2nywv")])
+highlight_auras = PackedStringArray()

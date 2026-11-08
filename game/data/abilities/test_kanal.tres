@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_sboc2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_8oh5e"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_ytxmo"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_sjb1p"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_lrr1a"]
+
+[sub_resource type="Resource" id="Resource_ut0he"]
+script = ExtResource("4_sjb1p")
+school = &"schatten"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_lrr1a")
+id = &"test_kanal"
+display_name = "Testkanal"
+description = "Kanalisiert 3 s: jede Sekunde Schattenschaden."
+dev_only = true
+is_spell = true
+school = &"schatten"
+effects = Array[ExtResource("1_sboc2")]([SubResource("Resource_ut0he")])
+highlight_auras = PackedStringArray()

@@ -1,6 +1,14 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_ms6y1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_kxu53"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_ddd8c"]
+[ext_resource type="Script" path="res://scripts/combat/effects/interrupt_effect.gd" id="4_odc6r"]
+
+[sub_resource type="Resource" id="Resource_3u0rb"]
+script = ExtResource("4_odc6r")
+values_from_ability = true
 
 [resource]
 script = ExtResource("1_ability")
@@ -10,3 +18,7 @@ description = "Unterbricht den Zauber des Ziels und sperrt kurz dessen Zaubersch
 class_id = &"mage"
 required_level = 4
 is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_ms6y1")]([SubResource("Resource_3u0rb")])
+ignores_gcd = true
+highlight_auras = PackedStringArray()
