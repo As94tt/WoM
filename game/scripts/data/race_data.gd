@@ -27,7 +27,7 @@ var body_family: BodyFamily = BodyFamily.NORMAL
 var height_factor: float = 1.0
 ## Reihenfolge in Listen (GDD-Reihenfolge der Völker).
 var order: int = 0
-## Grundwerte des Volks (bis #19 alle 0).
+## Volksboni auf die Attribute (Platzhalter); StatBlock (#19) liest sie aus voelker.csv.
 var strength: int = 0
 var agility: int = 0
 var intellect: int = 0

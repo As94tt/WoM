@@ -15,6 +15,8 @@ extends Node3D
 ##   HUD den Gebietsnamen.
 ## - MapRenderer: Kartenbild von oben für das Kartenfenster (M).
 ## - Hud: Name/Infozeile, Interface (#17), Entwickler-Panel (F10, nur Debug).
+##   Inhalt des Charakterfensters (C) ist CharacterPanel (#19) mit der eigenen
+##   Figur; das Entwickler-Panel hat dafür den Abschnitt „Werte“.
 ##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
@@ -29,6 +31,8 @@ extends Node3D
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const MAP_VIEW_SCENE := preload("res://scenes/ui/hud/map_view.tscn")
 const DEV_PANEL_SCENE := preload("res://scenes/ui/dev/dev_panel.tscn")
+const CHARACTER_PANEL_SCENE := preload("res://scenes/ui/hud/character_panel.tscn")
+const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 
 ## Weitere Spieler stehen im Kreis mit diesem Abstand um den Startpunkt, in
 ## Metern (#30).
@@ -45,6 +49,13 @@ var _local_zone: WorldZone = null
 var _nav_status := "noch nicht gebacken"
 var _dev_info: Label = null
 var _map_view: MapView = null
+var _character_panel: CharacterPanel = null
+## Entwickler-Panel, Abschnitt „Werte“ (#19): Infozeilen und Bedienelemente,
+## die dem Stand der eigenen Figur folgen.
+var _stat_dev_info: Label = null
+var _stat_dev_level_label: Label = null
+var _stat_dev_level_slider: HSlider = null
+var _stat_dev_toggles: Dictionary[String, CheckBox] = {}
 
 @onready var _players: Node3D = %Players
 @onready var _navigation: NavigationRegion3D = %Navigation
@@ -68,6 +79,7 @@ func _ready() -> void:
 	Network.players_changed.connect(_on_players_changed)
 	Data.reloaded.connect(_on_data_reloaded)
 	_show_character_info()
+	_setup_character_window()
 	_setup_map()
 	_start_autosave()
 	if OS.is_debug_build():
@@ -189,8 +201,9 @@ func _show_character_info() -> void:
 	# Name im Spiel, falls der Host einen Zusatz vergeben hat („Arthas (2)“).
 	var info := Network.get_local_player_info()
 	%NameLabel.text = info.display_name if info != null else c.character_name
+	var player := get_local_player()
 	%InfoLabel.text = "Stufe %d · %s · %s" % [
-		c.level,
+		player.get_level() if player != null and player.is_node_ready() else c.level,
 		race.display_name if race != null else String(c.race_id),
 		class_data.display_name if class_data != null else String(c.class_id),
 	]
@@ -266,6 +279,14 @@ func _on_player_node_added(node: Node) -> void:
 
 
 func _on_player_ready(player: PlayerCharacter) -> void:
+	if player.is_local():
+		if _character_panel != null:
+			_character_panel.setup(player)
+		_connect_stat_dev(player)
+		# Infozeile oben links folgt der Stufe der Werte (#19, auch „Stufe
+		# ändern“ im Entwickler-Panel).
+		player.get_stats().stats_changed.connect(_show_character_info)
+		_show_character_info()
 	if _map_view == null:
 		return
 	if player.is_local():
@@ -294,6 +315,16 @@ func _on_zone_changed(body: Node3D, zone: WorldZone) -> void:
 	var map_window := _hud.get_hud_window(&"map")
 	if map_window != null:
 		map_window.title = "Karte – %s" % zone.get_display_name()
+
+
+# --- Charakterfenster (#19) ---------------------------------------------------
+
+func _setup_character_window() -> void:
+	var window := _hud.get_hud_window(&"character")
+	if window == null:
+		return
+	_character_panel = CHARACTER_PANEL_SCENE.instantiate()
+	window.set_content(_character_panel)
 
 
 # --- Karte -------------------------------------------------------------------
@@ -404,6 +435,8 @@ func _setup_dev_panel() -> void:
 	panel.add_button(data, "Tabellen neu laden (%s)" % InputLabels.for_action(Data.RELOAD_ACTION),
 			func() -> void: Data.reload_tables())
 
+	_setup_stat_dev_section(panel)
+
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)
 	panel.add_toggle(display, "Gebietsgrenzen anzeigen", false, _set_bounds_visible)
@@ -426,6 +459,81 @@ func _on_data_reloaded(_ok: bool, lines: PackedStringArray) -> void:
 		_hud.add_log_message(lines[i])
 	if lines.size() > MAX_LOG_LINES:
 		_hud.add_log_message("… und %d weitere Fehler (siehe Konsole)." % (lines.size() - MAX_LOG_LINES))
+
+
+## Abschnitt „Werte“ (#19): Testmodifikatoren, Stufe, „Im Kampf“,
+## Nahkampfwaffe/Schild, Schaden und Ressourcen. Alles wirkt auf die eigene
+## Figur; auf einem Client geht es als Wunsch an den Host
+## (CharacterStats.request_dev_action), der die Werte bestimmt.
+func _setup_stat_dev_section(panel: DevPanel) -> void:
+	var section := panel.add_section("Werte")
+	_stat_dev_info = panel.add_info(section)
+	_stat_dev_toggles["combat"] = panel.add_toggle(section, "Im Kampf", false,
+			func(on: bool) -> void: _stat_dev_action("combat", on))
+	_stat_dev_toggles["melee"] = panel.add_toggle(section, "Nahkampfwaffe getragen", false,
+			func(on: bool) -> void: _stat_dev_action("melee", on))
+	_stat_dev_toggles["shield"] = panel.add_toggle(section, "Schild getragen", false,
+			func(on: bool) -> void: _stat_dev_action("shield", on))
+	_stat_dev_level_label = panel.add_info(section)
+	_stat_dev_level_slider = panel.add_slider(section, 1.0, Data.hoechste_stufe(), 1.0, 1.0,
+			func(value: float) -> void:
+				_stat_dev_level_label.text = "Stufe (nur diese Sitzung): %d" % int(value)
+				_stat_dev_action("level", int(value)))
+	_stat_dev_level_label.text = "Stufe (nur diese Sitzung): 1"
+	panel.add_button(section, "Schaden nehmen (%s %% Leben)" % StatFormat.number(
+			STAT_DEV_TOOLS.damage_taken_percent, 0), _stat_dev_action.bind("take_damage", null))
+	panel.add_button(section, "Schaden austeilen (%s, nur Wut)" % StatFormat.number(
+			STAT_DEV_TOOLS.damage_dealt, 0), _stat_dev_action.bind("deal_damage", null))
+	panel.add_button(section, "Mana/Energie verbrauchen (%s)" % StatFormat.number(
+			STAT_DEV_TOOLS.resource_spent, 0), _stat_dev_action.bind("spend", null))
+	panel.add_button(section, "Chi aufbauen (+%s)" % StatFormat.number(
+			STAT_DEV_TOOLS.chi_built, 0), _stat_dev_action.bind("build_chi", null))
+	panel.add_button(section, "Leben und Ressourcen auffüllen", _stat_dev_action.bind("refill", null))
+	panel.add_info(section, "Testmodifikatoren:")
+	for index in STAT_DEV_TOOLS.test_modifiers.size():
+		_stat_dev_toggles["modifier_%d" % index] = panel.add_toggle(section,
+				CharacterStats.dev_modifier_label(index), false,
+				func(on: bool) -> void: _stat_dev_action("modifier", [index, on]))
+
+
+func _stat_dev_action(action: String, value: Variant) -> void:
+	var player := get_local_player()
+	if player != null:
+		player.get_stats().request_dev_action(action, value)
+
+
+## Eigene Figur ist da: Abschnitt „Werte“ folgt ihrem Stand (auch wenn der
+## Host etwas ändert).
+func _connect_stat_dev(player: PlayerCharacter) -> void:
+	if _stat_dev_info == null:
+		return
+	var stats := player.get_stats()
+	stats.stats_changed.connect(_sync_stat_dev.bind(stats))
+	stats.resources_changed.connect(_update_stat_dev_info.bind(stats))
+	_sync_stat_dev(stats)
+
+
+## Schalter und Regler auf den Stand der Figur setzen, ohne Aktionen auszulösen.
+func _sync_stat_dev(stats: CharacterStats) -> void:
+	_stat_dev_toggles["combat"].set_pressed_no_signal(stats.is_in_combat())
+	_stat_dev_toggles["melee"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_MELEE_WEAPON))
+	_stat_dev_toggles["shield"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_SHIELD))
+	for index in STAT_DEV_TOOLS.test_modifiers.size():
+		_stat_dev_toggles["modifier_%d" % index].set_pressed_no_signal(
+				stats.block.has_source(CharacterStats.dev_source(index)))
+	_stat_dev_level_slider.set_value_no_signal(stats.get_level())
+	_stat_dev_level_label.text = "Stufe (nur diese Sitzung): %d" % stats.get_level()
+	_update_stat_dev_info(stats)
+
+
+func _update_stat_dev_info(stats: CharacterStats) -> void:
+	var lines: PackedStringArray = ["Leben: %s / %s" % [StatFormat.number(stats.health, 0),
+			StatFormat.number(stats.max_health, 0)]]
+	for resource_id in stats.get_resource_ids():
+		lines.append("%s: %s / %s" % [CharacterStats.RULES.get_resource_name(resource_id),
+				StatFormat.number(stats.get_resource(resource_id), 0),
+				StatFormat.number(stats.get_resource_max(resource_id), 0)])
+	_stat_dev_info.text = "\n".join(lines)
 
 
 func _set_placeholders_visible(on: bool) -> void:

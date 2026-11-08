@@ -609,6 +609,77 @@ layout_mode = 2
 size_flags_horizontal = 0
 title = "Charakter"
 
+[node name="StatLabel" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Werte im Charakterfenster: normal (SmallLabel), Bonus (StatBonus), Malus (StatMalus); Farben OFFEN"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StatSample" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"SlotColumn"
+
+[node name="Normal" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample"]
+layout_mode = 2
+tooltip_text = "Ausdauer
+Erhöht das maximale Leben.
+Grundwert 26, kein Bonus"
+theme_type_variation = &"InlineRow"
+
+[node name="Name" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Normal"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+text = "Ausdauer"
+
+[node name="Value" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Normal"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "26"
+horizontal_alignment = 2
+
+[node name="Bonus" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample"]
+layout_mode = 2
+tooltip_text = "Stärke
+Erhöht die Kampfkraft. Hauptattribut des Kriegers.
+Grundwert 41 + 50 = 91
+Bonus: +50"
+theme_type_variation = &"InlineRow"
+
+[node name="Name" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Bonus"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+text = "Stärke"
+
+[node name="Value" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Bonus"]
+layout_mode = 2
+theme_type_variation = &"StatBonus"
+text = "91"
+horizontal_alignment = 2
+
+[node name="Malus" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample"]
+layout_mode = 2
+tooltip_text = "Kampfkraft
+Grundwert 120 − 24 = 96
+Malus: −24"
+theme_type_variation = &"InlineRow"
+
+[node name="Name" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Malus"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+text = "Kampfkraft"
+
+[node name="Value" type="Label" parent="ScrollContainer/MarginContainer/Content/HudGrid/StatSample/Malus"]
+layout_mode = 2
+theme_type_variation = &"StatMalus"
+text = "96"
+horizontal_alignment = 2
+
 [node name="SectionWorld" type="HSeparator" parent="ScrollContainer/MarginContainer/Content"]
 layout_mode = 2
 

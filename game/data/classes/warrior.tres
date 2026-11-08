@@ -11,3 +11,6 @@ role = 1
 role_name = "Tank"
 color = Color(0.75, 0.55, 0.35, 1)
 order = 2
+primary_attribute = &"strength"
+power_stat = &"attack_power"
+resources = Array[StringName]([&"rage"])

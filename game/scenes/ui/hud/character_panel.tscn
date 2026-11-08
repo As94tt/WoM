@@ -1,0 +1,136 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_preview.tscn" id="2_preview"]
+
+[node name="CharacterPanel" type="HBoxContainer"]
+mouse_filter = 2
+theme_type_variation = &"ButtonRow"
+script = ExtResource("1_panel")
+
+[node name="Equipment" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="Header" type="HBoxContainer" parent="Equipment"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="Titles" type="VBoxContainer" parent="Equipment/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="NameLabel" type="Label" parent="Equipment/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="InfoRow" type="HBoxContainer" parent="Equipment/Header/Titles"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="InfoLabel" type="Label" parent="Equipment/Header/Titles/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Stufe 1 · Volk ·"
+
+[node name="ClassLabel" type="Label" parent="Equipment/Header/Titles/InfoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Klasse"
+
+[node name="StatsToggle" type="Button" parent="Equipment/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Werte anzeigen"
+focus_mode = 0
+theme_type_variation = &"SlotButton"
+toggle_mode = true
+text = "»"
+
+[node name="Middle" type="HBoxContainer" parent="Equipment"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+alignment = 1
+
+[node name="LeftSlots" type="VBoxContainer" parent="Equipment/Middle"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="Preview" parent="Equipment/Middle" instance=ExtResource("2_preview")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 260)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightSlots" type="VBoxContainer" parent="Equipment/Middle"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="WeaponSlots" type="HBoxContainer" parent="Equipment"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+alignment = 1
+
+[node name="SpecialSlots" type="HBoxContainer" parent="Equipment"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotRow"
+alignment = 1
+
+[node name="StatsSeparator" type="VSeparator" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StatsArea" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+
+[node name="StatsTitle" type="Label" parent="StatsArea"]
+layout_mode = 2
+theme_type_variation = &"Subtitle"
+text = "Werte"
+
+[node name="CombatLabel" type="Label" parent="StatsArea"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Außerhalb des Kampfes"
+
+[node name="Scroll" type="ScrollContainer" parent="StatsArea"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StatsList" type="VBoxContainer" parent="StatsArea/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"

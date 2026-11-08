@@ -56,35 +56,35 @@ script = ExtResource("1_5fjd1")
 name = "staerke"
 type = 2
 choices = PackedStringArray()
-description = "Stärke-Bonus des Volks (bis zum Wertesystem 0)."
+description = "Stärke-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert)."
 
 [sub_resource type="Resource" id="Resource_dry2w"]
 script = ExtResource("1_5fjd1")
 name = "gewandtheit"
 type = 2
 choices = PackedStringArray()
-description = "Gewandtheit-Bonus des Volks (bis zum Wertesystem 0)."
+description = "Gewandtheit-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert)."
 
 [sub_resource type="Resource" id="Resource_v6010"]
 script = ExtResource("1_5fjd1")
 name = "intellekt"
 type = 2
 choices = PackedStringArray()
-description = "Intellekt-Bonus des Volks (bis zum Wertesystem 0)."
+description = "Intellekt-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert)."
 
 [sub_resource type="Resource" id="Resource_whv71"]
 script = ExtResource("1_5fjd1")
 name = "ausdauer"
 type = 2
 choices = PackedStringArray()
-description = "Ausdauer-Bonus des Volks (bis zum Wertesystem 0)."
+description = "Ausdauer-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert)."
 
 [sub_resource type="Resource" id="Resource_fts2m"]
 script = ExtResource("1_5fjd1")
 name = "willenskraft"
 type = 2
 choices = PackedStringArray()
-description = "Willenskraft-Bonus des Volks (bis zum Wertesystem 0)."
+description = "Willenskraft-Bonus des Volks (Platzhalter, wird zu den Klassenwerten addiert)."
 
 [sub_resource type="Resource" id="Resource_80jdi"]
 script = ExtResource("1_5fjd1")

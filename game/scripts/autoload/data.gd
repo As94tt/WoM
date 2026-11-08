@@ -193,6 +193,49 @@ func klassenwachstum(klasse: StringName, stufe: int) -> TableRow:
 	return row("klassenwachstum", [klasse, stufe])
 
 
+## Werte einer Klasse auf einer Stufe (Wertesystem #19): Summe aller Zeilen
+## von klassenwachstum.csv bis einschließlich stufe (Stufe 1 = Grundwerte).
+## Ergebnis: Spaltenname → Zahl, z. B. {"staerke": 24, "leben": 110, …}.
+## Fehlende Stufen zählen als 0.
+func klassenwerte(klasse: StringName, stufe: int) -> Dictionary:
+	_ensure_loaded()
+	var schema: TableSchema = _data.schemas.get("klassenwachstum")
+	var result := {}
+	if schema == null:
+		return result
+	for column in schema.columns:
+		if column.type == ColumnSchema.Type.INT and column.name != "stufe":
+			result[column.name] = 0
+	for r in rows_where("klassenwachstum", "klasse", klasse):
+		if int(r.get_value("stufe", 0)) > stufe:
+			continue
+		for column_name: String in result:
+			result[column_name] += int(r.get_value(column_name, 0))
+	return result
+
+
+## Umrechnung der Wertungen in Prozent für eine Stufe (umrechnung.csv) oder
+## null. Fehlt die Stufe, gilt die höchste vorhandene darunter.
+func umrechnung(stufe: int) -> TableRow:
+	var r := row("umrechnung", stufe)
+	if r != null:
+		return r
+	var best: TableRow = null
+	for candidate: TableRow in rows("umrechnung"):
+		var s := int(candidate.get_value("stufe", 0))
+		if s <= stufe and (best == null or s > int(best.get_value("stufe", 0))):
+			best = candidate
+	return best
+
+
+## Höchste Stufe in umrechnung.csv (für den Stufenregler im Entwickler-Panel).
+func hoechste_stufe() -> int:
+	var result := 1
+	for r: TableRow in rows("umrechnung"):
+		result = maxi(result, int(r.get_value("stufe", 1)))
+	return result
+
+
 ## Benötigte Erfahrung für die nächste Stufe; -1, wenn die Stufe fehlt.
 func erfahrung(stufe: int) -> int:
 	var r := row("erfahrung", stufe)

@@ -23,7 +23,7 @@ min_value = 1.0
 has_max = true
 max_value = 100.0
 choices = PackedStringArray()
-description = "Stufe, die erreicht wird."
+description = "Stufe, die erreicht wird (1 = Grundwerte)."
 
 [sub_resource type="Resource" id="Resource_hqpgn"]
 script = ExtResource("1_sxqff")
@@ -74,12 +74,26 @@ type = 2
 choices = PackedStringArray()
 description = "Manazuwachs."
 
+[sub_resource type="Resource" id="Resource_kk19a"]
+script = ExtResource("1_sxqff")
+name = "kampfkraft"
+type = 2
+choices = PackedStringArray()
+description = "Zuwachs der Grund-Kampfkraft (Krieger, Schurke, Mönch; dazu kommt das Hauptattribut)."
+
+[sub_resource type="Resource" id="Resource_zm19b"]
+script = ExtResource("1_sxqff")
+name = "zaubermacht"
+type = 2
+choices = PackedStringArray()
+description = "Zuwachs der Grund-Zaubermacht (Magier, Druide; dazu kommt der Intellekt)."
+
 [resource]
 script = ExtResource("2_ydk2p")
 table = "klassenwachstum"
 title = "Klassenwachstum"
 group = "Charaktere"
-description = "Wertezuwachs je Klasse und Stufe."
+description = "Wertezuwachs je Klasse und Stufe. Die Zeile mit Stufe 1 enthält die Grundwerte; die Werte einer Stufe sind die Summe aller Zeilen bis zu dieser Stufe. Fehlende Stufen zählen als 0 (Wertesystem #19)."
 key_columns = PackedStringArray("klasse", "stufe")
 order = 51
-columns = Array[ExtResource("1_sxqff")]([SubResource("Resource_m40lw"), SubResource("Resource_dea6l"), SubResource("Resource_hqpgn"), SubResource("Resource_hy5aw"), SubResource("Resource_s35jd"), SubResource("Resource_10017"), SubResource("Resource_hkx8b"), SubResource("Resource_hcykb"), SubResource("Resource_7mteu")])
+columns = Array[ExtResource("1_sxqff")]([SubResource("Resource_m40lw"), SubResource("Resource_dea6l"), SubResource("Resource_hqpgn"), SubResource("Resource_hy5aw"), SubResource("Resource_s35jd"), SubResource("Resource_10017"), SubResource("Resource_hkx8b"), SubResource("Resource_hcykb"), SubResource("Resource_7mteu"), SubResource("Resource_kk19a"), SubResource("Resource_zm19b")])

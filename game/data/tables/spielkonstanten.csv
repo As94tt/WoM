@@ -3,3 +3,43 @@ schluessel;wert;notiz
 gcd;1,5;Globaler Cooldown in Sekunden
 bedrohung_schwelle_nahkampf;110;Bedrohung in Prozent, ab der ein Gegner im Nahkampf das Ziel wechselt
 bedrohung_schwelle_fernkampf;130;Bedrohung in Prozent, ab der ein Gegner auf Abstand das Ziel wechselt
+# Wertesystem (#19): Umrechnung von Attributen (Platzhalter, Balancing folgt)
+leben_pro_ausdauer;10;Maximales Leben je Punkt Ausdauer
+kampfkraft_pro_hauptattribut;2;Kampfkraft je Punkt Hauptattribut (Stärke beim Krieger, Gewandtheit bei Schurke und Mönch)
+zaubermacht_pro_intellekt;1;Zaubermacht je Punkt Intellekt (Magier, Druide)
+mana_pro_intellekt;15;Maximales Mana je Punkt Intellekt (Magier, Druide)
+# Wertesystem (#19): Grundwerte in Prozent
+krit_grundchance;5;Kritische Trefferchance ohne Präzision
+krit_grundschaden;150;Schaden eines kritischen Treffers in Prozent des normalen Schadens, ohne Verheerung
+ausweichen_grund;3;Ausweichchance ohne Abwehr
+parieren_grund;3;Parierchance ohne Abwehr (nur mit Nahkampfwaffe)
+blocken_grund;5;Blockchance ohne Abwehr (nur mit Schild)
+bewegung_grund;100;Laufgeschwindigkeit in Prozent ohne Eile
+# Wertesystem (#19): Obergrenzen in Prozent
+obergrenze_krit;50;Höchste kritische Trefferchance
+obergrenze_ausweichen;30;Höchste Ausweichchance
+obergrenze_parieren;30;Höchste Parierchance
+obergrenze_blocken;50;Höchste Blockchance
+obergrenze_ruestung;75;Höchste Schadensverringerung durch Rüstung
+obergrenze_zauberschutz;75;Höchste Schadensverringerung durch Zauberschutz
+obergrenze_durchschlag;50;Höchster Durchschlag
+obergrenze_bewegung;200;Höchste Laufgeschwindigkeit (mit Eile)
+# Wertesystem (#19): Verfehlen (kein Trefferwert, nur Stufenunterschied; Kampf ab M2)
+verfehlen_grund;5;Chance zu verfehlen bei gleicher Stufe
+verfehlen_pro_stufe;2;Zusätzliche Chance je Stufe, die das Ziel höher ist (bzw. weniger, wenn es niedriger ist)
+verfehlen_min;0;Kleinste Chance zu verfehlen
+verfehlen_max;60;Größte Chance zu verfehlen
+# Wertesystem (#19): Ressourcen und Regeneration
+leben_regen_im_kampf;0,2;Lebensregeneration im Kampf in Prozent des maximalen Lebens je Sekunde
+leben_regen_ausser_kampf;3;Lebensregeneration außerhalb des Kampfes in Prozent des maximalen Lebens je Sekunde
+mana_regen_grund;0,5;Manaregeneration je Sekunde ohne Willenskraft (im Kampf)
+mana_regen_pro_willenskraft;0,1;Manaregeneration je Sekunde und Punkt Willenskraft (im Kampf)
+mana_regen_faktor_ausser_kampf;3;Faktor auf die Manaregeneration außerhalb des Kampfes
+wut_max;100;Maximale Wut
+wut_pro_schaden_ausgeteilt;0,2;Wut je Punkt ausgeteilten Schadens
+wut_pro_schaden_genommen;50;Wut für genommenen Schaden: Faktor × Schaden / maximales Leben
+wut_verfall_pro_s;3;Wutverlust je Sekunde außerhalb des Kampfes
+energie_max;100;Maximale Energie
+energie_regen_pro_s;10;Energieregeneration je Sekunde (wird mit Tempo schneller)
+chi_max;100;Maximales Chi, beim Erreichen wird der Zustand „Chi voll“ ausgelöst
+chi_verfall_pro_s;5;Chi-Verlust je Sekunde nach „Chi voll“, bis Chi wieder 0 ist
