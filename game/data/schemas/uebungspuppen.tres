@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_upcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_uptab"]
+
+[sub_resource type="Resource" id="Resource_up_id"]
+script = ExtResource("1_upcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID, wird nie geändert (z. B. schadenspuppe_10). Die Aufstellpunkte im Trainingsbereich verweisen darauf."
+
+[sub_resource type="Resource" id="Resource_up_name"]
+script = ExtResource("1_upcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Rahmen, Namensplakette)."
+
+[sub_resource type="Resource" id="Resource_up_art"]
+script = ExtResource("1_upcol")
+name = "art"
+type = 5
+required = true
+choices = PackedStringArray("schaden", "heilung")
+description = "schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung."
+
+[sub_resource type="Resource" id="Resource_up_gesinnung"]
+script = ExtResource("1_upcol")
+name = "gesinnung"
+type = 5
+default_value = "feindlich"
+choices = PackedStringArray("feindlich", "neutral", "freundlich")
+description = "Gesinnung gegenüber Spielern."
+
+[sub_resource type="Resource" id="Resource_up_stufe"]
+script = ExtResource("1_upcol")
+name = "stufe"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe der Puppe (im Entwickler-Panel zur Laufzeit änderbar)."
+
+[sub_resource type="Resource" id="Resource_up_rang"]
+script = ExtResource("1_upcol")
+name = "rang"
+type = 5
+default_value = "normal"
+choices = PackedStringArray("normal", "elite", "selten", "boss")
+description = "Rang für die Kennzeichnung am Zielrahmen (wie bei Gegnern)."
+
+[sub_resource type="Resource" id="Resource_up_leben"]
+script = ExtResource("1_upcol")
+name = "leben"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Maximales Leben (fester Grundwert, ersetzt die Formel des Wertesystems)."
+
+[sub_resource type="Resource" id="Resource_up_verlust"]
+script = ExtResource("1_upcol")
+name = "verlust_prozent"
+type = 3
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Nur Heilpuppe: Lebensverlust je Intervall in Prozent des maximalen Lebens (0 = kein Verlust)."
+
+[sub_resource type="Resource" id="Resource_up_intervall"]
+script = ExtResource("1_upcol")
+name = "verlust_intervall"
+type = 3
+default_value = "1"
+has_min = true
+min_value = 0.1
+has_max = true
+max_value = 60.0
+choices = PackedStringArray()
+description = "Nur Heilpuppe: Sekunden zwischen zwei Lebensverlusten."
+
+[resource]
+script = ExtResource("2_uptab")
+table = "uebungspuppen"
+title = "Übungspuppen"
+group = "Gegner"
+description = "Übungspuppen im Trainingsbereich (#31). Eine Zeile pro Puppentyp; aufgestellt werden sie über Aufstellpunkte (UnitSpawnPoint) in der Szene des Trainingsgeländes. Anzeigefenster und Rücksetzzeit stehen in spielkonstanten.csv."
+key_columns = PackedStringArray("id")
+order = 15
+columns = Array[ExtResource("1_upcol")]([SubResource("Resource_up_id"), SubResource("Resource_up_name"), SubResource("Resource_up_art"), SubResource("Resource_up_gesinnung"), SubResource("Resource_up_stufe"), SubResource("Resource_up_rang"), SubResource("Resource_up_leben"), SubResource("Resource_up_verlust"), SubResource("Resource_up_intervall")])

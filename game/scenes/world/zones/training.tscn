@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://data/world/placeholders/area.tres" id="4_area"]
 [ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="5_world_zone"]
 [ext_resource type="Resource" path="res://data/zones/trainingsgelaende.tres" id="6_trainingsgelaende"]
+[ext_resource type="Script" path="res://scripts/world/unit_spawn_point.gd" id="7_unit_spawn"]
 
 [sub_resource type="StandardMaterial3D" id="Material_fence"]
 albedo_color = Color(0.55, 0.5, 0.45, 1)
@@ -55,31 +56,13 @@ size = Vector3(10, 3.6, 2)
 
 [node name="Placeholders" type="Node3D" parent="."]
 
+[node name="Dummies" type="Node3D" parent="."]
+
 [node name="Teleport" type="Marker3D" parent="Points"]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -62, 0, -1.5)
 script = ExtResource("1_teleport_point")
 display_name = "Trainingsgelände"
 order = 20
-
-[node name="Dummy" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
-position = Vector3(-50, 0, -15.5)
-kind = ExtResource("3_dummy")
-text = "Schadenspuppe Stufe 1"
-
-[node name="Dummy2" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
-position = Vector3(-44, 0, -15.5)
-kind = ExtResource("3_dummy")
-text = "Schadenspuppe Stufe 10"
-
-[node name="Dummy3" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
-position = Vector3(-38, 0, -15.5)
-kind = ExtResource("3_dummy")
-text = "Schadenspuppe Stufe 30"
-
-[node name="Dummy4" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
-position = Vector3(-26, 0, -15.5)
-kind = ExtResource("3_dummy")
-text = "Heilpuppe"
 
 [node name="Dummy5" parent="Placeholders" instance=ExtResource("2_placeholder_post")]
 position = Vector3(-50, 0, 18.5)
@@ -101,3 +84,23 @@ position = Vector3(25, 0, 0.5)
 kind = ExtResource("4_area")
 text = "Freie Fläche für Flächenzauber"
 area_radius = 18
+
+[node name="Schadenspuppe1" type="Marker3D" parent="Dummies"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -50, 0, -15.5)
+script = ExtResource("7_unit_spawn")
+unit_id = &"schadenspuppe_1"
+
+[node name="Schadenspuppe10" type="Marker3D" parent="Dummies"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -44, 0, -15.5)
+script = ExtResource("7_unit_spawn")
+unit_id = &"schadenspuppe_10"
+
+[node name="Schadenspuppe30" type="Marker3D" parent="Dummies"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -38, 0, -15.5)
+script = ExtResource("7_unit_spawn")
+unit_id = &"schadenspuppe_30"
+
+[node name="Heilpuppe" type="Marker3D" parent="Dummies"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -26, 0, -15.5)
+script = ExtResource("7_unit_spawn")
+unit_id = &"heilpuppe"

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/player/player_camera.gd" id="3_camera"]
 [ext_resource type="Script" path="res://scripts/stats/character_stats.gd" id="4_stats"]
 [ext_resource type="Script" path="res://scripts/abilities/player_abilities.gd" id="5_abilities"]
+[ext_resource type="Script" path="res://scripts/units/targeting.gd" id="6_targeting"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -125,26 +126,6 @@ mesh = SubResource("Mesh_body")
 position = Vector3(0, 1.4, -0.45)
 mesh = SubResource("Mesh_nose")
 
-[node name="Nameplate" type="Node3D" parent="."]
-position = Vector3(0, 2.1, 0)
-
-[node name="NameLabel" type="Label3D" parent="Nameplate"]
-position = Vector3(0, 0.32, 0)
-visibility_range_end = 80.0
-pixel_size = 0.01
-billboard = 1
-text = "Name"
-font_size = 40
-outline_size = 10
-
-[node name="LevelLabel" type="Label3D" parent="Nameplate"]
-visibility_range_end = 80.0
-pixel_size = 0.01
-billboard = 1
-text = "Stufe 1"
-font_size = 26
-outline_size = 8
-
 [node name="CameraRig" type="Node3D" parent="."]
 top_level = true
 script = ExtResource("3_camera")
@@ -181,3 +162,6 @@ replication_config = SubResource("Replication_stats")
 
 [node name="Abilities" type="Node" parent="."]
 script = ExtResource("5_abilities")
+
+[node name="Targeting" type="Node" parent="."]
+script = ExtResource("6_targeting")

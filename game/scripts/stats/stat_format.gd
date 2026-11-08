@@ -40,6 +40,18 @@ static func number(amount: float, decimals: int) -> String:
 	return text.replace("-", MINUS)
 
 
+## Ganze Zahl mit Tausenderpunkten, z. B. „1.250“ (Lebensbalken, #31).
+static func grouped(amount: float) -> String:
+	var value := roundi(amount)
+	var digits := str(absi(value))
+	var parts := PackedStringArray()
+	while digits.length() > 3:
+		parts.insert(0, digits.substr(digits.length() - 3))
+		digits = digits.substr(0, digits.length() - 3)
+	parts.insert(0, digits)
+	return (MINUS if value < 0 else "") + ".".join(parts)
+
+
 ## Kurzer Text eines Modifikators, z. B. „+50 Stärke“ oder „−20 % Kampfkraft“.
 static func modifier(stat_name: String, definition: StatDefinition, kind: StatModifier.Kind,
 		amount: float) -> String:

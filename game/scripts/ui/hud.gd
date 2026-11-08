@@ -21,8 +21,9 @@ extends Control
 ##
 ## Netzwerk (#30): Log-Bereich unten links (add_log_message, z. B. „X hat die
 ## Welt betreten“), Spielerliste solange O gehalten wird (Aktion
-## „player_list“), Netzwerk-Overlay mit F3. Sie lesen nur den Autoload
-## „Network“; nichts davon wird synchronisiert.
+## „player_list“), Netzwerk-Overlay mit F9 (seit #31; F1–F5 gehören der
+## Zielauswahl). Sie lesen nur den Autoload „Network“; nichts davon wird
+## synchronisiert.
 ##
 ## Fähigkeiten (#21): setup_abilities() verbindet beide Aktionsleisten mit der
 ## Belegung (ActionBarLayout) und den Fähigkeiten der eigenen Figur. Den
@@ -30,6 +31,11 @@ extends Control
 ## Fähigkeit gezogen wird bzw. am Mauszeiger hängt, brechen Rechtsklick und
 ## Esc das Ziehen ab (ActionDragData.cancelled), statt die Kamera zu drehen
 ## bzw. das Spielmenü zu öffnen.
+##
+## Einheiten (#31): setup_local_player() verbindet Spielerrahmen (oben links),
+## Zielrahmen (rechts daneben, nur mit Ziel) und die Namensplaketten
+## (NameplateLayer, unter allen Fenstern) mit der eigenen Figur und ihrer
+## Zielauswahl (Targeting). Esc hebt nach den Fenstern das Ziel auf.
 ##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
@@ -54,6 +60,8 @@ const PLAYER_LIST_ACTION := &"player_list"
 var hotkeys_enabled := true
 
 var _windows: Dictionary[StringName, HudWindow] = {}
+## Zielauswahl der eigenen Figur (#31), null bis setup_local_player.
+var _targeting: Targeting = null
 
 @onready var _game_menu: GameMenu = %GameMenu
 @onready var _action_bar_1: ActionBar = %ActionBar1
@@ -140,17 +148,44 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 ## Esc und Menüleisten-Button „Spielmenü“. Die Reihenfolge steht bewusst nur
-## hier, damit spätere Tickets einen Schritt einfügen können (#31: nach dem
-## Schließen der Fenster zuerst das Ziel aufheben):
+## hier, damit spätere Tickets einen Schritt einfügen können:
 ## 1. offenes Spielmenü schließen, 2. offene Fenster schließen,
-## 3. Spielmenü öffnen.
+## 3. Ziel aufheben (#31), 4. Spielmenü öffnen.
 func handle_cancel() -> void:
 	if _game_menu.visible:
 		_game_menu.close()
 		return
 	if close_all_windows():
 		return
+	if _targeting != null and is_instance_valid(_targeting) and _targeting.clear():
+		return
 	_game_menu.open()
+
+
+## Eigene Figur ist da (#31): Rahmen, Namensplaketten und Esc mit ihrer
+## Zielauswahl verbinden.
+func setup_local_player(player: PlayerCharacter) -> void:
+	_targeting = player.get_targeting()
+	var player_frame: UnitFrame = %PlayerFrame
+	var target_frame: UnitFrame = %TargetFrame
+	player_frame.set_viewer(player)
+	player_frame.set_unit(player)
+	target_frame.set_viewer(player)
+	%NameplateLayer.setup(player)
+	if _targeting == null:
+		return
+	_targeting.target_changed.connect(target_frame.set_unit)
+	target_frame.set_unit(_targeting.target)
+	# Klick auf den eigenen Rahmen wählt sich selbst (wie F1).
+	player_frame.clicked.connect(func(unit: Unit) -> void: _targeting.select(unit))
+
+
+func get_player_frame() -> UnitFrame:
+	return %PlayerFrame
+
+
+func get_target_frame() -> UnitFrame:
+	return %TargetFrame
 
 
 ## Verbindet die Aktionsleisten mit Belegung und Fähigkeiten der eigenen

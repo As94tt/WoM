@@ -1,5 +1,5 @@
 class_name PlayerCharacter
-extends CharacterBody3D
+extends Unit
 ## Spielfigur mit WoW-Bewegung (Ticket #16). Graubox: Kapsel mit „Nase“,
 ## Vorderseite ist -Z. Der Ursprung liegt an den Füßen.
 ##
@@ -34,6 +34,13 @@ extends CharacterBody3D
 ## Fähigkeiten (#21): Kindknoten „Abilities“ (PlayerAbilities) mit Zauberbuch-
 ## Reitern, „erlernt“ und der zentralen Funktion use_ability(). Nicht
 ## synchronisiert; die Stufe kommt aus „Stats“.
+##
+## Einheit (#31): Die Figur ist eine Unit (Entfernung, Sichtlinie, Gesinnung).
+## Die Zielauswahl liegt im Kindknoten „Targeting“, der wie die Eingabe nur
+## beim Besitzer existiert. Der Besitzer meldet sein Ziel und den
+## automatischen Angriff per RPC an den Host (report_target), der es in
+## current_target/auto_attacking führt. Die Namensplakette zeichnet seit #31
+## das HUD (NameplateLayer), nicht mehr die Figur selbst.
 
 ## Wird gesendet, wenn die Figur anfängt oder aufhört, sich zu bewegen
 ## (für den Zauberabbruch bei Bewegung, #33).
@@ -43,10 +50,6 @@ enum MoveState { STANDING, RUNNING, JUMPING, FALLING }
 
 const NETWORK_SETTINGS: NetworkSettings = preload("res://data/network/network_settings.tres")
 const MOVEMENT_CHECK: MovementCheckData = preload("res://data/network/movement_check.tres")
-## Grundhöhe der Kapsel bei height_factor 1,0 (muss zur CapsuleMesh passen).
-const BASE_HEIGHT := 1.8
-## Abstand der Namensplakette über dem Kopf in Metern.
-const NAMEPLATE_OFFSET := 0.3
 
 ## Bewegungswerte aus res://data/movement/.
 @export var movement: MovementData = preload("res://data/movement/player_movement.tres")
@@ -131,9 +134,6 @@ var _body_material: StandardMaterial3D = null
 
 @onready var _model: Node3D = $Model
 @onready var _body: MeshInstance3D = $Model/Body
-@onready var _nameplate: Node3D = $Nameplate
-@onready var _name_label: Label3D = $Nameplate/NameLabel
-@onready var _level_label: Label3D = $Nameplate/LevelLabel
 @onready var _movement_sync: MultiplayerSynchronizer = $MovementSync
 @onready var _server_sync: MultiplayerSynchronizer = $ServerSync
 @onready var _stats_sync: MultiplayerSynchronizer = $StatsSync
@@ -178,10 +178,9 @@ func _ready() -> void:
 		$CameraRig.queue_free()
 		$PlayerInput.queue_free()
 		_movement_sync.synchronized.connect(_on_movement_synchronized)
+		$Targeting.queue_free()
 		if multiplayer.is_server():
 			_check = MovementCheck.new(MOVEMENT_CHECK)
-	# Die eigene Plakette würde nur die Sicht verdecken (Name steht im HUD).
-	_nameplate.visible = not is_multiplayer_authority()
 
 
 ## true, wenn dies die Figur des eigenen Spielers ist.
@@ -217,6 +216,11 @@ func get_abilities() -> PlayerAbilities:
 	return _abilities
 
 
+## Zielauswahl (#31); nur beim Besitzer, sonst null.
+func get_targeting() -> Targeting:
+	return get_node_or_null(^"Targeting") as Targeting
+
+
 ## Stufe, mit der die Werte rechnen (inklusive „Stufe ändern“ im
 ## Entwickler-Panel, das nur zur Laufzeit gilt).
 func get_level() -> int:
@@ -228,6 +232,61 @@ func get_class_data() -> ClassData:
 	return GameData.get_class_data(class_id)
 
 
+# --- Einheit (#31) -----------------------------------------------------------
+
+func get_unit_name() -> String:
+	return display_name
+
+
+func is_player_unit() -> bool:
+	return true
+
+
+func get_base_reaction() -> Unit.Reaction:
+	return Unit.Reaction.FRIENDLY
+
+
+func get_stat_class_id() -> StringName:
+	return class_id
+
+
+func get_stat_race_id() -> StringName:
+	return race_id
+
+
+func get_base_level() -> int:
+	return level
+
+
+func get_controlling_peer() -> int:
+	return peer_id
+
+
+## Nur beim Besitzer: Ziel und automatischen Angriff an den Host melden (auf
+## dem Host selbst direkt übernehmen). target_path leer = kein Ziel.
+func report_target(target: Unit, attack: bool) -> void:
+	var path := target.get_path() if target != null else NodePath()
+	if multiplayer.is_server():
+		_apply_reported_target(path, attack)
+	else:
+		_rpc_report_target.rpc_id(1, path, attack)
+
+
+## Wunsch des Besitzers an den Host: Ziel und automatischer Angriff.
+@rpc("any_peer", "call_remote", "reliable")
+func _rpc_report_target(target_path: NodePath, attack: bool) -> void:
+	if not multiplayer.is_server() or multiplayer.get_remote_sender_id() != peer_id:
+		return
+	_apply_reported_target(target_path, attack)
+
+
+## Host: Ziel übernehmen. Angreifen geht nur bei Einheiten, die die Figur
+## angreifen darf (feindlich oder neutral).
+func _apply_reported_target(target_path: NodePath, attack: bool) -> void:
+	current_target = Unit.from_path(get_tree(), target_path)
+	auto_attacking = attack and current_target != null and current_target.can_be_attacked_by(self)
+
+
 ## Authority der Figur = Besitzer; ServerSync gehört immer dem Host.
 func _apply_authority() -> void:
 	set_multiplayer_authority(peer_id)
@@ -235,9 +294,9 @@ func _apply_authority() -> void:
 	$StatsSync.set_multiplayer_authority(1)
 
 
-## Platzhaltermodell und Namensplakette: Größe nach Volk, Farbe nach Klasse
-## (ClassData.color, siehe UI-Styleguide „Klassenfarben“). Das Geschlecht
-## ändert am Platzhalter nichts, wie in der Charaktervorschau.
+## Platzhaltermodell: Größe nach Volk, Farbe nach Klasse (ClassData.color,
+## siehe UI-Styleguide „Klassenfarben“). Das Geschlecht ändert am Platzhalter
+## nichts, wie in der Charaktervorschau.
 func _update_appearance() -> void:
 	if not is_node_ready():
 		return
@@ -247,19 +306,15 @@ func _update_appearance() -> void:
 	var class_data := get_class_data()
 	if class_data != null:
 		_body_material.albedo_color = class_data.color
-		_name_label.modulate = class_data.color
-	_name_label.text = display_name
-	_nameplate.position.y = BASE_HEIGHT * factor + NAMEPLATE_OFFSET
-	# Klasse, Volk oder Stufe geändert: Werte neu rechnen (ruft
-	# _on_stats_changed, das die Stufe auf der Plakette setzt).
-	_stats.refresh_from_player()
-	_level_label.text = "Stufe %d" % get_level()
+	# Klasse, Volk oder Stufe geändert: Werte neu rechnen.
+	_stats.refresh_from_unit()
+	unit_changed.emit()
 
 
 ## Werte haben sich geändert: Laufgeschwindigkeit (Eile) und Stufe übernehmen.
 func _on_stats_changed() -> void:
 	speed_multiplier = _stats.get_value(&"movement_speed") / 100.0
-	_level_label.text = "Stufe %d" % get_level()
+	unit_changed.emit()
 
 
 ## Laufgeschwindigkeit dieser Figur (Daten mal Aurenfaktor), in m/s.

@@ -100,6 +100,11 @@ Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welch
 
 Testen: Im Spiel C drücken, im Charakterfenster „»“ klicken und im Entwickler-Panel (F10) unter „Werte“ Stufe, Testmodifikatoren usw. ändern. Nach dem Ändern einer Tabelle F6 drücken; die Werte werden sofort mit den neuen Zahlen neu berechnet.
 
+### Übungspuppen und Zielauswahl (#31)
+
+- **Puppen:** `uebungspuppen.csv`, eine Zeile pro Puppentyp (Name, Art `schaden`/`heilung`, Gesinnung, Stufe, Rang, Leben, bei der Heilpuppe Lebensverlust je Intervall). Wo welche Puppe steht, legen Aufstellpunkte (`UnitSpawnPoint`, Feld `unit_id`) in `game/scenes/world/zones/training.tscn` fest. Eine weitere Puppe: Zeile ergänzen und in der Szene einen Aufstellpunkt mit dieser `id` anlegen. Das Leben ersetzt die Formel des Wertesystems (feste Grundwerte).
+- **Konstanten:** `spielkonstanten.csv`, Abschnitte „Zielauswahl und Einheiten (#31)“, „Stufenunterschied (#31)“ und „Übungspuppen (#31)“: Tab-Reichweite (`zielwahl_reichweite`), Reichweite der Namensplaketten, Blickwinkel für „vor mir“ und „hinter dem Ziel“, die Mausbewegung, bis zu der ein Klick als Klick zählt (`klickweg_max`), die Schwellen für die Farbe der Stufe am Zielrahmen (`stufe_rot_ab`, `stufe_orange_ab`, `stufe_gruen_bis`, `stufe_grau_bis`; Unterschied = Stufe des Ziels − eigene Stufe) sowie Anzeigefenster und Rücksetzzeit der Puppen.
+
 ## 4. Was tun bei Fehlermeldungen?
 
 Jede Meldung nennt Datei, Zeile, Spalte und Grund, z. B.:
@@ -218,6 +223,25 @@ Eindeutig: `rang`.
 | `schaden_faktor` | Kommazahl |  | 1 | ab 0 | Faktor auf den Schaden. |
 | `erfahrung_faktor` | Kommazahl |  | 1 | ab 0 | Faktor auf die Erfahrung. |
 | `geld_faktor` | Kommazahl |  | 1 | ab 0 | Faktor auf die Geldbeute. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### uebungspuppen.csv – Übungspuppen
+
+Übungspuppen im Trainingsbereich (#31). Eine Zeile pro Puppentyp; aufgestellt werden sie über Aufstellpunkte (UnitSpawnPoint) in der Szene des Trainingsgeländes. Anzeigefenster und Rücksetzzeit stehen in spielkonstanten.csv.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID, wird nie geändert (z. B. schadenspuppe_10). Die Aufstellpunkte im Trainingsbereich verweisen darauf. |
+| `name` | Text | ja |  |  | Anzeigename (Rahmen, Namensplakette). |
+| `art` | Auswahl | ja |  | `schaden`, `heilung` | schaden: zeigt Schaden pro Sekunde und Gesamtschaden, stirbt nie. heilung: verliert regelmäßig Leben, zeigt Heilung pro Sekunde und Überheilung. |
+| `gesinnung` | Auswahl |  | feindlich | `feindlich`, `neutral`, `freundlich` | Gesinnung gegenüber Spielern. |
+| `stufe` | Ganzzahl | ja |  | 1 bis 100 | Stufe der Puppe (im Entwickler-Panel zur Laufzeit änderbar). |
+| `rang` | Auswahl |  | normal | `normal`, `elite`, `selten`, `boss` | Rang für die Kennzeichnung am Zielrahmen (wie bei Gegnern). |
+| `leben` | Ganzzahl | ja |  | ab 1 | Maximales Leben (fester Grundwert, ersetzt die Formel des Wertesystems). |
+| `verlust_prozent` | Kommazahl |  | 0 | 0 bis 100 | Nur Heilpuppe: Lebensverlust je Intervall in Prozent des maximalen Lebens (0 = kein Verlust). |
+| `verlust_intervall` | Kommazahl |  | 1 | 0,1 bis 60 | Nur Heilpuppe: Sekunden zwischen zwei Lebensverlusten. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Welt

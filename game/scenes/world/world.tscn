@@ -164,6 +164,13 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 spawn_path = NodePath("../Players")
 
+[node name="Units" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="UnitSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+spawn_path = NodePath("../Units")
+
 [node name="ZoneTracker" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_tracker")
@@ -174,33 +181,6 @@ script = ExtResource("7_map")
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
-
-[node name="Margin" type="MarginContainer" parent="HudLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_type_variation = &"ScreenMargin"
-
-[node name="Rows" type="VBoxContainer" parent="HudLayer/Margin"]
-layout_mode = 2
-mouse_filter = 2
-theme_type_variation = &"ButtonList"
-
-[node name="NameLabel" type="Label" parent="HudLayer/Margin/Rows"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"ScreenTitle"
-text = "Name"
-
-[node name="InfoLabel" type="Label" parent="HudLayer/Margin/Rows"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"Subtitle"
-text = "Stufe · Volk · Klasse"
 
 [node name="GameHud" parent="HudLayer" instance=ExtResource("8_hud")]
 unique_name_in_owner = true

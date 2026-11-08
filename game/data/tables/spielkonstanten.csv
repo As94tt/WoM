@@ -43,3 +43,17 @@ energie_max;100;Maximale Energie
 energie_regen_pro_s;10;Energieregeneration je Sekunde (wird mit Tempo schneller)
 chi_max;100;Maximales Chi, beim Erreichen wird der Zustand „Chi voll“ ausgelöst
 chi_verfall_pro_s;5;Chi-Verlust je Sekunde nach „Chi voll“, bis Chi wieder 0 ist
+# Zielauswahl und Einheiten (#31)
+zielwahl_reichweite;40;Reichweite der Tab-Zielauswahl in Metern (von Rand zu Rand)
+plaketten_reichweite;40;Namensplaketten erscheinen bis zu dieser Entfernung in Metern
+blickwinkel_vorne;180;Winkel in Grad, in dem eine Einheit „vor mir“ steht (Tab, später Fähigkeiten)
+blickwinkel_hinten;180;Winkel in Grad hinter dem Ziel, in dem man „hinter dem Ziel“ steht
+klickweg_max;6;Größte Mausbewegung in Pixeln, bei der Drücken und Loslassen noch als Klick (Zielauswahl) statt als Kamera drehen zählt
+# Stufenunterschied (#31): Farbe der Stufe am Zielrahmen. Unterschied = Stufe des Ziels − eigene Stufe. Kann vom Stufen-Ticket #27 übernommen werden.
+stufe_rot_ab;5;Ab diesem Unterschied gilt das Ziel als „sehr schwer“ (rot)
+stufe_orange_ab;3;Ab diesem Unterschied gilt das Ziel als „schwer“ (orange)
+stufe_gruen_bis;-3;Bis zu diesem Unterschied gilt das Ziel als „leicht“ (grün), dazwischen als „ebenbürtig“ (gelb)
+stufe_grau_bis;-8;Bis zu diesem Unterschied gilt das Ziel als „trivial“ (grau)
+# Übungspuppen (#31)
+puppe_anzeige_fenster;60;Schaden bzw. Heilung pro Sekunde wird über so viele Sekunden gemittelt
+puppe_ruecksetzen_nach;10;Sekunden ohne Schaden bzw. Heilung, nach denen sich eine Puppe zurücksetzt
