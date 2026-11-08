@@ -72,6 +72,21 @@ func has_ability(ability_id: StringName) -> bool:
 	return false
 
 
+## Entfernt eine Fähigkeit von allen Slots (#20: Talent-Fähigkeiten beim
+## Zurücksetzen). Gibt die Zahl der geleerten Slots zurück.
+func remove_ability(ability_id: StringName) -> int:
+	var count := 0
+	for bar in BAR_COUNT:
+		for index in SLOT_COUNT:
+			var content: ActionSlotContent = _slots[bar][index]
+			if content != null and content.is_ability() and content.id == ability_id:
+				_put(bar, index, null)
+				count += 1
+	if count > 0:
+		changed.emit()
+	return count
+
+
 ## Legt eine Fähigkeit in den ersten freien Slot von Leiste 1, sonst Leiste 2
 ## (Entscheidung zu #21). Gibt false zurück, wenn beide voll sind.
 func place_ability(ability_id: StringName) -> bool:

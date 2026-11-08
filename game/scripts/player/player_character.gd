@@ -47,6 +47,10 @@ extends Unit
 ## jedes Bild bei Änderung). „GroundTargeting“ (Bodenziel) gibt es wie
 ## „Targeting“ nur beim Besitzer. moving_changed bricht Zauber ab.
 ##
+## Spezialisierung und Talente (#20): Kindknoten „Talents“ (PlayerTalents);
+## der Stand (talent_state) läuft über ServerSync (Authority Host). Den Stand
+## vom Beitreten gibt setup_from_info vor dem Erzeugen mit.
+##
 ## Auren (#32): Kindknoten „Combat“ (UnitCombat), übertragen über StatsSync.
 ## Betäubt, festgehalten und umgeworfen sperren beim Besitzer Laufen und
 ## Springen, betäubt und umgeworfen auch das Drehen; Verlangsamung wirkt über
@@ -217,6 +221,12 @@ func setup_from_info(info: NetPlayerInfo) -> void:
 	gender = info.gender
 	class_id = info.class_id
 	level = info.level
+	# Talente (#20) nur vor dem Erzeugen; danach gilt der Stand der Figur
+	# (spätere Aufrufe kommen bei jeder Änderung der Spielerliste).
+	if not is_inside_tree():
+		var talents := get_node_or_null(^"Talents") as PlayerTalents
+		if talents != null:
+			talents.set_initial_state(info.talents)
 
 
 ## Werte und Ressourcen der Figur (#19).
@@ -227,6 +237,11 @@ func get_stats() -> CharacterStats:
 ## Fähigkeiten der Figur (#21).
 func get_abilities() -> PlayerAbilities:
 	return _abilities
+
+
+## Spezialisierung und Talente der Figur (#20).
+func get_talents() -> PlayerTalents:
+	return get_node_or_null(^"Talents") as PlayerTalents
 
 
 ## Zielauswahl (#31); nur beim Besitzer, sonst null.
