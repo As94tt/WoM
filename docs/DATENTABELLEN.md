@@ -174,7 +174,7 @@ Eindeutig: `id`.
 | `gesinnung` | Auswahl |  | feindlich | `feindlich`, `neutral` | feindlich greift an, neutral erst wenn angegriffen. |
 | `kampfart` | Auswahl |  | nahkampf | `nahkampf`, `fernkampf`, `zauberwirker` | Art des Kampfes. |
 | `angriffstempo` | Kommazahl |  | 2 | 0,1 bis 10 | Sekunden zwischen zwei automatischen Angriffen. |
-| `schule` | Auswahl |  | physisch | `physisch`, `feuer`, `frost`, `natur`, `arkan`, `schatten`, `heilig` | Schadensschule des automatischen Angriffs (vorläufige Liste). |
+| `schule` | Verweis |  | physisch | Schadensschule aus `schadensschulen.csv` | Schadensschule des automatischen Angriffs (ID aus schadensschulen.csv). |
 | `leben_mod` | Kommazahl |  | 1 | 0 bis 100 | Faktor auf das Leben aus Stufe und Rang (1 = unverändert). |
 | `schaden_mod` | Kommazahl |  | 1 | 0 bis 100 | Faktor auf den Schaden. |
 | `ruestung_mod` | Kommazahl |  | 1 | 0 bis 100 | Faktor auf die Rüstung (1,5 = +50 %). |
@@ -242,6 +242,7 @@ Eindeutig: `id`.
 | `leben` | Ganzzahl | ja |  | ab 1 | Maximales Leben (fester Grundwert, ersetzt die Formel des Wertesystems). |
 | `verlust_prozent` | Kommazahl |  | 0 | 0 bis 100 | Nur Heilpuppe: Lebensverlust je Intervall in Prozent des maximalen Lebens (0 = kein Verlust). |
 | `verlust_intervall` | Kommazahl |  | 1 | 0,1 bis 60 | Nur Heilpuppe: Sekunden zwischen zwei Lebensverlusten. |
+| `immunitaeten` | Liste (ID) |  |  |  | Zustände oder Schadensschulen, gegen die die Puppe immun ist (#32), z. B. betaeubung\|feuer. Zustände: betaeubung, festhalten, verlangsamung, stille, umwerfen, tarnung, unverwundbarkeit; Schulen: IDs aus schadensschulen.csv. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Welt
@@ -460,6 +461,22 @@ Eindeutig: `stufe`.
 | `eile` | Kommazahl | ja |  | ab 0,1 | Eile für 1 % Laufgeschwindigkeit. |
 | `ruestung_konstante` | Kommazahl | ja |  | ab 0,1 | Rüstungskonstante K: Verringerung = Rüstung / (Rüstung + K); bei Rüstung = K sind es 50 %. |
 | `zauberschutz_konstante` | Kommazahl | ja |  | ab 0,1 | Zauberschutzkonstante K, wie bei der Rüstung. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+### Kampf
+
+#### schadensschulen.csv – Schadensschulen
+
+Schadensschulen (#32, Liste aus #39 um die Schulen aus #34 ergänzt). Schadenseffekte, Gegner (Spalte schule) und Immunitäten verweisen über die ID. Neue Schule = neue Zeile.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID der Schule (z. B. feuer). Effekte (.tres), Gegner und Immunitäten verweisen darauf; nie ändern. |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip, Kampftext, Entwickler-Panel). |
+| `art` | Auswahl |  | magisch | `koerperlich`, `magisch` | koerperlich: Rüstung verringert den Schaden; magisch: Zauberschutz verringert ihn (Trefferberechnung #34). |
+| `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Sortierung in Listen (kleiner = weiter vorn). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Fähigkeiten
