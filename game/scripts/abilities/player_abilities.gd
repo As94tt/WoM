@@ -193,6 +193,45 @@ func knows(ability: AbilityData) -> bool:
 	return false
 
 
+## Gehört die Fähigkeit überhaupt zu dieser Figur (#22, unabhängig von Stufe
+## und Entwickler-Schaltern)? Reiter „Allgemein“ (auch Testfähigkeiten), die
+## Liste der Klasse oder eine Fähigkeit aus Talenten der Klasse. Varianten
+## und Ersatz durch Talente gehören nicht dazu (gespeichert wird immer die
+## Grundfähigkeit).
+func belongs_to_character(ability: AbilityData) -> bool:
+	if ability == null:
+		return false
+	var general := GameData.get_general_tab()
+	if general != null and general.abilities.has(ability):
+		return true
+	var class_data := get_class_data()
+	if class_data != null and class_data.abilities.has(ability):
+		return true
+	var talents := get_talents()
+	return talents != null and talents.is_talent_ability(ability)
+
+
+## Leisten bereinigen (#22): Slots mit Fähigkeiten, die es nicht mehr gibt
+## oder die nicht zu dieser Figur gehören (z. B. gespeicherte Charaktere mit
+## alten Fähigkeits-IDs), werden geleert. Gibt die Zahl der geleerten Slots
+## zurück.
+func clean_bar_layout(layout: ActionBarLayout) -> int:
+	if layout == null:
+		return 0
+	var removed := 0
+	for bar in ActionBarLayout.BAR_COUNT:
+		for index in ActionBarLayout.SLOT_COUNT:
+			var content := layout.get_content(bar, index)
+			if content == null or not content.is_ability():
+				continue
+			if not belongs_to_character(content.get_ability()):
+				push_warning("PlayerAbilities: Slot %d/%d „%s“ gehört nicht (mehr) zur Figur und wird geleert." % [
+						bar + 1, index + 1, content.id])
+				layout.clear(bar, index)
+				removed += 1
+	return removed
+
+
 ## Ob die Fähigkeit auf eine Aktionsleiste darf: erlernt und aktiv.
 func can_place(ability: AbilityData) -> bool:
 	return is_learned(ability) and not ability.passive

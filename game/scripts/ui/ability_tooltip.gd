@@ -88,11 +88,13 @@ static func range_text(ability: AbilityData, caster: Unit = null) -> String:
 
 ## Zauberart: „Sofort“, „2,5 Sek. Zauberzeit“ oder „Kanalisiert (4 Sek.)“.
 static func cast_text(ability: AbilityData, caster: Unit = null) -> String:
-	match ability.get_cast_type():
-		AbilityData.CastType.CAST:
-			return "%s Sek. Zauberzeit" % _number(ability.get_number_for(caster, "zauberzeit"))
-		AbilityData.CastType.CHANNELED:
-			return "Kanalisiert (%s Sek.)" % _number(ability.get_number_for(caster, "kanalisierzeit"))
+	# Mit Veränderungen (#22: z. B. „nächster Meteor sofort wirkbar“).
+	var channel := ability.get_number_for(caster, "kanalisierzeit")
+	if channel > 0.0:
+		return "Kanalisiert (%s Sek.)" % _number(channel)
+	var cast := ability.get_number_for(caster, "zauberzeit")
+	if cast > 0.0:
+		return "%s Sek. Zauberzeit" % _number(cast)
 	return "Sofort"
 
 
@@ -106,11 +108,21 @@ static func cooldown_text(ability: AbilityData, caster: Unit = null) -> String:
 	return "%s Sek. Abklingzeit" % _number(cooldown)
 
 
-## Zeilen links/rechts: [Kosten, Reichweite], [Zauberart, Abklingzeit].
+## Schadensschule eines Zaubers (#22), z. B. „Schule: Feuer“; leer bei
+## körperlichen Fähigkeiten.
+static func school_text(ability: AbilityData) -> String:
+	if not ability.is_spell:
+		return ""
+	return "Schule: %s" % Data.schulname(ability.get_school())
+
+
+## Zeilen links/rechts: [Kosten, Reichweite], [Zauberart, Abklingzeit],
+## [Schule].
 static func _value_rows(ability: AbilityData, caster: Unit = null) -> Array:
 	return [
 		[cost_text(ability, caster), range_text(ability, caster)],
 		[cast_text(ability, caster), cooldown_text(ability, caster)],
+		[school_text(ability), ""],
 	]
 
 
