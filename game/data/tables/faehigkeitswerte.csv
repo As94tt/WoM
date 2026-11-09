@@ -4,19 +4,54 @@ id;klasse;spezialisierung;stufe;kosten;ressource;zauberzeit;kanalisierzeit;abkli
 # Allgemein
 automatischer_angriff;;;1;0;keine;0;0;0;1;5;0;1;waffe;0;0;;Platzhalter (#21)
 aufhelfen;;;1;0;keine;5;0;0;1;3;0;0;;0;0;leben:30;Aufhelfen (#35): Taste F gedrückt halten, nur außerhalb des Kampfes, Leben (und Mana/Energie) in Prozent nach dem Aufstehen
-# Magier
-feuerball;mage;;1;30;mana;2,5;0;0;1;30;50;1;zaubermacht;8;2;brand_stapel:1|brand_schaden:10|flug:25;Beispiel (#33: Projektil, Brand über Zeit)
-frostnova;mage;;2;25;mana;0;0;20;1;0;10;0,2;zaubermacht;6;0;radius:8;Beispiel
-passiv_magier;mage;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
-gegenzauber;mage;;4;20;mana;0;0;24;1;30;0;0;;4;0;sperre:4;Platzhalter (#21), Unterbrechung (#33)
-# Magier: Varianten der Spezialisierungen und Talent-Fähigkeiten (Testdaten #20, werden durch die echten Magier-Inhalte ersetzt)
-glutball;mage;mage_feuer;1;30;mana;2;0;0;1;35;60;1,1;zaubermacht;8;2;brand_stapel:1|brand_schaden:15|flug:30;Variante von Feuerball (Spezialisierung Feuer)
-eiswelle;mage;mage_frost;2;25;mana;0;0;16;1;0;14;0,25;zaubermacht;6;0;radius:10;Variante von Frostnova (Spezialisierung Frost)
-flammenstoss;mage;mage_feuer;1;20;mana;0;0;8;1;30;40;0,6;zaubermacht;0;0;;Talent Flammenstoß (Feuer, Reihe 1)
-feuerring;mage;mage_feuer;2;30;mana;0;0;20;1;0;30;0,4;zaubermacht;0;0;radius:8;Talent Feuerring (Feuer, Reihe 3), ersetzt Frostnova
-eislanze;mage;mage_frost;1;20;mana;0;0;6;1;30;35;0,6;zaubermacht;0;0;;Talent Eislanze (Frost, Reihe 1)
-frostblitz;mage;mage_frost;1;25;mana;2;0;0;1;35;55;1;zaubermacht;0;0;flug:25;Talent Frostblitz (Frost, Reihe 3), ersetzt Feuerball
-arkanschlag;mage;mage_arkan;1;25;mana;0;0;5;1;30;45;0,7;zaubermacht;0;0;;Talent Arkanschlag (Arkan, gesperrt, Reihe 1)
+# Magier (#22): Grundzauber bis Stufe 10, Schule Arkan. Alle Zahlen sind Platzhalter.
+magisches_geschoss;mage;;1;20;mana;2;0;0;1;30;40;0,8;zaubermacht;0;0;flug:25;Mittlerer Schaden
+magische_beruehrung;mage;;2;25;mana;0;0;0;1;30;8;0,15;zaubermacht;8;2;;Schaden über Zeit: Grundwert und Faktor je Tick
+magischer_einschlag;mage;;4;35;mana;2,5;0;10;1;30;90;1,6;zaubermacht;0;0;;Hoher Schaden
+magischer_schild;mage;;5;30;mana;0;0;30;1;0;0;0;;15;0;schild:100|schild_faktor:2;Absorption = schild + schild_faktor × Zaubermacht, dauer = Dauer des Schilds
+magischer_schritt;mage;;6;15;mana;0;0;15;1;0;0;0;;0;0;distanz:15;Teleport nach vorn (Meter)
+magische_nova;mage;;8;30;mana;0;0;20;1;0;35;0,5;zaubermacht;0;0;radius:8;Schaden an allen Gegnern im Umkreis
+magische_fessel;mage;;9;20;mana;1,5;0;20;1;30;0;0;;6;0;;Hält fest, endet bei Schaden
+# Magier – Feuer (#22): Varianten, Mechanik Brand, Talent-Fähigkeiten
+feuerball;mage;mage_feuer;1;30;mana;3;0;0;1;35;90;1,6;zaubermacht;0;0;flug:25|brand_stapel:1|krit_je_brand:0|krit_schaden_bonus:0|hitzewelle_dauer:10;Verwandelt Magisches Geschoss – krit_je_brand (Verbrennung) und krit_schaden_bonus (Inferno) verändern Talente
+entzuenden;mage;mage_feuer;2;20;mana;0;0;8;1;30;0;0;;0;0;brand_stapel:2;Verwandelt Magische Berührung – Schwelbrand +1 Stapel
+meteor;mage;mage_feuer;4;40;mana;3;0;10;1;35;140;2,4;zaubermacht;0;0;;Verwandelt Magischen Einschlag, lässt den Brand explodieren
+feuernova;mage;mage_feuer;8;30;mana;0;0;20;1;0;35;0,5;zaubermacht;0;0;radius:8;Verwandelt Magische Nova, +1 Brand auf alle Getroffenen
+flammenschild;mage;mage_feuer;5;30;mana;0;0;30;1;0;0;0;;15;0;schild:100|schild_faktor:2;Verwandelt Magischen Schild, Nahkampf-Angreifer erhalten 1 Brand
+flammensprung;mage;mage_feuer;6;15;mana;0;0;15;1;0;0;0;;0;0;distanz:15|spur_anzahl:4|spur_dauer:4|spur_radius:2|spur_tick:1;Verwandelt Magischen Schritt (nur Aussehen) – spur_* für Feuriger Pfad
+flammenfessel;mage;mage_feuer;9;20;mana;1,5;0;20;1;30;0;0;;6;0;;Verwandelt Magische Fessel (nur Aussehen)
+brand;mage;mage_feuer;10;0;keine;0;0;0;1;0;6;0,1;zaubermacht;10;2;radius:5|explosion_schaden:30|explosion_faktor:0,5|aschenregen_dauer:0|aschenregen_tick:1|aschenregen_schaden:10|aschenregen_faktor:0,15|meteor_cd_je_explosion:0;Mechanik Brand: Grundwert/Faktor je Stapel und Tick, dauer/tick der Aura, radius und explosion_* der Explosion (je Stapel) – Talente verändern radius, dauer, aschenregen_dauer, meteor_cd_je_explosion
+flammensalve;mage;mage_feuer;10;35;mana;0;2;12;1;35;25;0,45;zaubermacht;0;0,5;flug:30|brand_stapel:1;Talent (Reihe 3): 4 Geschosse
+glutbombe;mage;mage_feuer;10;30;mana;0;0;15;1;35;60;1;zaubermacht;4;0;;Talent (Reihe 3): Explosion nach dauer Sekunden
+inferno;mage;mage_feuer;10;20;mana;0;0;90;1;0;0;0;;15;0;;Talent (Reihe 7): Überladung, dauer = Dauer
+sonnenzorn;mage;mage_feuer;10;50;mana;0;3;30;1;35;200;3;zaubermacht;0;3;bonus_je_brand:20;Talent (Reihe 7): ein Treffer am Ende, +bonus_je_brand % je verbrauchtem Brand
+# Magier – Frost (#22): Varianten und Talent-Fähigkeiten
+frostblitz;mage;mage_frost;1;20;mana;1,5;0;0;1;35;45;0,8;zaubermacht;0;0;flug:30|verlangsamung_dauer:6|zusatzziele:0|zusatz_radius:10|praezision_dauer:10;Verwandelt Magisches Geschoss, verlangsamt 30 % (Kälte) – zusatzziele (Absoluter Nullpunkt)
+erfrierung;mage;mage_frost;2;25;mana;0;0;0;1;30;10;0,2;zaubermacht;8;2;verlangsamung_dauer:8|sprung_radius:10;Verwandelt Magische Berührung: Schaden über Zeit (je Tick) und Verlangsamung – sprung_radius für Frostbiss
+gletschersplitter;mage;mage_frost;4;35;mana;2;0;10;1;35;80;1,3;zaubermacht;0;0;flaeche_dauer:6|flaeche_radius:5|flaeche_tick:1|flaeche_schaden:8|flaeche_faktor:0,15|flaeche_verlangsamung:2;Verwandelt Magischen Einschlag – eisige Fläche (Schaden je Tick, Verlangsamung je Tick)
+frostnova;mage;mage_frost;8;30;mana;0;0;20;1;0;35;0,5;zaubermacht;0;0;radius:8|verlangsamung_dauer:4|flaeche_dauer:0|flaeche_radius:8|flaeche_tick:1|flaeche_schaden:6|flaeche_faktor:0,1|flaeche_verlangsamung:2;Verwandelt Magische Nova, verlangsamt 60 % (Tiefe Kälte) – flaeche_* für Kältefront
+eisschild;mage;mage_frost;5;30;mana;0;0;30;1;0;0;0;;15;0;schild:100|schild_faktor:2|verlangsamung_dauer:4|radius:8|splitter_schaden:40|splitter_faktor:0,6;Verwandelt Magischen Schild – radius und splitter_* für Splitterpanzer
+frostschritt;mage;mage_frost;6;15;mana;0;0;15;1;0;0;0;;0;0;distanz:15|adern_dauer:15;Verwandelt Magischen Schritt (nur Aussehen) – adern_dauer für Eisige Adern
+eisfessel;mage;mage_frost;9;20;mana;1,5;0;20;1;30;0;0;;6;0;;Verwandelt Magische Fessel (nur Aussehen)
+schneesturm;mage;mage_frost;10;45;mana;0;6;20;1;35;0;0;;0;1;flaeche_dauer:1|flaeche_tick:5|flaeche_radius:6|flaeche_schaden:20|flaeche_faktor:0,35|flaeche_verlangsamung:2;Talent (Reihe 3): je Tick eine kurze Fläche am Ziel
+eissplittersalve;mage;mage_frost;10;35;mana;0;2;12;1;35;30;0,5;zaubermacht;0;0,4;flug:30|radius:8;Talent (Reihe 3): 5 Splitter auf Gegner im Umkreis
+eisblock;mage;mage_frost;5;0;keine;0;0;60;1;0;0;0;;6;0;;Talent (Reihe 5): ersetzt Eisschild
+absoluter_nullpunkt;mage;mage_frost;10;20;mana;0;0;60;1;0;0;0;;12;0;;Talent (Reihe 7): Überladung
+eiszeit;mage;mage_frost;10;40;mana;0;0;60;1;0;0;0;;8;1;radius:15|flaeche_schaden:15|flaeche_faktor:0,25|verlangsamung_dauer:2|anzeige_dauer:1|anzeige_tick:5;Talent (Reihe 7): Überladung, Schaden je Tick, Verlangsamung 70 % (Eiseskälte)
+# Magier – Blitz (#22): Varianten, Mechanik Ladung, Talent-Fähigkeiten (höhere Manakosten)
+blitzpfeil;mage;mage_blitz;1;28;mana;1,2;0;0;1;35;30;0,55;zaubermacht;0;0;flug:40|ladung_stapel:1|extra_ladung_chance:0;Verwandelt Magisches Geschoss – extra_ladung_chance (Funkenschlag)
+elektrisieren;mage;mage_blitz;2;30;mana;0;0;10;1;30;15;0,25;zaubermacht;0;0;ladung_stapel:2;Verwandelt Magische Berührung – Hochspannung verkürzt die Abklingzeit
+donnerschlag;mage;mage_blitz;4;45;mana;1,5;0;8;1;35;70;1,2;zaubermacht;0;0;radius:10|spruenge:1|sprung_prozent:50|bonus_je_ladung:20;Verwandelt Magischen Einschlag: verbraucht Ladungen (+bonus_je_ladung % je Ladung), springt spruenge-mal mit sprung_prozent % Schaden (Sprungweite radius)
+gewitternova;mage;mage_blitz;8;30;mana;0;0;20;1;0;20;0,3;zaubermacht;0;0;radius:5|ladung_stapel:1;Verwandelt Magische Nova
+sturmschild;mage;mage_blitz;5;30;mana;0;0;30;1;0;0;0;;15;0;schild:100|schild_faktor:2|betaeubung_dauer:1;Verwandelt Magischen Schild – betaeubung_dauer für Blitzableiter
+blitzsprung;mage;mage_blitz;6;15;mana;0;0;15;1;0;0;0;;0;0;distanz:15;Verwandelt Magischen Schritt (nur Aussehen)
+blitzsprung_zickzack;mage;mage_blitz;6;15;mana;0;0;15;2;0;0;0;;0;0;distanz:15;Blitzsprung mit Talent Zickzack (2 Aufladungen)
+statische_fessel;mage;mage_blitz;9;20;mana;1,5;0;20;1;30;0;0;;6;0;;Verwandelt Magische Fessel (nur Aussehen)
+ladung;mage;mage_blitz;10;0;keine;0;0;0;1;0;0;0;;8;0;bonus_je_stapel:5|sprung_radius:10|ueberspannung_dauer:10;Mechanik Ladung: dauer der Aura, +bonus_je_stapel % Blitzschaden je Stapel – sprung_radius (Entladung), ueberspannung_dauer
+kettenblitz;mage;mage_blitz;10;40;mana;1,8;0;6;1;35;50;0,9;zaubermacht;0;0;radius:10|spruenge:2|ladung_stapel:1;Talent (Reihe 3): springt zwischen 3 Zielen
+blitzsalve;mage;mage_blitz;10;40;mana;0;1,5;10;1;35;20;0,35;zaubermacht;0;0,3;flug:45|ladung_stapel:1;Talent (Reihe 3): schnelle Pfeile
+sturmgewalt;mage;mage_blitz;10;20;mana;0;0;60;1;0;0;0;;12;0;;Talent (Reihe 7): Überladung
+kugelblitz;mage;mage_blitz;10;40;mana;0;0;30;1;0;40;0,6;zaubermacht;5;0,25;flug:6|radius:3|ladung_stapel:2|anzeige_dauer:0,25|anzeige_tick:5;Talent (Reihe 7): Kugel mit flug m/s, dauer = Flugzeit, tick = Schrittweite
 # Krieger
 schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;bedrohung:100;Beispiel, zusätzliche Bedrohung (#35)
 spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;;Platzhalter (#21)

@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_vqowb"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_i4ln2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_3ry6b"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_xdvf3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="5_hfdtx"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="6_w76jo"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="7_ve1vb"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="8_kfj35"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_orb_logic.gd" id="9_41d2c"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="10_rimdx"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="11_m1ova"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="12_wfvno"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="13_hx2ny"]
+
+[sub_resource type="Resource" id="Resource_vqowb"]
+script = ExtResource("5_hfdtx")
+school = &"blitz"
+attack = 3
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_i4ln2"]
+script = ExtResource("8_kfj35")
+duration_ability = ExtResource("7_ve1vb")
+duration_key = "dauer"
+stacks_key = "werte.ladung_stapel"
+aura = ExtResource("6_w76jo")
+
+[sub_resource type="Resource" id="Resource_3ry6b"]
+script = ExtResource("10_rimdx")
+duration_key = "werte.anzeige_dauer"
+radius_key = "werte.radius"
+interval_key = "werte.anzeige_tick"
+at_point = true
+
+[sub_resource type="Resource" id="Resource_xdvf3"]
+script = ExtResource("9_41d2c")
+hit_effects = Array[ExtResource("2_i4ln2")]([SubResource("Resource_vqowb"), SubResource("Resource_i4ln2")])
+visual_area = SubResource("Resource_3ry6b")
+
+[sub_resource type="Resource" id="Resource_hfdtx"]
+script = ExtResource("2_i4ln2")
+target_mode = 1
+
+[resource]
+script = ExtResource("12_wfvno")
+id = &"kugelblitz"
+display_name = "Kugelblitz"
+description = "Eine langsame Kugelblitz fliegt geradeaus und trifft alles auf ihrem Weg."
+category = 1
+duration = 5.0
+ability_id = &"kugelblitz"
+cancelable = false
+tick_interval = 0.25
+tick_effects = Array[ExtResource("2_i4ln2")]([SubResource("Resource_hfdtx")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+logic = SubResource("Resource_xdvf3")

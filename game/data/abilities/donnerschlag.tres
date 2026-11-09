@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_cv0mi"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_2j22y"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_rj3kp"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="4_nqj6j"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="5_mo4y8"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_condition.gd" id="6_uerac"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="7_i5p70"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="8_p4n6a"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="9_khriv"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="10_y6nx2"]
+
+[sub_resource type="Resource" id="Resource_cv0mi"]
+script = ExtResource("2_2j22y")
+kind = 1
+aura_id = &"talent_gewitterfront"
+
+[sub_resource type="Resource" id="Resource_2j22y"]
+script = ExtResource("3_rj3kp")
+kind = 1
+aura_id = &"talent_gewitterfront"
+
+[sub_resource type="Resource" id="Resource_rj3kp"]
+script = ExtResource("4_nqj6j")
+amount = 2.0
+percent_of_max = true
+target_mode = 1
+conditions = Array[ExtResource("2_2j22y")]([SubResource("Resource_cv0mi")])
+scaling = Array[ExtResource("3_rj3kp")]([SubResource("Resource_2j22y")])
+
+[sub_resource type="Resource" id="Resource_nqj6j"]
+script = ExtResource("6_uerac")
+kind = 11
+aura_id = &"talent_rueckkopplung"
+value = 33.34
+
+[sub_resource type="Resource" id="Resource_mo4y8"]
+script = ExtResource("8_p4n6a")
+duration_ability = ExtResource("7_i5p70")
+duration_key = "dauer"
+aura = ExtResource("5_mo4y8")
+conditions = Array[ExtResource("2_2j22y")]([SubResource("Resource_nqj6j")])
+
+[sub_resource type="Resource" id="Resource_uerac"]
+script = ExtResource("9_khriv")
+consume_aura_id = &"ladung"
+bonus_per_stack_key = "werte.bonus_je_ladung"
+full_stacks = 5
+full_effects = Array[ExtResource("1_cv0mi")]([SubResource("Resource_rj3kp")])
+jumps_key = "werte.spruenge"
+jump_percent_key = "werte.sprung_prozent"
+jump_effects = Array[ExtResource("1_cv0mi")]([SubResource("Resource_mo4y8")])
+school = &"blitz"
+values_from_ability = true
+target_mode = 7
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("10_y6nx2")
+id = &"donnerschlag"
+display_name = "Donnerschlag"
+description = "Hoher Blitzschaden. Verbraucht alle eigenen Ladungen am Ziel (Bonusschaden je Ladung) und springt auf ein weiteres Ziel."
+class_id = &"mage"
+required_level = 4
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_cv0mi")]([SubResource("Resource_uerac")])
+highlight_auras = PackedStringArray("ueberspannung")

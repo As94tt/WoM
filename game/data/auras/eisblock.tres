@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_1t3oe"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_udm8k"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_r36q2"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_gx02q"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_hqycj"]
+
+[resource]
+script = ExtResource("4_gx02q")
+id = &"eisblock"
+display_name = "Eisblock"
+description = "Unverwundbar, aber handlungsunfähig. Rechtsklick beendet den Eisblock."
+category = 1
+duration = 6.0
+ability_id = &"eisblock"
+states = 65
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

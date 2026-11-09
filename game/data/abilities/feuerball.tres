@@ -1,35 +1,60 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
-[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_cbojx"]
-[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_xihp8"]
-[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_j8pn7"]
-[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_4g7t0"]
-[ext_resource type="Resource" path="res://data/auras/brand.tres" id="5_x5cn5"]
-[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="6_nouaf"]
-[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="7_8xg40"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_4g7t0"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_x5cn5"]
+[ext_resource type="Resource" path="res://data/auras/hitzewelle.tres" id="3_nouaf"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_8xg40"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="5_o7716"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_self_effect.gd" id="6_p0ial"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="7_g3w30"]
+[ext_resource type="Resource" path="res://data/auras/brand.tres" id="8_e1s8j"]
+[ext_resource type="Resource" path="res://data/abilities/brand.tres" id="9_jenxq"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="10_jmu8k"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="11_d5bul"]
 
-[sub_resource type="Resource" id="Resource_o7716"]
-script = ExtResource("4_4g7t0")
+[sub_resource type="Resource" id="Resource_4g7t0"]
+script = ExtResource("2_x5cn5")
+kind = 1
+aura_id = &"talent_hitzewelle"
+
+[sub_resource type="Resource" id="Resource_x5cn5"]
+script = ExtResource("5_o7716")
+duration_key = "werte.hitzewelle_dauer"
+aura = ExtResource("3_nouaf")
+
+[sub_resource type="Resource" id="Resource_nouaf"]
+script = ExtResource("6_p0ial")
+effects = Array[ExtResource("1_4g7t0")]([SubResource("Resource_x5cn5")])
+conditions = Array[ExtResource("2_x5cn5")]([SubResource("Resource_4g7t0")])
+
+[sub_resource type="Resource" id="Resource_8xg40"]
+script = ExtResource("7_g3w30")
+crit_per_stack_key = "werte.krit_je_brand"
+crit_stack_aura_id = &"brand"
+crit_damage_key = "werte.krit_schaden_bonus"
+on_crit_effects = Array[ExtResource("1_4g7t0")]([SubResource("Resource_nouaf")])
 school = &"feuer"
 values_from_ability = true
 
-[sub_resource type="Resource" id="Resource_p0ial"]
-script = ExtResource("6_nouaf")
-aura = ExtResource("5_x5cn5")
+[sub_resource type="Resource" id="Resource_o7716"]
+script = ExtResource("5_o7716")
+duration_ability = ExtResource("9_jenxq")
+duration_key = "dauer"
+stacks_key = "werte.brand_stapel"
+aura = ExtResource("8_e1s8j")
 
-[sub_resource type="Resource" id="Resource_g3w30"]
-script = ExtResource("7_8xg40")
+[sub_resource type="Resource" id="Resource_p0ial"]
+script = ExtResource("10_jmu8k")
 speed_from_ability = true
-effects = Array[ExtResource("1_cbojx")]([SubResource("Resource_o7716"), SubResource("Resource_p0ial")])
+effects = Array[ExtResource("1_4g7t0")]([SubResource("Resource_8xg40"), SubResource("Resource_o7716")])
 
 [resource]
-script = ExtResource("1_ability")
+script = ExtResource("11_d5bul")
 id = &"feuerball"
 display_name = "Feuerball"
-description = "Schleudert eine Feuerkugel auf das Ziel und verursacht Feuerschaden. Das Ziel brennt kurz nach."
+description = "Schleudert eine langsame, wuchtige Feuerkugel auf das Ziel: hoher Feuerschaden und 1 Brand."
 class_id = &"mage"
 is_spell = true
 school = &"feuer"
-effects = Array[ExtResource("1_cbojx")]([SubResource("Resource_g3w30")])
+effects = Array[ExtResource("1_4g7t0")]([SubResource("Resource_p0ial")])
 highlight_auras = PackedStringArray()

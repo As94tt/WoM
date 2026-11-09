@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_78vwv"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_v7wr4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_iinpr"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_b2nty"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="5_ksje3"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="6_qyi10"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_buga1"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_a2ukh"]
+
+[sub_resource type="Resource" id="Resource_78vwv"]
+script = ExtResource("4_b2nty")
+jumps_key = "werte.spruenge"
+school = &"blitz"
+values_from_ability = true
+target_mode = 7
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_v7wr4"]
+script = ExtResource("7_buga1")
+duration_ability = ExtResource("6_qyi10")
+duration_key = "dauer"
+stacks_key = "werte.ladung_stapel"
+jumps_key = "werte.spruenge"
+aura = ExtResource("5_ksje3")
+target_mode = 7
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("8_a2ukh")
+id = &"kettenblitz"
+display_name = "Kettenblitz"
+description = "Blitz, der zwischen 3 Zielen springt; jedes erhält 1 Ladung."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_78vwv")]([SubResource("Resource_78vwv"), SubResource("Resource_v7wr4")])
+highlight_auras = PackedStringArray()

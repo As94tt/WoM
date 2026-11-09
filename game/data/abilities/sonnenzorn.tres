@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_0m5wu"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_ses6t"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_2he6n"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_nc6b2"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_up5ve"]
+
+[sub_resource type="Resource" id="Resource_0m5wu"]
+script = ExtResource("4_nc6b2")
+consume_aura_id = &"brand"
+bonus_per_stack_key = "werte.bonus_je_brand"
+school = &"feuer"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_up5ve")
+id = &"sonnenzorn"
+display_name = "Sonnenzorn"
+description = "Überladung: Kanalisiert einen gewaltigen Feuerstrahl auf das Ziel. Verbraucht alle eigenen Brand-Stapel für Bonusschaden."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_0m5wu")]([SubResource("Resource_0m5wu")])
+highlight_auras = PackedStringArray()

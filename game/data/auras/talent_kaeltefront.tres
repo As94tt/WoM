@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_cbykk"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_p6luf"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_q1phk"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_llmem"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_yf3dj"]
+
+[resource]
+script = ExtResource("4_llmem")
+id = &"talent_kaeltefront"
+display_name = "Kältefront"
+description = "Talent: Frostnova hinterlässt eine eisige Fläche für 2/4/6 s."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

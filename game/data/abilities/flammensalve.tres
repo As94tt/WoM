@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_n2pmv"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_x47sl"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_03dre"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_0520r"]
+[ext_resource type="Resource" path="res://data/auras/brand.tres" id="5_7g6ex"]
+[ext_resource type="Resource" path="res://data/abilities/brand.tres" id="6_kimk7"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_3pu6p"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="8_ll5lc"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="9_rong7"]
+
+[sub_resource type="Resource" id="Resource_n2pmv"]
+script = ExtResource("4_0520r")
+school = &"feuer"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_x47sl"]
+script = ExtResource("7_3pu6p")
+duration_ability = ExtResource("6_kimk7")
+duration_key = "dauer"
+stacks_key = "werte.brand_stapel"
+aura = ExtResource("5_7g6ex")
+
+[sub_resource type="Resource" id="Resource_03dre"]
+script = ExtResource("8_ll5lc")
+speed_from_ability = true
+effects = Array[ExtResource("1_n2pmv")]([SubResource("Resource_n2pmv"), SubResource("Resource_x47sl")])
+
+[resource]
+script = ExtResource("9_rong7")
+id = &"flammensalve"
+display_name = "Flammensalve"
+description = "Kanalisiert: schleudert 4 Feuergeschosse auf das Ziel, jedes legt 1 Brand."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_n2pmv")]([SubResource("Resource_03dre")])
+highlight_auras = PackedStringArray()

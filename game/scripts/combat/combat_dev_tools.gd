@@ -10,4 +10,4 @@ extends Resource
 ## Betrag, mit dem „Ereignis auslösen“ die Auslöser füttert.
 @export var event_amount := 100.0
 ## Fähigkeit für „Ereignis: Fähigkeit gewirkt“.
-@export var event_ability_id: StringName = &"feuerball"
+@export var event_ability_id: StringName = &"magisches_geschoss"

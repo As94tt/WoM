@@ -1,28 +1,66 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
-[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_effect"]
-[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="3_damage"]
-[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="4_projectile"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_suuf5"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_0l7ih"]
+[ext_resource type="Resource" path="res://data/auras/eiskalte_praezision.tres" id="3_qyxq1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_uvhsb"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="5_2fsda"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_self_effect.gd" id="6_tt2pu"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="7_ejrlr"]
+[ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="8_jkcpl"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="9_n2jog"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_nearby_effect.gd" id="10_nyk04"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="11_w2v8c"]
 
-[sub_resource type="Resource" id="Resource_damage"]
-script = ExtResource("3_damage")
+[sub_resource type="Resource" id="Resource_suuf5"]
+script = ExtResource("2_0l7ih")
+kind = 2
+states = 4
+
+[sub_resource type="Resource" id="Resource_0l7ih"]
+script = ExtResource("2_0l7ih")
+kind = 1
+aura_id = &"talent_eiskalte_praezision"
+
+[sub_resource type="Resource" id="Resource_qyxq1"]
+script = ExtResource("5_2fsda")
+duration_key = "werte.praezision_dauer"
+aura = ExtResource("3_qyxq1")
+
+[sub_resource type="Resource" id="Resource_uvhsb"]
+script = ExtResource("6_tt2pu")
+effects = Array[ExtResource("1_suuf5")]([SubResource("Resource_qyxq1")])
+conditions = Array[ExtResource("2_0l7ih")]([SubResource("Resource_suuf5"), SubResource("Resource_0l7ih")])
+
+[sub_resource type="Resource" id="Resource_2fsda"]
+script = ExtResource("7_ejrlr")
 school = &"frost"
 values_from_ability = true
 
-[sub_resource type="Resource" id="Resource_projectile"]
-script = ExtResource("4_projectile")
+[sub_resource type="Resource" id="Resource_tt2pu"]
+script = ExtResource("5_2fsda")
+duration_key = "werte.verlangsamung_dauer"
+aura = ExtResource("8_jkcpl")
+
+[sub_resource type="Resource" id="Resource_ejrlr"]
+script = ExtResource("9_n2jog")
 speed_from_ability = true
-effects = Array[ExtResource("2_effect")]([SubResource("Resource_damage")])
+effects = Array[ExtResource("1_suuf5")]([SubResource("Resource_uvhsb"), SubResource("Resource_2fsda"), SubResource("Resource_tt2pu")])
+
+[sub_resource type="Resource" id="Resource_jkcpl"]
+script = ExtResource("10_nyk04")
+count_key = "werte.zusatzziele"
+radius_key = "werte.zusatz_radius"
+effects = Array[ExtResource("1_suuf5")]([SubResource("Resource_ejrlr")])
+filter = 2
 
 [resource]
-script = ExtResource("1_ability")
+script = ExtResource("11_w2v8c")
 id = &"frostblitz"
 display_name = "Frostblitz"
-description = "Talent (Testdaten #20), ersetzt Feuerball: Frostgeschoss auf das Ziel."
+description = "Schneller Frostzauber: Frostschaden und Verlangsamung um 30 %."
 class_id = &"mage"
-required_level = 1
 is_spell = true
 school = &"frost"
-effects = Array[ExtResource("2_effect")]([SubResource("Resource_projectile")])
-highlight_auras = PackedStringArray()
+effects = Array[ExtResource("1_suuf5")]([SubResource("Resource_ejrlr"), SubResource("Resource_jkcpl")])
+highlight_auras = PackedStringArray("eisige_adern")

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_rl7yq"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_xpbwd"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_duawf"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_8b7h2"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_g33fw"]
+
+[resource]
+script = ExtResource("4_8b7h2")
+id = &"eiseskaelte"
+display_name = "Eiseskälte"
+description = "Verlangsamt: Bewegungsgeschwindigkeit um 70 % verringert. Stapelt nicht; es gilt die stärkste Verlangsamung."
+is_debuff = true
+category = 1
+duration = 4.0
+states = 4
+slow_percent = 70.0
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

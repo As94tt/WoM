@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_jyv3p"]
+[ext_resource type="Resource" path="res://data/auras/flammenschild.tres" id="2_d37s0"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_elvnt"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_1oltb"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_tghr3"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_7eytk"]
+
+[sub_resource type="Resource" id="Resource_jyv3p"]
+script = ExtResource("5_tghr3")
+aura = ExtResource("2_d37s0")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_7eytk")
+id = &"flammenschild"
+display_name = "Flammenschild"
+description = "Umgibt den Magier mit einem Flammenschild, der Schaden abfängt. Nahkampf-Angreifer erhalten 1 Brand."
+class_id = &"mage"
+required_level = 5
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_jyv3p")]([SubResource("Resource_jyv3p")])
+target_kind = 0
+highlight_auras = PackedStringArray()

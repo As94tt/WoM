@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_nypi8"]
+[ext_resource type="Resource" path="res://data/auras/magische_beruehrung.tres" id="2_nwgml"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_0mtut"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_nonwf"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_e84r8"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_jek4d"]
+
+[sub_resource type="Resource" id="Resource_nypi8"]
+script = ExtResource("5_e84r8")
+aura = ExtResource("2_nwgml")
+
+[resource]
+script = ExtResource("6_jek4d")
+id = &"magische_beruehrung"
+display_name = "Magische Berührung"
+description = "Belegt das Ziel mit arkaner Energie, die über Zeit Arkanschaden verursacht."
+class_id = &"mage"
+required_level = 2
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_nypi8")]([SubResource("Resource_nypi8")])
+highlight_auras = PackedStringArray()

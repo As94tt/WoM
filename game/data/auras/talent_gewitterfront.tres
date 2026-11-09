@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_ukjkp"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_ucike"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_yw8s6"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_khmi0"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_4cpo8"]
+
+[resource]
+script = ExtResource("4_khmi0")
+id = &"talent_gewitterfront"
+display_name = "Gewitterfront"
+description = "Talent: Verbraucht Donnerschlag 5 Ladungen, erhält der Magier 2/4/6 % Mana zurück."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_gh8po"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_cigcs"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_ivdkq"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_jbsom"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="5_rj51f"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_nearby_effect.gd" id="6_pfw68"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="7_81ohp"]
+
+[sub_resource type="Resource" id="Resource_gh8po"]
+script = ExtResource("4_jbsom")
+school = &"frost"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_cigcs"]
+script = ExtResource("5_rj51f")
+speed_from_ability = true
+effects = Array[ExtResource("1_gh8po")]([SubResource("Resource_gh8po")])
+
+[sub_resource type="Resource" id="Resource_ivdkq"]
+script = ExtResource("6_pfw68")
+radius_key = "werte.radius"
+include_main = true
+random_pick = true
+effects = Array[ExtResource("1_gh8po")]([SubResource("Resource_cigcs")])
+filter = 2
+
+[resource]
+script = ExtResource("7_81ohp")
+id = &"eissplittersalve"
+display_name = "Eissplittersalve"
+description = "Kanalisiert: 5 Eissplitter verteilen sich auf Gegner im Umkreis des Ziels."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_gh8po")]([SubResource("Resource_ivdkq")])
+highlight_auras = PackedStringArray()

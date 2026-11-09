@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_xqxx1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_tqts7"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_qio2q"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_osegv"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_lwukl"]
+
+[resource]
+script = ExtResource("4_osegv")
+id = &"talent_entladung"
+display_name = "Entladung"
+description = "Talent: Stirbt ein Ziel mit Ladungen, springen sie mit 33/66/100 % Chance auf das nächste Ziel."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

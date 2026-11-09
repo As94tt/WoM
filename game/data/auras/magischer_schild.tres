@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_rt45o"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_xddob"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_aura_logic.gd" id="3_taoty"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="4_8ecny"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="5_1uopd"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="6_8e1mh"]
+
+[sub_resource type="Resource" id="Resource_rt45o"]
+script = ExtResource("3_taoty")
+absorb_key = "werte.schild"
+absorb_factor_key = "werte.schild_faktor"
+
+[resource]
+script = ExtResource("5_1uopd")
+id = &"magischer_schild"
+display_name = "Magischer Schild"
+description = "Fängt Schaden ab."
+category = 1
+duration = 15.0
+ability_id = &"magischer_schild"
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+logic = SubResource("Resource_rt45o")

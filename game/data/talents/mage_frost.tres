@@ -1,90 +1,265 @@
 [gd_resource type="Resource" script_class="TalentTreeData" format=3]
 
-[ext_resource type="Script" path="res://scripts/talents/talent_tree_data.gd" id="e1"]
-[ext_resource type="Script" path="res://scripts/talents/talent_row_data.gd" id="e2"]
-[ext_resource type="Script" path="res://scripts/talents/talent_data.gd" id="e3"]
-[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="e4"]
-[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="e5"]
-[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="e6"]
-[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="e7"]
-[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="e8"]
-[ext_resource type="Resource" path="res://data/abilities/eislanze.tres" id="e9"]
-[ext_resource type="Resource" path="res://data/auras/talent_kaeltepanzer.tres" id="e10"]
-[ext_resource type="Resource" path="res://data/auras/talent_winterschlaf.tres" id="e11"]
+[ext_resource type="Script" path="res://scripts/talents/talent_row_data.gd" id="1_smx14"]
+[ext_resource type="Script" path="res://scripts/talents/talent_data.gd" id="2_vskma"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_c15dg"]
+[ext_resource type="Resource" path="res://data/auras/talent_eiskalte_praezision.tres" id="4_fk48k"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="5_hyypc"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_3cko5"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="7_h2fmm"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="8_ohp7r"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="9_vf8et"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="10_xchnd"]
+[ext_resource type="Resource" path="res://data/auras/talent_frostbiss.tres" id="11_5mdhl"]
+[ext_resource type="Resource" path="res://data/abilities/schneesturm.tres" id="12_jdqon"]
+[ext_resource type="Resource" path="res://data/abilities/eissplittersalve.tres" id="13_5l2yt"]
+[ext_resource type="Resource" path="res://data/auras/talent_kaeltefront.tres" id="14_4vwtx"]
+[ext_resource type="Resource" path="res://data/auras/talent_eisige_adern.tres" id="15_bwcyw"]
+[ext_resource type="Resource" path="res://data/auras/talent_splitterpanzer.tres" id="16_rdn07"]
+[ext_resource type="Resource" path="res://data/auras/talent_kalter_kreislauf.tres" id="17_irayk"]
+[ext_resource type="Resource" path="res://data/abilities/absoluter_nullpunkt.tres" id="18_olee2"]
+[ext_resource type="Resource" path="res://data/abilities/eiszeit.tres" id="19_g30sl"]
+[ext_resource type="Script" path="res://scripts/talents/talent_tree_data.gd" id="20_pnd0x"]
 
-[sub_resource type="Resource" id="S1"]
-script = ExtResource("e3")
-id = &"eislanze"
-display_name = "Eislanze"
-description = "Neue Fähigkeit: Eislanze."
-grants_abilities = Array[ExtResource("e7")]([ExtResource("e9")])
+[sub_resource type="Resource" id="Resource_kurv8"]
+script = ExtResource("2_vskma")
+id = &"eiskalte_praezision"
+display_name = "Eiskalte Präzision"
+description = "Frostblitz auf ein verlangsamtes Ziel → nächster Gletschersplitter ist sofort wirkbar."
+auras = Array[ExtResource("3_c15dg")]([ExtResource("4_fk48k")])
 
-[sub_resource type="Resource" id="S2"]
-script = ExtResource("e3")
-id = &"kaeltepanzer"
-display_name = "Kältepanzer"
-description = "Passiv: +200 Rüstung."
-auras = Array[ExtResource("e8")]([ExtResource("e10")])
+[sub_resource type="Resource" id="Resource_35anm"]
+script = ExtResource("8_ohp7r")
+ability_id = &"frostblitz"
+value_key = "werte.verlangsamung_dauer"
+percent = 50.0
 
-[sub_resource type="Resource" id="S3"]
-script = ExtResource("e2")
-kind = 0
-required_points = 0
-talents = Array[ExtResource("e3")]([SubResource("S1"), SubResource("S2")])
+[sub_resource type="Resource" id="Resource_mtliq"]
+script = ExtResource("8_ohp7r")
+ability_id = &"erfrierung"
+value_key = "werte.verlangsamung_dauer"
+percent = 50.0
 
-[sub_resource type="Resource" id="S4"]
-script = ExtResource("e5")
-ability_id = &"eiswelle"
-value_key = "abklingzeit"
-add = -2.0
+[sub_resource type="Resource" id="Resource_x3l3e"]
+script = ExtResource("8_ohp7r")
+ability_id = &"frostnova"
+value_key = "werte.verlangsamung_dauer"
+percent = 50.0
 
-[sub_resource type="Resource" id="S5"]
-script = ExtResource("e6")
-modifiers = Array[ExtResource("e5")]([SubResource("S4")])
+[sub_resource type="Resource" id="Resource_6ty0k"]
+script = ExtResource("8_ohp7r")
+ability_id = &"frostnova"
+value_key = "werte.flaeche_verlangsamung"
+percent = 50.0
 
-[sub_resource type="Resource" id="S6"]
-script = ExtResource("e3")
-id = &"bitterkalt"
-display_name = "Bitterkalt"
-description = "Eiswelle hat je Rang 2 Sek. weniger Abklingzeit."
+[sub_resource type="Resource" id="Resource_k7b8p"]
+script = ExtResource("8_ohp7r")
+ability_id = &"gletschersplitter"
+value_key = "werte.flaeche_verlangsamung"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_wq35o"]
+script = ExtResource("8_ohp7r")
+ability_id = &"eisschild"
+value_key = "werte.verlangsamung_dauer"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_f3iax"]
+script = ExtResource("8_ohp7r")
+ability_id = &"schneesturm"
+value_key = "werte.flaeche_verlangsamung"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_hycl8"]
+script = ExtResource("8_ohp7r")
+ability_id = &"eiszeit"
+value_key = "werte.verlangsamung_dauer"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_em2qt"]
+script = ExtResource("10_xchnd")
+modifiers = Array[ExtResource("8_ohp7r")]([SubResource("Resource_35anm"), SubResource("Resource_mtliq"), SubResource("Resource_x3l3e"), SubResource("Resource_6ty0k"), SubResource("Resource_k7b8p"), SubResource("Resource_wq35o"), SubResource("Resource_f3iax"), SubResource("Resource_hycl8")])
+
+[sub_resource type="Resource" id="Resource_kb7mr"]
+script = ExtResource("2_vskma")
+id = &"klirrende_kaelte"
+display_name = "Klirrende Kälte"
+description = "Verlangsamungen halten 50 % länger."
+effects = Array[ExtResource("5_hyypc")]([SubResource("Resource_em2qt")])
+
+[sub_resource type="Resource" id="Resource_bnw67"]
+script = ExtResource("1_smx14")
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_kurv8"), SubResource("Resource_kb7mr")])
+
+[sub_resource type="Resource" id="Resource_r0jv3"]
+script = ExtResource("8_ohp7r")
+ability_id = &"gletschersplitter"
+value_key = "werte.flaeche_dauer"
+add = 1.0
+
+[sub_resource type="Resource" id="Resource_23vbe"]
+script = ExtResource("8_ohp7r")
+ability_id = &"frostnova"
+value_key = "werte.flaeche_dauer"
+add = 1.0
+
+[sub_resource type="Resource" id="Resource_oht4f"]
+script = ExtResource("10_xchnd")
+modifiers = Array[ExtResource("8_ohp7r")]([SubResource("Resource_r0jv3"), SubResource("Resource_23vbe")])
+
+[sub_resource type="Resource" id="Resource_cw6ee"]
+script = ExtResource("2_vskma")
+id = &"permafrost"
+display_name = "Permafrost"
+description = "Eisige Flächen halten 1 s länger pro Rang."
 max_ranks = 3
-effects = Array[ExtResource("e4")]([SubResource("S5")])
+effects = Array[ExtResource("5_hyypc")]([SubResource("Resource_oht4f")])
 
-[sub_resource type="Resource" id="S7"]
-script = ExtResource("e2")
+[sub_resource type="Resource" id="Resource_xvgq8"]
+script = ExtResource("2_vskma")
+id = &"frostbiss"
+display_name = "Frostbiss"
+description = "Läuft Erfrierung aus, springt sie mit 33/66/100 % Chance auf ein nahes Ziel."
+max_ranks = 3
+auras = Array[ExtResource("3_c15dg")]([ExtResource("11_5mdhl")])
+
+[sub_resource type="Resource" id="Resource_d1flk"]
+script = ExtResource("1_smx14")
 kind = 1
 required_points = 1
-talents = Array[ExtResource("e3")]([SubResource("S6")])
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_cw6ee"), SubResource("Resource_xvgq8")])
 
-[sub_resource type="Resource" id="S8"]
-script = ExtResource("e5")
-ability_id = &"feuerball"
-replacement_id = &"frostblitz"
+[sub_resource type="Resource" id="Resource_0dhkj"]
+script = ExtResource("2_vskma")
+id = &"schneesturm"
+display_name = "Schneesturm"
+description = "Neuer Zauber: kanalisiert 6 s, Fläche am Zielort mit Schaden und Verlangsamung."
+grants_abilities = Array[ExtResource("6_3cko5")]([ExtResource("12_jdqon")])
 
-[sub_resource type="Resource" id="S9"]
-script = ExtResource("e6")
-modifiers = Array[ExtResource("e5")]([SubResource("S8")])
+[sub_resource type="Resource" id="Resource_bqtrt"]
+script = ExtResource("2_vskma")
+id = &"eissplittersalve"
+display_name = "Eissplittersalve"
+description = "Neuer Zauber: kanalisiert 2 s, 5 Splitter verteilen sich auf Gegner im Umkreis des Ziels."
+grants_abilities = Array[ExtResource("6_3cko5")]([ExtResource("13_5l2yt")])
 
-[sub_resource type="Resource" id="S10"]
-script = ExtResource("e3")
-id = &"frostblitz"
-display_name = "Frostblitz"
-description = "Ersetzt Feuerball durch Frostblitz."
-effects = Array[ExtResource("e4")]([SubResource("S9")])
+[sub_resource type="Resource" id="Resource_lktl4"]
+script = ExtResource("1_smx14")
+required_points = 4
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_0dhkj"), SubResource("Resource_bqtrt")])
 
-[sub_resource type="Resource" id="S11"]
-script = ExtResource("e3")
-id = &"winterschlaf"
-display_name = "Winterschlaf"
-description = "Passiv: +10 % erhaltene Heilung."
-auras = Array[ExtResource("e8")]([ExtResource("e11")])
+[sub_resource type="Resource" id="Resource_aii0i"]
+script = ExtResource("8_ohp7r")
+ability_id = &"frostnova"
+value_key = "werte.flaeche_dauer"
+add = 2.0
 
-[sub_resource type="Resource" id="S12"]
-script = ExtResource("e2")
-kind = 0
-required_points = 3
-talents = Array[ExtResource("e3")]([SubResource("S10"), SubResource("S11")])
+[sub_resource type="Resource" id="Resource_r2rwc"]
+script = ExtResource("10_xchnd")
+modifiers = Array[ExtResource("8_ohp7r")]([SubResource("Resource_aii0i")])
+
+[sub_resource type="Resource" id="Resource_rgsa5"]
+script = ExtResource("2_vskma")
+id = &"kaeltefront"
+display_name = "Kältefront"
+description = "Frostnova hinterlässt eine eisige Fläche für 2/4/6 s."
+max_ranks = 3
+effects = Array[ExtResource("5_hyypc")]([SubResource("Resource_r2rwc")])
+auras = Array[ExtResource("3_c15dg")]([ExtResource("14_4vwtx")])
+
+[sub_resource type="Resource" id="Resource_sjn5j"]
+script = ExtResource("2_vskma")
+id = &"eisige_adern"
+display_name = "Eisige Adern"
+description = "Nach Frostschritt sind die nächsten 1/2/3 Frostblitze sofort wirkbar."
+max_ranks = 3
+auras = Array[ExtResource("3_c15dg")]([ExtResource("15_bwcyw")])
+
+[sub_resource type="Resource" id="Resource_o6tki"]
+script = ExtResource("1_smx14")
+kind = 1
+required_points = 5
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_rgsa5"), SubResource("Resource_sjn5j")])
+
+[sub_resource type="Resource" id="Resource_tonev"]
+script = ExtResource("8_ohp7r")
+ability_id = &"eisschild"
+replacement_id = &"eisblock"
+
+[sub_resource type="Resource" id="Resource_jeqxx"]
+script = ExtResource("10_xchnd")
+modifiers = Array[ExtResource("8_ohp7r")]([SubResource("Resource_tonev")])
+
+[sub_resource type="Resource" id="Resource_svddn"]
+script = ExtResource("2_vskma")
+id = &"eisblock"
+display_name = "Eisblock"
+description = "Ersetzt Eisschild: 6 s unverwundbar, aber handlungsunfähig."
+effects = Array[ExtResource("5_hyypc")]([SubResource("Resource_jeqxx")])
+
+[sub_resource type="Resource" id="Resource_ivkvb"]
+script = ExtResource("2_vskma")
+id = &"splitterpanzer"
+display_name = "Splitterpanzer"
+description = "Zerbricht der Eisschild, treffen Splitter alle Gegner im Umkreis und verlangsamen sie."
+auras = Array[ExtResource("3_c15dg")]([ExtResource("16_rdn07")])
+
+[sub_resource type="Resource" id="Resource_ujigg"]
+script = ExtResource("1_smx14")
+required_points = 8
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_svddn"), SubResource("Resource_ivkvb")])
+
+[sub_resource type="Resource" id="Resource_t76mf"]
+script = ExtResource("8_ohp7r")
+ability_id = &"gletschersplitter"
+value_key = "werte.flaeche_radius"
+add = 1.0
+
+[sub_resource type="Resource" id="Resource_37q2v"]
+script = ExtResource("10_xchnd")
+modifiers = Array[ExtResource("8_ohp7r")]([SubResource("Resource_t76mf")])
+
+[sub_resource type="Resource" id="Resource_ntxpu"]
+script = ExtResource("2_vskma")
+id = &"lawine"
+display_name = "Lawine"
+description = "Fläche von Gletschersplitter +1 m Radius pro Rang."
+max_ranks = 3
+effects = Array[ExtResource("5_hyypc")]([SubResource("Resource_37q2v")])
+
+[sub_resource type="Resource" id="Resource_jfiud"]
+script = ExtResource("2_vskma")
+id = &"kalter_kreislauf"
+display_name = "Kalter Kreislauf"
+description = "Treffer gegen verlangsamte Ziele geben 1/2/3 % Mana zurück."
+max_ranks = 3
+auras = Array[ExtResource("3_c15dg")]([ExtResource("17_irayk")])
+
+[sub_resource type="Resource" id="Resource_1xo33"]
+script = ExtResource("1_smx14")
+kind = 1
+required_points = 9
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_ntxpu"), SubResource("Resource_jfiud")])
+
+[sub_resource type="Resource" id="Resource_h2085"]
+script = ExtResource("2_vskma")
+id = &"absoluter_nullpunkt"
+display_name = "Absoluter Nullpunkt"
+description = "Überladung (neuer Zauber): 12 s lang sind alle Frost-Flächen doppelt so groß, Frostblitz trifft ein zweites Ziel."
+grants_abilities = Array[ExtResource("6_3cko5")]([ExtResource("18_olee2")])
+
+[sub_resource type="Resource" id="Resource_xme1k"]
+script = ExtResource("2_vskma")
+id = &"eiszeit"
+display_name = "Eiszeit"
+description = "Überladung (neuer Zauber): 8 s lang Fläche von 15 m um den Magier, Gegner darin stark verlangsamt und erleiden Schaden über Zeit."
+grants_abilities = Array[ExtResource("6_3cko5")]([ExtResource("19_g30sl")])
+
+[sub_resource type="Resource" id="Resource_tyhju"]
+script = ExtResource("1_smx14")
+required_points = 12
+talents = Array[ExtResource("2_vskma")]([SubResource("Resource_h2085"), SubResource("Resource_xme1k")])
 
 [resource]
-script = ExtResource("e1")
-rows = Array[ExtResource("e2")]([SubResource("S3"), SubResource("S7"), SubResource("S12")])
+script = ExtResource("20_pnd0x")
+rows = Array[ExtResource("1_smx14")]([SubResource("Resource_bnw67"), SubResource("Resource_d1flk"), SubResource("Resource_lktl4"), SubResource("Resource_o6tki"), SubResource("Resource_ujigg"), SubResource("Resource_1xo33"), SubResource("Resource_tyhju")])

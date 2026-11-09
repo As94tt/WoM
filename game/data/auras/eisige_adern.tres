@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_1hlk8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_uyl2j"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_oyyp2"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="4_x5v4x"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_vrfe2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="6_ajc7s"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="7_5mn02"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_nkove"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_0e5h8"]
+
+[sub_resource type="Resource" id="Resource_1hlk8"]
+script = ExtResource("4_x5v4x")
+ability_id = &"frostblitz"
+value_key = "zauberzeit"
+percent = -100.0
+
+[sub_resource type="Resource" id="Resource_uyl2j"]
+script = ExtResource("6_ajc7s")
+modifiers = Array[ExtResource("4_x5v4x")]([SubResource("Resource_1hlk8")])
+
+[sub_resource type="Resource" id="Resource_oyyp2"]
+script = ExtResource("7_5mn02")
+event = 6
+ability_id = &"frostblitz"
+consume_stack = true
+
+[resource]
+script = ExtResource("8_nkove")
+id = &"eisige_adern"
+display_name = "Eisige Adern"
+description = "Die nächsten Frostblitze sind sofort wirkbar (je Stapel einer)."
+duration = 10.0
+max_stacks = 3
+stack_mode = 1
+apply_effects = Array[ExtResource("2_uyl2j")]([SubResource("Resource_uyl2j")])
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("7_5mn02")]([SubResource("Resource_oyyp2")])
+absorb_schools = PackedStringArray()

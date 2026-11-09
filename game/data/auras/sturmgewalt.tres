@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_aey3q"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_wkot7"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_hawsh"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="4_git2c"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_jo7wq"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="6_qb2b5"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="7_gqc4p"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_nt5pd"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_woaa5"]
+
+[sub_resource type="Resource" id="Resource_aey3q"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzpfeil"
+value_key = "zauberzeit"
+percent = -30.0
+
+[sub_resource type="Resource" id="Resource_wkot7"]
+script = ExtResource("4_git2c")
+ability_id = &"donnerschlag"
+value_key = "zauberzeit"
+percent = -30.0
+
+[sub_resource type="Resource" id="Resource_hawsh"]
+script = ExtResource("4_git2c")
+ability_id = &"kettenblitz"
+value_key = "zauberzeit"
+percent = -30.0
+
+[sub_resource type="Resource" id="Resource_git2c"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzsalve"
+value_key = "kanalisierzeit"
+percent = -30.0
+
+[sub_resource type="Resource" id="Resource_jo7wq"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzsalve"
+value_key = "tick"
+percent = -30.0
+
+[sub_resource type="Resource" id="Resource_qb2b5"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzpfeil"
+value_key = "werte.ladung_stapel"
+add = 1.0
+
+[sub_resource type="Resource" id="Resource_gqc4p"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzpfeil"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_nt5pd"]
+script = ExtResource("4_git2c")
+ability_id = &"elektrisieren"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_woaa5"]
+script = ExtResource("4_git2c")
+ability_id = &"donnerschlag"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_t5ap0"]
+script = ExtResource("4_git2c")
+ability_id = &"gewitternova"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_tw1m0"]
+script = ExtResource("4_git2c")
+ability_id = &"kettenblitz"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_o4kce"]
+script = ExtResource("4_git2c")
+ability_id = &"blitzsalve"
+value_key = "kosten"
+percent = 50.0
+
+[sub_resource type="Resource" id="Resource_0i0a5"]
+script = ExtResource("6_qb2b5")
+modifiers = Array[ExtResource("4_git2c")]([SubResource("Resource_aey3q"), SubResource("Resource_wkot7"), SubResource("Resource_hawsh"), SubResource("Resource_git2c"), SubResource("Resource_jo7wq"), SubResource("Resource_qb2b5"), SubResource("Resource_gqc4p"), SubResource("Resource_nt5pd"), SubResource("Resource_woaa5"), SubResource("Resource_t5ap0"), SubResource("Resource_tw1m0"), SubResource("Resource_o4kce")])
+
+[resource]
+script = ExtResource("8_nt5pd")
+id = &"sturmgewalt"
+display_name = "Sturmgewalt"
+description = "30 % weniger Zauberzeit, jeder Blitzpfeil legt 2 Ladungen, aber 50 % mehr Manakosten."
+category = 1
+duration = 12.0
+ability_id = &"sturmgewalt"
+apply_effects = Array[ExtResource("2_wkot7")]([SubResource("Resource_0i0a5")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

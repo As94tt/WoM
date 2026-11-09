@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_bve3y"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_j13cv"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_c4tx6"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_hhdbx"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="5_jqlk3"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="6_eiaco"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_asgqw"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="8_1xsqq"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="9_mpob0"]
+
+[sub_resource type="Resource" id="Resource_bve3y"]
+script = ExtResource("4_hhdbx")
+school = &"blitz"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_j13cv"]
+script = ExtResource("7_asgqw")
+duration_ability = ExtResource("6_eiaco")
+duration_key = "dauer"
+stacks_key = "werte.ladung_stapel"
+aura = ExtResource("5_jqlk3")
+
+[sub_resource type="Resource" id="Resource_c4tx6"]
+script = ExtResource("8_1xsqq")
+speed_from_ability = true
+effects = Array[ExtResource("1_bve3y")]([SubResource("Resource_bve3y"), SubResource("Resource_j13cv")])
+
+[resource]
+script = ExtResource("9_mpob0")
+id = &"blitzsalve"
+display_name = "Blitzsalve"
+description = "Kanalisiert: schnelle Blitzpfeile auf das Ziel, jeder legt 1 Ladung."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_bve3y")]([SubResource("Resource_c4tx6")])
+highlight_auras = PackedStringArray()

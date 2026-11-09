@@ -1,23 +1,65 @@
 [gd_resource type="Resource" script_class="SpecializationData" format=3]
 
-[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_spec"]
-[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_transform"]
-[ext_resource type="Resource" path="res://data/talents/mage_feuer.tres" id="3_tree"]
-[ext_resource type="Resource" path="res://data/abilities/feuerball.tres" id="b0"]
-[ext_resource type="Resource" path="res://data/abilities/glutball.tres" id="v0"]
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_y028t"]
+[ext_resource type="Resource" path="res://data/talents/mage_feuer.tres" id="2_dw2jj"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="3_1cxc7"]
+[ext_resource type="Resource" path="res://data/abilities/magisches_geschoss.tres" id="4_ft5ja"]
+[ext_resource type="Resource" path="res://data/abilities/feuerball.tres" id="5_pnqu8"]
+[ext_resource type="Resource" path="res://data/abilities/magische_beruehrung.tres" id="6_qvcfb"]
+[ext_resource type="Resource" path="res://data/abilities/entzuenden.tres" id="7_3jjq4"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_einschlag.tres" id="8_pbp6u"]
+[ext_resource type="Resource" path="res://data/abilities/meteor.tres" id="9_ncpgs"]
+[ext_resource type="Resource" path="res://data/abilities/magische_nova.tres" id="10_sq0cr"]
+[ext_resource type="Resource" path="res://data/abilities/feuernova.tres" id="11_q4vwi"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schild.tres" id="12_5x0ef"]
+[ext_resource type="Resource" path="res://data/abilities/flammenschild.tres" id="13_ktqa3"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schritt.tres" id="14_ptjy5"]
+[ext_resource type="Resource" path="res://data/abilities/flammensprung.tres" id="15_le23x"]
+[ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_tekn8"]
+[ext_resource type="Resource" path="res://data/abilities/flammenfessel.tres" id="17_t7wiw"]
 
-[sub_resource type="Resource" id="T0"]
-script = ExtResource("2_transform")
-base = ExtResource("b0")
-variant = ExtResource("v0")
+[sub_resource type="Resource" id="Resource_6j08f"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("4_ft5ja")
+variant = ExtResource("5_pnqu8")
+
+[sub_resource type="Resource" id="Resource_hkfy1"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("6_qvcfb")
+variant = ExtResource("7_3jjq4")
+
+[sub_resource type="Resource" id="Resource_aoxu2"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("8_pbp6u")
+variant = ExtResource("9_ncpgs")
+
+[sub_resource type="Resource" id="Resource_eerli"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("10_sq0cr")
+variant = ExtResource("11_q4vwi")
+
+[sub_resource type="Resource" id="Resource_4ral1"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("12_5x0ef")
+variant = ExtResource("13_ktqa3")
+
+[sub_resource type="Resource" id="Resource_6lvbd"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("14_ptjy5")
+variant = ExtResource("15_le23x")
+
+[sub_resource type="Resource" id="Resource_nv4ut"]
+script = ExtResource("3_1cxc7")
+base = ExtResource("16_tekn8")
+variant = ExtResource("17_t7wiw")
 
 [resource]
-script = ExtResource("1_spec")
+script = ExtResource("1_y028t")
 id = &"mage_feuer"
 display_name = "Feuer"
-description = "Platzhalter (Testdaten #20): Der Magier entfesselt Flammen mit hohem Schaden.
-Verwandelt Feuerball in Glutball; Talente geben Flammenstoß und Feuerring."
+description = "Langsam und wuchtig: Brand aufbauen, dann explodieren lassen.
+Große Einzeltreffer und kurze, heftige Explosionen. Mana: mittel."
 order = 1
 preferred_stats = Array[StringName]([&"precision", &"devastation"])
-transformations = Array[ExtResource("2_transform")]([SubResource("T0")])
-talent_tree = ExtResource("3_tree")
+transformations = Array[ExtResource("3_1cxc7")]([SubResource("Resource_6j08f"), SubResource("Resource_hkfy1"), SubResource("Resource_aoxu2"), SubResource("Resource_eerli"), SubResource("Resource_4ral1"), SubResource("Resource_6lvbd"), SubResource("Resource_nv4ut")])
+talent_tree = ExtResource("2_dw2jj")

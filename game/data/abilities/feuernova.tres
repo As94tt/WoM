@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_8mrrt"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_i760s"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_mly3m"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_lk824"]
+[ext_resource type="Resource" path="res://data/auras/brand.tres" id="5_4s6ug"]
+[ext_resource type="Resource" path="res://data/abilities/brand.tres" id="6_ppkh4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_by0jq"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_0hcag"]
+
+[sub_resource type="Resource" id="Resource_8mrrt"]
+script = ExtResource("4_lk824")
+school = &"feuer"
+values_from_ability = true
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_i760s"]
+script = ExtResource("7_by0jq")
+duration_ability = ExtResource("6_ppkh4")
+duration_key = "dauer"
+aura = ExtResource("5_4s6ug")
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("8_0hcag")
+id = &"feuernova"
+display_name = "Feuernova"
+description = "Flammenwelle um den Magier: Schaden an allen Gegnern im Umkreis und 1 Brand auf alle Getroffenen."
+class_id = &"mage"
+required_level = 8
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_8mrrt")]([SubResource("Resource_8mrrt"), SubResource("Resource_i760s")])
+target_kind = 0
+highlight_auras = PackedStringArray()

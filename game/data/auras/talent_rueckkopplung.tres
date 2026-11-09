@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_30yhh"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_a0r7c"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_jmyrs"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_c334x"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_xkrgc"]
+
+[resource]
+script = ExtResource("4_c334x")
+id = &"talent_rueckkopplung"
+display_name = "Rückkopplung"
+description = "Talent: Ziele, auf die Donnerschlag springt, behalten mit 33/66/100 % Chance 1 Ladung."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

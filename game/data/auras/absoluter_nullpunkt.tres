@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_dvehr"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_t30ib"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_1uppn"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="4_w8bof"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_60b7b"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="6_npi43"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="7_0y1tg"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_jf38j"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_tu4el"]
+
+[sub_resource type="Resource" id="Resource_dvehr"]
+script = ExtResource("4_w8bof")
+ability_id = &"gletschersplitter"
+value_key = "werte.flaeche_radius"
+percent = 100.0
+
+[sub_resource type="Resource" id="Resource_t30ib"]
+script = ExtResource("4_w8bof")
+ability_id = &"frostnova"
+value_key = "werte.flaeche_radius"
+percent = 100.0
+
+[sub_resource type="Resource" id="Resource_1uppn"]
+script = ExtResource("4_w8bof")
+ability_id = &"schneesturm"
+value_key = "werte.flaeche_radius"
+percent = 100.0
+
+[sub_resource type="Resource" id="Resource_w8bof"]
+script = ExtResource("4_w8bof")
+ability_id = &"frostblitz"
+value_key = "werte.zusatzziele"
+add = 1.0
+
+[sub_resource type="Resource" id="Resource_60b7b"]
+script = ExtResource("6_npi43")
+modifiers = Array[ExtResource("4_w8bof")]([SubResource("Resource_dvehr"), SubResource("Resource_t30ib"), SubResource("Resource_1uppn"), SubResource("Resource_w8bof")])
+
+[resource]
+script = ExtResource("8_jf38j")
+id = &"absoluter_nullpunkt"
+display_name = "Absoluter Nullpunkt"
+description = "Alle Frost-Flächen sind doppelt so groß, Frostblitz trifft ein zweites Ziel."
+category = 1
+duration = 12.0
+ability_id = &"absoluter_nullpunkt"
+apply_effects = Array[ExtResource("2_t30ib")]([SubResource("Resource_60b7b")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

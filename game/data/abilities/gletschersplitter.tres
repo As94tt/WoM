@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_63k71"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_tfk6y"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_qa52q"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_0b2q0"]
+[ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="5_yfmdw"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_rxrig"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="7_erx85"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_1cl4r"]
+
+[sub_resource type="Resource" id="Resource_63k71"]
+script = ExtResource("4_0b2q0")
+school = &"frost"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_tfk6y"]
+script = ExtResource("4_0b2q0")
+school = &"frost"
+values_from_ability = true
+base_key = "werte.flaeche_schaden"
+factor_key = "werte.flaeche_faktor"
+
+[sub_resource type="Resource" id="Resource_qa52q"]
+script = ExtResource("6_rxrig")
+duration_key = "werte.flaeche_verlangsamung"
+aura = ExtResource("5_yfmdw")
+
+[sub_resource type="Resource" id="Resource_0b2q0"]
+script = ExtResource("7_erx85")
+effects = Array[ExtResource("1_63k71")]([SubResource("Resource_tfk6y"), SubResource("Resource_qa52q")])
+
+[resource]
+script = ExtResource("8_1cl4r")
+id = &"gletschersplitter"
+display_name = "Gletschersplitter"
+description = "Frostschaden am Ziel. Hinterlässt eine eisige Fläche, die Schaden über Zeit verursacht und verlangsamt."
+class_id = &"mage"
+required_level = 4
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_63k71")]([SubResource("Resource_63k71"), SubResource("Resource_0b2q0")])
+highlight_auras = PackedStringArray("eiskalte_praezision")

@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_vucoe"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_cvvcq"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_pljk2"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_m12ik"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_y2pyj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="6_fqxs7"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="7_bgywd"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="8_ffo03"]
+[ext_resource type="Resource" path="res://data/auras/eiseskaelte.tres" id="9_3vxyg"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="10_gvtpw"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="11_sf2pg"]
+
+[sub_resource type="Resource" id="Resource_vucoe"]
+script = ExtResource("8_ffo03")
+school = &"frost"
+values_from_ability = true
+base_key = "werte.flaeche_schaden"
+factor_key = "werte.flaeche_faktor"
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_cvvcq"]
+script = ExtResource("10_gvtpw")
+duration_key = "werte.verlangsamung_dauer"
+aura = ExtResource("9_3vxyg")
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_pljk2"]
+script = ExtResource("11_sf2pg")
+duration_key = "werte.anzeige_dauer"
+radius_key = "werte.radius"
+interval_key = "werte.anzeige_tick"
+target_mode = 1
+
+[resource]
+script = ExtResource("4_m12ik")
+id = &"eiszeit"
+display_name = "Eiszeit"
+description = "Gegner im großen Umkreis um den Magier sind stark verlangsamt und erleiden Schaden über Zeit."
+category = 1
+duration = 8.0
+ability_id = &"eiszeit"
+tick_interval = 1.0
+tick_effects = Array[ExtResource("2_cvvcq")]([SubResource("Resource_vucoe"), SubResource("Resource_cvvcq"), SubResource("Resource_pljk2")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

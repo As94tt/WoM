@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="SpecializationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_moexv"]
+[ext_resource type="Resource" path="res://data/talents/mage_blitz.tres" id="2_xea0c"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="3_dwykr"]
+[ext_resource type="Resource" path="res://data/abilities/magisches_geschoss.tres" id="4_8byi3"]
+[ext_resource type="Resource" path="res://data/abilities/blitzpfeil.tres" id="5_7pkfp"]
+[ext_resource type="Resource" path="res://data/abilities/magische_beruehrung.tres" id="6_ae2ie"]
+[ext_resource type="Resource" path="res://data/abilities/elektrisieren.tres" id="7_rokab"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_einschlag.tres" id="8_d8bv3"]
+[ext_resource type="Resource" path="res://data/abilities/donnerschlag.tres" id="9_08nl3"]
+[ext_resource type="Resource" path="res://data/abilities/magische_nova.tres" id="10_cxasi"]
+[ext_resource type="Resource" path="res://data/abilities/gewitternova.tres" id="11_wkh2c"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schild.tres" id="12_jmudi"]
+[ext_resource type="Resource" path="res://data/abilities/sturmschild.tres" id="13_s4478"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schritt.tres" id="14_102hv"]
+[ext_resource type="Resource" path="res://data/abilities/blitzsprung.tres" id="15_qervs"]
+[ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_an3ur"]
+[ext_resource type="Resource" path="res://data/abilities/statische_fessel.tres" id="17_hg460"]
+
+[sub_resource type="Resource" id="Resource_bdkeu"]
+script = ExtResource("3_dwykr")
+base = ExtResource("4_8byi3")
+variant = ExtResource("5_7pkfp")
+
+[sub_resource type="Resource" id="Resource_jjfkl"]
+script = ExtResource("3_dwykr")
+base = ExtResource("6_ae2ie")
+variant = ExtResource("7_rokab")
+
+[sub_resource type="Resource" id="Resource_ypm7d"]
+script = ExtResource("3_dwykr")
+base = ExtResource("8_d8bv3")
+variant = ExtResource("9_08nl3")
+
+[sub_resource type="Resource" id="Resource_nj3yd"]
+script = ExtResource("3_dwykr")
+base = ExtResource("10_cxasi")
+variant = ExtResource("11_wkh2c")
+
+[sub_resource type="Resource" id="Resource_62el8"]
+script = ExtResource("3_dwykr")
+base = ExtResource("12_jmudi")
+variant = ExtResource("13_s4478")
+
+[sub_resource type="Resource" id="Resource_1d1qg"]
+script = ExtResource("3_dwykr")
+base = ExtResource("14_102hv")
+variant = ExtResource("15_qervs")
+
+[sub_resource type="Resource" id="Resource_7e13d"]
+script = ExtResource("3_dwykr")
+base = ExtResource("16_an3ur")
+variant = ExtResource("17_hg460")
+
+[resource]
+script = ExtResource("1_moexv")
+id = &"mage_blitz"
+display_name = "Blitz"
+description = "Schnell und mana-hungrig: Ladungen sammeln, mit Donnerschlag entladen.
+Einzelziel mit Sprüngen auf 2–3 Ziele, kaum Fläche. Mana: am knappsten."
+order = 3
+preferred_stats = Array[StringName]([&"penetration", &"haste"])
+transformations = Array[ExtResource("3_dwykr")]([SubResource("Resource_bdkeu"), SubResource("Resource_jjfkl"), SubResource("Resource_ypm7d"), SubResource("Resource_nj3yd"), SubResource("Resource_62el8"), SubResource("Resource_1d1qg"), SubResource("Resource_7e13d")])
+talent_tree = ExtResource("2_xea0c")

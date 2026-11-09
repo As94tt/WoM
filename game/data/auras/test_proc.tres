@@ -103,7 +103,7 @@ target_mode = 1
 [sub_resource type="Resource" id="Resource_vnlpk"]
 script = ExtResource("2_ct84h")
 event = 6
-ability_id = &"feuerball"
+ability_id = &"magisches_geschoss"
 effects = Array[ExtResource("1_be877")]([SubResource("Resource_gbf6j")])
 
 [sub_resource type="Resource" id="Resource_26qp0"]
@@ -120,7 +120,7 @@ effects = Array[ExtResource("1_be877")]([SubResource("Resource_26qp0")])
 script = ExtResource("8_cdnd0")
 id = &"test_proc"
 display_name = "Kampfrausch"
-description = "Treffer: 50 % Chance auf 250 Arkanschaden (alle 2 s). Erlittener Schaden: Heilung um 300 (alle 3 s). Kritischer Treffer: 500 Feuerschaden. Ausweichen, Parieren, Blocken: +10 Wut und +10 Energie. Feuerball gewirkt: Erneuerung. Tod des Ziels: Heilung um 1.000. Testaura: Auslöser."
+description = "Treffer: 50 % Chance auf 250 Arkanschaden (alle 2 s). Erlittener Schaden: Heilung um 300 (alle 3 s). Kritischer Treffer: 500 Feuerschaden. Ausweichen, Parieren, Blocken: +10 Wut und +10 Energie. Magisches Geschoss gewirkt: Erneuerung. Tod des Ziels: Heilung um 1.000. Testaura: Auslöser."
 duration = 60.0
 grants_immunities = PackedStringArray()
 procs = Array[ExtResource("2_ct84h")]([SubResource("Resource_y7ekk"), SubResource("Resource_0sjps"), SubResource("Resource_n63eb"), SubResource("Resource_mawpv"), SubResource("Resource_8kcqx"), SubResource("Resource_um35u"), SubResource("Resource_vnlpk"), SubResource("Resource_ancd0")])
