@@ -53,6 +53,8 @@ Fünf Grundklassen decken alle Kernmechaniken ab. Sie werden in dieser Reihenfol
 | 4 | Schurke | Nahkampf-DD | Energie + Combopunkte | Aufbauen/Ausgeben, Positionierung, Tarnung | Finsterer Stoß, Ausweiden, Verstohlenheit |
 | 5 | Mönch | Nahkampf-DD mit Sofortzaubern | Energie + Chi | Schadensarten, Zaubern in Bewegung, Procs, Bewegungsfähigkeiten | Tigerklaue, Blitzfaust, Fliegender Tritt |
 
+**Sechste Klasse: Jäger.** Fernkampf-DD mit Bogen oder Armbrust, trägt Leder, Ressource Mana (nur von der Stufe abhängig). Testet vor allem Fernkampfwaffen, automatischen Schuss, Abstand halten und Rückzug. Er gehört nicht zu den fünf Grundklassen von M2, sondern wird nach dem Ausrüstungssystem (M4) eingeführt, weil er Waffentypen (Bogen, Langbogen, Kurzbogen, Armbrust) braucht. Inhalte: Ticket #24.
+
 **Schurke und Mönch unterscheiden sich klar:** Der Schurke ist der Präzisionskämpfer (Combopunkte am Ziel, Positionierung, Finisher). Der Mönch ist der Fluss-Kämpfer: Schläge erzeugen Chi, Sofortzauber geben es aus, Abwechslung zwischen Fähigkeiten wird belohnt.
 
 **Unterklassen** kommen später über Talente und sollen die Klassen deutlich unterscheiden. Ein Talent kann Fähigkeiten hinzufügen, verändern oder ersetzen und sogar Rolle und Ressource wechseln (z. B. Druide als Bär-Tank). Das Effekt- und Aura-System muss das von Anfang an tragen.
@@ -89,7 +91,7 @@ Bis auf den Schmuck ist jede Ausrüstung am Charakter sichtbar und muss auf alle
 
 **Waffenlogik:** Haupthand und Nebenhand. Zweihandwaffen belegen beide, Schild und Fokus nur die Nebenhand. Schurke und Mönch können zwei Einhandwaffen führen.
 
-**Rüstungsklassen:** Stoff (Magier), Leder (Schurke, Mönch, Druide), Platte (Krieger). Kette später für neue Klassen oder Unterklassen.
+**Rüstungsklassen:** Stoff (Magier), Leder (Schurke, Mönch, Druide, Jäger), Platte (Krieger). Kette später für neue Klassen oder Unterklassen.
 
 **Spielstil-Gegenstände, klar abgegrenzt:**
 
