@@ -39,7 +39,7 @@ eisblock;mage;mage_frost;5;0;keine;0;0;60;1;0;0;0;;6;0;;Talent (Reihe 5): ersetz
 absoluter_nullpunkt;mage;mage_frost;10;20;mana;0;0;60;1;0;0;0;;12;0;;Talent (Reihe 7): Überladung
 eiszeit;mage;mage_frost;10;40;mana;0;0;60;1;0;0;0;;8;1;radius:15|flaeche_schaden:15|flaeche_faktor:0,25|verlangsamung_dauer:2|anzeige_dauer:1|anzeige_tick:5;Talent (Reihe 7): Überladung, Schaden je Tick, Verlangsamung 70 % (Eiseskälte)
 # Magier – Blitz (#22): Varianten, Mechanik Ladung, Talent-Fähigkeiten (höhere Manakosten)
-blitzpfeil;mage;mage_blitz;1;28;mana;1,2;0;0;1;35;30;0,55;zaubermacht;0;0;flug:40|ladung_stapel:1|extra_ladung_chance:0;Verwandelt Magisches Geschoss – extra_ladung_chance (Funkenschlag)
+blitzpfeil;mage;mage_blitz;1;32;mana;1,2;0;0;1;35;30;0,55;zaubermacht;0;0;flug:40|ladung_stapel:1|extra_ladung_chance:0;Verwandelt Magisches Geschoss – extra_ladung_chance (Funkenschlag)
 elektrisieren;mage;mage_blitz;2;30;mana;0;0;10;1;30;15;0,25;zaubermacht;0;0;ladung_stapel:2;Verwandelt Magische Berührung – Hochspannung verkürzt die Abklingzeit
 donnerschlag;mage;mage_blitz;4;45;mana;1,5;0;8;1;35;70;1,2;zaubermacht;0;0;radius:10|spruenge:1|sprung_prozent:50|bonus_je_ladung:20;Verwandelt Magischen Einschlag: verbraucht Ladungen (+bonus_je_ladung % je Ladung), springt spruenge-mal mit sprung_prozent % Schaden (Sprungweite radius)
 gewitternova;mage;mage_blitz;8;30;mana;0;0;20;1;0;20;0,3;zaubermacht;0;0;radius:5|ladung_stapel:1;Verwandelt Magische Nova

@@ -437,7 +437,9 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 				if key != "":
 					saved += 1
 		_bar_layout.load_save(c.action_bars)
-		abilities.clean_bar_layout(_bar_layout)
+		var removed := abilities.clean_bar_layout(_bar_layout)
+		if not removed.is_empty():
+			push_warning("Aktionsleisten: %s gehören nicht (mehr) zur Figur und wurden entfernt." % ", ".join(removed))
 		# Alte Fähigkeits-IDs (#22): Fehlt danach etwas, kommen erlernte
 		# Fähigkeiten, die auf keiner Leiste liegen, in freie Slots.
 		if _count_filled_slots() < saved:

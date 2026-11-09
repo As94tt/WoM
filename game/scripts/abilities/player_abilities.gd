@@ -213,22 +213,20 @@ func belongs_to_character(ability: AbilityData) -> bool:
 
 ## Leisten bereinigen (#22): Slots mit Fähigkeiten, die es nicht mehr gibt
 ## oder die nicht zu dieser Figur gehören (z. B. gespeicherte Charaktere mit
-## alten Fähigkeits-IDs), werden geleert. Gibt die Zahl der geleerten Slots
+## alten Fähigkeits-IDs), werden geleert. Gibt die IDs der geleerten Slots
 ## zurück.
-func clean_bar_layout(layout: ActionBarLayout) -> int:
+func clean_bar_layout(layout: ActionBarLayout) -> PackedStringArray:
+	var removed := PackedStringArray()
 	if layout == null:
-		return 0
-	var removed := 0
+		return removed
 	for bar in ActionBarLayout.BAR_COUNT:
 		for index in ActionBarLayout.SLOT_COUNT:
 			var content := layout.get_content(bar, index)
 			if content == null or not content.is_ability():
 				continue
 			if not belongs_to_character(content.get_ability()):
-				push_warning("PlayerAbilities: Slot %d/%d „%s“ gehört nicht (mehr) zur Figur und wird geleert." % [
-						bar + 1, index + 1, content.id])
+				removed.append(String(content.id))
 				layout.clear(bar, index)
-				removed += 1
 	return removed
 
 
