@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="7_txioy"]
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="8_7l8kc"]
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="9_r0sjy"]
+[ext_resource type="Texture2D" uid="uid://bggy0uq7nbvtn" path="res://assets/ui/icons/auras/erfrierung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_40d42"]
 script = ExtResource("3_ihwyr")
@@ -25,6 +26,7 @@ values_from_ability = true
 [resource]
 script = ExtResource("5_f4dgi")
 id = &"erfrierung"
+icon = ExtResource("icon_55")
 display_name = "Erfrierung"
 description = "Frostschaden über Zeit."
 is_debuff = true

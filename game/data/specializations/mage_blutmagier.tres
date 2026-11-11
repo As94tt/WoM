@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_yd16i"]
 [ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_j5aba"]
+[ext_resource type="Texture2D" uid="uid://c2u4iw55xhfkt" path="res://assets/ui/icons/specializations/mage_blutmagier.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_yd16i")
 id = &"mage_blutmagier"
+icon = ExtResource("icon_55")
 display_name = "Blutmagier"
 description = "Opfert eigenes Leben, um seine Zauber zu verstärken."
 order = 5

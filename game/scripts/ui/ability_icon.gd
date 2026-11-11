@@ -13,5 +13,7 @@ static func apply(button: Button, ability: AbilityData) -> void:
 		return
 	button.icon = ability.icon
 	button.expand_icon = ability.icon != null
+	# Icons sind 128 px groß und werden auf 40–48 px verkleinert (#55).
+	button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.text = "" if ability.icon != null else ability.get_short_name()

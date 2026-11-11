@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="7_njeip"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="8_3wu5s"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="9_xeyvu"]
+[ext_resource type="Texture2D" uid="uid://bo03pgxdc8vx8" path="res://assets/ui/icons/abilities/frostnova.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_w2hfw"]
 script = ExtResource("4_b5ia5")
@@ -52,6 +53,7 @@ conditions = Array[ExtResource("2_1pjyd")]([SubResource("Resource_oclxu")])
 [resource]
 script = ExtResource("9_xeyvu")
 id = &"frostnova"
+icon = ExtResource("icon_55")
 display_name = "Frostnova"
 description = "Frostwelle um den Magier: Schaden an allen Gegnern im Umkreis, verlangsamt sie um 60 %."
 class_id = &"mage"

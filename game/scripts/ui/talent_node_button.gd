@@ -23,6 +23,9 @@ func _init() -> void:
 	custom_minimum_size = Vector2(48, 48)
 	focus_mode = Control.FOCUS_NONE
 	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	expand_icon = true
+	icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	_learned_frame = _make_frame(&"SlotActive")
 	_pending_frame = _make_frame(&"TalentPending")
 

@@ -6,10 +6,12 @@
 [ext_resource type="Resource" path="res://data/abilities/ausweiden.tres" id="3_ausweiden"]
 [ext_resource type="Resource" path="res://data/abilities/passiv_schurke.tres" id="4_passiv_schurke"]
 [ext_resource type="Resource" path="res://data/abilities/verstohlenheit.tres" id="5_verstohlenheit"]
+[ext_resource type="Texture2D" uid="uid://cyfxnci2rnsvv" path="res://assets/ui/icons/classes/rogue.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"rogue"
+icon = ExtResource("icon_55")
 display_name = "Schurke"
 description = "Nahkampf-Schaden mit Energie und Combopunkten. Der Präzisionskämpfer: aufbauen, ausgeben, Positionierung und Tarnung."
 role = 0

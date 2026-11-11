@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_jg83k"]
 [ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_6b7qu"]
+[ext_resource type="Texture2D" uid="uid://dqmpgq7jeoxl3" path="res://assets/ui/icons/specializations/mage_hexenmeister.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_jg83k")
 id = &"mage_hexenmeister"
+icon = ExtResource("icon_55")
 display_name = "Hexenmeister"
 description = "Meister der Flüche und schleichenden Qualen."
 order = 4

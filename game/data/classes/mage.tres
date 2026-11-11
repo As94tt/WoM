@@ -16,10 +16,12 @@
 [ext_resource type="Resource" path="res://data/specializations/mage_blutmagier.tres" id="15_dfke3"]
 [ext_resource type="Resource" path="res://data/specializations/mage_beschwoerer.tres" id="16_3rej4"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
+[ext_resource type="Texture2D" uid="uid://dikkpxdx3lebi" path="res://assets/ui/icons/classes/mage.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"mage"
+icon = ExtResource("icon_55")
 display_name = "Magier"
 description = "Fernkampf-Zauberwirker in Stoff: hoher Schaden, wenig Rüstung. Überlebt durch Schild, Schritt und Fessel. Ressource: Mana."
 role_name = "Schaden"

@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_jkoa5"]
 [ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_1nibn"]
+[ext_resource type="Texture2D" uid="uid://corpdrigmccuu" path="res://assets/ui/icons/specializations/mage_beschwoerer.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_jkoa5")
 id = &"mage_beschwoerer"
+icon = ExtResource("icon_55")
 display_name = "Beschwörer"
 description = "Ruft Dämonen herbei, die für ihn kämpfen."
 order = 6

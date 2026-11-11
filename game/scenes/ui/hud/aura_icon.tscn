@@ -19,6 +19,7 @@ theme_type_variation = &"AuraBuff"
 [node name="Icon" type="TextureRect" parent="Frame"]
 unique_name_in_owner = true
 visible = false
+texture_filter = 3
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1

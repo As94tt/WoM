@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_tby6o"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_d5782"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_w3eh7"]
+[ext_resource type="Texture2D" uid="uid://cplypy88qqq3t" path="res://assets/ui/icons/abilities/eisfessel.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_dmwa4"]
 script = ExtResource("5_d5782")
@@ -14,6 +15,7 @@ aura = ExtResource("2_g5ihs")
 [resource]
 script = ExtResource("6_w3eh7")
 id = &"eisfessel"
+icon = ExtResource("icon_55")
 display_name = "Eisfessel"
 description = "Wie Magische Fessel, aus Eis."
 class_id = &"mage"

@@ -44,7 +44,7 @@ WoM/
 ├── art-source/        ← Blender-Arbeitsdateien (.blend) – nur lesen!
 └── game/              ← Godot-Projekt (project.godot)
     ├── assets/        ← exportierte Modelle (.glb), Texturen, Audio
-    │   └── ui/        ← theme.tres (zentrales UI-Theme), fonts/ (Schriften + Lizenzen)
+    │   └── ui/        ← theme.tres (zentrales UI-Theme), fonts/ (Schriften + Lizenzen), icons/<kategorie>/<id>.png
     ├── data/          ← Daten: strukturierte als .tres (Fähigkeiten, Auren, Klassen, Gebiete, Quests)
     │   ├── tables/    ← flache Werte als CSV-Tabellen (Gegner, Gegenstände, Beute, Völker, Konstanten …)
     │   └── schemas/   ← ein Schema (.tres) pro Tabelle

@@ -6,10 +6,12 @@
 [ext_resource type="Resource" path="res://data/abilities/heilende_beruehrung.tres" id="3_heilende_beruehrung"]
 [ext_resource type="Resource" path="res://data/abilities/passiv_druide.tres" id="4_passiv_druide"]
 [ext_resource type="Resource" path="res://data/abilities/wildwuchs.tres" id="5_wildwuchs"]
+[ext_resource type="Texture2D" uid="uid://qvpj6uenyapw" path="res://assets/ui/icons/classes/druid.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"druid"
+icon = ExtResource("icon_55")
 display_name = "Druide"
 description = "Heiler mit Mana. Heilt Verbündete direkt, über Zeit und die ganze Gruppe."
 role = 2

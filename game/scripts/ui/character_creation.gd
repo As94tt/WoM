@@ -82,6 +82,9 @@ func _build_class_buttons() -> void:
 		var class_data := _classes[i]
 		var label := "%s (%s)" % [class_data.display_name, class_data.role_name]
 		var button := _make_choice_button(label, _class_group)
+		# Klassen-Icon (#55); Größe begrenzt das Theme (ChoiceButton/icon_max_width).
+		button.icon = class_data.icon
+		button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		button.toggled.connect(func(on: bool) -> void:
 			if on: _set_class(class_data))
 		%ClassList.add_child(button)

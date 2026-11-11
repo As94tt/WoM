@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_trail_effect.gd" id="8_al4u0"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="9_i21av"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="10_308dt"]
+[ext_resource type="Texture2D" uid="uid://bmu0ohtyiund3" path="res://assets/ui/icons/abilities/flammensprung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_j8pjw"]
 script = ExtResource("6_o4q87")
@@ -44,6 +45,7 @@ target_mode = 1
 [resource]
 script = ExtResource("10_308dt")
 id = &"flammensprung"
+icon = ExtResource("icon_55")
 display_name = "Flammensprung"
 description = "Wie Magischer Schritt, in Flammen gehüllt."
 class_id = &"mage"

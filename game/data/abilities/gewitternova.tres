@@ -8,6 +8,7 @@
 [ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="6_vfi7i"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_1uk6j"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_6tu6s"]
+[ext_resource type="Texture2D" uid="uid://d3q24cpobudrp" path="res://assets/ui/icons/abilities/gewitternova.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_1ar1l"]
 script = ExtResource("4_jm1tk")
@@ -30,6 +31,7 @@ radius_from_ability = true
 [resource]
 script = ExtResource("8_6tu6s")
 id = &"gewitternova"
+icon = ExtResource("icon_55")
 display_name = "Gewitternova"
 description = "Blitzentladung in kleinem Umkreis: geringer Schaden und 1 Ladung auf alle Getroffenen."
 class_id = &"mage"

@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_o1ktq"]
 [ext_resource type="Resource" path="res://data/effects/brand_explosion.tres" id="5_iq1on"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_k41si"]
+[ext_resource type="Texture2D" uid="uid://o0v6hi3koehl" path="res://assets/ui/icons/abilities/meteor.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_44o2s"]
 script = ExtResource("4_o1ktq")
@@ -15,6 +16,7 @@ values_from_ability = true
 [resource]
 script = ExtResource("6_k41si")
 id = &"meteor"
+icon = ExtResource("icon_55")
 display_name = "Meteor"
 description = "Ruft einen Meteor herab: sehr hoher Feuerschaden. Lässt den Brand des Ziels explodieren (Flächenschaden je Stapel um das Ziel)."
 class_id = &"mage"

@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_liols"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_i1qhv"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_oafa8"]
+[ext_resource type="Texture2D" uid="uid://c5wxs5w6me63g" path="res://assets/ui/icons/abilities/magische_fessel.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_mbhev"]
 script = ExtResource("5_i1qhv")
@@ -14,6 +15,7 @@ aura = ExtResource("2_h5xt8")
 [resource]
 script = ExtResource("6_oafa8")
 id = &"magische_fessel"
+icon = ExtResource("icon_55")
 display_name = "Magische Fessel"
 description = "Hält das Ziel fest. Die Fessel endet, sobald das Ziel Schaden nimmt."
 class_id = &"mage"

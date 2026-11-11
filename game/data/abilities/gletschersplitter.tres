@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_rxrig"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="7_erx85"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_1cl4r"]
+[ext_resource type="Texture2D" uid="uid://duohu0j7evwf4" path="res://assets/ui/icons/abilities/gletschersplitter.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_63k71"]
 script = ExtResource("4_0b2q0")
@@ -33,6 +34,7 @@ effects = Array[ExtResource("1_63k71")]([SubResource("Resource_tfk6y"), SubResou
 [resource]
 script = ExtResource("8_1cl4r")
 id = &"gletschersplitter"
+icon = ExtResource("icon_55")
 display_name = "Gletschersplitter"
 description = "Frostschaden am Ziel. Hinterlässt eine eisige Fläche, die Schaden über Zeit verursacht und verlangsamt."
 class_id = &"mage"

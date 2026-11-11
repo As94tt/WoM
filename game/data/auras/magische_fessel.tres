@@ -5,10 +5,12 @@
 [ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_uo323"]
 [ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_vcj05"]
 [ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_3f3rj"]
+[ext_resource type="Texture2D" uid="uid://wxxxun656g5i" path="res://assets/ui/icons/auras/magische_fessel.png" id="icon_55"]
 
 [resource]
 script = ExtResource("4_vcj05")
 id = &"magische_fessel"
+icon = ExtResource("icon_55")
 display_name = "Magische Fessel"
 description = "Festgehalten: keine Bewegung. Endet, sobald das Ziel Schaden nimmt."
 is_debuff = true

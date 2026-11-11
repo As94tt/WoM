@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_qsm1d"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_1cyol"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="7_epigm"]
+[ext_resource type="Texture2D" uid="uid://dlg8ond02l26v" path="res://assets/ui/icons/abilities/entzuenden.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_7ftwo"]
 script = ExtResource("6_1cyol")
@@ -18,6 +19,7 @@ aura = ExtResource("2_qnqxc")
 [resource]
 script = ExtResource("7_epigm")
 id = &"entzuenden"
+icon = ExtResource("icon_55")
 display_name = "Entzünden"
 description = "Setzt das Ziel sofort in Brand: 2 Brand."
 class_id = &"mage"

@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="9_n2jog"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_nearby_effect.gd" id="10_nyk04"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="11_w2v8c"]
+[ext_resource type="Texture2D" uid="uid://u2j64wkcxpcf" path="res://assets/ui/icons/abilities/frostblitz.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_suuf5"]
 script = ExtResource("2_0l7ih")
@@ -57,6 +58,7 @@ filter = 2
 [resource]
 script = ExtResource("11_w2v8c")
 id = &"frostblitz"
+icon = ExtResource("icon_55")
 display_name = "Frostblitz"
 description = "Schneller Frostzauber: Frostschaden und Verlangsamung um 30 %."
 class_id = &"mage"

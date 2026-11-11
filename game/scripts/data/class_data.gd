@@ -28,6 +28,8 @@ enum Role { DAMAGE, TANK, HEALER }
 @export var color: Color = Color.WHITE
 ## Reihenfolge in Listen (GDD: Magier 1, Krieger 2, Druide 3, Schurke 4, Mönch 5).
 @export var order: int = 0
+## Icon (#55); leer = kein Icon, nur der Name.
+@export var icon: Texture2D
 
 @export_group("Werte (#19)")
 ## Attribut, aus dem die Kampfkraft entsteht (StatDefinition-ID, z. B.

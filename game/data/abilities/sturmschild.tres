@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_nn8wt"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_cwnjw"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_lprrw"]
+[ext_resource type="Texture2D" uid="uid://b18u2dbtfw6bo" path="res://assets/ui/icons/abilities/sturmschild.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_heav3"]
 script = ExtResource("5_cwnjw")
@@ -15,6 +16,7 @@ target_mode = 1
 [resource]
 script = ExtResource("6_lprrw")
 id = &"sturmschild"
+icon = ExtResource("icon_55")
 display_name = "Sturmschild"
 description = "Umgibt den Magier mit einem Sturm, der Schaden abfängt. Angreifer erhalten 1 Ladung."
 class_id = &"mage"
