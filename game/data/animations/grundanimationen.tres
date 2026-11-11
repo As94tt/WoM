@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CharacterAnimationSet" format=3]
+
+[ext_resource type="Script" path="res://scripts/player/character_animation_set.gd" id="1_set"]
+[ext_resource type="AnimationLibrary" uid="uid://bo4h54h6pry8p" path="res://assets/animations/UAL1_Standard.glb" id="2_ual"]
+
+[resource]
+script = ExtResource("1_set")
+library = ExtResource("2_ual")
+idle = &"Idle"
+walk = &"Walk"
+run = &"Jog_Fwd"
+sprint = &"Sprint"
+jump_start = &"Jump_Start"
+jump_air = &"Jump"
+land = &"Jump_Land"
+walk_reference_speed = 1.06
+run_reference_speed = 5.85
+sprint_reference_speed = 9.0
+sprint_threshold = 8.0
+min_time_scale = 0.5
+max_time_scale = 2.5
+standing_speed = 0.2
+blend_time = 0.18
+min_air_time = 0.25
+fall_delay = 0.12
+land_time_standing = 0.7
+land_time_moving = 0.2
+jump_start_time = 0.9
+facing_turn_rate = 12.0
