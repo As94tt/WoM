@@ -129,6 +129,12 @@ Wahrzeichen zur Orientierung: hoher Turm im Startdorf, großer einzelner Baum au
 
 - Godot ist die Zielengine; genaue Version und Rendering-Pipeline gemäß Projektdateien festhalten.
 - Einheitliche Importvorgaben für Texturfilterung, Kompression, Alpha, Normalmaps und Animationen zentral dokumentieren, sobald der technische Stand bekannt ist.
+- **Import von Modellen und Animationen (Stand Ticket #59):**
+  - Jedes Modell mit Skelett und jede Animationsdatei wird beim Import per **BoneMap auf `SkeletonProfileHumanoid`** abgebildet; die Einstellung steht in der `.import`-Datei (`_subresources` → Skelettknoten → `retarget/bone_map`), nicht nur im Editor. BoneMaps liegen in `game/assets/rig/`: `humanoid_profile_bone_map.tres` für Skelette mit Profil-Knochennamen (unsere Rigs), eigene Maps für Fremdquellen (z. B. `ual_bone_map.tres`).
+  - Dazu „Fix Silhouette“ einschalten, damit Animationen zwischen Modellen mit unterschiedlicher Ruhepose (A- oder T-Pose) gleich aussehen.
+  - Reine Animationsdateien werden als **AnimationLibrary** importiert (ohne Root Motion; die Bewegung kommt aus dem Spielcode).
+  - Modelle blicken nach glTF-Konvention nach +Z; die Drehung zur Spielfigur (-Z) steht in den Modelldaten (`CharacterModelData.yaw_offset_deg`), nicht im Modell.
+  - Modelle werden nur gleichmäßig skaliert, nie verzerrt. Animationsquellen mit Lizenz und Herkunft stehen in `QUELLE.md` neben den Dateien.
 - Zielplattform, Performancebudget, Kameradistanz, LOD und Asset-Auflösung aus `docs/GDD.md` übernehmen – **nicht raten**.
 - Assets nach Klasse/Volk/Region und Typ konsistent benennen; Quellen und Lizenzen dokumentieren.
 - Externe Referenzen nur als Inspiration; verwendete Assets müssen eigene Kreationen oder ordnungsgemäß lizenziert sein.
