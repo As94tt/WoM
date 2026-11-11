@@ -42,6 +42,7 @@ WoM/
 ├── .claude/agents/    ← Agenten: refiner (Tickets prüfen), umsetzer (Tickets umsetzen)
 ├── docs/              ← GDD.md, UI-STYLEGUIDE.md, GAME-STYLEGUIDE.md, DATENTABELLEN.md, später Rig-Konvention
 ├── art-source/        ← Blender-Arbeitsdateien (.blend) – nur lesen!
+├── tools/blender/     ← Blender-Skripte für die Art-Pipeline (z. B. humanoid_rig.py: Skelett nach Godot-Profil)
 └── game/              ← Godot-Projekt (project.godot)
     ├── assets/        ← exportierte Modelle (.glb), Texturen, Audio
     │   └── ui/        ← theme.tres (zentrales UI-Theme), fonts/ (Schriften + Lizenzen)
