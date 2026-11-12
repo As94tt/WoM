@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/combat/unit_caster.gd" id="cst_caster"]
 [ext_resource type="Script" path="res://scripts/abilities/ground_targeting.gd" id="cst_ground"]
 [ext_resource type="Script" path="res://scripts/talents/player_talents.gd" id="tal_talents"]
+[ext_resource type="Script" path="res://scripts/player/character_animator.gd" id="anm_animator"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -155,6 +156,9 @@ mesh = SubResource("Mesh_body")
 [node name="Nose" type="MeshInstance3D" parent="Model"]
 position = Vector3(0, 1.4, -0.45)
 mesh = SubResource("Mesh_nose")
+
+[node name="Animator" type="Node3D" parent="Model"]
+script = ExtResource("anm_animator")
 
 [node name="CameraRig" type="Node3D" parent="."]
 top_level = true

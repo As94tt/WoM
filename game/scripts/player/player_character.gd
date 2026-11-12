@@ -51,6 +51,11 @@ extends Unit
 ## der Stand (talent_state) läuft über ServerSync (Authority Host). Den Stand
 ## vom Beitreten gibt setup_from_info vor dem Erzeugen mit.
 ##
+## Modell und Animationen (#59): Kindknoten „Model/Animator“
+## (CharacterAnimator) trägt optional ein Modell mit Skelett und wählt die
+## Animation lokal aus move_state und visual_velocity; nichts Neues wird
+## übertragen. Ohne Modell bleibt die Kapsel.
+##
 ## Auren (#32): Kindknoten „Combat“ (UnitCombat), übertragen über StatsSync.
 ## Betäubt, festgehalten und umgeworfen sperren beim Besitzer Laufen und
 ## Springen, betäubt und umgeworfen auch das Drehen; Verlangsamung wirkt über
@@ -68,6 +73,10 @@ const MOVEMENT_CHECK: MovementCheckData = preload("res://data/network/movement_c
 
 ## Bewegungswerte aus res://data/movement/.
 @export var movement: MovementData = preload("res://data/movement/player_movement.tres")
+## Modell mit Skelett und Grundanimationen (#59). Leer = Graubox-Kapsel.
+## Der Startparameter --spielfigur (PlayerModelOverride) ersetzt den Wert
+## lokal für Tests.
+@export var model_data: CharacterModelData = null
 
 ## Peer, dem die Figur gehört. Kommt aus dem Knotennamen (Peer-ID, siehe
 ## _enter_tree) und bestimmt die Multiplayer-Authority.
@@ -104,8 +113,12 @@ var net_time: int = 0
 var net_teleport_seq: int = 0
 
 ## Bewegungszustand (läuft, springt, steht, fällt), bei fremden Figuren aus
-## dem Netz. Für spätere Animationen.
+## dem Netz. Wählt mit visual_velocity die Animation (#59).
 var move_state: MoveState = MoveState.STANDING
+## Geschwindigkeit für die Animationen (#59), in m/s: beim Besitzer die
+## tatsächliche Bewegung im Physikschritt, bei fremden Figuren aus den beiden
+## Schnappschüssen, zwischen denen gerade interpoliert wird. Nicht übertragen.
+var visual_velocity := Vector3.ZERO
 
 ## Faktor auf alle Geschwindigkeiten. Seit #19 aus dem Wert „movement_speed“
 ## der Werte (Stats) gesetzt, auf jeder Instanz gleich: Eile erhöht ihn.
@@ -150,6 +163,7 @@ var _body_material: StandardMaterial3D = null
 
 @onready var _model: Node3D = $Model
 @onready var _body: MeshInstance3D = $Model/Body
+@onready var _animator: CharacterAnimator = $Model/Animator
 @onready var _movement_sync: MultiplayerSynchronizer = $MovementSync
 @onready var _server_sync: MultiplayerSynchronizer = $ServerSync
 @onready var _stats_sync: MultiplayerSynchronizer = $StatsSync
@@ -180,6 +194,7 @@ func _ready() -> void:
 	_body_material = (_body.mesh as PrimitiveMesh).material.duplicate()
 	_body.material_override = _body_material
 	_stats.stats_changed.connect(_on_stats_changed)
+	_setup_model()
 	_update_appearance()
 	_on_stats_changed()
 
@@ -323,6 +338,15 @@ func _apply_authority() -> void:
 	$CastSync.set_multiplayer_authority(1)
 
 
+## Modell (#59): Startparameter --spielfigur vor model_data; ohne Modell
+## bleibt die Kapsel. Gilt nur auf dieser Instanz, nichts wird übertragen.
+func _setup_model() -> void:
+	var data := PlayerModelOverride.get_model() if PlayerModelOverride.is_active() else model_data
+	if _animator.setup(data, self):
+		_body.visible = false
+		$Model/Nose.visible = false
+
+
 ## Platzhaltermodell: Größe nach Volk, Farbe nach Klasse (ClassData.color,
 ## siehe UI-Styleguide „Klassenfarben“). Das Geschlecht ändert am Platzhalter
 ## nichts, wie in der Charaktervorschau.
@@ -460,6 +484,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 	var real := get_real_velocity() if not stepped else velocity
+	visual_velocity = real
 	is_moving = not is_on_floor() or Vector2(real.x, real.z).length() > MOVING_THRESHOLD
 	if not is_on_floor():
 		move_state = MoveState.JUMPING if velocity.y > 0.0 else MoveState.FALLING
@@ -574,7 +599,9 @@ func _process(_delta: float) -> void:
 	if render_time <= older["time"]:
 		_apply_snapshot(older)  # Puffer läuft gerade an.
 		return
-	var t := clampf((render_time - older["time"]) / float(newer["time"] - older["time"]), 0.0, 1.0)
+	var span_ms := float(newer["time"] - older["time"])
+	var t := clampf((render_time - older["time"]) / span_ms, 0.0, 1.0)
+	visual_velocity = ((newer["position"] as Vector3) - (older["position"] as Vector3)) / (span_ms / 1000.0)
 	global_position = (older["position"] as Vector3).lerp(newer["position"], t)
 	rotation = Vector3(0.0, lerp_angle(older["yaw"], newer["yaw"], t), 0.0)
 	_set_remote_state(older["state"])
@@ -582,6 +609,7 @@ func _process(_delta: float) -> void:
 
 func _apply_snapshot(snapshot: Dictionary) -> void:
 	global_position = snapshot["position"]
+	visual_velocity = Vector3.ZERO
 	rotation = Vector3(0.0, snapshot["yaw"], 0.0)
 	_set_remote_state(snapshot["state"])
 
