@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_1oltb"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_tghr3"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_7eytk"]
+[ext_resource type="Texture2D" uid="uid://6d0lxxci4o0d" path="res://assets/ui/icons/abilities/flammenschild.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_jyv3p"]
 script = ExtResource("5_tghr3")
@@ -15,6 +16,7 @@ target_mode = 1
 [resource]
 script = ExtResource("6_7eytk")
 id = &"flammenschild"
+icon = ExtResource("icon_55")
 display_name = "Flammenschild"
 description = "Umgibt den Magier mit einem Flammenschild, der Schaden abfängt. Nahkampf-Angreifer erhalten 1 Brand."
 class_id = &"mage"

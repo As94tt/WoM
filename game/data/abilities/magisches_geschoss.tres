@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_6uqfh"]
 [ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="5_kpv8j"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_0d131"]
+[ext_resource type="Texture2D" uid="uid://cgdu7mwwgk65j" path="res://assets/ui/icons/abilities/magisches_geschoss.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_gnagy"]
 script = ExtResource("4_6uqfh")
@@ -20,6 +21,7 @@ effects = Array[ExtResource("1_gnagy")]([SubResource("Resource_gnagy")])
 [resource]
 script = ExtResource("6_0d131")
 id = &"magisches_geschoss"
+icon = ExtResource("icon_55")
 display_name = "Magisches Geschoss"
 description = "Schleudert ein arkanes Geschoss auf das Ziel und verursacht Arkanschaden."
 class_id = &"mage"

@@ -8,6 +8,7 @@
 [ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="6_hhusj"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_41fbm"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_xki0x"]
+[ext_resource type="Texture2D" uid="uid://bcgkbk3l3rmw4" path="res://assets/ui/icons/abilities/erfrierung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_bn55v"]
 script = ExtResource("5_2mi1m")
@@ -21,6 +22,7 @@ aura = ExtResource("6_hhusj")
 [resource]
 script = ExtResource("8_xki0x")
 id = &"erfrierung"
+icon = ExtResource("icon_55")
 display_name = "Erfrierung"
 description = "Sofort: Frostschaden über Zeit und Verlangsamung."
 class_id = &"mage"

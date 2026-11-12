@@ -156,7 +156,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 - Zentrales Theme unter `game/assets/ui/theme.tres`.
 - Schriftdateien und zugehörige Lizenzen unter `game/assets/ui/fonts/`.
 - Vorläufige Rahmen ausschließlich mit Godot-`StyleBoxFlat`: Flächen, Rahmenbreite, Ecken, Schatten.
-- Keine handgezeichneten oder aus fremden Spielen übernommenen Rahmen/Icons in der ersten Iteration.
+- Keine handgezeichneten oder aus fremden Spielen übernommenen Rahmen in der ersten Iteration. Icons: nur eigene bzw. ordnungsgemäß lizenzierte, siehe Abschnitt „Icons“ unten.
 - Theme-Overrides nur, wenn sie als dokumentierte, wiederverwendbare Variation im Theme-System etabliert sind.
 - **Keine Farben und Schriften direkt in Gameplay- oder UI-Code hardcoden.**
 - Pflicht-Vorschauszene: `game/scenes/ui/style_preview.tscn` mit sämtlichen Komponenten und States.
@@ -188,7 +188,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `ListEntryMargin` | `MarginContainer` | Rand 20 px links, 16 px rechts, 12 px oben/unten | Inhalt eines `ListEntryButton` (links breiter wegen des Auswahlrands) |
 | `DialogPanel` | `PanelContainer` | `StyleBoxFlat` mit 24 px Innenabstand und 2-px-Rahmen | modale Dialoge (z. B. Charakter löschen) |
 | `DimOverlay` | `Panel` | halbtransparente dunkle Fläche ohne Rahmen | Abdunklung hinter modalen Dialogen; fängt Mausklicks ab |
-| `ChoiceButton` | `Button` | wie `Button`; gedrückt und Hover+gedrückt nutzen die Ausgewählt-Fläche von `ListEntryButton`, Schrift im ausgewählten Zustand weiß | Auswahlbutton mit `toggle_mode` in einer `ButtonGroup` (Volk, Geschlecht, Klasse in der Charaktererstellung) |
+| `ChoiceButton` | `Button` | wie `Button`; gedrückt und Hover+gedrückt nutzen die Ausgewählt-Fläche von `ListEntryButton`, Schrift im ausgewählten Zustand weiß; Icon höchstens 32 px breit (`icon_max_width`, #55) | Auswahlbutton mit `toggle_mode` in einer `ButtonGroup` (Volk, Geschlecht, Klasse in der Charaktererstellung, mit Klassen-Icon links) |
 | `ChoiceGrid` | `GridContainer` | Abstand 12 px horizontal und vertikal | Raster aus Auswahlbuttons (z. B. Völker in zwei Spalten) |
 | `ErrorText` | `Label` | Schriftgröße 16 px, hellste Textfarbe (Graubox-Platzhalter, bis ein Warn-Token freigegeben ist) | Fehlermeldung unter einem Eingabefeld; ersetzt in derselben Zeile den `HintText` |
 | `SlotButton` | `Button` | quadratischer leerer Rahmen ohne Innenabstand: eigene `StyleBoxFlat` für normal, Hover, gedrückt (auch Hover+gedrückt), deaktiviert; Fokus wie `Button` | Aktionsleisten-Slot (48 × 48 px), Taschenplatz (48 × 48 px), Menüleisten-Button und Schließen-Button „X“ eines Fensters (40 × 40 px) |
@@ -240,7 +240,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 | `SlotProcGlow` | `Panel` | ohne Fläche, 3-px-Rahmen in **Platzhalter-Gold** (**OFFEN**) | leuchtender Rand eines Aktionsslots, solange ein Proc die Fähigkeit verfügbar macht oder verstärkt |
 | `SlotActive` | `Panel` | leicht aufgehellte Fläche, heller 2-px-Rahmen | aktiver Umschalter, laufender automatischer Angriff, vorgemerkter nächster Schlag; seit #20 auch „gelernt“ an Talenten |
 | `TalentPending` | `Panel` | ohne Fläche, 3-px-Rahmen in **Platzhalter-Hellgrün** (**OFFEN**) | Talent mit vorläufiger Änderung im Talentfenster (#20), bis „Übernehmen“ oder „Verwerfen“ |
-| `LockedChoiceButton` | `Button` (über `ChoiceButton`) | wie `ChoiceButton`, Schrift im Grau deaktivierter Buttons (kein neuer Farbwert) | Reiter einer gesperrten Spezialisierung im Talentfenster (#20): ausgegraut, aber anklickbar, damit Name, Kurzbeschreibung und „Noch nicht entdeckt“ lesbar sind |
+| `LockedChoiceButton` | `Button` (über `ChoiceButton`) | wie `ChoiceButton`, Schrift und Icon (#55) im Grau deaktivierter Buttons (kein neuer Farbwert) | Reiter einer gesperrten Spezialisierung im Talentfenster (#20): ausgegraut, aber anklickbar, damit Name, Kurzbeschreibung und „Noch nicht entdeckt“ lesbar sind |
 | `MenuHintDot` | `Panel` | runder Punkt 10 × 10 px in **Platzhalter-Gold** mit 1-px-Kontur (**OFFEN**) | Hinweis-Punkt oben rechts an einem Menüleisten-Button (#20: „Spezialisierung wählbar“); fängt keine Klicks ab |
 
 **Basistypen ohne Variation:**
@@ -328,6 +328,38 @@ Fenstergrößen und Plätze: Charakter 400 × 520 px und Zauberbuch 480 × 520 p
 - **Fehlerliste der Datentabellen** (#39, `game/scenes/ui/data_error_screen.tscn`): erscheint im Hauptmenü statt des Spiels, wenn die Tabellen beim Start Fehler enthalten. Gleicher Aufbau wie die Dialoge (`DimOverlay` + `DialogPanel`), aber 960 × 640 px: Titel `WindowTitle` („Fehler in den Spieldaten“), darunter Anzahl und Anleitung als `HintText`, dann eine Liste mit Bildlaufleiste, ein Fehler pro Zeile als `BodyText` (Datei, Zeile, Spalte, Grund – immer als Text, nie nur über Farbe). Buttons rechts (`ButtonRow`, 160 px): „Beenden“, „Neu laden“. Esc schließt die Liste nicht; sie verschwindet erst, wenn die Tabellen fehlerfrei neu geladen sind. Werkzeug für die Datenpflege, keine neue Theme-Variation.
 
 **Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Dieselbe Farbe färbt in der Charakterauswahl und -erstellung auch das Platzhaltermodell (Kapsel) in der 3D-Vorschau, im Spiel die Kapsel jeder Spielfigur, den Namen auf ihrer Namensplakette (#31: HUD-Plakette), die Klasse in der Spielerliste und den Mitspieler-Punkt auf der Karte (#30). Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
+
+### Icons (#55)
+
+Erste Icons (Klassen, Magier-Spezialisierungen, Magier-Zauber) sind eingebaut. Die **Stilrichtung ist weiter OFFEN** (Abschnitt 2); die Icons sind ein Stand zum Ansehen, kein freigegebener Stil.
+
+**Format:** PNG, 128 × 128 px, quadratisch, RGBA (32 Bit), sRGB. Arbeitsfassungen (512–1254 px) legt der Projektverantwortliche in `art-source/` ab; Agenten verändern dort nichts. Verkleinert wird hochwertig (bikubisch) auf 128 px.
+
+**Anzeigegrößen** (logische Pixel bei 1080p, bei 1440p × 1,33): Aktionsleiste, Taschen, Talente 48 px · Zauberbuch, Ausrüstung 40 px · Auren am Spielerrahmen 36 px · Klasse/Spezialisierung auf Auswahlbuttons 32 px (`ChoiceButton/icon_max_width`) · Auren auf Namensplaketten 20 px.
+
+**Gestaltungsregeln:** Motiv füllt das Quadrat; kein eigener Rahmen (Rahmen, Zustände, Seltenheit und Abklingzeit kommen aus dem Theme); kein Text; Ecke unten rechts ruhig (Tastenkürzel, Stapelzahl); bei 20 px erkennbar; Bedeutung über Form und Motiv, nicht nur Farbe; keine Ähnlichkeit zu Icons aus WoW oder anderen Spielen.
+
+**Naming Convention:** `game/assets/ui/icons/<kategorie>/<id>.png`. Der Ordner sagt, *was* es ist; der Dateiname ist *genau* die ID des Datensatzes. Nur `a–z`, `0–9`, `_`; Umlaute umschreiben (ä → `ae`, ö → `oe`, ü → `ue`, ß → `ss`); Endung `.png` klein.
+
+| Ordner | Für | ID aus | Beispiel |
+|---|---|---|---|
+| `abilities/` | Fähigkeiten | Dateiname in `game/data/abilities/` | `abilities/feuerball.png` |
+| `auras/` | Buffs, Debuffs | Dateiname in `game/data/auras/` | `auras/eisschild.png` |
+| `talents/` | einzelne Talente | ID des Talents im Talentbaum | `talents/eiskalte_praezision.png` |
+| `specializations/` | Spezialisierungen | Dateiname in `game/data/specializations/` | `specializations/mage_frost.png` |
+| `classes/` | Klassen | Dateiname in `game/data/classes/` | `classes/warrior.png` |
+| `schools/` | Schadensschulen | ID in `schadensschulen.csv` | `schools/frost.png` |
+| `items/` | Gegenstände | ID in `gegenstaende.csv` | `items/schwert_rostig.png` |
+| `interface/` | Bediensymbole ohne Datensatz | `<bereich>_<bedeutung>` | `interface/window_close.png` |
+| `_test/` | Graubox-Testicons (werden entfernt) | frei | `_test/kreis.png` |
+
+Gleiche IDs in verschiedenen Kategorien (z. B. Fähigkeit und Aura `eisschild`) sind erlaubt; es gibt dann zwei Dateien, auch wenn sie gleich aussehen. Ändert sich eine ID, wird das Icon im selben Pull Request umbenannt.
+
+**Einbinden:** Das Icon steht im Datensatz im Feld `icon` (`AbilityData`, `AuraData`, `TalentData`, `SpecializationData`, `ClassData`; bei Gegenständen die Spalte `icon` in `gegenstaende.csv`). Leer = Kürzel als Platzhalter wie bisher.
+
+**Import:** In der `.import`-Datei jedes Icons `mipmaps/generate=true` (im Editor: Icon auswählen → Reiter „Import“ → „Mipmaps → Generate“ → „Reimport“). Alle Anzeige-Stellen nutzen den Texturfilter „Linear Mipmap“ (`TEXTURE_FILTER_LINEAR_WITH_MIPMAPS`): `AbilityIcon`, `TalentNodeButton`, `aura_icon.tscn`, Klassenwahl in der Charaktererstellung, Spezialisierungs-Reiter im Talentfenster. Ohne Mipmaps flimmern verkleinerte Icons.
+
+**Herkunft und Lizenz:** `game/assets/ui/icons/QUELLEN.md` nennt für jede Gruppe Urheber bzw. Werkzeug und Nutzungsbedingungen; neue Icons werden dort eingetragen.
 
 ## 8. Qualitätssicherung und Abnahme
 

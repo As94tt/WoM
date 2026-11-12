@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_jlqn5"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_5ekki"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_c103g"]
+[ext_resource type="Texture2D" uid="uid://ksvre7xwb8tj" path="res://assets/ui/icons/abilities/flammenfessel.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_e0nrc"]
 script = ExtResource("5_5ekki")
@@ -14,6 +15,7 @@ aura = ExtResource("2_j2w7s")
 [resource]
 script = ExtResource("6_c103g")
 id = &"flammenfessel"
+icon = ExtResource("icon_55")
 display_name = "Flammenfessel"
 description = "Wie Magische Fessel, aus Flammen."
 class_id = &"mage"

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_tmkjv"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="4_xeiek"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_4mdlp"]
+[ext_resource type="Texture2D" uid="uid://ctqkimjg8bx0u" path="res://assets/ui/icons/abilities/blitzsprung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_oohto"]
 script = ExtResource("4_xeiek")
@@ -13,6 +14,7 @@ target_mode = 1
 [resource]
 script = ExtResource("5_4mdlp")
 id = &"blitzsprung"
+icon = ExtResource("icon_55")
 display_name = "Blitzsprung"
 description = "Wie Magischer Schritt, als Blitz."
 class_id = &"mage"

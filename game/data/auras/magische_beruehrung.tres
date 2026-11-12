@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="6_n1ffx"]
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="7_ar5je"]
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="8_fys4i"]
+[ext_resource type="Texture2D" uid="uid://c3q6eo7x33v4f" path="res://assets/ui/icons/auras/magische_beruehrung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_0ngrw"]
 script = ExtResource("8_fys4i")
@@ -17,6 +18,7 @@ values_from_ability = true
 [resource]
 script = ExtResource("4_ciogm")
 id = &"magische_beruehrung"
+icon = ExtResource("icon_55")
 display_name = "Magische Berührung"
 description = "Arkanschaden über Zeit."
 is_debuff = true

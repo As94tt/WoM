@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_ygecp"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_1cabu"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_vshwd"]
+[ext_resource type="Texture2D" uid="uid://dmblp200uls3g" path="res://assets/ui/icons/abilities/eisschild.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_hqvr8"]
 script = ExtResource("5_1cabu")
@@ -15,6 +16,7 @@ target_mode = 1
 [resource]
 script = ExtResource("6_vshwd")
 id = &"eisschild"
+icon = ExtResource("icon_55")
 display_name = "Eisschild"
 description = "Umgibt den Magier mit Eis, das Schaden abfängt. Nahkampf-Angreifer werden verlangsamt."
 class_id = &"mage"

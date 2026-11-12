@@ -6,10 +6,12 @@
 [ext_resource type="Resource" path="res://data/abilities/spott.tres" id="3_spott"]
 [ext_resource type="Resource" path="res://data/abilities/passiv_krieger.tres" id="4_passiv_krieger"]
 [ext_resource type="Resource" path="res://data/abilities/kampfschrei.tres" id="5_kampfschrei"]
+[ext_resource type="Texture2D" uid="uid://cdw3nwxckpca8" path="res://assets/ui/icons/classes/warrior.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"warrior"
+icon = ExtResource("icon_55")
 display_name = "Krieger"
 description = "Tank mit Wut, die sich im Kampf aufbaut. Zieht Bedrohung auf sich, spottet, blockt und pariert im Nahkampf."
 role = 1

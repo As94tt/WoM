@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_oepm6"]
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_g1kma"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_tws06"]
+[ext_resource type="Texture2D" uid="uid://cqc65nmjp6mvi" path="res://assets/ui/icons/abilities/magische_nova.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_7a5to"]
 script = ExtResource("4_g1kma")
@@ -17,6 +18,7 @@ radius_from_ability = true
 [resource]
 script = ExtResource("5_tws06")
 id = &"magische_nova"
+icon = ExtResource("icon_55")
 display_name = "Magische Nova"
 description = "Entfesselt eine arkane Welle, die allen Gegnern im Umkreis Schaden zufügt."
 class_id = &"mage"

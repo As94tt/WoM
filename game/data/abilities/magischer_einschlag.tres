@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_2io6n"]
 [ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_m3ldc"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_jip0d"]
+[ext_resource type="Texture2D" uid="uid://cxkmaucfub7cu" path="res://assets/ui/icons/abilities/magischer_einschlag.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_iwb25"]
 script = ExtResource("4_m3ldc")
@@ -14,6 +15,7 @@ values_from_ability = true
 [resource]
 script = ExtResource("5_jip0d")
 id = &"magischer_einschlag"
+icon = ExtResource("icon_55")
 display_name = "Magischer Einschlag"
 description = "Lässt arkane Energie auf das Ziel niedergehen und verursacht hohen Arkanschaden."
 class_id = &"mage"

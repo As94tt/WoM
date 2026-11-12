@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="5_yafj2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="6_1x5re"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="7_k7kyp"]
+[ext_resource type="Texture2D" uid="uid://cv0osr0mbdbwr" path="res://assets/ui/icons/abilities/frostschritt.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_roc68"]
 script = ExtResource("3_5lvbp")
@@ -28,6 +29,7 @@ target_mode = 1
 [resource]
 script = ExtResource("7_k7kyp")
 id = &"frostschritt"
+icon = ExtResource("icon_55")
 display_name = "Frostschritt"
 description = "Wie Magischer Schritt, mit Frost."
 class_id = &"mage"

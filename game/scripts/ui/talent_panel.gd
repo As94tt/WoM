@@ -255,6 +255,9 @@ func _rebuild() -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		var chosen := _talents != null and _talents.get_spec() == spec
 		button.text = spec.display_name + (" (gewählt)" if chosen else "")
+		# Spezialisierungs-Icon (#55); Größe begrenzt das Theme (ChoiceButton/icon_max_width).
+		button.icon = spec.icon
+		button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		button.tooltip_text = spec.display_name + "\n" + spec.get_short_description() \
 				+ ("" if unlocked else "\nNoch nicht entdeckt")
 		button.button_pressed = i == _tab_index

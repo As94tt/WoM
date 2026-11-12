@@ -6,10 +6,12 @@
 [ext_resource type="Resource" path="res://data/abilities/blitzfaust.tres" id="3_blitzfaust"]
 [ext_resource type="Resource" path="res://data/abilities/passiv_moench.tres" id="4_passiv_moench"]
 [ext_resource type="Resource" path="res://data/abilities/fliegender_tritt.tres" id="5_fliegender_tritt"]
+[ext_resource type="Texture2D" uid="uid://boyn08wkqwwex" path="res://assets/ui/icons/classes/monk.png" id="icon_55"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"monk"
+icon = ExtResource("icon_55")
 display_name = "Mönch"
 description = "Nahkampf-Schaden mit Energie und Chi. Der Fluss-Kämpfer: Schläge erzeugen Chi, Sofortzauber geben es aus."
 role = 0

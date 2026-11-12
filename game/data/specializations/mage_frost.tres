@@ -17,6 +17,7 @@
 [ext_resource type="Resource" path="res://data/abilities/frostschritt.tres" id="15_1x8cl"]
 [ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_8x25x"]
 [ext_resource type="Resource" path="res://data/abilities/eisfessel.tres" id="17_8bf6q"]
+[ext_resource type="Texture2D" uid="uid://1x0qgqp7wb31" path="res://assets/ui/icons/specializations/mage_frost.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_7vugg"]
 script = ExtResource("3_gs1ww")
@@ -56,6 +57,7 @@ variant = ExtResource("17_8bf6q")
 [resource]
 script = ExtResource("1_4go02")
 id = &"mage_frost"
+icon = ExtResource("icon_55")
 display_name = "Frost"
 description = "Kontrolle und Fläche über Zeit: verlangsamen, eisige Flächen legen.
 Mittleres Tempo, Stärke in Fläche über Zeit und Kontrolle. Mana: mittel."

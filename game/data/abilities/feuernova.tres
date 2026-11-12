@@ -8,6 +8,7 @@
 [ext_resource type="Resource" path="res://data/abilities/brand.tres" id="6_ppkh4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_by0jq"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_0hcag"]
+[ext_resource type="Texture2D" uid="uid://bkoht4me8c0e4" path="res://assets/ui/icons/abilities/feuernova.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_8mrrt"]
 script = ExtResource("4_lk824")
@@ -29,6 +30,7 @@ radius_from_ability = true
 [resource]
 script = ExtResource("8_0hcag")
 id = &"feuernova"
+icon = ExtResource("icon_55")
 display_name = "Feuernova"
 description = "Flammenwelle um den Magier: Schaden an allen Gegnern im Umkreis und 1 Brand auf alle Getroffenen."
 class_id = &"mage"

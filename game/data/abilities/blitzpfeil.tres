@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_66vhh"]
 [ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="8_720wh"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="9_77f8c"]
+[ext_resource type="Texture2D" uid="uid://c02gkl2qa4k25" path="res://assets/ui/icons/abilities/blitzpfeil.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_pykmd"]
 script = ExtResource("4_awwpg")
@@ -31,6 +32,7 @@ effects = Array[ExtResource("1_pykmd")]([SubResource("Resource_pykmd"), SubResou
 [resource]
 script = ExtResource("9_77f8c")
 id = &"blitzpfeil"
+icon = ExtResource("icon_55")
 display_name = "Blitzpfeil"
 description = "Schneller Blitzzauber: Blitzschaden und 1 Ladung. Kostet mehr Mana."
 class_id = &"mage"

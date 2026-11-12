@@ -17,6 +17,7 @@
 [ext_resource type="Resource" path="res://data/abilities/flammensprung.tres" id="15_le23x"]
 [ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_tekn8"]
 [ext_resource type="Resource" path="res://data/abilities/flammenfessel.tres" id="17_t7wiw"]
+[ext_resource type="Texture2D" uid="uid://cdtvijvl324ew" path="res://assets/ui/icons/specializations/mage_feuer.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_6j08f"]
 script = ExtResource("3_1cxc7")
@@ -56,6 +57,7 @@ variant = ExtResource("17_t7wiw")
 [resource]
 script = ExtResource("1_y028t")
 id = &"mage_feuer"
+icon = ExtResource("icon_55")
 display_name = "Feuer"
 description = "Langsam und wuchtig: Brand aufbauen, dann explodieren lassen.
 Große Einzeltreffer und kurze, heftige Explosionen. Mana: mittel."

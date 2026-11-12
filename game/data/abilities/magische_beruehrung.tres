@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_nonwf"]
 [ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_e84r8"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_jek4d"]
+[ext_resource type="Texture2D" uid="uid://dmr6jg0f1tnd2" path="res://assets/ui/icons/abilities/magische_beruehrung.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_nypi8"]
 script = ExtResource("5_e84r8")
@@ -14,6 +15,7 @@ aura = ExtResource("2_nwgml")
 [resource]
 script = ExtResource("6_jek4d")
 id = &"magische_beruehrung"
+icon = ExtResource("icon_55")
 display_name = "Magische Berührung"
 description = "Belegt das Ziel mit arkaner Energie, die über Zeit Arkanschaden verursacht."
 class_id = &"mage"

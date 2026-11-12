@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="8_p4n6a"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="9_khriv"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="10_y6nx2"]
+[ext_resource type="Texture2D" uid="uid://bxgebbqpnroc6" path="res://assets/ui/icons/abilities/donnerschlag.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_cv0mi"]
 script = ExtResource("2_2j22y")
@@ -60,6 +61,7 @@ radius_from_ability = true
 [resource]
 script = ExtResource("10_y6nx2")
 id = &"donnerschlag"
+icon = ExtResource("icon_55")
 display_name = "Donnerschlag"
 description = "Hoher Blitzschaden. Verbraucht alle eigenen Ladungen am Ziel (Bonusschaden je Ladung) und springt auf ein weiteres Ziel."
 class_id = &"mage"

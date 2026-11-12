@@ -17,6 +17,7 @@
 [ext_resource type="Resource" path="res://data/abilities/blitzsprung.tres" id="15_qervs"]
 [ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_an3ur"]
 [ext_resource type="Resource" path="res://data/abilities/statische_fessel.tres" id="17_hg460"]
+[ext_resource type="Texture2D" uid="uid://dgysifgjrblpr" path="res://assets/ui/icons/specializations/mage_blitz.png" id="icon_55"]
 
 [sub_resource type="Resource" id="Resource_bdkeu"]
 script = ExtResource("3_dwykr")
@@ -56,6 +57,7 @@ variant = ExtResource("17_hg460")
 [resource]
 script = ExtResource("1_moexv")
 id = &"mage_blitz"
+icon = ExtResource("icon_55")
 display_name = "Blitz"
 description = "Schnell und mana-hungrig: Ladungen sammeln, mit Donnerschlag entladen.
 Einzelziel mit Sprüngen auf 2–3 Ziele, kaum Fläche. Mana: am knappsten."
