@@ -4,6 +4,9 @@ extends SubViewportContainer
 ## Graubox: Kapsel, gleichmäßig mit RaceData.height_factor skaliert, in der
 ## Klassenfarbe (ClassData.color), Name darüber. Linke Maustaste ziehen dreht
 ## das Modell um die Hochachse.
+## Gibt es ein Modell für das Volk (CharacterModelData.for_race), steht statt
+## der Kapsel dieses Modell in der Stehen-Animation; die Klassenfarbe gilt
+## dann nicht (echte Modelle haben eigene Materialien).
 ## Rein lokal, eigene 3D-Welt in der SubViewport, nichts wird synchronisiert.
 
 ## Grundhöhe der Kapsel bei height_factor 1,0 (muss zur CapsuleMesh passen).
@@ -15,7 +18,13 @@ const ROTATE_SPEED := 0.01
 
 @onready var _model: Node3D = %Model
 @onready var _body: MeshInstance3D = %Body
+@onready var _facing: MeshInstance3D = %Model.get_node(^"Facing")
 @onready var _name_label: Label3D = %NameLabel
+
+## Echtes Volksmodell (oder null = Kapsel) und das Volk, für das es gilt.
+var _race_model: Node3D = null
+var _race_model_data: CharacterModelData = null
+var _race_model_id: StringName = &"-"
 
 var _dragging := false
 ## Eigene Kopie des Körpermaterials, damit die Klassenfarbe nur diese
@@ -52,10 +61,51 @@ func show_appearance(race: RaceData, _gender: CharacterData.Gender, display_name
 	_model.scale = Vector3.ONE * factor
 	# Klassenfarbe kommt aus den Daten (ClassData.color), siehe UI-Styleguide.
 	_body_material.albedo_color = class_data.color if class_data != null else _neutral_color
+	_show_race_model(race.id if race != null else &"", factor)
 	_model.visible = true
 	_name_label.text = display_name
 	_name_label.position.y = BASE_HEIGHT * factor + NAME_OFFSET
 	_name_label.visible = not display_name.is_empty()
+
+
+## Setzt das Modell des Volks ein (nur bei Volkswechsel neu) oder zeigt die
+## Kapsel. Das Modell bekommt seine eigene Größe: „Model“ trägt den
+## Platzhalter-Größenfaktor, der hier wieder herausgerechnet wird.
+func _show_race_model(race_id: StringName, factor: float) -> void:
+	if race_id != _race_model_id:
+		_race_model_id = race_id
+		if _race_model != null:
+			_race_model.queue_free()
+			_race_model = null
+		_race_model_data = CharacterModelData.for_race(race_id)
+		if _race_model_data != null and _race_model_data.scene != null:
+			_race_model = _build_race_model(_race_model_data)
+	if _race_model != null:
+		_race_model.scale = Vector3.ONE * (_race_model_data.model_scale / maxf(factor, 0.01))
+	_body.visible = _race_model == null
+	_facing.visible = _race_model == null
+
+
+## Erzeugt das Modell unter „Model“ und spielt die Stehen-Animation in Schleife.
+func _build_race_model(data: CharacterModelData) -> Node3D:
+	var pivot := Node3D.new()
+	pivot.name = "RaceModel"
+	# Die Vorschau blickt zur Kamera (+Z), die Spielfigur nach -Z; yaw_offset_deg
+	# ist für die Spielfigur angegeben.
+	pivot.rotation.y = deg_to_rad(data.yaw_offset_deg - 180.0)
+	var instance := data.scene.instantiate() as Node3D
+	pivot.add_child(instance)
+	_model.add_child(pivot)
+	var anims := data.animations
+	if anims != null and anims.library != null and anims.library.has_animation(anims.idle):
+		var player := AnimationPlayer.new()
+		pivot.add_child(player)
+		player.root_node = player.get_path_to(instance)
+		player.add_animation_library(&"", anims.library)
+		var idle := anims.idle
+		player.animation_finished.connect(func(_name: StringName) -> void: player.play(idle))
+		player.play(idle)
+	return pivot
 
 
 ## Blendet Modell und Namen aus.

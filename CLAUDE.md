@@ -46,7 +46,9 @@ WoM/
 └── game/              ← Godot-Projekt (project.godot)
     ├── assets/        ← exportierte Modelle (.glb), Texturen, Audio
     │   └── ui/        ← theme.tres (zentrales UI-Theme), fonts/ (Schriften + Lizenzen), icons/<kategorie>/<id>.png
-    ├── data/          ← Daten: strukturierte als .tres (Fähigkeiten, Auren, Klassen, Gebiete, Quests)
+    ├── lokal/         ← nur auf dem eigenen PC (über .git/info/exclude ignoriert), z. B. Testmodelle mit fremder Lizenz – nie committen!
+    │   └── modelle/   ← lokale Volksmodelle <volk>.tres, gehen data/modelle/ vor
+    ├── data/          ← Daten: strukturierte als .tres (Fähigkeiten, Auren, Klassen, Gebiete, Quests); modelle/<volk>.tres = Volksmodell
     │   ├── tables/    ← flache Werte als CSV-Tabellen (Gegner, Gegenstände, Beute, Völker, Konstanten …)
     │   └── schemas/   ← ein Schema (.tres) pro Tabelle
     ├── scenes/        ← Godot-Szenen (.tscn); UI-Szenen in scenes/ui/
