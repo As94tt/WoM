@@ -338,10 +338,19 @@ func _apply_authority() -> void:
 	$CastSync.set_multiplayer_authority(1)
 
 
-## Modell (#59): Startparameter --spielfigur vor model_data; ohne Modell
-## bleibt die Kapsel. Gilt nur auf dieser Instanz, nichts wird übertragen.
+## Modell (#59): Startparameter --spielfigur vor dem Modell des Volks
+## (CharacterModelData.for_race) vor model_data; ohne Modell bleibt die
+## Kapsel. Das Volk kommt beim Erzeugen mit (race_id, ServerSync), daher
+## wählt jede Instanz dasselbe Modell, ohne dass etwas übertragen wird –
+## sofern die Modelldatei dort vorhanden ist, sonst sieht sie die Kapsel.
 func _setup_model() -> void:
-	var data := PlayerModelOverride.get_model() if PlayerModelOverride.is_active() else model_data
+	var data: CharacterModelData = null
+	if PlayerModelOverride.is_active():
+		data = PlayerModelOverride.get_model()
+	else:
+		data = CharacterModelData.for_race(race_id)
+		if data == null:
+			data = model_data
 	if _animator.setup(data, self):
 		_body.visible = false
 		$Model/Nose.visible = false

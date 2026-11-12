@@ -22,6 +22,15 @@ func test_library_hat_alle_clips_mit_profil_spuren() -> void:
 	check(paths.has("%GeneralSkeleton:LeftUpperLeg"), "Spuren auf Profil-Knochen abgebildet (LeftUpperLeg)")
 
 
+func test_volksmodell_ablage() -> void:
+	var paths := CharacterModelData.race_model_paths(&"troll")
+	check_equal(paths.size(), 2, "Zwei mögliche Ablagen je Volk")
+	check_equal(paths[0], "res://lokal/modelle/troll.tres", "Lokales Testmodell zuerst")
+	check_equal(paths[1], "res://data/modelle/troll.tres", "Danach Modell aus den Daten")
+	check_equal(CharacterModelData.race_model_paths(&"").size(), 0, "Ohne Volk keine Ablage")
+	check(CharacterModelData.for_race(&"gibt_es_nicht") == null, "Unbekanntes Volk: Kapsel")
+
+
 func test_gangwahl() -> void:
 	var walk_limit := 2.5 * CharacterAnimator.WALK_TOLERANCE
 	var stand := CharacterAnimator.choose_gait(Vector3.ZERO, 1.0, walk_limit, ANIMS)

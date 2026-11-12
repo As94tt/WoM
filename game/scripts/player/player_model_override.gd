@@ -8,9 +8,10 @@ extends RefCounted
 ## Wie bei QuickStart dürfen die Parameter vor oder nach „--“ stehen (im
 ## Editor unter Debug → Ausführungsinstanzen anpassen → Startargumente).
 ##
-## Die Wahl gilt nur für die eigene Instanz und wird nicht übertragen; das
-## Modell pro Spieler gehört später zur Charakterauswahl. Fehlt die Datei
-## (z. B. auf einem anderen PC), bleibt mit einer Warnung die Kapsel.
+## Die Wahl gilt nur für die eigene Instanz und wird nicht übertragen. Ohne
+## Parameter bestimmt das Volk das Modell (CharacterModelData.for_race).
+## Fehlt die Datei (z. B. auf einem anderen PC), bleibt mit einer Warnung die
+## Kapsel.
 
 const ARG := "--spielfigur"
 const CAPSULE := "kapsel"

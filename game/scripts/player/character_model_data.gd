@@ -19,3 +19,30 @@ extends Resource
 @export var yaw_offset_deg: float = 180.0
 ## Gleichmäßiger Größenfaktor des Modells.
 @export var model_scale: float = 1.0
+
+## Ablage der Volksmodelle: <Ordner><Volks-ID>.tres, z. B. troll.tres.
+## Lokale Testmodelle (nur auf diesem PC, über .git/info/exclude ignoriert,
+## nie im Repo) gehen echten Modellen aus den Daten vor.
+const LOCAL_RACE_FOLDER := "res://lokal/modelle/"
+const RACE_FOLDER := "res://data/modelle/"
+
+
+## Mögliche Dateien für das Modell eines Volks, in Prüfreihenfolge.
+static func race_model_paths(race_id: StringName) -> PackedStringArray:
+	if race_id == &"":
+		return PackedStringArray()
+	return PackedStringArray([LOCAL_RACE_FOLDER + race_id + ".tres", RACE_FOLDER + race_id + ".tres"])
+
+
+## Modell eines Volks oder null (= Kapsel). Volksmodelle sind Daten mit
+## fester Ablage statt einer Spalte in voelker.csv, weil lokale Testmodelle
+## auf anderen Rechnern fehlen und die Datenprüfung dort sonst fehlschlüge.
+static func for_race(race_id: StringName) -> CharacterModelData:
+	for path in race_model_paths(race_id):
+		if not ResourceLoader.exists(path):
+			continue
+		var model := load(path) as CharacterModelData
+		if model != null:
+			return model
+		push_warning("Volksmodell: „%s“ ist kein CharacterModelData, wird übersprungen." % path)
+	return null
