@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_eeax7"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_8tlbg"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_yx2q8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="4_027qq"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_bqs5n"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="6_ds6p1"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_self_effect.gd" id="7_rl7us"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_f5nau"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_bppws"]
+
+[sub_resource type="Resource" id="Resource_ubb5y"]
+script = ExtResource("4_027qq")
+kind = 2
+states = 4
+
+[sub_resource type="Resource" id="Resource_hps11"]
+script = ExtResource("5_bqs5n")
+kind = 1
+aura_id = &"talent_kalter_kreislauf"
+
+[sub_resource type="Resource" id="Resource_og4f7"]
+script = ExtResource("6_ds6p1")
+amount = 1.0
+percent_of_max = true
+scaling = Array[ExtResource("5_bqs5n")]([SubResource("Resource_hps11")])
+
+[sub_resource type="Resource" id="Resource_vcbjp"]
+script = ExtResource("7_rl7us")
+effects = Array[ExtResource("2_8tlbg")]([SubResource("Resource_og4f7")])
+conditions = Array[ExtResource("4_027qq")]([SubResource("Resource_ubb5y")])
+
+[sub_resource type="Resource" id="Resource_k4o8a"]
+script = ExtResource("3_yx2q8")
+effects = Array[ExtResource("2_8tlbg")]([SubResource("Resource_vcbjp")])
+
+[resource]
+script = ExtResource("8_f5nau")
+id = &"talent_kalter_kreislauf"
+display_name = "Kalter Kreislauf"
+description = "Talent: Treffer gegen verlangsamte Ziele geben 1/2/3 % Mana zurück."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("3_yx2q8")]([SubResource("Resource_k4o8a")])
+absorb_schools = PackedStringArray()

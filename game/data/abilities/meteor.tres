@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_44o2s"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_lbjck"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_78ys7"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_o1ktq"]
+[ext_resource type="Resource" path="res://data/effects/brand_explosion.tres" id="5_iq1on"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_k41si"]
+
+[sub_resource type="Resource" id="Resource_44o2s"]
+script = ExtResource("4_o1ktq")
+school = &"feuer"
+values_from_ability = true
+
+[resource]
+script = ExtResource("6_k41si")
+id = &"meteor"
+display_name = "Meteor"
+description = "Ruft einen Meteor herab: sehr hoher Feuerschaden. Lässt den Brand des Ziels explodieren (Flächenschaden je Stapel um das Ziel)."
+class_id = &"mage"
+required_level = 4
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_44o2s")]([SubResource("Resource_44o2s"), ExtResource("5_iq1on")])
+highlight_auras = PackedStringArray("hitzewelle")

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_g6ntr"]
+[ext_resource type="Resource" path="res://data/auras/glutbombe.tres" id="2_3beh8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_q7yhk"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_v3e3m"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_haif4"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_x86v5"]
+
+[sub_resource type="Resource" id="Resource_g6ntr"]
+script = ExtResource("5_haif4")
+aura = ExtResource("2_3beh8")
+
+[resource]
+script = ExtResource("6_x86v5")
+id = &"glutbombe"
+display_name = "Glutbombe"
+description = "Sofort: Das Ziel explodiert nach kurzer Zeit (Feuerschaden) und lässt dabei seinen Brand explodieren."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_g6ntr")]([SubResource("Resource_g6ntr")])
+highlight_auras = PackedStringArray()

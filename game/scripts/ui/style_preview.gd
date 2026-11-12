@@ -53,21 +53,21 @@ func _ready() -> void:
 ## erlernt), Slots mit Fähigkeit (normal, ausgegraut) und der Tooltip.
 func _add_spellbook_samples() -> void:
 	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
-	var feuerball := GameData.get_ability(&"feuerball")
-	var passive := GameData.get_ability(&"passiv_magier")
-	var gegenzauber := GameData.get_ability(&"gegenzauber")
-	if feuerball == null or passive == null or gegenzauber == null:
+	var geschoss := GameData.get_ability(&"magisches_geschoss")
+	var passive := GameData.get_ability(&"passiv_krieger")
+	var fessel := GameData.get_ability(&"magische_fessel")
+	if geschoss == null or passive == null or fessel == null:
 		return
 	_add_row(grid, "Zauberbuch-Eintrag: erlernt, passiv, nicht erlernt (HintText, SmallHintText)")
 	var entries := VBoxContainer.new()
 	entries.theme_type_variation = &"SpellbookGrid"
 	entries.custom_minimum_size.x = 218
 	grid.add_child(entries)
-	for ability in [feuerball, passive, gegenzauber]:
+	for ability in [geschoss, passive, fessel]:
 		var entry: SpellbookEntry = preload("res://scenes/ui/hud/spellbook_entry.tscn").instantiate()
 		entries.add_child(entry)
 		# Ohne Figur (null) gilt learned_without_player.
-		entry.setup(ability, null, ability != gegenzauber)
+		entry.setup(ability, null, ability != fessel)
 
 	_add_row(grid, "Aktionsslot mit Fähigkeit: normal, ausgegraut (nicht erlernt)")
 	var slots := HBoxContainer.new()
@@ -76,13 +76,13 @@ func _add_spellbook_samples() -> void:
 	for learned in [true, false]:
 		var slot: ActionSlot = preload("res://scenes/ui/hud/action_slot.tscn").instantiate()
 		slots.add_child(slot)
-		slot.show_content(ActionSlotContent.ability(feuerball.id), learned)
+		slot.show_content(ActionSlotContent.ability(geschoss.id), learned)
 
 	_add_row(grid, "Tooltip einer Fähigkeit (Subtitle, SmallLabel, BodyText, HintText)")
 	var tooltip := PanelContainer.new()
 	tooltip.theme_type_variation = &"TooltipPanel"
 	tooltip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	tooltip.add_child(AbilityTooltip.create(gegenzauber, false))
+	tooltip.add_child(AbilityTooltip.create(fessel, false))
 	grid.add_child(tooltip)
 
 

@@ -68,6 +68,9 @@ const HOST_QUEUE_SLACK := 0.25
 ## Ein vorhergesagter Zauber gilt beim Besitzer so lange nach seinem Ende
 ## noch als laufend, bis der Host antwortet (Sicherheitsgrenze, Sekunden).
 const PREDICTION_TIMEOUT := 3.0
+## Eine Abklingzeit des Hosts bestätigt eine Vorhersage, wenn sie höchstens
+## so viele Sekunden vor ihr begann (Uhrabgleich ist nie ganz genau).
+const PREDICTION_CONFIRM_SLACK := 0.5
 ## Gemeldete Position darf so weit von der zuletzt bekannten abweichen.
 const MAX_REPORTED_OFFSET := 4.0
 ## Ein Fehler des automatischen Angriffs geht höchstens so oft an den Besitzer.
@@ -90,6 +93,7 @@ var cast_end: Array = []:
 var cooldown_state: Dictionary = {}:
 	set(value):
 		cooldown_state = value
+		_confirm_predicted_cooldowns()
 		cooldowns_changed.emit()
 ## Übertragen: automatischer Angriff läuft (Host).
 var auto_attack_on := false:
@@ -571,6 +575,28 @@ func on_damage_taken() -> void:
 	_cast["pushbacks"] = int(_cast["pushbacks"]) + 1
 	_cast["end"] = float(_cast["end"]) + Data.konstante(&"zauber_verzoegerung", 0.5)
 	_publish_cast()
+
+
+## Host: laufende Abklingzeit einer Fähigkeit um seconds Sekunden verkürzen
+## (#22, z. B. Glühende Gedanken: Explosionen verkürzen Meteor). Ohne
+## laufende Abklingzeit passiert nichts. Fähigkeiten mit Aufladungen: die
+## nächste Aufladung kommt früher.
+func host_reduce_cooldown(ability: AbilityData, seconds: float) -> void:
+	if not Network.is_host() or ability == null or seconds <= 0.0:
+		return
+	var now := Network.host_time()
+	if ability.get_charges() > 1:
+		var entry: Array = _charges.get(String(ability.id), [])
+		if entry.size() >= 4 and float(entry[1]) > now:
+			entry[1] = maxf(now, float(entry[1]) - seconds)
+			_cd_dirty = true
+		return
+	var key := String(ability.get_cooldown_key())
+	var window: Array = _cooldowns.get(key, [])
+	if window.size() < 2 or float(window[1]) <= now:
+		return
+	window[1] = maxf(now, float(window[1]) - seconds)
+	_cd_dirty = true
 
 
 ## Host: Abklingzeiten zurücksetzen (Entwickler-Panel).
@@ -1084,6 +1110,20 @@ func _on_result(req: int, code: int, param: String) -> void:
 		cast_ended.emit(Result.FAILED, cast_ability.id)
 	cooldowns_changed.emit()
 	_owner_fail(code, param, ability)
+
+
+## Besitzer: Vorhergesagte Abklingzeiten, die der Host bestätigt hat (seine
+## Abklingzeit für denselben Schlüssel begann nicht vor der Vorhersage),
+## fallen weg; ab dann gilt sein Stand. So wirkt es sofort, wenn der Host
+## eine Abklingzeit verkürzt (#22, host_reduce_cooldown).
+func _confirm_predicted_cooldowns() -> void:
+	if _pred_cd.is_empty():
+		return
+	var host_cds: Dictionary = cooldown_state.get("cd", {})
+	for key: String in _pred_cd.keys():
+		var window: Array = host_cds.get(key, [])
+		if window.size() >= 2 and float(window[0]) >= float(_pred_cd[key][0]) - PREDICTION_CONFIRM_SLACK:
+			_pred_cd.erase(key)
 
 
 func _drop_req(req: int) -> void:

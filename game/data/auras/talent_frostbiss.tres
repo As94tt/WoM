@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_tafdy"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_c34vv"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_pty40"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_4w26i"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_3vx0x"]
+
+[resource]
+script = ExtResource("4_4w26i")
+id = &"talent_frostbiss"
+display_name = "Frostbiss"
+description = "Talent: Läuft Erfrierung aus, springt sie mit 33/66/100 % Chance auf ein nahes Ziel."
+hidden = true
+cancelable = false
+max_stacks = 3
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

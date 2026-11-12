@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_roc68"]
+[ext_resource type="Resource" path="res://data/auras/eisige_adern.tres" id="2_f01m6"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_5lvbp"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_17hfw"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="5_yafj2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="6_1x5re"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="7_k7kyp"]
+
+[sub_resource type="Resource" id="Resource_roc68"]
+script = ExtResource("3_5lvbp")
+kind = 1
+aura_id = &"talent_eisige_adern"
+
+[sub_resource type="Resource" id="Resource_f01m6"]
+script = ExtResource("5_yafj2")
+duration_key = "werte.adern_dauer"
+stacks_from_caster_aura = &"talent_eisige_adern"
+aura = ExtResource("2_f01m6")
+target_mode = 1
+conditions = Array[ExtResource("3_5lvbp")]([SubResource("Resource_roc68")])
+
+[sub_resource type="Resource" id="Resource_5lvbp"]
+script = ExtResource("6_1x5re")
+target_mode = 1
+
+[resource]
+script = ExtResource("7_k7kyp")
+id = &"frostschritt"
+display_name = "Frostschritt"
+description = "Wie Magischer Schritt, mit Frost."
+class_id = &"mage"
+required_level = 6
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_roc68")]([SubResource("Resource_f01m6"), SubResource("Resource_5lvbp")])
+target_kind = 0
+highlight_auras = PackedStringArray()

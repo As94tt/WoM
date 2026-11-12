@@ -17,21 +17,21 @@ base_amount = 100.0
 
 [sub_resource type="Resource" id="Resource_7wirg"]
 script = ExtResource("3_8ad3x")
-ability_id = &"feuerball"
+ability_id = &"magisches_geschoss"
 value_key = "kosten"
 add = -10.0
 added_effects = Array[ExtResource("1_nthul")]([SubResource("Resource_ra3nc")])
 
 [sub_resource type="Resource" id="Resource_rwdnq"]
 script = ExtResource("3_8ad3x")
-ability_id = &"feuerball"
+ability_id = &"magisches_geschoss"
 value_key = "abklingzeit"
 add = 2.0
 
 [sub_resource type="Resource" id="Resource_p7xny"]
 script = ExtResource("3_8ad3x")
-ability_id = &"frostnova"
-replacement_id = &"gegenzauber"
+ability_id = &"magische_nova"
+replacement_id = &"magischer_schild"
 
 [sub_resource type="Resource" id="Resource_yveu1"]
 script = ExtResource("6_oowwe")
@@ -40,8 +40,8 @@ modifiers = Array[ExtResource("3_8ad3x")]([SubResource("Resource_7wirg"), SubRes
 [resource]
 script = ExtResource("8_3xhtu")
 id = &"test_talent"
-display_name = "Testtalent: Feuerkraft"
-description = "Feuerball kostet 10 Mana weniger, hat 2 s mehr Abklingzeit und verursacht zusätzlich 100 Feuerschaden. Frostnova wird durch Gegenzauber ersetzt. Testaura: Fähigkeit verändern."
+display_name = "Testtalent: Arkankraft"
+description = "Magisches Geschoss kostet 10 Mana weniger, hat 2 s mehr Abklingzeit und verursacht zusätzlich 100 Feuerschaden. Magische Nova wird durch Magischen Schild ersetzt. Testaura: Fähigkeit verändern."
 duration = 60.0
 apply_effects = Array[ExtResource("1_nthul")]([SubResource("Resource_yveu1")])
 grants_immunities = PackedStringArray()

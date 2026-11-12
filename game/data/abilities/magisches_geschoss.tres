@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_gnagy"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_jrd7v"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_5qwv0"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_6uqfh"]
+[ext_resource type="Script" path="res://scripts/combat/effects/projectile_effect.gd" id="5_kpv8j"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_0d131"]
+
+[sub_resource type="Resource" id="Resource_gnagy"]
+script = ExtResource("4_6uqfh")
+school = &"arkan"
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_jrd7v"]
+script = ExtResource("5_kpv8j")
+speed_from_ability = true
+effects = Array[ExtResource("1_gnagy")]([SubResource("Resource_gnagy")])
+
+[resource]
+script = ExtResource("6_0d131")
+id = &"magisches_geschoss"
+display_name = "Magisches Geschoss"
+description = "Schleudert ein arkanes Geschoss auf das Ziel und verursacht Arkanschaden."
+class_id = &"mage"
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_gnagy")]([SubResource("Resource_jrd7v")])
+highlight_auras = PackedStringArray()

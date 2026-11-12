@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_qw4wv"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_funtw"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_4g3yo"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="4_w6ywx"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_1f0kc"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="6_5m43h"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="7_sluyd"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_x80nc"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_17ps7"]
+
+[sub_resource type="Resource" id="Resource_qw4wv"]
+script = ExtResource("4_w6ywx")
+ability_id = &"feuerball"
+value_key = "werte.krit_schaden_bonus"
+add = 50.0
+
+[sub_resource type="Resource" id="Resource_funtw"]
+script = ExtResource("6_5m43h")
+modifiers = Array[ExtResource("4_w6ywx")]([SubResource("Resource_qw4wv")])
+
+[resource]
+script = ExtResource("8_x80nc")
+id = &"inferno"
+display_name = "Inferno"
+description = "Brand explodiert automatisch bei 5 Stapeln. Feuerball verursacht 50 % mehr kritischen Schaden."
+category = 1
+duration = 15.0
+ability_id = &"inferno"
+apply_effects = Array[ExtResource("2_funtw")]([SubResource("Resource_funtw")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_hqvr8"]
+[ext_resource type="Resource" path="res://data/auras/eisschild.tres" id="2_v6u2e"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_vu3u4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_ygecp"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_1cabu"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_vshwd"]
+
+[sub_resource type="Resource" id="Resource_hqvr8"]
+script = ExtResource("5_1cabu")
+aura = ExtResource("2_v6u2e")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_vshwd")
+id = &"eisschild"
+display_name = "Eisschild"
+description = "Umgibt den Magier mit Eis, das Schaden abfängt. Nahkampf-Angreifer werden verlangsamt."
+class_id = &"mage"
+required_level = 5
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_hqvr8")]([SubResource("Resource_hqvr8")])
+target_kind = 0
+highlight_auras = PackedStringArray()

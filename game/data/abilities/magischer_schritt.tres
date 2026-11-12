@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_ukx7k"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_bd7yo"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_08obg"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="4_xbrkg"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_pvx42"]
+
+[sub_resource type="Resource" id="Resource_ukx7k"]
+script = ExtResource("4_xbrkg")
+target_mode = 1
+
+[resource]
+script = ExtResource("5_pvx42")
+id = &"magischer_schritt"
+display_name = "Magischer Schritt"
+description = "Teleportiert den Magier ein Stück nach vorn. Wände halten den Sprung auf."
+class_id = &"mage"
+required_level = 6
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_ukx7k")]([SubResource("Resource_ukx7k")])
+target_kind = 0
+highlight_auras = PackedStringArray()

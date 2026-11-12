@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_en4cg"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="2_agkey"]
+
+[resource]
+script = ExtResource("2_agkey")
+id = &"brand"
+display_name = "Brand"
+description = "Mechanik der Spezialisierung Feuer (nur Zahlen, erscheint in keinem Zauberbuch): Schaden über Zeit je Stapel, Explosion, Aschenregen, Glühende Gedanken."
+class_id = &"mage"
+required_level = 10
+passive = true
+is_spell = true
+school = &"feuer"
+target_kind = 0
+highlight_auras = PackedStringArray()

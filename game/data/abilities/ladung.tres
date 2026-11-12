@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_x4667"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="2_s0oui"]
+
+[resource]
+script = ExtResource("2_s0oui")
+id = &"ladung"
+display_name = "Ladung"
+description = "Mechanik der Spezialisierung Blitz (nur Zahlen, erscheint in keinem Zauberbuch): Bonus je Stapel, Dauer, Sprungweite, Überspannung."
+class_id = &"mage"
+required_level = 10
+passive = true
+is_spell = true
+school = &"blitz"
+target_kind = 0
+highlight_auras = PackedStringArray()

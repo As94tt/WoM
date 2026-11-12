@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_wrn5j"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_7yyqx"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_4y5ue"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_mdok0"]
+[ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="5_8i1gi"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_2aayy"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="7_43hhq"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_ijtnu"]
+
+[sub_resource type="Resource" id="Resource_wrn5j"]
+script = ExtResource("4_mdok0")
+school = &"frost"
+values_from_ability = true
+base_key = "werte.flaeche_schaden"
+factor_key = "werte.flaeche_faktor"
+
+[sub_resource type="Resource" id="Resource_7yyqx"]
+script = ExtResource("6_2aayy")
+duration_key = "werte.flaeche_verlangsamung"
+aura = ExtResource("5_8i1gi")
+
+[sub_resource type="Resource" id="Resource_4y5ue"]
+script = ExtResource("7_43hhq")
+tick_on_create = true
+effects = Array[ExtResource("1_wrn5j")]([SubResource("Resource_wrn5j"), SubResource("Resource_7yyqx")])
+
+[resource]
+script = ExtResource("8_ijtnu")
+id = &"schneesturm"
+display_name = "Schneesturm"
+description = "Kanalisiert: Schneesturm am Zielort, verursacht Schaden und verlangsamt alle Gegner darin."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_wrn5j")]([SubResource("Resource_4y5ue")])
+highlight_auras = PackedStringArray()

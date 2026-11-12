@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_dxcd4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_v82ri"]
+[ext_resource type="Resource" path="res://data/auras/phoenix_erschoepft.tres" id="3_g5uac"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_lethal_guard_logic.gd" id="4_8opta"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="5_34o28"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="6_3t2fw"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="7_nowhi"]
+
+[sub_resource type="Resource" id="Resource_aj237"]
+script = ExtResource("4_8opta")
+required_aura_id = &"flammenschild"
+cooldown_aura = ExtResource("3_g5uac")
+
+[resource]
+script = ExtResource("6_3t2fw")
+id = &"talent_phoenixschild"
+display_name = "Phönixschild"
+description = "Talent: Flammenschild verhindert einmal alle 2 Minuten tödlichen Schaden."
+hidden = true
+cancelable = false
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+logic = SubResource("Resource_aj237")

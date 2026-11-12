@@ -1,27 +1,32 @@
 [gd_resource type="Resource" script_class="ClassData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/class_data.gd" id="1_class"]
-[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
-[ext_resource type="Resource" path="res://data/abilities/feuerball.tres" id="2_feuerball"]
-[ext_resource type="Resource" path="res://data/abilities/frostnova.tres" id="3_frostnova"]
-[ext_resource type="Resource" path="res://data/abilities/passiv_magier.tres" id="4_passiv_magier"]
-[ext_resource type="Resource" path="res://data/abilities/gegenzauber.tres" id="5_gegenzauber"]
+[ext_resource type="Resource" path="res://data/abilities/magisches_geschoss.tres" id="2_7i70b"]
+[ext_resource type="Resource" path="res://data/abilities/magische_beruehrung.tres" id="3_b4jg5"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_einschlag.tres" id="4_srxku"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schild.tres" id="5_wtygw"]
 [ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="6_spec_script"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schritt.tres" id="6_ttxsn"]
+[ext_resource type="Resource" path="res://data/abilities/magische_nova.tres" id="7_4clds"]
 [ext_resource type="Resource" path="res://data/specializations/mage_feuer.tres" id="7_feuer"]
+[ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="8_6eowd"]
 [ext_resource type="Resource" path="res://data/specializations/mage_frost.tres" id="8_frost"]
-[ext_resource type="Resource" path="res://data/specializations/mage_arkan.tres" id="9_arkan"]
+[ext_resource type="Resource" path="res://data/specializations/mage_blitz.tres" id="13_tm5w4"]
+[ext_resource type="Resource" path="res://data/specializations/mage_hexenmeister.tres" id="14_7pgy1"]
+[ext_resource type="Resource" path="res://data/specializations/mage_blutmagier.tres" id="15_dfke3"]
+[ext_resource type="Resource" path="res://data/specializations/mage_beschwoerer.tres" id="16_3rej4"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="ability_script"]
 
 [resource]
 script = ExtResource("1_class")
 id = &"mage"
 display_name = "Magier"
-description = "Fernkampf-Schaden mit Mana. Wirkt Zauber mit Zauberzeit, Projektile, Flächenschaden und Kontrolle."
-role = 0
+description = "Fernkampf-Zauberwirker in Stoff: hoher Schaden, wenig Rüstung. Überlebt durch Schild, Schritt und Fessel. Ressource: Mana."
 role_name = "Schaden"
 color = Color(0.35, 0.6, 1, 1)
 order = 1
 primary_attribute = &"intellect"
 power_stat = &"spell_power"
 resources = Array[StringName]([&"mana"])
-abilities = Array[ExtResource("ability_script")]([ExtResource("2_feuerball"), ExtResource("3_frostnova"), ExtResource("4_passiv_magier"), ExtResource("5_gegenzauber")])
-specializations = Array[ExtResource("6_spec_script")]([ExtResource("7_feuer"), ExtResource("8_frost"), ExtResource("9_arkan")])
+abilities = Array[ExtResource("ability_script")]([ExtResource("2_7i70b"), ExtResource("3_b4jg5"), ExtResource("4_srxku"), ExtResource("5_wtygw"), ExtResource("6_ttxsn"), ExtResource("7_4clds"), ExtResource("8_6eowd")])
+specializations = Array[ExtResource("6_spec_script")]([ExtResource("7_feuer"), ExtResource("8_frost"), ExtResource("13_tm5w4"), ExtResource("14_7pgy1"), ExtResource("15_dfke3"), ExtResource("16_3rej4")])

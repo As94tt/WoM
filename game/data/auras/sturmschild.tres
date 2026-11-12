@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_en4dc"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_guyrv"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_aura_logic.gd" id="3_ugmwx"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="4_uxj61"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="5_ctarr"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="6_ya82x"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="7_qe4ss"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="8_novye"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="9_es30y"]
+[ext_resource type="Resource" path="res://data/auras/blitzableiter.tres" id="10_klji8"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="11_3cesv"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="12_42ueh"]
+
+[sub_resource type="Resource" id="Resource_en4dc"]
+script = ExtResource("3_ugmwx")
+absorb_key = "werte.schild"
+absorb_factor_key = "werte.schild_faktor"
+
+[sub_resource type="Resource" id="Resource_guyrv"]
+script = ExtResource("9_es30y")
+duration_ability = ExtResource("7_qe4ss")
+duration_key = "dauer"
+aura = ExtResource("5_ctarr")
+filter = 2
+
+[sub_resource type="Resource" id="Resource_ugmwx"]
+script = ExtResource("4_uxj61")
+event = 2
+effects = Array[ExtResource("2_guyrv")]([SubResource("Resource_guyrv")])
+
+[sub_resource type="Resource" id="Resource_uxj61"]
+script = ExtResource("6_ya82x")
+kind = 1
+aura_id = &"talent_blitzableiter"
+
+[sub_resource type="Resource" id="Resource_ctarr"]
+script = ExtResource("9_es30y")
+duration_key = "werte.betaeubung_dauer"
+aura = ExtResource("10_klji8")
+filter = 2
+conditions = Array[ExtResource("6_ya82x")]([SubResource("Resource_uxj61")])
+
+[sub_resource type="Resource" id="Resource_ya82x"]
+script = ExtResource("4_uxj61")
+event = 2
+internal_cooldown = 10.0
+effects = Array[ExtResource("2_guyrv")]([SubResource("Resource_ctarr")])
+
+[resource]
+script = ExtResource("11_3cesv")
+id = &"sturmschild"
+display_name = "Sturmschild"
+description = "Fängt Schaden ab. Angreifer erhalten 1 Ladung."
+category = 1
+duration = 15.0
+ability_id = &"sturmschild"
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("4_uxj61")]([SubResource("Resource_ugmwx"), SubResource("Resource_ya82x")])
+absorb_schools = PackedStringArray()
+logic = SubResource("Resource_en4dc")

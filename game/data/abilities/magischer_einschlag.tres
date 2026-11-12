@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_iwb25"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_gmnl8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_2io6n"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_m3ldc"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_jip0d"]
+
+[sub_resource type="Resource" id="Resource_iwb25"]
+script = ExtResource("4_m3ldc")
+school = &"arkan"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_jip0d")
+id = &"magischer_einschlag"
+display_name = "Magischer Einschlag"
+description = "Lässt arkane Energie auf das Ziel niedergehen und verursacht hohen Arkanschaden."
+class_id = &"mage"
+required_level = 4
+is_spell = true
+school = &"arkan"
+effects = Array[ExtResource("1_iwb25")]([SubResource("Resource_iwb25")])
+highlight_auras = PackedStringArray()

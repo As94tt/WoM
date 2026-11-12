@@ -119,6 +119,18 @@ func _ready() -> void:
 	_update_states()
 
 
+func _notification(what: int) -> void:
+	# Wird die Einheit mit Auren freigegeben (z. B. Spieler verlässt die Welt),
+	# den Kreis Instanz ↔ Kontext auflösen, sonst bleiben beide im Speicher
+	# (gefunden mit den Tests aus #22, wie in remove_instance).
+	if what == NOTIFICATION_PREDELETE:
+		for inst in _auras:
+			if inst.ctx != null:
+				inst.ctx.aura = null
+				inst.ctx = null
+		_auras.clear()
+
+
 func _process(_delta: float) -> void:
 	if _unit == null:
 		return

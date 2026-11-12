@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_kp7m5"]
+[ext_resource type="Resource" path="res://data/auras/eisblock.tres" id="2_83ftx"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_xvm2j"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_tfb2i"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_p1jua"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_fh2s0"]
+
+[sub_resource type="Resource" id="Resource_kp7m5"]
+script = ExtResource("5_p1jua")
+aura = ExtResource("2_83ftx")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_fh2s0")
+id = &"eisblock"
+display_name = "Eisblock"
+description = "Schließt den Magier in Eis ein: unverwundbar, aber handlungsunfähig."
+class_id = &"mage"
+required_level = 5
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_kp7m5")]([SubResource("Resource_kp7m5")])
+target_kind = 0
+highlight_auras = PackedStringArray()

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_djg0y"]
+[ext_resource type="Resource" path="res://data/auras/kugelblitz.tres" id="2_ekpnj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_dok8h"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_3upux"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_lsh0i"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_d2kp0"]
+
+[sub_resource type="Resource" id="Resource_djg0y"]
+script = ExtResource("5_lsh0i")
+aura = ExtResource("2_ekpnj")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_d2kp0")
+id = &"kugelblitz"
+display_name = "Kugelblitz"
+description = "Überladung: Eine langsame Kugel fliegt geradeaus, trifft alles auf ihrem Weg und legt je 2 Ladungen."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_djg0y")]([SubResource("Resource_djg0y")])
+target_kind = 0
+highlight_auras = PackedStringArray()

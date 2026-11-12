@@ -1,37 +1,63 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
-[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_b008w"]
-[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_dlnka"]
-[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_w2hfw"]
-[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="4_1pjyd"]
-[ext_resource type="Resource" path="res://data/auras/frostnova_fessel.tres" id="5_oclxu"]
-[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="6_b5ia5"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_w2hfw"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_1pjyd"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_oclxu"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_b5ia5"]
+[ext_resource type="Resource" path="res://data/auras/tiefe_kaelte.tres" id="5_syns2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_4ryet"]
+[ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="7_njeip"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="8_3wu5s"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="9_xeyvu"]
 
-[sub_resource type="Resource" id="Resource_syns2"]
-script = ExtResource("4_1pjyd")
+[sub_resource type="Resource" id="Resource_w2hfw"]
+script = ExtResource("4_b5ia5")
 school = &"frost"
 values_from_ability = true
 target_mode = 2
 filter = 2
 radius_from_ability = true
 
-[sub_resource type="Resource" id="Resource_4ryet"]
-script = ExtResource("6_b5ia5")
-aura = ExtResource("5_oclxu")
+[sub_resource type="Resource" id="Resource_1pjyd"]
+script = ExtResource("6_4ryet")
+duration_key = "werte.verlangsamung_dauer"
+aura = ExtResource("5_syns2")
 target_mode = 2
 filter = 2
 radius_from_ability = true
 
+[sub_resource type="Resource" id="Resource_oclxu"]
+script = ExtResource("2_1pjyd")
+kind = 1
+aura_id = &"talent_kaeltefront"
+
+[sub_resource type="Resource" id="Resource_b5ia5"]
+script = ExtResource("4_b5ia5")
+school = &"frost"
+values_from_ability = true
+base_key = "werte.flaeche_schaden"
+factor_key = "werte.flaeche_faktor"
+
+[sub_resource type="Resource" id="Resource_syns2"]
+script = ExtResource("6_4ryet")
+duration_key = "werte.flaeche_verlangsamung"
+aura = ExtResource("7_njeip")
+
+[sub_resource type="Resource" id="Resource_4ryet"]
+script = ExtResource("8_3wu5s")
+effects = Array[ExtResource("1_w2hfw")]([SubResource("Resource_b5ia5"), SubResource("Resource_syns2")])
+target_mode = 1
+conditions = Array[ExtResource("2_1pjyd")]([SubResource("Resource_oclxu")])
+
 [resource]
-script = ExtResource("1_ability")
+script = ExtResource("9_xeyvu")
 id = &"frostnova"
 display_name = "Frostnova"
-description = "Entfesselt eine Welle aus Frost um den Magier, die nahe Gegner verletzt und am Boden festfriert."
+description = "Frostwelle um den Magier: Schaden an allen Gegnern im Umkreis, verlangsamt sie um 60 %."
 class_id = &"mage"
-required_level = 2
+required_level = 8
 is_spell = true
 school = &"frost"
-effects = Array[ExtResource("1_b008w")]([SubResource("Resource_syns2"), SubResource("Resource_4ryet")])
+effects = Array[ExtResource("1_w2hfw")]([SubResource("Resource_w2hfw"), SubResource("Resource_1pjyd"), SubResource("Resource_4ryet")])
 target_kind = 0
 highlight_auras = PackedStringArray()

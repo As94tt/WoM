@@ -1,30 +1,41 @@
 [gd_resource type="Resource" script_class="AuraData" format=3]
 
-[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_5uj2r"]
-[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_ttsmg"]
-[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="3_n7wwl"]
-[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="4_qkeuo"]
-[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="5_mepuo"]
-[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="6_eci6a"]
-[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="7_dkiiu"]
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_qkeuo"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_mepuo"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_aura_logic.gd" id="3_eci6a"]
+[ext_resource type="Resource" path="res://data/effects/brand_explosion.tres" id="3_mepuo"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="4_dkiiu"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="5_uclxm"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="6_hh2vs"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="7_h30j4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="8_cuj1q"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="9_d0jrf"]
+[ext_resource type="Resource" path="res://data/abilities/brand.tres" id="10_00fpw"]
 
-[sub_resource type="Resource" id="Resource_uclxm"]
-script = ExtResource("7_dkiiu")
+[sub_resource type="Resource" id="Resource_qkeuo"]
+script = ExtResource("3_eci6a")
+full_required_aura_id = &"inferno"
+full_effects = Array[ExtResource("2_mepuo")]([ExtResource("3_mepuo")])
+
+[sub_resource type="Resource" id="Resource_mepuo"]
+script = ExtResource("9_d0jrf")
+values_ability = ExtResource("10_00fpw")
 school = &"feuer"
 values_from_ability = true
-base_key = "werte.brand_schaden"
-factor_key = "werte.brand_faktor"
 
 [resource]
-script = ExtResource("3_n7wwl")
+script = ExtResource("5_uclxm")
 id = &"brand"
 display_name = "Brand"
-description = "Brennt und erleidet alle 2 Sekunden Feuerschaden (Feuerball)."
+description = "Brennt: Feuerschaden über Zeit je Stapel. Bestimmte Zauber lassen den Brand explodieren."
 is_debuff = true
 category = 1
-duration = 8.0
-ability_id = &"feuerball"
+duration = 10.0
+ability_id = &"brand"
+max_stacks = 5
+stack_mode = 2
 tick_interval = 2.0
-tick_effects = Array[ExtResource("1_5uj2r")]([SubResource("Resource_uclxm")])
+tick_effects = Array[ExtResource("2_mepuo")]([SubResource("Resource_mepuo")])
 grants_immunities = PackedStringArray()
 absorb_schools = PackedStringArray()
+logic = SubResource("Resource_qkeuo")

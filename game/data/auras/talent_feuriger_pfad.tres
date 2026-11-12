@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_e88i8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_3ndf0"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_6lqbq"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_v2qca"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_3ei0l"]
+
+[resource]
+script = ExtResource("4_v2qca")
+id = &"talent_feuriger_pfad"
+display_name = "Feuriger Pfad"
+description = "Talent: Flammensprung hinterlässt eine Feuerspur, die Brand legt."
+hidden = true
+cancelable = false
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()

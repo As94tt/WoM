@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_8qdyb"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_it8ea"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_nyimt"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="4_mt3vs"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_f464e"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="6_6rwkw"]
+[ext_resource type="Resource" path="res://data/effects/brand_explosion.tres" id="7_7ool8"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="8_figbr"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="9_o8nd4"]
+
+[sub_resource type="Resource" id="Resource_8qdyb"]
+script = ExtResource("6_6rwkw")
+school = &"feuer"
+attack = 3
+values_from_ability = true
+
+[sub_resource type="Resource" id="Resource_it8ea"]
+script = ExtResource("3_nyimt")
+event = 8
+effects = Array[ExtResource("2_it8ea")]([SubResource("Resource_8qdyb"), ExtResource("7_7ool8")])
+
+[resource]
+script = ExtResource("8_figbr")
+id = &"glutbombe"
+display_name = "Glutbombe"
+description = "Explodiert, wenn die Aura ausläuft, und lässt dabei den Brand explodieren."
+is_debuff = true
+category = 1
+duration = 4.0
+ability_id = &"glutbombe"
+stack_mode = 2
+grants_immunities = PackedStringArray()
+procs = Array[ExtResource("3_nyimt")]([SubResource("Resource_it8ea")])
+absorb_schools = PackedStringArray()

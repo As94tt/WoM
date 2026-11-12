@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_bn55v"]
+[ext_resource type="Resource" path="res://data/auras/erfrierung.tres" id="2_aggp6"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_d42f4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_7kx6k"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_2mi1m"]
+[ext_resource type="Resource" path="res://data/auras/kaelte.tres" id="6_hhusj"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_41fbm"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_xki0x"]
+
+[sub_resource type="Resource" id="Resource_bn55v"]
+script = ExtResource("5_2mi1m")
+aura = ExtResource("2_aggp6")
+
+[sub_resource type="Resource" id="Resource_aggp6"]
+script = ExtResource("7_41fbm")
+duration_key = "werte.verlangsamung_dauer"
+aura = ExtResource("6_hhusj")
+
+[resource]
+script = ExtResource("8_xki0x")
+id = &"erfrierung"
+display_name = "Erfrierung"
+description = "Sofort: Frostschaden über Zeit und Verlangsamung."
+class_id = &"mage"
+required_level = 2
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_bn55v")]([SubResource("Resource_bn55v"), SubResource("Resource_aggp6")])
+highlight_auras = PackedStringArray()

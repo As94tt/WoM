@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_7078v"]
+[ext_resource type="Resource" path="res://data/auras/eiszeit.tres" id="2_xt5e8"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_8h158"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_cd443"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_i1y54"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_ft11o"]
+
+[sub_resource type="Resource" id="Resource_7078v"]
+script = ExtResource("5_i1y54")
+aura = ExtResource("2_xt5e8")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_ft11o")
+id = &"eiszeit"
+display_name = "Eiszeit"
+description = "Überladung: Eine eisige Fläche um den Magier verlangsamt Gegner darin stark und verursacht Schaden über Zeit."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"frost"
+effects = Array[ExtResource("1_7078v")]([SubResource("Resource_7078v")])
+target_kind = 0
+highlight_auras = PackedStringArray()

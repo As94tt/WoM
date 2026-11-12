@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_e0nrc"]
+[ext_resource type="Resource" path="res://data/auras/magische_fessel.tres" id="2_j2w7s"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_6lrq1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_jlqn5"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_5ekki"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_c103g"]
+
+[sub_resource type="Resource" id="Resource_e0nrc"]
+script = ExtResource("5_5ekki")
+aura = ExtResource("2_j2w7s")
+
+[resource]
+script = ExtResource("6_c103g")
+id = &"flammenfessel"
+display_name = "Flammenfessel"
+description = "Wie Magische Fessel, aus Flammen."
+class_id = &"mage"
+required_level = 9
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_e0nrc")]([SubResource("Resource_e0nrc")])
+highlight_auras = PackedStringArray()

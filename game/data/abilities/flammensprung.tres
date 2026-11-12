@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_j8pjw"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_62hoq"]
+[ext_resource type="Resource" path="res://data/auras/brand.tres" id="3_ojxi5"]
+[ext_resource type="Resource" path="res://data/abilities/brand.tres" id="4_loh5n"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="5_5h0cj"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="6_o4q87"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_area_effect.gd" id="7_psgmg"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_trail_effect.gd" id="8_al4u0"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="9_i21av"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="10_308dt"]
+
+[sub_resource type="Resource" id="Resource_j8pjw"]
+script = ExtResource("6_o4q87")
+duration_ability = ExtResource("4_loh5n")
+duration_key = "dauer"
+aura = ExtResource("3_ojxi5")
+
+[sub_resource type="Resource" id="Resource_62hoq"]
+script = ExtResource("7_psgmg")
+duration_key = "werte.spur_dauer"
+radius_key = "werte.spur_radius"
+interval_key = "werte.spur_tick"
+tick_on_create = true
+at_point = true
+effects = Array[ExtResource("1_j8pjw")]([SubResource("Resource_j8pjw")])
+
+[sub_resource type="Resource" id="Resource_ojxi5"]
+script = ExtResource("2_62hoq")
+kind = 1
+aura_id = &"talent_feuriger_pfad"
+
+[sub_resource type="Resource" id="Resource_loh5n"]
+script = ExtResource("8_al4u0")
+area = SubResource("Resource_62hoq")
+target_mode = 1
+conditions = Array[ExtResource("2_62hoq")]([SubResource("Resource_ojxi5")])
+
+[sub_resource type="Resource" id="Resource_5h0cj"]
+script = ExtResource("9_i21av")
+target_mode = 1
+
+[resource]
+script = ExtResource("10_308dt")
+id = &"flammensprung"
+display_name = "Flammensprung"
+description = "Wie Magischer Schritt, in Flammen gehüllt."
+class_id = &"mage"
+required_level = 6
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_j8pjw")]([SubResource("Resource_loh5n"), SubResource("Resource_5h0cj")])
+target_kind = 0
+highlight_auras = PackedStringArray()

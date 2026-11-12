@@ -107,6 +107,15 @@ Spezialisierungen und Talentbäume sind **Struktur** und bleiben `.tres`; Zahlen
 
 Konstanten in `spielkonstanten.csv`, Abschnitt „Spezialisierung und Talente (#20)“: `spezialisierung_ab_stufe` (10), `talentpunkt_ab_stufe` (11), `talentpunkte_je_stufe` (1). Talentpunkte werden nicht gespeichert, sondern aus der Stufe berechnet. Testen: Entwickler-Panel (F10) → „Werte“ → Stufe, dann „Talente“ (entsperren, Punkte geben, zurücksetzen); Talentfenster mit N. `--tests` prüft die Bäume aller Klassen.
 
+### Magier: Zahlen der Mechaniken (#22)
+
+Alle Zahlen des Magiers stehen in `faehigkeitswerte.csv` (Abschnitte „Magier“, „Magier – Feuer/Frost/Blitz“). Die `.tres` beschreiben nur den Aufbau; die Effekte der Klasse (`scripts/combat/effects/mage/`, `scripts/combat/logic/`) lesen die Zahlen immer mit den Veränderungen durch Talente.
+
+- **Mechanik-Zeilen:** `brand` und `ladung` sind keine Zauber, sondern tragen die Zahlen der Mechanik (erscheinen in keinem Zauberbuch). `brand`: `grundwert`/`faktor` = Schaden je Stapel und Tick, `dauer`/`tick` der Aura, `werte.radius` und `explosion_schaden`/`explosion_faktor` (je Stapel) der Explosion, `aschenregen_*`, `meteor_cd_je_explosion`. `ladung`: `dauer`, `bonus_je_stapel` (Prozent mehr Blitzschaden je Stapel), `sprung_radius` (Entladung), `ueberspannung_dauer`.
+- **Häufige Schlüssel in `werte`:** `brand_stapel`, `ladung_stapel` (Stapel, die ein Zauber legt), `verlangsamung_dauer`, `flaeche_dauer`/`flaeche_radius`/`flaeche_tick`/`flaeche_schaden`/`flaeche_faktor`/`flaeche_verlangsamung` (eisige Flächen), `schild`/`schild_faktor` (Absorption = schild + schild_faktor × Zaubermacht), `distanz` (Schritt), `spruenge`/`sprung_prozent`/`bonus_je_ladung` (Donnerschlag), `flug` (Geschwindigkeit von Projektilen).
+- **Talente** verändern diese Schlüssel über „Fähigkeit verändern“ (z. B. Glutkern `brand` · `werte.radius` +1 je Rang). Die Boni je Rang stehen wie in #20 im Talentbaum (`game/data/talents/mage_*.tres`).
+- **Verlangsamung:** Die Stärke steht in der Aura (`kaelte` 30 %, `tiefe_kaelte` 60 %, `eiseskaelte` 70 %), die Dauer beim Zauber (`verlangsamung_dauer`).
+
 ### Werte der Charaktere anpassen (Wertesystem #19)
 
 Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welche Spalten nutzt, Namen und Tooltips der Werte) in `game/data/stats/stat_rules.tres`. Alle Zahlen sind Platzhalter.

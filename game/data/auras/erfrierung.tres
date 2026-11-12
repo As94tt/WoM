@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_40d42"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_lh6tn"]
+[ext_resource type="Script" path="res://scripts/combat/logic/mage_aura_logic.gd" id="3_ihwyr"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="4_eita8"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="5_f4dgi"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="6_t2px3"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="7_txioy"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="8_7l8kc"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="9_r0sjy"]
+
+[sub_resource type="Resource" id="Resource_40d42"]
+script = ExtResource("3_ihwyr")
+jump_on_expire = true
+jump_talent_aura_id = &"talent_frostbiss"
+jump_chance_per_rank = 33.34
+jump_recast = true
+
+[sub_resource type="Resource" id="Resource_lh6tn"]
+script = ExtResource("9_r0sjy")
+school = &"frost"
+values_from_ability = true
+
+[resource]
+script = ExtResource("5_f4dgi")
+id = &"erfrierung"
+display_name = "Erfrierung"
+description = "Frostschaden über Zeit."
+is_debuff = true
+category = 1
+duration = 8.0
+ability_id = &"erfrierung"
+stack_mode = 2
+tick_interval = 2.0
+tick_effects = Array[ExtResource("2_lh6tn")]([SubResource("Resource_lh6tn")])
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
+logic = SubResource("Resource_40d42")

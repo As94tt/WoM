@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_heav3"]
+[ext_resource type="Resource" path="res://data/auras/sturmschild.tres" id="2_y4qso"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_02ayj"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_nn8wt"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_cwnjw"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_lprrw"]
+
+[sub_resource type="Resource" id="Resource_heav3"]
+script = ExtResource("5_cwnjw")
+aura = ExtResource("2_y4qso")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_lprrw")
+id = &"sturmschild"
+display_name = "Sturmschild"
+description = "Umgibt den Magier mit einem Sturm, der Schaden abfängt. Angreifer erhalten 1 Ladung."
+class_id = &"mage"
+required_level = 5
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_heav3")]([SubResource("Resource_heav3")])
+target_kind = 0
+highlight_auras = PackedStringArray()

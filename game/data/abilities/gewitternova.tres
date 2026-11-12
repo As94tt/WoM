@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_1ar1l"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="2_3q1jk"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_j8pfe"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_damage_effect.gd" id="4_jm1tk"]
+[ext_resource type="Resource" path="res://data/auras/ladung.tres" id="5_t5tk1"]
+[ext_resource type="Resource" path="res://data/abilities/ladung.tres" id="6_vfi7i"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="7_1uk6j"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="8_6tu6s"]
+
+[sub_resource type="Resource" id="Resource_1ar1l"]
+script = ExtResource("4_jm1tk")
+school = &"blitz"
+values_from_ability = true
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="Resource_3q1jk"]
+script = ExtResource("7_1uk6j")
+duration_ability = ExtResource("6_vfi7i")
+duration_key = "dauer"
+stacks_key = "werte.ladung_stapel"
+aura = ExtResource("5_t5tk1")
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("8_6tu6s")
+id = &"gewitternova"
+display_name = "Gewitternova"
+description = "Blitzentladung in kleinem Umkreis: geringer Schaden und 1 Ladung auf alle Getroffenen."
+class_id = &"mage"
+required_level = 8
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_1ar1l")]([SubResource("Resource_1ar1l"), SubResource("Resource_3q1jk")])
+target_kind = 0
+highlight_auras = PackedStringArray()

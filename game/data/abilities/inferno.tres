@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_lr0gd"]
+[ext_resource type="Resource" path="res://data/auras/inferno.tres" id="2_aloar"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_2vo5t"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_j87b4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_l02ot"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_2jj7q"]
+
+[sub_resource type="Resource" id="Resource_lr0gd"]
+script = ExtResource("5_l02ot")
+aura = ExtResource("2_aloar")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_2jj7q")
+id = &"inferno"
+display_name = "Inferno"
+description = "Überladung: Eine Zeit lang explodiert Brand automatisch bei 5 Stapeln, und Feuerball verursacht 50 % mehr kritischen Schaden."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"feuer"
+effects = Array[ExtResource("1_lr0gd")]([SubResource("Resource_lr0gd")])
+target_kind = 0
+highlight_auras = PackedStringArray()

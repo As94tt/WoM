@@ -1,23 +1,65 @@
 [gd_resource type="Resource" script_class="SpecializationData" format=3]
 
-[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_spec"]
-[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="2_transform"]
-[ext_resource type="Resource" path="res://data/talents/mage_frost.tres" id="3_tree"]
-[ext_resource type="Resource" path="res://data/abilities/frostnova.tres" id="b0"]
-[ext_resource type="Resource" path="res://data/abilities/eiswelle.tres" id="v0"]
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="1_4go02"]
+[ext_resource type="Resource" path="res://data/talents/mage_frost.tres" id="2_cxcuu"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="3_gs1ww"]
+[ext_resource type="Resource" path="res://data/abilities/magisches_geschoss.tres" id="4_o4ilk"]
+[ext_resource type="Resource" path="res://data/abilities/frostblitz.tres" id="5_waue2"]
+[ext_resource type="Resource" path="res://data/abilities/magische_beruehrung.tres" id="6_k22lv"]
+[ext_resource type="Resource" path="res://data/abilities/erfrierung.tres" id="7_8i24u"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_einschlag.tres" id="8_xnvrt"]
+[ext_resource type="Resource" path="res://data/abilities/gletschersplitter.tres" id="9_722xy"]
+[ext_resource type="Resource" path="res://data/abilities/magische_nova.tres" id="10_s26ck"]
+[ext_resource type="Resource" path="res://data/abilities/frostnova.tres" id="11_baeyi"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schild.tres" id="12_g37x6"]
+[ext_resource type="Resource" path="res://data/abilities/eisschild.tres" id="13_nuf0v"]
+[ext_resource type="Resource" path="res://data/abilities/magischer_schritt.tres" id="14_ej0qu"]
+[ext_resource type="Resource" path="res://data/abilities/frostschritt.tres" id="15_1x8cl"]
+[ext_resource type="Resource" path="res://data/abilities/magische_fessel.tres" id="16_8x25x"]
+[ext_resource type="Resource" path="res://data/abilities/eisfessel.tres" id="17_8bf6q"]
 
-[sub_resource type="Resource" id="T0"]
-script = ExtResource("2_transform")
-base = ExtResource("b0")
-variant = ExtResource("v0")
+[sub_resource type="Resource" id="Resource_7vugg"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("4_o4ilk")
+variant = ExtResource("5_waue2")
+
+[sub_resource type="Resource" id="Resource_c7a6l"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("6_k22lv")
+variant = ExtResource("7_8i24u")
+
+[sub_resource type="Resource" id="Resource_redcu"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("8_xnvrt")
+variant = ExtResource("9_722xy")
+
+[sub_resource type="Resource" id="Resource_q130r"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("10_s26ck")
+variant = ExtResource("11_baeyi")
+
+[sub_resource type="Resource" id="Resource_l2kny"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("12_g37x6")
+variant = ExtResource("13_nuf0v")
+
+[sub_resource type="Resource" id="Resource_ou7pl"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("14_ej0qu")
+variant = ExtResource("15_1x8cl")
+
+[sub_resource type="Resource" id="Resource_rkan7"]
+script = ExtResource("3_gs1ww")
+base = ExtResource("16_8x25x")
+variant = ExtResource("17_8bf6q")
 
 [resource]
-script = ExtResource("1_spec")
+script = ExtResource("1_4go02")
 id = &"mage_frost"
 display_name = "Frost"
-description = "Platzhalter (Testdaten #20): Der Magier kontrolliert Gegner mit Eis und Kälte.
-Verwandelt Frostnova in Eiswelle; Talente geben Eislanze und Frostblitz."
+description = "Kontrolle und Fläche über Zeit: verlangsamen, eisige Flächen legen.
+Mittleres Tempo, Stärke in Fläche über Zeit und Kontrolle. Mana: mittel."
 order = 2
-preferred_stats = Array[StringName]([&"haste", &"precision"])
-transformations = Array[ExtResource("2_transform")]([SubResource("T0")])
-talent_tree = ExtResource("3_tree")
+preferred_stats = Array[StringName]([&"haste", &"penetration"])
+transformations = Array[ExtResource("3_gs1ww")]([SubResource("Resource_7vugg"), SubResource("Resource_c7a6l"), SubResource("Resource_redcu"), SubResource("Resource_q130r"), SubResource("Resource_l2kny"), SubResource("Resource_ou7pl"), SubResource("Resource_rkan7")])
+talent_tree = ExtResource("2_cxcuu")

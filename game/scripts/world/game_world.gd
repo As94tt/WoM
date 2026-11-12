@@ -431,7 +431,21 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 	var c := Network.get_local_character()
 	_bar_layout = ActionBarLayout.new()
 	if c != null and not c.action_bars.is_empty():
+		var saved := 0
+		for row: PackedStringArray in c.action_bars:
+			for key in row:
+				if key != "":
+					saved += 1
 		_bar_layout.load_save(c.action_bars)
+		var removed := abilities.clean_bar_layout(_bar_layout)
+		if not removed.is_empty():
+			push_warning("Aktionsleisten: %s gehören nicht (mehr) zur Figur und wurden entfernt." % ", ".join(removed))
+		# Alte Fähigkeits-IDs (#22): Fehlt danach etwas, kommen erlernte
+		# Fähigkeiten, die auf keiner Leiste liegen, in freie Slots.
+		if _count_filled_slots() < saved:
+			for ability in abilities.get_default_bar_abilities(c.level):
+				if not _bar_layout.has_ability(ability.id):
+					_bar_layout.place_ability(ability.id)
 	else:
 		_bar_layout.reset(abilities.get_default_bar_abilities(c.level if c != null else 1))
 	_bar_layout.changed.connect(_save_bar_layout)
@@ -445,6 +459,15 @@ func _setup_abilities(player: PlayerCharacter) -> void:
 	# Fehlermeldungen oben in der Mitte (#33).
 	abilities.ability_failed.connect(func(_ability: AbilityData, reason: String) -> void:
 		_hud.show_error(reason))
+
+
+func _count_filled_slots() -> int:
+	var count := 0
+	for bar in ActionBarLayout.BAR_COUNT:
+		for index in ActionBarLayout.SLOT_COUNT:
+			if _bar_layout.get_content(bar, index) != null:
+				count += 1
+	return count
 
 
 ## Belegung in den Charakter schreiben und speichern (Testcharaktere nie).

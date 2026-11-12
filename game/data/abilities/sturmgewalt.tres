@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_5ti4n"]
+[ext_resource type="Resource" path="res://data/auras/sturmgewalt.tres" id="2_2whqn"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="3_oicur"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="4_gut42"]
+[ext_resource type="Script" path="res://scripts/combat/effects/apply_aura_effect.gd" id="5_p2wxo"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="6_775cf"]
+
+[sub_resource type="Resource" id="Resource_5ti4n"]
+script = ExtResource("5_p2wxo")
+aura = ExtResource("2_2whqn")
+target_mode = 1
+
+[resource]
+script = ExtResource("6_775cf")
+id = &"sturmgewalt"
+display_name = "Sturmgewalt"
+description = "Überladung: Eine Zeit lang 30 % weniger Zauberzeit, jeder Blitzpfeil legt 2 Ladungen, aber 50 % mehr Manakosten."
+class_id = &"mage"
+required_level = 10
+is_spell = true
+school = &"blitz"
+effects = Array[ExtResource("1_5ti4n")]([SubResource("Resource_5ti4n")])
+target_kind = 0
+highlight_auras = PackedStringArray()

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="1_eok7j"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_qy2q3"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="3_2mquj"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_2lecl"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="5_3hhr2"]
+
+[resource]
+script = ExtResource("4_2lecl")
+id = &"talent_blitzableiter"
+display_name = "Blitzableiter"
+description = "Talent: Sturmschild betäubt Angreifer für 1 s (höchstens einmal alle 10 s)."
+hidden = true
+cancelable = false
+grants_immunities = PackedStringArray()
+absorb_schools = PackedStringArray()
