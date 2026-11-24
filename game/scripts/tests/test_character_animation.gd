@@ -165,7 +165,10 @@ func test_zauber_ablauf_zauberzeit() -> void:
 	check_equal(s.stage, SpellAnimation.Stage.IDLE, "Halten bleibt, solange der Zauber läuft")
 	s.end_cast(true)
 	check_equal(s.stage, SpellAnimation.Stage.SHOOT, "Erfolg: Loslassen")
-	_run(s, ANIMS.spell_shoot_time + ANIMS.spell_blend_time + 0.05)
+	_run(s, ANIMS.spell_shoot_time + 0.02)
+	check_equal(s.stage, SpellAnimation.Stage.EXIT, "Danach Senken")
+	check_near(s.weight, 1.0, 0.001, "Beim Übergang zum Senken noch voll eingeblendet")
+	_run(s, ANIMS.spell_exit_time + ANIMS.spell_blend_time)
 	check_equal(s.stage, SpellAnimation.Stage.NONE, "Danach fertig")
 	check_near(s.weight, 0.0, 0.001, "Oberkörper wieder ausgeblendet")
 
@@ -204,7 +207,9 @@ func test_zauber_ablauf_sofort() -> void:
 	s.instant(false, ANIMS.spell_self_speed)
 	check_equal(s.stage, SpellAnimation.Stage.SHOOT, "Sofortzauber: Loslassen")
 	_run(s, ANIMS.spell_shoot_time + 0.02)
-	check_equal(s.stage, SpellAnimation.Stage.NONE, "Danach fertig (kein Senken)")
+	check_equal(s.stage, SpellAnimation.Stage.EXIT, "Danach Senken")
+	_run(s, ANIMS.spell_exit_time + ANIMS.spell_blend_time)
+	check_equal(s.stage, SpellAnimation.Stage.NONE, "Danach fertig")
 	# Zweimal hintereinander: Clip beginnt neu.
 	s.instant(false, ANIMS.spell_self_speed)
 	var serial := s.serial

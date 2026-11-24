@@ -7,11 +7,11 @@ extends RefCounted
 ##
 ## Abläufe (Clips aus CharacterAnimationSet, Gruppe „Zauber“):
 ##   Zauberzeit, fremdes Ziel:  Heben → Halten (Schleife) → Erfolg: Loslassen
-##                              → Ende; sonst Senken
+##                              → Senken; sonst gleich Senken
 ##   Kanalisieren:              Heben → Halten (Schleife) → Senken
 ##   Zauberzeit ohne fremdes Ziel (Selbst-/Hilfszauber):
 ##                              Heben → Halten → Senken (kein Loslassen)
-##   Sofortzauber:              Loslassen, danach ausblenden
+##   Sofortzauber:              Loslassen → Senken
 ##   Sofortzauber ohne fremdes Ziel: Heben → Senken, schneller abgespielt
 ##   Unterbrochen, abgebrochen, fehlgeschlagen, vom Host abgelehnt:
 ##                              sofort Senken (nie Loslassen)
@@ -37,8 +37,8 @@ var serial := 0
 
 ## Abschnitt nach dem Heben (Halten bzw. bei Selbst-Sofortzaubern Senken).
 var _after_enter: Stage = Stage.IDLE
-## Abschnitt nach dem Loslassen (Sofortzauber: keiner, Zauberzeit: Ende).
-var _after_shoot: Stage = Stage.NONE
+## Abschnitt nach dem Loslassen (bisher immer Senken; NONE = gleich ausblenden).
+var _after_shoot: Stage = Stage.EXIT
 
 
 ## Zauber mit Zauberzeit oder Kanalisieren beginnt: Heben, dann Halten.
@@ -55,7 +55,7 @@ func end_cast(shoot: bool) -> void:
 		return
 	speed = 1.0
 	if shoot:
-		_after_shoot = Stage.NONE
+		_after_shoot = Stage.EXIT
 		_enter(Stage.SHOOT)
 	else:
 		_enter(Stage.EXIT)
@@ -69,7 +69,8 @@ func instant(self_cast: bool, self_speed: float) -> void:
 		_enter(Stage.ENTER)
 	else:
 		speed = 1.0
-		_after_shoot = Stage.NONE
+		# Der Loslassen-Clip endet wieder mit erhobener Hand: danach Senken.
+		_after_shoot = Stage.EXIT
 		_enter(Stage.SHOOT)
 
 

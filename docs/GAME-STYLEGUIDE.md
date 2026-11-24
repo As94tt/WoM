@@ -117,7 +117,7 @@ Wahrzeichen zur Orientierung: hoher Turm im Startdorf, großer einzelner Baum au
 - Visuelle Rückmeldung für Treffer, Krit, Heilung, Buff, Debuff, Unterbrechung und Immunität eindeutig gestalten.
 - Flashing und Screen-Shake begrenzen; Optionen zur Effekt- und Bewegungsreduktion vorsehen.
 - Lesbarkeit mit mehreren Spielern, Beschwörungen und AoE-Effekten prüfen.
-- **Zauber-Animationen (Stand Ticket #63):** laufen nur im Oberkörper (ab Wirbelsäule: Brust, Hals, Kopf, Arme, Finger), Hüfte und Beine folgen weiter Stehen, Laufen oder Springen. Abläufe: Zauberzeit = Heben → Halten → Loslassen → (Ende), Kanalisieren = Heben → Halten → Senken, Sofortzauber = Loslassen, Selbst-/Hilfszauber ohne fremdes Ziel = kurzes Heben → Senken, Abbruch/Unterbrechung = sofort Senken ohne Loslassen. Clips und Zeiten stehen im Animationssatz (`grundanimationen.tres`, Gruppe „Zauber“). Neue Zauber-Clips (eigene Buff-, Heil- oder Kanalisier-Animationen) müssen sich an diese Abschnitte halten, damit sie ohne Codeänderung passen.
+- **Zauber-Animationen (Stand Ticket #63):** laufen nur im Oberkörper (ab Wirbelsäule: Brust, Hals, Kopf, Arme, Finger), Hüfte und Beine folgen weiter Stehen, Laufen oder Springen. Abläufe: Zauberzeit = Heben → Halten → Loslassen → Senken (ohne fremdes Ziel ohne Loslassen), Kanalisieren = Heben → Halten → Senken, Sofortzauber = Loslassen → Senken, Selbst-/Hilfszauber ohne fremdes Ziel = kurzes Heben → Senken, Abbruch/Unterbrechung = sofort Senken ohne Loslassen. Clips und Zeiten stehen im Animationssatz (`grundanimationen.tres`, Gruppe „Zauber“). Neue Zauber-Clips (eigene Buff-, Heil- oder Kanalisier-Animationen) müssen sich an diese Abschnitte halten, damit sie ohne Codeänderung passen.
 
 ## 10. Ikonografie und Symbole
 
