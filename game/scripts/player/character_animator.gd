@@ -22,6 +22,23 @@ extends Node3D
 ## Übergangslösung: rückwärts spielen Gehen/Laufen rückwärts ab, seitwärts
 ## und schräg dreht sich das Modell (nicht die Figur) in Laufrichtung, höchstens
 ## um 90 Grad.
+##
+## Zauber (Ticket #63): Über der Grundanimation liegt ein Blend2
+## „oberkoerper“, dessen Filter nur den Oberkörper (ab upper_body_root, z. B.
+## Spine) durchlässt. Sein zweiter Eingang ist die Transition „zauber“
+## (heben | halten | loslassen | senken) hinter „zauber_tempo“. Den Ablauf
+## bestimmt SpellAnimation aus dem UnitCaster der Figur:
+## - Zauberzeit/Kanalisieren: laufender Zauber aus get_cast_info() (beim
+##   Besitzer die Vorhersage, sonst cast_state über CastSync), Ergebnis aus
+##   cast_ended (cast_end über CastSync bzw. beim Besitzer Abbruch/Ablehnung).
+## - Sofortzauber: Signal instant_used (beim Besitzer sofort als Vorhersage,
+##   bei allen anderen aus instant_cast über CastSync), Ablehnung durch den
+##   Host: instant_rejected (wie ein Abbruch).
+## Auch hier wird nichts zusätzlich übertragen außer instant_cast.
+
+## Ein Zauber, dessen Zustand verschwindet, ohne dass ein Ergebnis kommt,
+## endet nach so vielen Sekunden wie ein Abbruch (Sicherheitsgrenze).
+const SPELL_END_GRACE := 0.3
 
 enum Gait { STAND, WALK, RUN, SPRINT, WALK_BACK, RUN_BACK }
 enum Phase { GROUND, JUMP_START, AIR, LAND }
@@ -94,6 +111,18 @@ var _gait: Gait = Gait.STAND
 var _hip_height := DEFAULT_HIP_HEIGHT
 var _facing := 0.0
 
+# --- Zauber (#63) ---
+var _caster: UnitCaster = null
+var _spell := SpellAnimation.new()
+var _spell_serial := 0
+## Laufender animierter Zauber: {key, ability, channel, self, gone}; leer = keiner.
+var _spell_cast: Dictionary = {}
+## Schlüssel des zuletzt beendeten Zaubers (nicht noch einmal beginnen, falls
+## sein Zustand kurz nach dem Ergebnis noch zu sehen ist).
+var _spell_done_key := ""
+## Fähigkeit des laufenden Sofortzauber-Ablaufs (für eine Ablehnung).
+var _spell_instant: AbilityData = null
+
 
 func _ready() -> void:
 	set_process(false)
@@ -130,6 +159,8 @@ func setup(data: CharacterModelData, character: PlayerCharacter) -> bool:
 		_tree.set(&"parameters/zustand/transition_request", String(PHASE_INPUTS[_phases.phase]))
 		_tree.set(&"parameters/gang/transition_request", String(GAIT_INPUTS[_gait]))
 		_tree.active = true
+		if animations.has_spell_clips():
+			_connect_caster(character.get_caster_node())
 	else:
 		push_warning("CharacterAnimator: keine Animationen für das Modell.")
 	set_process(true)
@@ -157,6 +188,11 @@ func get_hip_height() -> float:
 	return _hip_height
 
 
+## Ablauf der Zauber-Animation (für Tests und Fehlersuche).
+func get_spell_animation() -> SpellAnimation:
+	return _spell
+
+
 func _process(delta: float) -> void:
 	if _character == null or _tree == null:
 		return
@@ -177,6 +213,99 @@ func _process(delta: float) -> void:
 		_tree.set(&"parameters/tempo/scale", choice.time_scale)
 		_facing = lerp_angle(_facing, choice.facing, clampf(anims.facing_turn_rate * delta, 0.0, 1.0))
 	_update_pivot(_facing)
+	if _caster != null:
+		_process_spell(delta)
+
+
+# --- Zauber (#63) ------------------------------------------------------------
+
+func _connect_caster(caster: UnitCaster) -> void:
+	if caster == null:
+		return
+	_caster = caster
+	caster.cast_ended.connect(_on_cast_ended)
+	caster.instant_used.connect(_on_instant_used)
+	caster.instant_rejected.connect(_on_instant_rejected)
+
+
+func _process_spell(delta: float) -> void:
+	var anims := _data.animations
+	_follow_cast(delta)
+	_spell.update(delta, anims)
+	if _spell.serial != _spell_serial:
+		_spell_serial = _spell.serial
+		if _spell.stage != SpellAnimation.Stage.NONE:
+			_tree.set(&"parameters/zauber/transition_request", String(SpellAnimation.STAGE_INPUTS[_spell.stage]))
+		if _spell.stage != SpellAnimation.Stage.SHOOT and _spell.stage != SpellAnimation.Stage.ENTER:
+			_spell_instant = null
+	_tree.set(&"parameters/zauber_tempo/scale", _spell.speed)
+	_tree.set(&"parameters/oberkoerper/blend_amount", _spell.weight)
+
+
+## Laufenden Zauber (Zauberzeit, Kanalisieren) mit der Animation abgleichen.
+func _follow_cast(delta: float) -> void:
+	var info := _caster.get_cast_info()
+	var key := cast_key(info)
+	if key != "" and key != _spell_done_key and (_spell_cast.is_empty() or _spell_cast["key"] != key):
+		var ability: AbilityData = info["ability"]
+		if SpellAnimation.animates(ability):
+			var target := Unit.from_path(get_tree(), info["target_path"]) if info["target_path"] is NodePath else null
+			_spell_cast = {"key": key, "ability": ability.id, "channel": bool(info["channel"]),
+					"self": SpellAnimation.is_self_cast(ability, _character, target), "gone": 0.0}
+			_spell_instant = null
+			_spell.begin_cast()
+		elif not _spell_cast.is_empty():
+			# Vorheriger Zauber ohne Ergebnis: nicht im Halten hängen bleiben.
+			_finish_cast(false)
+		return
+	if _spell_cast.is_empty():
+		return
+	if key == "":
+		# Zustand weg, Ergebnis (cast_ended) fehlt noch: kurz warten, dann Senken.
+		_spell_cast["gone"] = float(_spell_cast["gone"]) + delta
+		if float(_spell_cast["gone"]) >= SPELL_END_GRACE:
+			_finish_cast(false)
+
+
+func _on_cast_ended(result: int, ability_id: StringName) -> void:
+	if _spell_cast.is_empty() or _spell_cast["ability"] != ability_id:
+		return
+	var shoot := result == UnitCaster.Result.DONE and not bool(_spell_cast["channel"]) \
+			and not bool(_spell_cast["self"])
+	_finish_cast(shoot)
+
+
+func _finish_cast(shoot: bool) -> void:
+	_spell_done_key = _spell_cast["key"]
+	_spell_cast = {}
+	_spell.end_cast(shoot)
+
+
+func _on_instant_used(ability: AbilityData, target: Unit) -> void:
+	if not SpellAnimation.animates(ability):
+		return
+	_spell_cast = {}
+	_spell_instant = ability
+	_spell.instant(SpellAnimation.is_self_cast(ability, _character, target), _data.animations.spell_self_speed)
+
+
+func _on_instant_rejected(ability: AbilityData) -> void:
+	if _spell_instant != null and ability != null and _spell_instant.id == ability.id:
+		_spell_instant = null
+		_spell.abort()
+
+
+## Eindeutiger Schlüssel eines laufenden Zaubers aus get_cast_info() (leer =
+## keiner). Vorhersage und Stand des Hosts teilen die Wunsch-Nummer; ohne
+## Wunsch (KI, Übungspuppen) zählt die Startzeit.
+static func cast_key(info: Dictionary) -> String:
+	if info.is_empty() or info.get("ability") == null:
+		return ""
+	var ability: AbilityData = info["ability"]
+	var req := int(info.get("req", 0))
+	if req != 0:
+		return "%s#%d" % [ability.id, req]
+	return "%s@%.3f" % [ability.id, float(info.get("start", 0.0))]
 
 
 func _update_pivot(facing: float) -> void:
@@ -269,5 +398,65 @@ static func build_tree(anims: CharacterAnimationSet) -> AnimationNodeBlendTree:
 	for i in PHASE_INPUTS.size():
 		zustand.add_input(PHASE_INPUTS[i])
 		root.connect_node(&"zustand", i, phase_sources[i])
-	root.connect_node(&"output", 0, &"zustand")
+	if not anims.has_spell_clips():
+		root.connect_node(&"output", 0, &"zustand")
+		return root
+
+	# Zauber (#63): Abschnitte als Transition, nur im Oberkörper überblendet.
+	var zauber := AnimationNodeTransition.new()
+	zauber.xfade_time = anims.spell_blend_time
+	zauber.allow_transition_to_self = true
+	root.add_node(&"zauber", zauber)
+	var spell_clips := [anims.spell_enter, anims.spell_idle, anims.spell_shoot, anims.spell_exit]
+	for i in spell_clips.size():
+		var input := SpellAnimation.STAGE_INPUTS[i + 1]
+		var clip := AnimationNodeAnimation.new()
+		clip.animation = spell_clips[i]
+		var node_name := StringName("z_" + String(input))
+		root.add_node(node_name, clip)
+		zauber.add_input(input)
+		zauber.set_input_reset(i, true)
+		root.connect_node(&"zauber", i, node_name)
+	root.add_node(&"zauber_tempo", AnimationNodeTimeScale.new())
+	root.connect_node(&"zauber_tempo", 0, &"zauber")
+	var upper := AnimationNodeBlend2.new()
+	upper.filter_enabled = true
+	for path in upper_body_tracks(anims):
+		upper.set_filter_path(path, true)
+	root.add_node(&"oberkoerper", upper)
+	root.connect_node(&"oberkoerper", 0, &"zustand")
+	root.connect_node(&"oberkoerper", 1, &"zauber_tempo")
+	root.connect_node(&"output", 0, &"oberkoerper")
 	return root
+
+
+## Spuren der Zauber-Clips, die zum Oberkörper gehören: Knochen
+## upper_body_root und alles darunter laut SkeletonProfileHumanoid. Knochen,
+## die das Profil nicht kennt (z. B. Fingerspitzen „…_leaf“), hängen an den
+## Händen und gehören ebenfalls dazu; Hüfte und Beine nicht.
+static func upper_body_tracks(anims: CharacterAnimationSet) -> Array[NodePath]:
+	var profile := SkeletonProfileHumanoid.new()
+	var upper := {}
+	for i in profile.bone_size:
+		var bone := profile.get_bone_name(i)
+		var current := bone
+		while current != &"":
+			if current == anims.upper_body_root:
+				upper[bone] = true
+				break
+			var index := profile.find_bone(current)
+			current = profile.get_bone_parent(index) if index >= 0 else &""
+	var result: Array[NodePath] = []
+	var seen := {}
+	for clip in [anims.spell_enter, anims.spell_idle, anims.spell_shoot, anims.spell_exit]:
+		var anim := anims.library.get_animation(clip)
+		for t in anim.get_track_count():
+			var path := anim.track_get_path(t)
+			var key := String(path)
+			if seen.has(key) or path.get_subname_count() == 0:
+				continue
+			seen[key] = true
+			var bone := StringName(path.get_subname(0))
+			if upper.has(bone) or profile.find_bone(bone) < 0:
+				result.append(path)
+	return result
