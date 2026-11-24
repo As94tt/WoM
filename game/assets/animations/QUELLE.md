@@ -5,7 +5,9 @@
 - **Werk:** Universal Animation Library (Standard-Fassung), Datei `Unreal-Godot/UAL1_Standard.glb` (ohne Root Motion)
 - **Urheber:** Quaternius – https://quaternius.itch.io/universal-animation-library
 - **Lizenz:** CC0 1.0 Universal (Public Domain Dedication), siehe `UAL1_License.txt`
-- **Übernommen:** unverändert für Ticket #59 (Grundanimationen der Spielfigur)
+- **Übernommen:** unverändert für Ticket #59 (Grundanimationen der Spielfigur);
+  seit Ticket #63 auch die Clips `Spell_Simple_Enter/Idle/Shoot/Exit` für
+  Zauber-Animationen im Oberkörper
 
 ## Import (reproduzierbar ohne Editor-Klicks)
 
