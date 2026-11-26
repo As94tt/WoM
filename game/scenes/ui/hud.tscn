@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/cast_bar.tscn" id="13_cast"]
 [ext_resource type="Script" path="res://scripts/ui/error_messages.gd" id="14_errors"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/death_window.tscn" id="15_death"]
+[ext_resource type="Script" path="res://scripts/ui/bag_bar_slot.gd" id="16_bagslot"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -266,6 +267,7 @@ theme_type_variation = &"SlotButton"
 text = "S"
 
 [node name="BagBar" type="HBoxContainer" parent="SafeArea/Layout/BottomRight"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
@@ -277,6 +279,8 @@ layout_mode = 2
 tooltip_text = "Taschenplatz (leer)"
 focus_mode = 0
 theme_type_variation = &"SlotButton"
+script = ExtResource("16_bagslot")
+bag_slot = 4
 
 [node name="BagSlot3" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
 custom_minimum_size = Vector2(48, 48)
@@ -284,6 +288,8 @@ layout_mode = 2
 tooltip_text = "Taschenplatz (leer)"
 focus_mode = 0
 theme_type_variation = &"SlotButton"
+script = ExtResource("16_bagslot")
+bag_slot = 3
 
 [node name="BagSlot2" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
 custom_minimum_size = Vector2(48, 48)
@@ -291,6 +297,8 @@ layout_mode = 2
 tooltip_text = "Taschenplatz (leer)"
 focus_mode = 0
 theme_type_variation = &"SlotButton"
+script = ExtResource("16_bagslot")
+bag_slot = 2
 
 [node name="BagSlot1" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
 custom_minimum_size = Vector2(48, 48)
@@ -298,6 +306,7 @@ layout_mode = 2
 tooltip_text = "Taschenplatz (leer)"
 focus_mode = 0
 theme_type_variation = &"SlotButton"
+script = ExtResource("16_bagslot")
 
 [node name="BackpackButton" type="Button" parent="SafeArea/Layout/BottomRight/BagBar"]
 unique_name_in_owner = true
@@ -306,6 +315,24 @@ layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"SlotButton"
 text = "R"
+
+[node name="FreeSlots" type="Label" parent="SafeArea/Layout/BottomRight/BagBar/BackpackButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ItemCount"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="ErrorMessages" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

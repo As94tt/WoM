@@ -11,6 +11,8 @@ const SCENES := [
 	"res://scenes/ui/style_preview.tscn",
 	"res://scenes/ui/hud/death_window.tscn",
 	"res://scenes/ui/hud/talent_panel.tscn",
+	"res://scenes/ui/hud/inventory_panel.tscn",
+	"res://scenes/ui/hud/item_slot.tscn",
 ]
 const SCRIPTS := [
 	"res://scripts/world/game_world.gd",
@@ -21,6 +23,8 @@ const SCRIPTS := [
 	"res://scripts/talents/player_talents.gd",
 	"res://scripts/talents/talent_dev_section.gd",
 	"res://scripts/ui/talent_panel.gd",
+	"res://scripts/items/inventory_dev_section.gd",
+	"res://scripts/ui/split_stack_dialog.gd",
 ]
 
 

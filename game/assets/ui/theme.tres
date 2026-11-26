@@ -620,6 +620,54 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_item_rarity_frame"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coin_gold"]
+bg_color = Color(0.85, 0.7, 0.25, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.05, 0.05, 0.05, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coin_silver"]
+bg_color = Color(0.76, 0.76, 0.8, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.05, 0.05, 0.05, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coin_copper"]
+bg_color = Color(0.72, 0.45, 0.25, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.05, 0.05, 0.05, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -960,3 +1008,27 @@ LockedChoiceButton/colors/icon_normal_color = Color(0.5, 0.5, 0.5, 1)
 LockedChoiceButton/colors/icon_hover_color = Color(0.65, 0.65, 0.65, 1)
 LockedChoiceButton/colors/icon_pressed_color = Color(0.65, 0.65, 0.65, 1)
 LockedChoiceButton/colors/icon_hover_pressed_color = Color(0.65, 0.65, 0.65, 1)
+RarityColors/colors/poor = Color(0.62, 0.62, 0.62, 1)
+RarityColors/colors/common = Color(0.95, 0.95, 0.95, 1)
+RarityColors/colors/uncommon = Color(0.35, 0.85, 0.35, 1)
+RarityColors/colors/rare = Color(0.3, 0.58, 0.98, 1)
+RarityColors/colors/epic = Color(0.72, 0.42, 0.95, 1)
+ItemRarityFrame/base_type = &"Panel"
+ItemRarityFrame/styles/panel = SubResource("StyleBoxFlat_item_rarity_frame")
+ItemCount/base_type = &"Label"
+ItemCount/colors/font_color = Color(0.95, 0.95, 0.95, 1)
+ItemCount/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+ItemCount/constants/outline_size = 4
+ItemCount/font_sizes/font_size = 14
+SlotGrid/base_type = &"GridContainer"
+SlotGrid/constants/h_separation = 4
+SlotGrid/constants/v_separation = 4
+CoinGold/base_type = &"Panel"
+CoinGold/styles/panel = SubResource("StyleBoxFlat_coin_gold")
+CoinSilver/base_type = &"Panel"
+CoinSilver/styles/panel = SubResource("StyleBoxFlat_coin_silver")
+CoinCopper/base_type = &"Panel"
+CoinCopper/styles/panel = SubResource("StyleBoxFlat_coin_copper")
+CoinText/base_type = &"Label"
+CoinText/colors/font_color = Color(0.05, 0.05, 0.05, 1)
+CoinText/font_sizes/font_size = 14

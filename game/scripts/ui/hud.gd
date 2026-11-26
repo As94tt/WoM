@@ -56,6 +56,13 @@ extends Control
 ## Button eines Fensters, mit Text im Tooltip als zweitem Signal (z. B.
 ## „Spezialisierung wählbar“). ask() öffnet eine Rückfrage (MessageDialog).
 ##
+## Inventar (#18): setup_inventory() verbindet die Taschenleiste (BagBarSlot,
+## Taschenplatz 1 direkt neben dem Rucksack) und die Zahl freier Plätze am
+## Rucksack-Symbol mit dem Inventar. Den Inhalt des Taschenfensters
+## (InventoryPanel) setzt GameWorld. Klick auf einen Taschenplatz öffnet bzw.
+## schließt das Taschenfenster wie der Rucksack. Rechtsklick und Esc brechen
+## auch das Ziehen eines Gegenstands ab (ItemDragData.cancelled).
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -86,6 +93,8 @@ var _windows: Dictionary[StringName, HudWindow] = {}
 var _targeting: Targeting = null
 ## Eigene Figur (#33: Bodenziel und Zauber abbrechen).
 var _player: PlayerCharacter = null
+## Inventar des eigenen Charakters (#18), null bis setup_inventory.
+var _inventory: Inventory = null
 
 @onready var _game_menu: GameMenu = %GameMenu
 @onready var _action_bar_1: ActionBar = %ActionBar1
@@ -109,7 +118,46 @@ func _ready() -> void:
 	var bags := _windows[&"bags"]
 	%BackpackButton.tooltip_text = _tooltip("Rucksack", bags.toggle_action)
 	%BackpackButton.pressed.connect(toggle_window.bind(&"bags"))
+	for slot in get_bag_bar_slots():
+		slot.pressed.connect(toggle_window.bind(&"bags"))
+		slot.error.connect(show_error)
 	_update_layout()
+
+
+## Taschenplätze der Taschenleiste (#18), Reihenfolge wie in der Leiste.
+func get_bag_bar_slots() -> Array[BagBarSlot]:
+	var result: Array[BagBarSlot] = []
+	for child in %BagBar.get_children():
+		if child is BagBarSlot:
+			result.append(child)
+	return result
+
+
+## Verbindet Taschenleiste und Rucksack-Symbol mit dem Inventar (#18).
+func setup_inventory(inventory: Inventory) -> void:
+	_inventory = inventory
+	for slot in get_bag_bar_slots():
+		slot.setup(inventory)
+	if not inventory.changed.is_connected(_update_bag_bar):
+		inventory.changed.connect(_update_bag_bar)
+	_update_bag_bar()
+
+
+## Zahl freier Plätze am Rucksack-Symbol (für Tests und Anzeige).
+func get_free_slot_text() -> String:
+	return %FreeSlots.text
+
+
+func _update_bag_bar() -> void:
+	if _inventory == null:
+		return
+	for slot in get_bag_bar_slots():
+		slot.refresh()
+	var free := _inventory.get_free_slots()
+	%FreeSlots.visible = true
+	%FreeSlots.text = str(free)
+	%BackpackButton.tooltip_text = "%s\n%d von %d Plätzen frei" % [
+			_tooltip("Rucksack", _windows[&"bags"].toggle_action), free, _inventory.get_total_slots()]
 
 
 ## Hinweis-Punkt am Menüleisten-Button des Fensters an/aus (#20); hint
@@ -186,7 +234,8 @@ func _input(event: InputEvent) -> void:
 	# Ziehen eine Taste neu gedrückt) neben einen Slot: Godot beendet das
 	# Ziehen dort nicht selbst. Wie „ins Leere loslassen“ behandeln.
 	if press and event.button_index == MOUSE_BUTTON_LEFT:
-		if not get_viewport().gui_get_hovered_control() is ActionSlot:
+		var hovered := get_viewport().gui_get_hovered_control()
+		if not (hovered is ActionSlot or hovered is ItemSlot or hovered is BagBarSlot):
 			get_viewport().gui_cancel_drag()
 			get_viewport().set_input_as_handled()
 		return
@@ -194,6 +243,8 @@ func _input(event: InputEvent) -> void:
 	if not right_click and not event.is_action_pressed(GAME_MENU_ACTION):
 		return
 	if data is ActionDragData:
+		data.cancelled = true
+	elif data is ItemDragData:
 		data.cancelled = true
 	get_viewport().gui_cancel_drag()
 	get_viewport().set_input_as_handled()
