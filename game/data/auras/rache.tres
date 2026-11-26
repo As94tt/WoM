@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x2"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+event = 6
+ability_id = &"vergeltung"
+remove_aura = true
+
+[resource]
+script = ExtResource("x1")
+id = &"rache"
+display_name = "Rache"
+description = "Vergeltung ist verfügbar."
+ability_id = &"rache"
+procs = Array[ExtResource("x2")]([SubResource("R1")])

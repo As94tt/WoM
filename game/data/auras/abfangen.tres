@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x2"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+event = 2
+remove_aura = true
+
+[resource]
+script = ExtResource("x1")
+id = &"abfangen"
+display_name = "Abfangen"
+description = "Der nächste Angriff gegen dieses Ziel trifft den Krieger."
+ability_id = &"abfangen"
+redirect_mode = 2
+redirect_percent = 100.0
+procs = Array[ExtResource("x2")]([SubResource("R1")])

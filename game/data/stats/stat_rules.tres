@@ -183,6 +183,7 @@ display = 1
 formula = 2
 source = &"haste"
 conversion_column = "tempo"
+allows_negative = true
 
 [sub_resource type="Resource" id="Stat_penetration_pct"]
 script = ExtResource("2_def")

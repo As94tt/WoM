@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"rache"
+display_name = "Rache"
+description = "Mechanik der Spezialisierung Bollwerk (nur Zahlen): Dauer des Fensters für Vergeltung nach Ausweichen, Parieren oder Blocken."
+class_id = &"warrior"
+required_level = 10
+passive = true
+school = &"physisch"
+target_kind = 0

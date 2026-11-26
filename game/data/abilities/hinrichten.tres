@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/spread_aura_effect.gd" id="x5"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="x6"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+resource = &"rage"
+amount_key = "werte.erstattung"
+target_mode = 1
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+consume_resource = &"rage"
+consume_max_key = "werte.zusatz_wut"
+bonus_per_point_key = "werte.bonus_je_wut"
+crit_bonus_key = "werte.krit_bonus"
+on_kill_effects = Array[ExtResource("x2")]([SubResource("R1")])
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x6")
+kind = 1
+aura_id = &"talent_blutige_ernte"
+
+[sub_resource type="Resource" id="R4"]
+script = ExtResource("x5")
+aura_id = &"tiefe_wunde"
+filter = 2
+count_key = "werte.verbreiten_ziele"
+radius_key = "werte.verbreiten_radius"
+conditions = Array[ExtResource("x6")]([SubResource("R3")])
+
+[resource]
+script = ExtResource("x1")
+id = &"hinrichten"
+display_name = "Hinrichten"
+description = "Nur gegen Ziele unter 20 % Leben. Verbraucht bis zu 40 zusätzliche Wut für Bonusschaden. Kostet 10 Wut."
+class_id = &"warrior"
+required_level = 6
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R2"), SubResource("R4")])
+starts_auto_attack = true
+highlight_auras = PackedStringArray("ploetzlicher_tod")

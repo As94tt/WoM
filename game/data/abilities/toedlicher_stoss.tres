@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+aura_id = &"toedliche_wunde"
+target_mode = 0
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+on_hit_effects = Array[ExtResource("x2")]([SubResource("R1")])
+
+[resource]
+script = ExtResource("x1")
+id = &"toedlicher_stoss"
+display_name = "Tödlicher Stoß"
+description = "Auch ohne Schild: hoher Schaden, das Ziel erhält 8 Sekunden lang 50 % weniger Heilung. Kostet 20 Wut."
+class_id = &"warrior"
+required_level = 3
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R2")])
+starts_auto_attack = true

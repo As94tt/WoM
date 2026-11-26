@@ -34,6 +34,8 @@ enum Code {
 	IN_COMBAT,        ## 8: nur außerhalb des Kampfes (#35, Aufhelfen)
 	TARGET_ALIVE,     ## 5: Ziel lebt (#35, Wiederbelebung)
 	NOBODY_TO_HELP,   ## Aufhelfen (F): kein toter Mitspieler in Reichweite (#35)
+	TOO_CLOSE,        ## 6: näher als die Mindestreichweite (#53, Sturmangriff)
+	TARGET_HEALTH_TOO_HIGH, ## 8: Ziel hat zu viel Leben (#53, Hinrichten)
 }
 
 const WEAPON_TEXTS := {
@@ -100,6 +102,10 @@ static func text(code: int, param: String = "") -> String:
 			return "Euer Ziel lebt noch."
 		Code.NOBODY_TO_HELP:
 			return "Hier ist niemand, dem Ihr aufhelfen könnt."
+		Code.TOO_CLOSE:
+			return "Ihr seid zu nah dran."
+		Code.TARGET_HEALTH_TOO_HIGH:
+			return "Euer Ziel hat noch zu viel Leben."
 	return "Das geht gerade nicht."
 
 

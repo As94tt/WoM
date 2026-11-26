@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="SpecializationData" format=3]
+
+[ext_resource type="Script" path="res://scripts/talents/specialization_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/talents/ability_transform_data.gd" id="x2"]
+[ext_resource type="Resource" path="res://data/abilities/hieb.tres" id="x3"]
+[ext_resource type="Resource" path="res://data/abilities/klaffender_hieb.tres" id="x4"]
+[ext_resource type="Resource" path="res://data/abilities/schildschlag.tres" id="x5"]
+[ext_resource type="Resource" path="res://data/abilities/toedlicher_stoss.tres" id="x6"]
+[ext_resource type="Resource" path="res://data/abilities/zerschmettern.tres" id="x7"]
+[ext_resource type="Resource" path="res://data/abilities/hinrichten.tres" id="x8"]
+[ext_resource type="Resource" path="res://data/abilities/donnerknall.tres" id="x9"]
+[ext_resource type="Resource" path="res://data/abilities/erdbeben.tres" id="x10"]
+[ext_resource type="Resource" path="res://data/abilities/kampfschrei.tres" id="x11"]
+[ext_resource type="Resource" path="res://data/abilities/kriegsruf.tres" id="x12"]
+[ext_resource type="Resource" path="res://data/abilities/spott.tres" id="x13"]
+[ext_resource type="Resource" path="res://data/abilities/bruellen.tres" id="x14"]
+[ext_resource type="Resource" path="res://data/abilities/sturmangriff.tres" id="x15"]
+[ext_resource type="Resource" path="res://data/abilities/schwerer_ansturm.tres" id="x16"]
+[ext_resource type="Resource" path="res://data/talents/warrior_schlachtmeister.tres" id="x17"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+base = ExtResource("x3")
+variant = ExtResource("x4")
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x2")
+base = ExtResource("x5")
+variant = ExtResource("x6")
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x2")
+base = ExtResource("x7")
+variant = ExtResource("x8")
+
+[sub_resource type="Resource" id="R4"]
+script = ExtResource("x2")
+base = ExtResource("x9")
+variant = ExtResource("x10")
+
+[sub_resource type="Resource" id="R5"]
+script = ExtResource("x2")
+base = ExtResource("x11")
+variant = ExtResource("x12")
+
+[sub_resource type="Resource" id="R6"]
+script = ExtResource("x2")
+base = ExtResource("x13")
+variant = ExtResource("x14")
+
+[sub_resource type="Resource" id="R7"]
+script = ExtResource("x2")
+base = ExtResource("x15")
+variant = ExtResource("x16")
+
+[resource]
+script = ExtResource("x1")
+id = &"warrior_schlachtmeister"
+display_name = "Schlachtmeister"
+description = "Langsamer Nahkampf-Schaden mit Zweihandwaffe: große Treffer und ein starkes Ende.
+Tiefe Wunde: Blutung am Ziel (bis 3 Stapel, 12 s). Hinrichten nur gegen Ziele unter 20 % Leben, verbraucht bis zu 40 zusätzliche Wut für Bonusschaden. Bevorzugt Verheerung und Durchschlag."
+order = 3
+preferred_stats = Array[StringName]([&"devastation", &"penetration"])
+transformations = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2"), SubResource("R3"), SubResource("R4"), SubResource("R5"), SubResource("R6"), SubResource("R7")])
+talent_tree = ExtResource("x17")

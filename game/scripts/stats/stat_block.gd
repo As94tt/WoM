@@ -225,7 +225,7 @@ func _compute(with_modifiers: bool) -> Dictionary[StringName, float]:
 			value = _apply_modifiers(definition.id, value)
 		if definition.cap_key != "":
 			value = minf(value, Data.konstante(StringName(definition.cap_key), INF))
-		result[definition.id] = maxf(value, 0.0)
+		result[definition.id] = value if definition.allows_negative else maxf(value, 0.0)
 	return result
 
 

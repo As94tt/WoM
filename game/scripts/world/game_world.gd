@@ -839,6 +839,7 @@ func _setup_stat_dev_section(panel: DevPanel) -> void:
 			STAT_DEV_TOOLS.resource_spent, 0), _stat_dev_action.bind("spend", null))
 	panel.add_button(section, "Chi aufbauen (+%s)" % StatFormat.number(
 			STAT_DEV_TOOLS.chi_built, 0), _stat_dev_action.bind("build_chi", null))
+	panel.add_button(section, "Wut auf 100 setzen", _stat_dev_action.bind("rage_full", null))
 	panel.add_button(section, "Leben und Ressourcen auffüllen", _stat_dev_action.bind("refill", null))
 	panel.add_info(section, "Testmodifikatoren:")
 	for index in STAT_DEV_TOOLS.test_modifiers.size():

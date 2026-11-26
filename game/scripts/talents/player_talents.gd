@@ -28,7 +28,8 @@ extends Node
 ##   zurück (request_failed).
 ## - Wirkung (nur Host): Verwandlungen als Veränderungen von Fähigkeiten
 ##   (Quelle „spec:<id>“), Talent-Effekte (z. B. „Fähigkeit verändern“, Quelle
-##   „talent:<id>:<rang>:<n>“) und passive Talent-Auren über UnitCombat (#32).
+##   „talent:<id>:<rang>:<n>“) und passive Talent-Auren über UnitCombat (#32);
+##   seit #53 auch passive Auren der Spezialisierung (SpecializationData.auras).
 ##   Die Veränderungen überträgt UnitCombat wie gewohnt (ability_mod_state),
 ##   deshalb lösen alle Instanzen Fähigkeiten gleich auf.
 ## - Gespeichert wird beim Besitzer: Kommt ein neuer Stand vom Host an, schreibt
@@ -451,6 +452,12 @@ func _host_refresh() -> void:
 	if spec.extension != null:
 		spec.extension.on_activated(_player)
 		_applied_extension = spec.extension
+	# Passive Auren der Spezialisierung (#53), nur auf Lebende (wie Talent-Auren).
+	if not dead:
+		for aura in spec.auras:
+			if aura != null and combat.apply_aura(aura, _player,
+					EffectContext.create(_player, _player, StringName("spec:%s" % spec.id), spec.display_name)) != null:
+				_applied_auras.append(aura)
 	if spec.talent_tree == null or not are_talents_active():
 		return
 	var ranks := get_ranks()

@@ -52,11 +52,57 @@ kettenblitz;mage;mage_blitz;10;40;mana;1,8;0;6;1;35;50;0,9;zaubermacht;0;0;radiu
 blitzsalve;mage;mage_blitz;10;40;mana;0;1,5;10;1;35;20;0,35;zaubermacht;0;0,3;flug:45|ladung_stapel:1;Talent (Reihe 3): schnelle Pfeile
 sturmgewalt;mage;mage_blitz;10;20;mana;0;0;60;1;0;0;0;;12;0;;Talent (Reihe 7): Überladung
 kugelblitz;mage;mage_blitz;10;40;mana;0;0;30;1;0;40;0,6;zaubermacht;5;0,25;flug:6|radius:3|ladung_stapel:2|anzeige_dauer:0,25|anzeige_tick:5;Talent (Reihe 7): Kugel mit flug m/s, dauer = Flugzeit, tick = Schrittweite
-# Krieger
-schildschlag;warrior;;1;15;wut;0;0;6;1;5;20;0,5;kampfkraft;0;0;bedrohung:100;Beispiel, zusätzliche Bedrohung (#35)
-spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;;Platzhalter (#21)
-passiv_krieger;warrior;;3;0;keine;0;0;0;1;0;0;0;;0;0;;Passiver Platzhalter (#21)
-kampfschrei;warrior;;4;10;wut;0;0;30;1;0;0;0;;60;0;radius:20;Platzhalter (#21)
+# Krieger (#53): Grundfähigkeiten bis Stufe 9, Schule Physisch, Ressource Wut. Alle Zahlen sind Platzhalter. „wut“ = erzeugte Wut, faktor_quelle waffe = Waffenschaden (Platzhalterwaffe bis #29).
+hieb;warrior;;1;0;keine;0;0;0;1;0;6;0,6;waffe;0;0;wut:10;Sofort, Nahkampf, Waffenschaden, erzeugt wut Wut
+spott;warrior;;2;0;keine;0;0;8;1;30;0;0;;3;0;radius:8;Ziel greift den Krieger dauer Sekunden an, außerhalb des globalen Cooldowns – radius für Fels in der Brandung (Flächenspott)
+schildschlag;warrior;;3;0;keine;0;0;6;1;0;20;0,9;waffe;0;0;bedrohung:100|wut:15;Nur mit Schild, bedrohung = Zusatzbedrohung
+kampfschrei;warrior;;4;0;keine;0;0;30;1;0;0;0;;60;0;radius:30|wut:20;Gruppe im Umkreis radius, dauer der Aura (+10 % Kampfkraft)
+sturmangriff;warrior;;5;0;keine;0;0;20;1;25;0;0;;0;0;mindestreichweite:8|betaeubung_dauer:1|wut:20;Sprung zum Ziel (mindestreichweite bis reichweite), betäubt betaeubung_dauer Sekunden
+zerschmettern;warrior;;6;30;wut;0;0;0;1;0;30;1,5;waffe;0;0;;Hoher Schaden
+donnerknall;warrior;;8;10;wut;0;0;6;1;0;10;0,4;waffe;6;0;radius:8|bedrohung:60;Fläche um den Krieger, dauer = Verlangsamung (20 %), bedrohung je Ziel
+letztes_gefecht;warrior;;9;0;keine;0;0;180;1;0;0;0;;15;0;;+30 % maximales Leben für dauer Sekunden, außerhalb des globalen Cooldowns
+# Krieger – Bollwerk (#53): Varianten, Mechaniken Bollwerk-Haltung und Rache, Talent-Fähigkeiten
+schildstoss;warrior;warrior_bollwerk;1;0;keine;0;0;0;1;0;6;0,6;waffe;0;0;wut:10|bedrohung_bonus:50;Verwandelt Hieb – bedrohung_bonus in Prozent des Schadens
+schildschlag_bollwerk;warrior;warrior_bollwerk;3;0;keine;0;0;4;1;0;20;0,9;waffe;0;0;bedrohung:100|wut:15;Verwandelt Schildschlag (Abklingzeit 4 s) – Schildmeister +10 Wut
+vergeltung;warrior;warrior_bollwerk;6;0;keine;0;0;0;1;0;40;1,8;waffe;0;0;wut:0;Verwandelt Zerschmettern, nur mit Rache – Zorn des Wächters +5 Wut je Rang
+donnerknall_bollwerk;warrior;warrior_bollwerk;8;10;wut;0;0;6;1;0;10;0,4;waffe;6;0;radius:8|bedrohung:60;Verwandelt Donnerknall, zusätzlich −10 % Angriffstempo – Grollen −1 s je Rang
+sammelruf;warrior;warrior_bollwerk;4;0;keine;0;0;30;1;0;0;0;;60;0;radius:30|wut:20;Verwandelt Kampfschrei, zusätzlich +10 % Rüstung
+schildansturm;warrior;warrior_bollwerk;5;0;keine;0;0;20;1;25;0;0;;0;0;mindestreichweite:8|betaeubung_dauer:1|wut:20;Verwandelt Sturmangriff (nur Aussehen)
+schildwall;warrior;warrior_bollwerk;9;0;keine;0;0;180;1;0;0;0;;15;0;;Verwandelt Letztes Gefecht: −40 % erlittener Schaden statt mehr Leben
+bollwerk_haltung;warrior;warrior_bollwerk;10;0;keine;0;0;0;1;0;0;0;;0;0;wut_je_block:5|heilung_je_block:1;Mechanik Bollwerk-Haltung (passive Aura der Spezialisierung): Wut je Block, Heilung je Block und Rang (Standhaft)
+rache;warrior;warrior_bollwerk;10;0;keine;0;0;0;1;0;0;0;;5;0;;Mechanik Rache: dauer = Fenster für Vergeltung – Gegenstoß +3 s
+heldenwurf;warrior;warrior_bollwerk;10;0;keine;0;0;10;1;20;30;0,8;waffe;0;0;bedrohung:150;Talent (Reihe 3): Wurf, Schaden und hohe Bedrohung
+schildwurf;warrior;warrior_bollwerk;10;0;keine;0;0;10;1;20;20;0,6;waffe;0;0;bedrohung:80;Talent (Reihe 3): springt auf 3 Ziele (Sprungweite 10 m), Schaden und Bedrohung an allen
+abfangen;warrior;warrior_bollwerk;10;0;keine;0;0;20;1;25;0;0;;6;0;;Talent (Reihe 5): Sprung zum Verbündeten, dauer = so lange wartet das Abfangen höchstens
+unbeugsam;warrior;warrior_bollwerk;10;0;keine;0;0;120;1;0;0;0;;10;0;;Talent (Reihe 7): großer Cooldown
+schildorkan;warrior;warrior_bollwerk;10;0;keine;0;0;90;1;0;0;0;;8;0;;Talent (Reihe 7): großer Cooldown
+# Krieger – Berserker (#53): Varianten, Mechaniken Raserei und Blutrausch, Talent-Fähigkeiten
+wilder_hieb;warrior;warrior_berserker;1;0;keine;0;0;0;1;0;4;0,4;waffe;0;0;schlaege:2|wut:12;Verwandelt Hieb: schlaege Schläge, grundwert/faktor je Schlag
+wutschlag;warrior;warrior_berserker;3;0;keine;0;0;6;1;0;20;0,9;waffe;0;0;wut:15;Verwandelt Schildschlag (ohne Schild)
+raserei_schlag;warrior;warrior_berserker;6;30;wut;0;0;0;1;0;30;1,5;waffe;0;0;;Verwandelt Zerschmettern, +1 Raserei
+wirbelwind;warrior;warrior_berserker;8;10;wut;0;0;6;1;0;10;0,5;waffe;0;0;radius:8|ziele:4;Verwandelt Donnerknall: Schaden an bis zu ziele Gegnern – Wirbelnde Klingen +1 Ziel je Rang
+schlachtgebruell;warrior;warrior_berserker;4;0;keine;0;0;30;1;0;0;0;;60;0;radius:30|wut:20;Verwandelt Kampfschrei, zusätzlich +1 Raserei
+herausforderung;warrior;warrior_berserker;2;0;keine;0;0;8;1;30;0;0;;3;0;;Verwandelt Spott (nur Aussehen)
+rasender_ansturm;warrior;warrior_berserker;5;0;keine;0;0;20;1;25;0;0;;0;0;mindestreichweite:8|betaeubung_dauer:1|wut:20|raserei_stapel:0;Verwandelt Sturmangriff – raserei_stapel für Rasender Beginn (+2)
+raserei;warrior;warrior_berserker;10;0;keine;0;0;0;1;0;0;0;;10;0;stapel:1|wut_je_stapel:30|wutentbrannt_wut:2|blutdurst_heilung:1|siegesrausch_heilung:20;Mechanik Raserei: dauer der Aura, stapel je Auslösung (Avatar der Wut +1), wut_je_stapel ausgegebene Wut je Stapel – wutentbrannt_wut, blutdurst_heilung (Prozent je Rang), siegesrausch_heilung (Prozent)
+blutrausch;warrior;warrior_berserker;10;0;keine;0;0;0;1;0;0;0;;8;0;;Mechanik Blutrausch: dauer bei 5 Raserei – Blinde Wut +2 s
+klingensturm;warrior;warrior_berserker;10;20;wut;0;3;20;1;0;10;0,45;waffe;0;1;radius:8;Talent (Reihe 3): kanalisiert, je Tick Schaden an allen Gegnern im Umkreis
+rasender_sprung;warrior;warrior_berserker;10;0;keine;0;0;20;1;25;20;0,8;waffe;0;0;radius:5;Talent (Reihe 3): Sprung, Flächenschaden um das Ziel
+avatar_der_wut;warrior;warrior_berserker;10;0;keine;0;0;90;1;0;0;0;;15;0;;Talent (Reihe 7): großer Cooldown, +25 % Schaden
+berserkerzorn;warrior;warrior_berserker;10;0;keine;0;0;60;1;0;0;0;;6;0;raserei_stapel:5;Talent (Reihe 7): großer Cooldown, dauer der Immunität
+# Krieger – Schlachtmeister (#53): Varianten, Mechanik Tiefe Wunde, Talent-Fähigkeiten
+klaffender_hieb;warrior;warrior_schlachtmeister;1;0;keine;0;0;0;1;0;6;0,6;waffe;0;0;wut:10;Verwandelt Hieb, +1 Tiefe Wunde
+toedlicher_stoss;warrior;warrior_schlachtmeister;3;20;wut;0;0;6;1;0;40;1,9;waffe;8;0;;Verwandelt Schildschlag: dauer = −50 % erhaltene Heilung am Ziel – Kriegsveteran −1 s je Rang
+hinrichten;warrior;warrior_schlachtmeister;6;10;wut;0;0;0;1;0;30;1,6;waffe;0;0;ziel_leben_unter:20|zusatz_wut:40|bonus_je_wut:1,5|krit_bonus:0|erstattung:0|verbreiten_ziele:2|verbreiten_radius:8;Verwandelt Zerschmettern: nur unter ziel_leben_unter % Leben, verbraucht bis zu zusatz_wut Wut (+bonus_je_wut % Schaden je Punkt) – krit_bonus (Gnadenlos), erstattung (Taktiker), verbreiten_* (Blutige Ernte)
+erdbeben;warrior;warrior_schlachtmeister;8;10;wut;0;0;10;1;0;6;0,25;waffe;0;0;flaeche_dauer:6|flaeche_radius:8|flaeche_tick:2;Verwandelt Donnerknall: Fläche um den Krieger, grundwert/faktor je Tick, je Tick 1 Tiefe Wunde – Schlachtenlärm +1 m je Rang
+kriegsruf;warrior;warrior_schlachtmeister;4;0;keine;0;0;30;1;0;0;0;;60;0;radius:30|wut:20;Verwandelt Kampfschrei, zusätzlich +5 % kritische Trefferchance
+bruellen;warrior;warrior_schlachtmeister;2;0;keine;0;0;8;1;30;0;0;;3;0;;Verwandelt Spott (nur Aussehen)
+schwerer_ansturm;warrior;warrior_schlachtmeister;5;0;keine;0;0;20;1;25;0;0;;0;0;mindestreichweite:8|betaeubung_dauer:1|wut:20;Verwandelt Sturmangriff (nur Aussehen)
+tiefe_wunde;warrior;warrior_schlachtmeister;10;0;keine;0;0;0;1;0;3;0,06;kampfkraft;12;3;max_stapel:3|zerreissen_wut:5;Mechanik Tiefe Wunde: grundwert/faktor je Stapel und Tick, dauer/tick der Aura, max_stapel (Tiefe Schnitte +2), zerreissen_wut (Zerreißen)
+ueberwaeltigen;warrior;warrior_schlachtmeister;10;0;keine;0;0;0;1;0;35;1,6;waffe;5;0;;Talent (Reihe 3): dauer = Fenster nach einem Ausweichen des Ziels, kann nicht verfehlen
+kolossales_schmettern;warrior;warrior_schlachtmeister;10;0;keine;0;0;45;1;0;0;0;;15;0;;Talent (Reihe 3): 30 % Durchschlag für dauer Sekunden
+schlachtfeld_herrschaft;warrior;warrior_schlachtmeister;10;0;keine;0;0;90;1;0;0;0;;12;0;;Talent (Reihe 7): großer Cooldown
+klingenschwung;warrior;warrior_schlachtmeister;10;0;keine;0;0;60;1;0;0;0;;10;0;prozent:100;Talent (Reihe 7): großer Cooldown, prozent des Treffers am zweiten Ziel
 # Druide
 verjuengung;druid;;1;20;mana;0;0;0;1;40;10;0,3;zaubermacht;12;3;;Platzhalter (#21)
 heilende_beruehrung;druid;;2;35;mana;3;0;0;1;40;60;1,2;zaubermacht;0;0;;Platzhalter (#21)

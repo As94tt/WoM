@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("x1")
+id = &"klingensturm"
+display_name = "Klingensturm"
+description = "Kanalisiert 3 Sekunden: jede Sekunde ein Wirbelwind um den Krieger. Kostet 20 Wut."
+class_id = &"warrior"
+required_level = 10
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1")])
+target_kind = 0
+requires_facing = false

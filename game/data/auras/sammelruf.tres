@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="x2"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+stat = &"attack_power"
+value = 10.0
+kind = 1
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x2")
+stat = &"armor"
+value = 10.0
+kind = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"sammelruf"
+display_name = "Sammelruf"
+description = "Kampfkraft und Rüstung um 10 % erhöht."
+ability_id = &"sammelruf"
+stat_modifiers = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2")])

@@ -47,3 +47,18 @@ func modify_incoming_damage(_instance: AuraInstance, _combat: UnitCombat, amount
 func modify_outgoing_damage(_instance: AuraInstance, _combat: UnitCombat, amount: float,
 		_school: StringName, _target: Unit) -> float:
 	return amount
+
+
+## Seit #53: Der Träger hat amount einer Ressource ausgegeben (Kosten einer
+## Fähigkeit oder zusätzlich verbrauchte Wut), z. B. für Raserei.
+func on_resource_spent(_instance: AuraInstance, _combat: UnitCombat, _resource: StringName,
+		_amount: float) -> void:
+	pass
+
+
+## Seit #53: Chancen eines Angriffs auf den Träger verändern, bevor
+## gewürfelt wird (raw wie in HitFormulas.chance_table: Outcome → Prozent),
+## z. B. Schildorkan (jeder Angriff von vorne wird geblockt).
+func modify_hit_chances(_instance: AuraInstance, _combat: UnitCombat, raw: Dictionary,
+		_attacker: Unit, _kind: HitFormulas.AttackKind) -> Dictionary:
+	return raw

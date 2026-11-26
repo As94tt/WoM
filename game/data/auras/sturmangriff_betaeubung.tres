@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"sturmangriff_betaeubung"
+display_name = "Sturmangriff"
+description = "Betäubt."
+is_debuff = true
+category = 5
+duration = 1.0
+states = 1

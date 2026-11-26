@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+aura_id = &"donnerknall_schwaechung"
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x5")
+amount_key = "werte.bedrohung"
+target_mode = 2
+filter = 2
+radius_from_ability = true
+
+[resource]
+script = ExtResource("x1")
+id = &"donnerknall_bollwerk"
+display_name = "Donnerknall"
+description = "Schaden an allen Gegnern im Umkreis von 8 m, verlangsamt sie 6 Sekunden um 20 % und senkt ihr Angriffstempo um 10 %. Erhöhte Bedrohung. Kostet 10 Wut."
+class_id = &"warrior"
+required_level = 8
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2"), SubResource("R3")])
+target_kind = 0
+requires_facing = false

@@ -55,7 +55,7 @@ func _ready() -> void:
 func _add_spellbook_samples() -> void:
 	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
 	var geschoss := GameData.get_ability(&"magisches_geschoss")
-	var passive := GameData.get_ability(&"passiv_krieger")
+	var passive := GameData.get_ability(&"passiv_druide")
 	var fessel := GameData.get_ability(&"magische_fessel")
 	if geschoss == null or passive == null or fessel == null:
 		return
@@ -383,7 +383,7 @@ func _hit_sample(source: NodePath, target: NodePath, school: StringName,
 func _add_casting_samples() -> void:
 	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
 	var ability := GameData.get_ability(&"test_meteor")
-	_add_row(grid, "Aktionsslots: Abklingzeit (CooldownSweep, SlotCooldownText), Proc (SlotProcGlow), aktiv (SlotActive), außer Reichweite, Ressource fehlt (AbilityColors), Aufladungen")
+	_add_row(grid, "Aktionsslots: Abklingzeit (CooldownSweep, SlotCooldownText), Proc (SlotProcGlow), aktiv (SlotActive), außer Reichweite, nicht nutzbar (z. B. ohne Schild), Ressource fehlt (AbilityColors), Aufladungen")
 	var slots := HBoxContainer.new()
 	slots.theme_type_variation = &"SlotRow"
 	grid.add_child(slots)
@@ -393,6 +393,7 @@ func _add_casting_samples() -> void:
 		{"highlight": true},
 		{"active": true},
 		{"out_of_range": true},
+		{"unusable": true},
 		{"no_resource": true},
 		{"charges": 2},
 	]

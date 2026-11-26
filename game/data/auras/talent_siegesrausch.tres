@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/percent_heal_effect.gd" id="x4"]
+[ext_resource type="Resource" path="res://data/abilities/raserei.tres" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+target_mode = 1
+percent_key = "werte.siegesrausch_heilung"
+values_ability = ExtResource("x5")
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x2")
+event = 7
+effects = Array[ExtResource("x3")]([SubResource("R1")])
+
+[resource]
+script = ExtResource("x1")
+id = &"talent_siegesrausch"
+display_name = "Siegesrausch"
+description = "Talent: Stirbt ein Ziel, heilt sich der Krieger um 20 %."
+hidden = true
+cancelable = false
+max_stacks = 3
+procs = Array[ExtResource("x2")]([SubResource("R2")])
