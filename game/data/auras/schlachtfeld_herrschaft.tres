@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
+[ext_resource type="Resource" path="res://data/abilities/tiefe_wunde.tres" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+aura_id = &"tiefe_wunde"
+target_mode = 0
+duration_ability = ExtResource("x5")
+duration_key = "dauer"
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x2")
+event = 0
+effects = Array[ExtResource("x3")]([SubResource("R1")])
+
+[resource]
+script = ExtResource("x1")
+id = &"schlachtfeld_herrschaft"
+display_name = "Schlachtfeld-Herrschaft"
+description = "Jeder Angriff verursacht eine Tiefe Wunde."
+ability_id = &"schlachtfeld_herrschaft"
+procs = Array[ExtResource("x2")]([SubResource("R2")])

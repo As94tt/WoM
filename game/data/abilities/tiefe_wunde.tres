@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"tiefe_wunde"
+display_name = "Tiefe Wunde"
+description = "Mechanik der Spezialisierung Schlachtmeister (nur Zahlen): Blutung je Stapel und Tick, Dauer, Höchstzahl, Zerreißen."
+class_id = &"warrior"
+required_level = 10
+passive = true
+school = &"physisch"
+target_kind = 0

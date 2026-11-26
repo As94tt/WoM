@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Resource" path="res://data/abilities/tiefe_wunde.tres" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="x5"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x6"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="x7"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_condition.gd" id="x8"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x5")
+kind = 0
+aura_id = &"tiefe_wunde"
+own_aura_only = true
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+values_ability = ExtResource("x4")
+attack = 4
+scaling = Array[ExtResource("x5")]([SubResource("R1")])
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x8")
+kind = 11
+mage_kind = 0
+aura_id = &"talent_zerreissen"
+value = 5.0
+
+[sub_resource type="Resource" id="R4"]
+script = ExtResource("x6")
+resource = &"rage"
+amount_key = "werte.zerreissen_wut"
+target_mode = 1
+values_ability = ExtResource("x4")
+conditions = Array[ExtResource("x7")]([SubResource("R3")])
+
+[resource]
+script = ExtResource("x1")
+id = &"tiefe_wunde"
+display_name = "Tiefe Wunde"
+description = "Blutet: körperlicher Schaden über Zeit je Stapel."
+ability_id = &"tiefe_wunde"
+is_debuff = true
+category = 5
+max_stacks = 3
+max_stacks_key = "werte.max_stapel"
+stack_mode = 2
+ticks_scale_with_stacks = false
+tick_effects = Array[ExtResource("x2")]([SubResource("R2"), SubResource("R4")])

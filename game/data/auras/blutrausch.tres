@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x5"]
+[ext_resource type="Resource" path="res://data/abilities/blutrausch.tres" id="x6"]
+[ext_resource type="Script" path="res://scripts/combat/effect_condition.gd" id="x7"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x8"]
+[ext_resource type="Script" path="res://scripts/combat/effects/remove_aura_effect.gd" id="x9"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+ability_id = &"zerschmettern"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+ability_id = &"raserei_schlag"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x4")
+ability_id = &"donnerknall"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R4"]
+script = ExtResource("x4")
+ability_id = &"wirbelwind"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R5"]
+script = ExtResource("x4")
+ability_id = &"klingensturm"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R6"]
+script = ExtResource("x4")
+ability_id = &"rasender_sprung"
+value_key = "kosten"
+percent = -100.0
+
+[sub_resource type="Resource" id="R7"]
+script = ExtResource("x3")
+modifiers = Array[ExtResource("x4")]([SubResource("R1"), SubResource("R2"), SubResource("R3"), SubResource("R4"), SubResource("R5"), SubResource("R6")])
+
+[sub_resource type="Resource" id="R8"]
+script = ExtResource("x7")
+kind = 1
+aura_id = &"talent_tollkuehnheit"
+
+[sub_resource type="Resource" id="R9"]
+script = ExtResource("x5")
+aura_id = &"tollkuehnheit"
+target_mode = 0
+duration_ability = ExtResource("x6")
+duration_key = "dauer"
+conditions = Array[ExtResource("x7")]([SubResource("R8")])
+
+[sub_resource type="Resource" id="R10"]
+script = ExtResource("x9")
+aura_id = &"raserei"
+
+[sub_resource type="Resource" id="R11"]
+script = ExtResource("x8")
+event = 8
+effects = Array[ExtResource("x2")]([SubResource("R10")])
+
+[resource]
+script = ExtResource("x1")
+id = &"blutrausch"
+display_name = "Blutrausch"
+description = "Fähigkeiten kosten keine Wut. Danach fallen alle Raserei-Stapel ab."
+ability_id = &"blutrausch"
+cancelable = false
+apply_effects = Array[ExtResource("x2")]([SubResource("R7"), SubResource("R9")])
+procs = Array[ExtResource("x8")]([SubResource("R11")])

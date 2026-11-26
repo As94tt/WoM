@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x4"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+resource = &"rage"
+amount_key = "werte.wut"
+target_mode = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"wutschlag"
+display_name = "Wutschlag"
+description = "Ein wütender Schlag, auch ohne Schild: mittlerer Schaden. Erzeugt 15 Wut."
+class_id = &"warrior"
+required_level = 3
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2")])
+starts_auto_attack = true

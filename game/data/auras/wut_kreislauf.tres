@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/logic/resource_spent_logic.gd" id="x2"]
+[ext_resource type="Resource" path="res://data/abilities/raserei.tres" id="x3"]
+[ext_resource type="Resource" path="res://data/auras/raserei.tres" id="x4"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+resource = &"rage"
+values_ability = ExtResource("x3")
+threshold_key = "werte.wut_je_stapel"
+aura = ExtResource("x4")
+stacks_key = "werte.stapel"
+duration_key = "dauer"
+
+[resource]
+script = ExtResource("x1")
+id = &"wut_kreislauf"
+display_name = "Wut-Kreislauf"
+description = "Jede ausgegebene 30 Wut gibt 1 Raserei."
+hidden = true
+cancelable = false
+duration = 0.0
+logic = SubResource("R1")

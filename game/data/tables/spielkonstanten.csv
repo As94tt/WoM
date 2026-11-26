@@ -46,7 +46,7 @@ mana_regen_grund;0,5;Manaregeneration je Sekunde ohne Willenskraft (im Kampf)
 mana_regen_pro_willenskraft;0,1;Manaregeneration je Sekunde und Punkt Willenskraft (im Kampf)
 mana_regen_faktor_ausser_kampf;3;Faktor auf die Manaregeneration außerhalb des Kampfes
 wut_max;100;Maximale Wut
-wut_pro_schaden_ausgeteilt;0,2;Wut je Punkt ausgeteilten Schadens
+wut_pro_schaden_ausgeteilt;0,05;Wut je Punkt ausgeteilten Schadens (#53: gesenkt, damit Aufbau-Fähigkeiten die Wut erzeugen)
 wut_pro_schaden_genommen;50;Wut für genommenen Schaden: Faktor × Schaden / maximales Leben
 wut_verfall_pro_s;3;Wutverlust je Sekunde außerhalb des Kampfes
 energie_max;100;Maximale Energie

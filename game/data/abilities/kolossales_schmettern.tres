@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x3"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+aura_id = &"kolossales_schmettern"
+target_mode = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"kolossales_schmettern"
+display_name = "Kolossales Schmettern"
+description = "15 Sekunden lang ignorieren alle Angriffe 30 % der Rüstung."
+class_id = &"warrior"
+required_level = 10
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1")])
+target_kind = 0
+ignores_gcd = true

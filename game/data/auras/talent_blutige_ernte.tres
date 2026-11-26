@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"talent_blutige_ernte"
+display_name = "Blutige Ernte"
+description = "Talent: Hinrichten verbreitet alle Wunden auf 2 nahe Ziele."
+hidden = true
+cancelable = false
+max_stacks = 3

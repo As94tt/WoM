@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/modify_ability_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/ability_modifier_data.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+ability_id = &"hinrichten"
+value_key = "werte.ziel_leben_unter"
+add = 100.0
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x3")
+modifiers = Array[ExtResource("x4")]([SubResource("R1")])
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x5")
+event = 6
+ability_id = &"hinrichten"
+remove_aura = true
+
+[resource]
+script = ExtResource("x1")
+id = &"ploetzlicher_tod"
+display_name = "Plötzlicher Tod"
+description = "Hinrichten ist unabhängig vom Leben des Ziels verfügbar."
+duration = 10.0
+apply_effects = Array[ExtResource("x2")]([SubResource("R2")])
+procs = Array[ExtResource("x5")]([SubResource("R3")])

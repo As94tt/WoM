@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+cannot_be_avoided = true
+
+[resource]
+script = ExtResource("x1")
+id = &"ueberwaeltigen"
+display_name = "Überwältigen"
+description = "Nur 5 Sekunden nach einem Ausweichen des Ziels: hoher Schaden, kann nicht verfehlen."
+class_id = &"warrior"
+required_level = 10
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1")])
+starts_auto_attack = true
+required_aura = &"ueberwaeltigen_bereit"
+highlight_auras = PackedStringArray("ueberwaeltigen_bereit")

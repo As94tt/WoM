@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/movement_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+kind = 0
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+aura_id = &"sturmangriff_betaeubung"
+target_mode = 0
+duration_key = "werte.betaeubung_dauer"
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x5")
+resource = &"rage"
+amount_key = "werte.wut"
+target_mode = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"sturmangriff"
+display_name = "Sturmangriff"
+description = "Springt zum Ziel (8–25 m) und betäubt es 1 Sekunde. Erzeugt 20 Wut. Nur außerhalb des Nahkampfs."
+class_id = &"warrior"
+required_level = 5
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2"), SubResource("R3")])
+starts_auto_attack = true

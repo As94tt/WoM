@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="x4"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+attack = 2
+target_mode = 7
+filter = 2
+chain_jumps = 2
+radius = 10.0
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+amount_key = "werte.bedrohung"
+target_mode = 7
+filter = 2
+chain_jumps = 2
+radius = 10.0
+
+[resource]
+script = ExtResource("x1")
+id = &"schildwurf"
+display_name = "Schildwurf"
+description = "Wirft den Schild, der auf bis zu 3 Ziele springt: Schaden und Bedrohung an allen. Nur mit Schild."
+class_id = &"warrior"
+required_level = 10
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2")])
+required_weapon = 2

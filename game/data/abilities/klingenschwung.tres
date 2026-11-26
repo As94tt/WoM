@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x3"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+aura_id = &"klingenschwung"
+target_mode = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"klingenschwung"
+display_name = "Klingenschwung"
+description = "10 Sekunden lang treffen Einzelzielangriffe ein zweites Ziel in der Nähe."
+class_id = &"warrior"
+required_level = 10
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1")])
+target_kind = 0
+ignores_gcd = true

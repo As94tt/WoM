@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="x2"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x2")
+stat = &"haste_pct"
+value = 2.0
+
+[resource]
+script = ExtResource("x1")
+id = &"talent_flinke_klinge"
+display_name = "Flinke Klinge"
+description = "Talent: +2 % Tempo pro Rang."
+hidden = true
+cancelable = false
+max_stacks = 3
+stat_modifiers = Array[ExtResource("x2")]([SubResource("R1")])

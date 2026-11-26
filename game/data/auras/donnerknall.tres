@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"donnerknall"
+display_name = "Donnerknall"
+description = "Verlangsamt: Bewegungsgeschwindigkeit um 20 % verringert."
+ability_id = &"donnerknall"
+is_debuff = true
+category = 5
+states = 4
+slow_percent = 20.0

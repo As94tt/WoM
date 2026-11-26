@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="x4"]
+[ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x5"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x3")
+school = &"physisch"
+values_from_ability = true
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x4")
+amount_key = "werte.bedrohung"
+
+[sub_resource type="Resource" id="R3"]
+script = ExtResource("x5")
+resource = &"rage"
+amount_key = "werte.wut"
+target_mode = 1
+
+[resource]
+script = ExtResource("x1")
+id = &"schildschlag_bollwerk"
+display_name = "Schildschlag"
+description = "Schlägt das Ziel mit dem Schild: mittlerer Schaden, hohe Zusatzbedrohung. Erzeugt 15 Wut. Nur mit Schild. Abklingzeit 4 Sekunden."
+class_id = &"warrior"
+required_level = 3
+school = &"physisch"
+effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2"), SubResource("R3")])
+starts_auto_attack = true
+required_weapon = 2

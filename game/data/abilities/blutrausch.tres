@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
+
+[resource]
+script = ExtResource("x1")
+id = &"blutrausch"
+display_name = "Blutrausch"
+description = "Mechanik der Spezialisierung Berserker (nur Zahlen): Dauer des Blutrauschs bei 5 Raserei."
+class_id = &"warrior"
+required_level = 10
+passive = true
+school = &"physisch"
+target_kind = 0

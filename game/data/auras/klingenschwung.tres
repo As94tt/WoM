@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="x2"]
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x3"]
+[ext_resource type="Script" path="res://scripts/combat/effects/echo_damage_effect.gd" id="x4"]
+
+[sub_resource type="Resource" id="R1"]
+script = ExtResource("x4")
+filter = 2
+radius = 8.0
+percent_key = "werte.prozent"
+count = 1
+
+[sub_resource type="Resource" id="R2"]
+script = ExtResource("x2")
+event = 0
+effects = Array[ExtResource("x3")]([SubResource("R1")])
+
+[resource]
+script = ExtResource("x1")
+id = &"klingenschwung"
+display_name = "Klingenschwung"
+description = "Einzelzielangriffe treffen ein zweites Ziel in der Nähe."
+ability_id = &"klingenschwung"
+procs = Array[ExtResource("x2")]([SubResource("R2")])
