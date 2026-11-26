@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_selcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_seltab"]
+
+[sub_resource type="Resource" id="Resource_sel_id"]
+script = ExtResource("1_selcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID der Seltenheit (z. B. selten). Gegenstände und Weltbeute verweisen darauf; nie ändern."
+
+[sub_resource type="Resource" id="Resource_sel_name"]
+script = ExtResource("1_selcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip, zweites Signal neben der Farbe). Vorläufig."
+
+[sub_resource type="Resource" id="Resource_sel_reihenfolge"]
+script = ExtResource("1_selcol")
+name = "reihenfolge"
+type = 2
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Rang der Seltenheit (größer = seltener). Sortieren im Taschenfenster: seltenere zuerst."
+
+[sub_resource type="Resource" id="Resource_sel_farbe"]
+script = ExtResource("1_selcol")
+name = "farbe"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Name der Farbe im Theme-Typ „RarityColors“ (game/assets/ui/theme.tres), z. B. rare für das Token rarity/rare. Die Farbe selbst steht nur im Theme."
+
+[sub_resource type="Resource" id="Resource_sel_rahmen"]
+script = ExtResource("1_selcol")
+name = "rahmen"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "ja = Der Platz im Taschenfenster bekommt einen Rahmen in der Seltenheitsfarbe."
+
+[resource]
+script = ExtResource("2_seltab")
+table = "seltenheiten"
+title = "Seltenheiten"
+group = "Gegenstände"
+description = "Seltenheitsstufen der Gegenstände (#18). Die Farben stehen im Theme (RarityColors), die Namen sind vorläufig. Neue Stufe = neue Zeile plus Farbe im Theme."
+key_columns = PackedStringArray("id")
+order = 42
+columns = Array[ExtResource("1_selcol")]([SubResource("Resource_sel_id"), SubResource("Resource_sel_name"), SubResource("Resource_sel_reihenfolge"), SubResource("Resource_sel_farbe"), SubResource("Resource_sel_rahmen")])

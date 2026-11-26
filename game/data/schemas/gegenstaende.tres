@@ -33,10 +33,12 @@ description = "Pfad zum Icon; leer = Platzhalter."
 [sub_resource type="Resource" id="Resource_5rxnh"]
 script = ExtResource("1_8wunn")
 name = "typ"
-type = 5
+type = 6
 required = true
-choices = PackedStringArray("tasche", "ausruestung", "verbrauchsgut", "material", "questgegenstand", "plunder")
-description = "Art des Gegenstands."
+choices = PackedStringArray()
+ref_table = "gegenstandstypen"
+ref_label = "Gegenstandstyp"
+description = "Art des Gegenstands (ID aus gegenstandstypen.csv)."
 
 [sub_resource type="Resource" id="Resource_qdp6b"]
 script = ExtResource("1_8wunn")
@@ -48,10 +50,12 @@ description = "Ausrüstungsplatz (nur bei Ausrüstung)."
 [sub_resource type="Resource" id="Resource_hsle2"]
 script = ExtResource("1_8wunn")
 name = "seltenheit"
-type = 5
+type = 6
 default_value = "gewoehnlich"
-choices = PackedStringArray("gewoehnlich")
-description = "Seltenheit (Stufen legt der Projektverantwortliche fest)."
+choices = PackedStringArray()
+ref_table = "seltenheiten"
+ref_label = "Seltenheit"
+description = "Seltenheit (ID aus seltenheiten.csv)."
 
 [sub_resource type="Resource" id="Resource_ixsev"]
 script = ExtResource("1_8wunn")

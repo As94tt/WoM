@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_gtcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_gttab"]
+
+[sub_resource type="Resource" id="Resource_gt_id"]
+script = ExtResource("1_gtcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID des Typs (z. B. tasche). Gegenstände verweisen darauf; nie ändern. Das Inventar erkennt Taschen an der ID tasche."
+
+[sub_resource type="Resource" id="Resource_gt_name"]
+script = ExtResource("1_gtcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip)."
+
+[sub_resource type="Resource" id="Resource_gt_reihenfolge"]
+script = ExtResource("1_gtcol")
+name = "reihenfolge"
+type = 2
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Sortieren im Taschenfenster (kleiner = weiter vorn)."
+
+[resource]
+script = ExtResource("2_gttab")
+table = "gegenstandstypen"
+title = "Gegenstandstypen"
+group = "Gegenstände"
+description = "Arten von Gegenständen (#18): Tasche, Ausrüstung, Verbrauchsgut, Material, Questgegenstand, Plunder."
+key_columns = PackedStringArray("id")
+order = 43
+columns = Array[ExtResource("1_gtcol")]([SubResource("Resource_gt_id"), SubResource("Resource_gt_name"), SubResource("Resource_gt_reihenfolge")])

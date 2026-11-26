@@ -14,10 +14,12 @@ description = "Rang des Gegners."
 [sub_resource type="Resource" id="Resource_4x35d"]
 script = ExtResource("1_qekho")
 name = "seltenheit"
-type = 5
+type = 6
 required = true
-choices = PackedStringArray("gewoehnlich")
-description = "Seltenheit (Stufen legt der Projektverantwortliche fest; bis dahin nur gewoehnlich)."
+choices = PackedStringArray()
+ref_table = "seltenheiten"
+ref_label = "Seltenheit"
+description = "Seltenheit (ID aus seltenheiten.csv)."
 
 [sub_resource type="Resource" id="Resource_1uyir"]
 script = ExtResource("1_qekho")

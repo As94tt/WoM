@@ -1,0 +1,8 @@
+﻿# Gegenstandstypen (#18). reihenfolge bestimmt das Sortieren im Taschenfenster.
+id;name;reihenfolge;notiz
+tasche;Tasche;1;
+ausruestung;Ausrüstung;2;
+verbrauchsgut;Verbrauchsgut;3;
+material;Material;4;
+questgegenstand;Questgegenstand;5;
+plunder;Plunder;6;
