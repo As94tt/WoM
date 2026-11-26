@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="1_panel"]
+
+[node name="InventoryPanel" type="VBoxContainer"]
+size_flags_vertical = 3
+theme_type_variation = &"ButtonList"
+script = ExtResource("1_panel")

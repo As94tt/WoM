@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31, #32 und #20).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31, #32, #20 und #18).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -45,6 +45,7 @@ func _ready() -> void:
 	_add_combat_samples()
 	_add_casting_samples()
 	_add_talent_samples()
+	_add_inventory_samples()
 
 	%FocusButton.grab_focus()
 
@@ -147,6 +148,43 @@ func _add_talent_samples() -> void:
 	dot.offset_bottom = 12.0
 	micro.add_child(dot)
 	grid.add_child(micro)
+
+
+## Inventar (#18): Plätze je Seltenheit (Rahmen ab Ungewöhnlich, Anzahl
+## unten rechts), leerer Platz, Tooltip mit Namen in Seltenheitsfarbe und die
+## Geldanzeige mit Münzsymbolen. Farben aus dem Theme (RarityColors, Coin*).
+func _add_inventory_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	_add_row(grid, "Taschenfenster (#18): Plätze minderwertig, gewöhnlich (Anzahl), ungewöhnlich, selten, episch (ItemRarityFrame), leer")
+	var inventory := Inventory.new(6)
+	for entry: Array in [[&"zahn_zerbrochen", 4], [&"wolfsfell", 7], [&"lederkappe", 1], [&"tasche_gross", 1],
+			[&"leuchtkristall", 3]]:
+		inventory.add_item(entry[0], entry[1])
+	var row := GridContainer.new()
+	row.theme_type_variation = &"SlotGrid"
+	row.columns = 6
+	grid.add_child(row)
+	for index in 6:
+		var slot: ItemSlot = preload("res://scenes/ui/hud/item_slot.tscn").instantiate()
+		row.add_child(slot)
+		slot.setup(inventory, 0, index)
+	_add_row(grid, "Tooltip eines Gegenstands: Name in Seltenheitsfarbe (RarityColors), Seltenheit und Typ als Text")
+	var tooltip := PanelContainer.new()
+	tooltip.theme_type_variation = &"TooltipPanel"
+	tooltip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	tooltip.add_child(ItemTooltip.create(&"leuchtkristall", 3))
+	grid.add_child(tooltip)
+	_add_row(grid, "Geldanzeige: Betrag (SmallLabel) mit Münzsymbol (CoinGold, CoinSilver, CoinCopper, Buchstabe CoinText)")
+	var money := HBoxContainer.new()
+	money.theme_type_variation = &"InlineRow"
+	money.tooltip_text = "Geld: %s" % ItemInfo.money_text(1234567)
+	grid.add_child(money)
+	for coin: Array in [["123", &"CoinGold", "G"], ["45", &"CoinSilver", "S"], ["67", &"CoinCopper", "K"]]:
+		var amount := Label.new()
+		amount.theme_type_variation = &"SmallLabel"
+		amount.text = coin[0]
+		money.add_child(amount)
+		money.add_child(InventoryPanel.make_coin(coin[1], coin[2]))
 
 
 func _add_row(grid: GridContainer, text: String) -> void:

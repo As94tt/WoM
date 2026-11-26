@@ -353,7 +353,7 @@ Eindeutig: die Kombination `rang` + `seltenheit`.
 | Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
 | --- | --- | --- | --- | --- | --- |
 | `rang` | Auswahl | ja |  | `normal`, `elite`, `selten`, `boss` | Rang des Gegners. |
-| `seltenheit` | Auswahl | ja |  | `gewoehnlich` | Seltenheit (Stufen legt der Projektverantwortliche fest; bis dahin nur gewoehnlich). |
+| `seltenheit` | Verweis | ja |  | Seltenheit aus `seltenheiten.csv` | Seltenheit (ID aus seltenheiten.csv). |
 | `chance` | Kommazahl | ja |  | 0 bis 100 | Chance in Prozent. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
@@ -371,9 +371,9 @@ Eindeutig: `id`.
 | `name` | Text | ja |  |  | Anzeigename. |
 | `beschreibung` | Text |  |  |  | Beschreibung im Tooltip. |
 | `icon` | Text |  |  |  | Pfad zum Icon; leer = Platzhalter. |
-| `typ` | Auswahl | ja |  | `tasche`, `ausruestung`, `verbrauchsgut`, `material`, `questgegenstand`, `plunder` | Art des Gegenstands. |
+| `typ` | Verweis | ja |  | Gegenstandstyp aus `gegenstandstypen.csv` | Art des Gegenstands (ID aus gegenstandstypen.csv). |
 | `slot` | Auswahl |  |  | `helm`, `schulter`, `brust`, `guertel`, `beine`, `schuhe`, `handschuhe`, `armschienen`, `umhang`, `ring`, `kette`, `einhand`, `zweihand`, `schild`, `zauberstab`, `fokus`, `fernkampfwaffe`, `siegel`, `talisman` | Ausrüstungsplatz (nur bei Ausrüstung). |
-| `seltenheit` | Auswahl |  | gewoehnlich | `gewoehnlich` | Seltenheit (Stufen legt der Projektverantwortliche fest). |
+| `seltenheit` | Verweis |  | gewoehnlich | Seltenheit aus `seltenheiten.csv` | Seltenheit (ID aus seltenheiten.csv). |
 | `gegenstandsstufe` | Ganzzahl |  | 1 | 1 bis 100 | Bestimmt das Wertebudget. |
 | `mindeststufe` | Ganzzahl |  | 1 | 1 bis 100 | Mindeststufe zum Anlegen. |
 | `ruestungsklasse` | Auswahl |  |  | `stoff`, `leder`, `kette`, `platte` | Nur Rüstungsteile. |
@@ -421,6 +421,34 @@ Eindeutig: die Kombination `haendler` + `gegenstand`.
 | `preis` | Ganzzahl |  |  | ab 0 | Preis in Kupfer; leer = Standardpreis. |
 | `vorrat` | Ganzzahl |  |  | ab 0 | Vorrat; leer = unbegrenzt. |
 | `auffuellen_s` | Kommazahl |  |  | ab 0 | Sekunden, bis der Vorrat wieder aufgefüllt ist. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### seltenheiten.csv – Seltenheiten
+
+Seltenheitsstufen der Gegenstände (#18). Die Farben stehen im Theme (RarityColors), die Namen sind vorläufig. Neue Stufe = neue Zeile plus Farbe im Theme.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID der Seltenheit (z. B. selten). Gegenstände und Weltbeute verweisen darauf; nie ändern. |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip, zweites Signal neben der Farbe). Vorläufig. |
+| `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Rang der Seltenheit (größer = seltener). Sortieren im Taschenfenster: seltenere zuerst. |
+| `farbe` | ID | ja |  |  | Name der Farbe im Theme-Typ „RarityColors“ (game/assets/ui/theme.tres), z. B. rare für das Token rarity/rare. Die Farbe selbst steht nur im Theme. |
+| `rahmen` | Ja/Nein |  | nein |  | ja = Der Platz im Taschenfenster bekommt einen Rahmen in der Seltenheitsfarbe. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### gegenstandstypen.csv – Gegenstandstypen
+
+Arten von Gegenständen (#18): Tasche, Ausrüstung, Verbrauchsgut, Material, Questgegenstand, Plunder.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID des Typs (z. B. tasche). Gegenstände verweisen darauf; nie ändern. Das Inventar erkennt Taschen an der ID tasche. |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip). |
+| `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Sortieren im Taschenfenster (kleiner = weiter vorn). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Charaktere

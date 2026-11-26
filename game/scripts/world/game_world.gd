@@ -45,6 +45,16 @@ extends Node3D
 ##   aus Talenten verschwinden beim Zurücksetzen von den Leisten. Abschnitt
 ##   „Talente“ im Entwickler-Panel (TalentDevSection).
 ##
+## - Inventar (#18): Das Inventar (Inventory) gehört dem eigenen Charakter und
+##   wird aus CharacterData geladen, sobald die eigene Figur da ist. Jede
+##   Änderung schreibt InventorySaver in den Charakter und speichert ihn
+##   (höchstens einmal pro Frame). Inhalt des Taschenfensters (B) ist
+##   InventoryPanel; Taschenleiste und Rucksack-Symbol verbindet
+##   Hud.setup_inventory. Abschnitt „Inventar“ im Entwickler-Panel
+##   (InventoryDevSection). Noch keine Synchronisierung: Das Inventar liegt
+##   nur beim Spieler; Beute vergibt später der Host über Inventory.add_item
+##   (meldet ADDED oder FULL).
+##
 ## - Tod und Wiederbelebung (#35): Kindknoten „Revival“ (RevivalService) für
 ##   Wiedereinstieg, Aufhelfen und gemeinsame Rückkehr; Wiedereinstiegspunkte
 ##   aus #15 (get_respawn_transform). unit_died meldet auf dem Host jeden Tod
@@ -66,6 +76,7 @@ const DEV_PANEL_SCENE := preload("res://scenes/ui/dev/dev_panel.tscn")
 const CHARACTER_PANEL_SCENE := preload("res://scenes/ui/hud/character_panel.tscn")
 const SPELLBOOK_PANEL_SCENE := preload("res://scenes/ui/hud/spellbook_panel.tscn")
 const TALENT_PANEL_SCENE := preload("res://scenes/ui/hud/talent_panel.tscn")
+const INVENTORY_PANEL_SCENE := preload("res://scenes/ui/hud/inventory_panel.tscn")
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 const DUMMY_SCENE := preload("res://scenes/units/training_dummy.tscn")
 const UNIT_DEV_TOOLS: UnitDevTools = preload("res://data/units/dev_tools.tres")
@@ -108,6 +119,10 @@ var _unit_dev_level_slider: HSlider = null
 var _unit_dev_dot_timer: Timer = null
 ## Rückkehr nach dem Tod (#35).
 var _revival: RevivalService = null
+## Inventar des eigenen Charakters (#18).
+var _inventory: Inventory = null
+var _inventory_saver: InventorySaver = null
+var _inventory_panel: InventoryPanel = null
 
 @onready var _players: Node3D = %Players
 @onready var _navigation: NavigationRegion3D = %Navigation
@@ -144,6 +159,7 @@ func _ready() -> void:
 	_setup_character_window()
 	_setup_spellbook_window()
 	_setup_talent_window()
+	_setup_bag_window()
 	_setup_map()
 	_start_autosave()
 	if OS.is_debug_build():
@@ -370,6 +386,7 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 		_connect_stat_dev(player)
 		_setup_abilities(player)
 		_setup_talents(player)
+		_setup_inventory()
 		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
 		_hud.setup_local_player(player)
 		_connect_unit_dev(player)
@@ -541,6 +558,55 @@ func _on_local_level_changed(level: int, previous: int, talents: PlayerTalents) 
 				"Talente öffnen", "Später", func() -> void: _hud.open_window(&"talents"))
 
 
+# --- Inventar (#18) ----------------------------------------------------------
+
+func _setup_bag_window() -> void:
+	var window := _hud.get_hud_window(&"bags")
+	if window == null:
+		return
+	_inventory_panel = INVENTORY_PANEL_SCENE.instantiate()
+	window.set_content(_inventory_panel)
+	_inventory_panel.confirm_handler = _hud.ask
+	_inventory_panel.dialog_parent = _hud
+	_inventory_panel.error.connect(_hud.show_error)
+
+
+## Eigene Figur ist da: Inventar aus dem Charakter laden und mit Fenster,
+## Taschenleiste und Speichern verbinden (nur einmal je Welt).
+func _setup_inventory() -> void:
+	if _inventory != null:
+		return
+	var c := Network.get_local_character()
+	_inventory = Inventory.new()
+	if c != null:
+		for warning in InventorySaver.load_into(_inventory, c):
+			push_warning("Inventar: " + warning)
+		_inventory_saver = InventorySaver.new(_inventory, c, Network.save_local_character)
+	_hud.setup_inventory(_inventory)
+	if _inventory_panel != null:
+		_inventory_panel.setup(_inventory)
+
+
+## Inventar des eigenen Charakters oder null (vor der eigenen Figur).
+func get_local_inventory() -> Inventory:
+	return _inventory
+
+
+func get_inventory_saver() -> InventorySaver:
+	return _inventory_saver
+
+
+## Meldung des Inventars oben in der Mitte (z. B. „Inventar ist voll.“).
+func show_inventory_error(message: String) -> void:
+	_hud.show_error(message)
+
+
+func _exit_tree() -> void:
+	# Ausstehendes Speichern nicht verlieren (Welt verlassen, Spiel beenden).
+	if _inventory_saver != null:
+		_inventory_saver.flush()
+
+
 # --- Einheiten (#31) ---------------------------------------------------------
 
 ## Nur auf dem Host: an jedem Aufstellpunkt die Einheit erzeugen. Der
@@ -708,6 +774,12 @@ func _setup_dev_panel() -> void:
 	var talent_dev := TalentDevSection.new()
 	add_child(talent_dev)
 	talent_dev.setup(panel, self)
+
+	# Inventar (#18): Testgegenstände, Geld, leeren.
+	var inventory_dev := InventoryDevSection.new()
+	inventory_dev.name = "InventoryDev"
+	add_child(inventory_dev)
+	inventory_dev.setup(panel, self)
 
 	var display := panel.add_section("Anzeige")
 	panel.add_toggle(display, "Platzhalter anzeigen", true, _set_placeholders_visible)

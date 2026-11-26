@@ -35,6 +35,15 @@ enum Gender { MALE, FEMALE }
 @export var bonus_talent_points: int = 0
 @export_group("")
 
+@export_group("Inventar (#18)")
+## Inventar im Format von Inventory.to_save(): Taschen-IDs und je Behälter die
+## Plätze als [ID, Anzahl]. Leer = neuer Charakter (leerer Rucksack). Bleibt
+## lokal und wird nicht an den Host übertragen (noch keine Synchronisierung).
+@export var inventory: Dictionary = {}
+## Geld in Kupfer (100 Kupfer = 1 Silber, 100 Silber = 1 Gold).
+@export var money_copper: int = 0
+@export_group("")
+
 ## Datei, aus der der Charakter geladen bzw. in die er gespeichert wurde.
 ## Wird von CharacterStore gesetzt und nicht mitgespeichert.
 var storage_path: String = ""

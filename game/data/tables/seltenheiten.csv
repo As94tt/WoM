@@ -1,0 +1,7 @@
+﻿# Seltenheitsstufen der Gegenstände (#18). Namen vorläufig. farbe = Theme-Farbe im Typ „RarityColors“ (Token rarity/<farbe>).
+id;name;reihenfolge;farbe;rahmen;notiz
+minderwertig;Minderwertig;1;poor;nein;grau
+gewoehnlich;Gewöhnlich;2;common;nein;weiß
+ungewoehnlich;Ungewöhnlich;3;uncommon;ja;grün
+selten;Selten;4;rare;ja;blau
+episch;Episch;5;epic;ja;lila
