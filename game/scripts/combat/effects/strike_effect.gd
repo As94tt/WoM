@@ -170,10 +170,14 @@ func _strike(ctx: EffectContext, target: Unit) -> void:
 		# danach sofort wieder auf, zählen aber wie bei Combat als getötet).
 		if before > 0.0 and result.amount >= before - 0.001:
 			killed = true
+	# Folge-Effekte ohne den Faktor dieses Schlags (Kette, zusätzliche Wut),
+	# sonst würde z. B. die erstattete Wut mit dem Bonusschaden wachsen.
+	var follow := ctx.copy()
+	follow.amount_factor = 1.0
 	if landed and not on_hit_effects.is_empty():
-		Combat.execute(on_hit_effects, ctx)
+		Combat.execute(on_hit_effects, follow)
 	if killed and not on_kill_effects.is_empty():
-		Combat.execute(on_kill_effects, ctx)
+		Combat.execute(on_kill_effects, follow)
 
 
 func _number(ctx: EffectContext, key: String, fallback := 0.0) -> float:

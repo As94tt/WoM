@@ -68,6 +68,9 @@ const PRIMARY_SOURCE := &"primary_attribute"
 ## true: Wert wird mit Tempo schneller (× (1 + Tempo % / 100)),
 ## z. B. Energieregeneration.
 @export var scales_with_haste := false
+## Darf durch Modifikatoren unter 0 sinken (seit #53: Tempo, z. B. „−10 %
+## Angriffstempo“ durch Donnerknall). Sonst gilt 0 als Untergrenze.
+@export var allows_negative := false
 
 @export_group("Gilt nur, wenn …")
 ## … es das Hauptattribut der Klasse ist (ClassData.primary_attribute).
