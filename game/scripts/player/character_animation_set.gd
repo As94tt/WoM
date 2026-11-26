@@ -64,3 +64,38 @@ extends Resource
 ## Wie schnell sich das Modell zur Laufrichtung dreht (seitwärts/schräg),
 ## in Bogenmaß pro Sekunde (Annäherung, kein festes Tempo).
 @export var facing_turn_rate: float = 12.0
+
+@export_group("Zauber")
+## Zauber-Animationen (Ticket #63), nur im Oberkörper. Abläufe siehe
+## SpellAnimation: Zauberzeit = Heben → Halten → Loslassen → Senken,
+## Kanalisieren = Heben → Halten → Senken, Sofortzauber = Loslassen,
+## Selbstzauber ohne fremdes Ziel = Heben → Senken (schneller).
+## Leerer Clipname = keine Zauber-Animationen für diesen Satz.
+@export var spell_enter: StringName = &"Spell_Simple_Enter"
+## Halten, Schleife (solange die Zauberleiste läuft).
+@export var spell_idle: StringName = &"Spell_Simple_Idle"
+@export var spell_shoot: StringName = &"Spell_Simple_Shoot"
+@export var spell_exit: StringName = &"Spell_Simple_Exit"
+## Dauer von Heben, Loslassen und Senken in Sekunden (danach folgt der
+## nächste Abschnitt).
+@export var spell_enter_time: float = 0.5
+@export var spell_shoot_time: float = 0.5
+@export var spell_exit_time: float = 0.4
+## Abspielfaktor für Selbstzauber ohne fremdes Ziel (Heben → Senken).
+@export var spell_self_speed: float = 1.5
+## Überblendzeit der Zauber-Abschnitte und Ein-/Ausblenden über den Beinen.
+@export var spell_blend_time: float = 0.15
+## Knochen (SkeletonProfileHumanoid), ab dem die Zauber-Animation gilt: er
+## und alle Knochen darunter (Brust, Hals, Kopf, Arme, Finger). Hüfte und
+## Beine laufen weiter.
+@export var upper_body_root: StringName = &"Spine"
+
+
+## true, wenn der Satz Zauber-Animationen hat.
+func has_spell_clips() -> bool:
+	if library == null:
+		return false
+	for clip in [spell_enter, spell_idle, spell_shoot, spell_exit]:
+		if clip == &"" or not library.has_animation(clip):
+			return false
+	return true

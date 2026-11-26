@@ -46,6 +46,10 @@ extends Node
 ##   Host prüft grob nach (gemeldete Position weit vom Startpunkt).
 ## - Automatischer Angriff läuft nur auf dem Host (Unit.auto_attacking);
 ##   auto_attack_on zeigt dem Besitzer, wenn der Host ihn beendet.
+## - Sofort-Fähigkeiten (#63, für Zauber-Animationen): Der Besitzer meldet
+##   sie beim Abschicken selbst (instant_used, Vorhersage); lehnt der Host ab,
+##   folgt instant_rejected. Für alle anderen setzt der Host instant_cast
+##   (CastSync, nur bei Änderung), daraus folgt dort instant_used.
 
 ## Laufender Zauber hat sich geändert (Beginn, Verzögerung, Ende).
 signal cast_changed
@@ -59,6 +63,12 @@ signal failed(code: int, param: String, ability: AbilityData)
 signal requested(ability: AbilityData)
 ## Automatischer Angriff laut Host an oder aus.
 signal auto_attack_changed(active: bool)
+## Eine Sofort-Fähigkeit wurde eingesetzt (#63): beim Besitzer sofort beim
+## Abschicken, sonst sobald der Host sie ausgeführt hat (instant_cast).
+## target = aufgelöstes Ziel (bei Fähigkeiten ohne Ziel der Wirker), kann null sein.
+signal instant_used(ability: AbilityData, target: Unit)
+## Nur beim Besitzer: der Host hat eine vorhergesagte Sofort-Fähigkeit abgelehnt.
+signal instant_rejected(ability: AbilityData)
 
 enum Result { DONE, INTERRUPTED, CANCELLED, FAILED }
 
@@ -75,6 +85,8 @@ const PREDICTION_CONFIRM_SLACK := 0.5
 const MAX_REPORTED_OFFSET := 4.0
 ## Ein Fehler des automatischen Angriffs geht höchstens so oft an den Besitzer.
 const AUTO_ERROR_INTERVAL := 1.0
+## Ältere Meldungen einer Sofort-Fähigkeit (Sekunden) zeigen keine Animation mehr.
+const INSTANT_MAX_AGE := 1.0
 
 ## Übertragen (Host → alle): [Fähigkeit, Start, Ende, kanalisiert,
 ## unterbrechbar, Schule, Zielpfad, Wunsch-Nummer] oder leer.
@@ -95,6 +107,13 @@ var cooldown_state: Dictionary = {}:
 		cooldown_state = value
 		_confirm_predicted_cooldowns()
 		cooldowns_changed.emit()
+## Übertragen (#63): zuletzt ausgeführte Sofort-Fähigkeit [laufende Nummer,
+## Fähigkeit, Zielpfad, Host-Zeit] oder leer. Nur bei Änderung, nicht beim
+## Erzeugen; ältere Meldungen als INSTANT_MAX_AGE werden nicht gezeigt.
+var instant_cast: Array = []:
+	set(value):
+		instant_cast = value
+		_on_instant_cast_received()
 ## Übertragen: automatischer Angriff läuft (Host).
 var auto_attack_on := false:
 	set(value):
@@ -121,6 +140,7 @@ var _main_at := 0.0
 var _off_at := 0.0
 var _ranged_at := 0.0
 var _end_seq := 0
+var _instant_seq := 0
 var _cd_dirty := false
 var _auto_errors: Dictionary = {}
 
@@ -137,6 +157,8 @@ var _client_queue: Dictionary = {}
 var _locally_ended_req := -1
 ## Wunsch-Nummern, deren Vorhersage beendet bzw. abgelehnt wurde (die letzten).
 var _dropped_reqs: Array[int] = []
+## Wunsch-Nummern vorhergesagter Sofort-Fähigkeiten → Fähigkeit (#63).
+var _pred_instants: Dictionary = {}
 
 
 func _enter_tree() -> void:
@@ -522,6 +544,7 @@ func host_use(ability: AbilityData, target: Unit, point := Vector3.ZERO, has_poi
 		AbilityData.CastType.INSTANT:
 			_pay_cost(ability)
 			_start_cooldown(ability)
+			_publish_instant(ability, unit_target)
 			_apply(ability, unit_target, point, has_point)
 		AbilityData.CastType.CAST:
 			_begin_cast(ability, unit_target, point, has_point, req_id, peer, view, false)
@@ -766,6 +789,28 @@ func _publish_cast() -> void:
 			ability.interruptible, String(ability.get_school()),
 			target.get_path() if target != null and target.is_inside_tree() else NodePath(),
 			int(_cast["req"])]
+
+
+## Host: Sofort-Fähigkeit für alle anderen Instanzen melden (#63).
+func _publish_instant(ability: AbilityData, target: Unit) -> void:
+	_instant_seq += 1
+	instant_cast = [_instant_seq, String(ability.id),
+			target.get_path() if target != null and is_instance_valid(target) and target.is_inside_tree() else NodePath(),
+			Network.host_time()]
+
+
+func _on_instant_cast_received() -> void:
+	if instant_cast.size() < 4 or _unit == null or not is_inside_tree():
+		return
+	# Der Besitzer hat sie schon beim Abschicken gemeldet (Vorhersage).
+	if is_owner():
+		return
+	if Network.host_time() - float(instant_cast[3]) > INSTANT_MAX_AGE:
+		return
+	var ability := GameData.get_ability(StringName(str(instant_cast[1])))
+	if ability == null:
+		return
+	instant_used.emit(ability, Unit.from_path(get_tree(), instant_cast[2]))
 
 
 func _host_cast_info() -> Dictionary:
@@ -1027,6 +1072,11 @@ func _send(ability: AbilityData, target: Unit, point: Vector3, has_point: bool, 
 		_predict(req, ability, target)
 	_pending[req] = ability
 	requested.emit(ability)
+	if predict and not ability.on_next_swing and get_cast_type(ability) == AbilityData.CastType.INSTANT:
+		_pred_instants[req] = ability
+		if _pred_instants.size() > 8:
+			_pred_instants.erase(_pred_instants.keys()[0])
+		instant_used.emit(ability, target)
 	if host:
 		var result := host_use(ability, target, point, has_point, req, multiplayer.get_unique_id())
 		if int(result[0]) >= 0:
@@ -1094,8 +1144,12 @@ func _predict(req: int, ability: AbilityData, target: Unit) -> void:
 func _on_result(req: int, code: int, param: String) -> void:
 	var ability: AbilityData = _pending.get(req)
 	_pending.erase(req)
+	var instant: AbilityData = _pred_instants.get(req)
+	_pred_instants.erase(req)
 	if code == AbilityError.Code.OK:
 		return
+	if instant != null:
+		instant_rejected.emit(instant)
 	_drop_req(req)
 	if not _pred_gcd.is_empty() and int(_pred_gcd[2]) == req:
 		_pred_gcd = []
