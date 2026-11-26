@@ -116,6 +116,15 @@ Alle Zahlen des Magiers stehen in `faehigkeitswerte.csv` (Abschnitte „Magier�
 - **Talente** verändern diese Schlüssel über „Fähigkeit verändern“ (z. B. Glutkern `brand` · `werte.radius` +1 je Rang). Die Boni je Rang stehen wie in #20 im Talentbaum (`game/data/talents/mage_*.tres`).
 - **Verlangsamung:** Die Stärke steht in der Aura (`kaelte` 30 %, `tiefe_kaelte` 60 %, `eiseskaelte` 70 %), die Dauer beim Zauber (`verlangsamung_dauer`).
 
+### Krieger: Wut und Zahlen der Mechaniken (#53)
+
+Alle Zahlen des Kriegers stehen in `faehigkeitswerte.csv` (Abschnitte „Krieger“, „Krieger – Bollwerk/Berserker/Schlachtmeister“). Die `.tres` beschreiben den Aufbau mit den allgemeinen Bausteinen (`StrikeEffect`, `ResourceEffect` mit `amount_key`, `PercentHealEffect`, `SpreadAuraEffect`, `EchoDamageEffect`, Logik in `scripts/combat/logic/`); gelesen wird immer mit den Veränderungen durch Talente.
+
+- **Wut:** Ressource `wut` (0–`wut_max`). Entsteht durch ausgeteilten Schaden (`wut_pro_schaden_ausgeteilt`, seit #53 0,05), erlittenen Schaden (`wut_pro_schaden_genommen`) und Fähigkeiten (`werte.wut`, z. B. Hieb 10), verfällt außerhalb des Kampfes (`wut_verfall_pro_s`). Kosten stehen wie bei Mana in `kosten`/`ressource`.
+- **Mechanik-Zeilen** (passiv, in keinem Zauberbuch): `bollwerk_haltung` (`wut_je_block`, `heilung_je_block` je Rang Standhaft), `rache` (`dauer` = Fenster für Vergeltung), `raserei` (`dauer`, `stapel` je Auslösung, `wut_je_stapel` ausgegebene Wut je Stapel, `wutentbrannt_wut`, `blutdurst_heilung`, `siegesrausch_heilung`), `blutrausch` (`dauer`), `tiefe_wunde` (`grundwert`/`faktor` je Stapel und Tick, `dauer`/`tick`, `max_stapel`, `zerreissen_wut`).
+- **Häufige Schlüssel in `werte`:** `wut` (erzeugte Wut), `bedrohung` (Zusatzbedrohung), `bedrohung_bonus` (Prozent des Schadens), `radius`, `mindestreichweite` (Sturmangriff: zu nah = „Ihr seid zu nah dran.“), `betaeubung_dauer`, `schlaege` (Wilder Hieb), `ziele` (Wirbelwind), `ziel_leben_unter` (Hinrichten nur unter diesem Leben in Prozent), `zusatz_wut`/`bonus_je_wut` (zusätzlich verbrauchte Wut und Prozent Schaden je Punkt), `krit_bonus`, `erstattung`, `verbreiten_ziele`/`verbreiten_radius`, `flaeche_*` (Erdbeben), `raserei_stapel`, `prozent` (Klingenschwung).
+- **In den Auren** stehen Prozentwerte, die zur Aura gehören (Bollwerk-Haltung +200 % Bedrohung und −10 % Schaden, Raserei +3 % Tempo je Stapel, Verlangsamung 20 %); die Boni je Talentrang stehen wie beim Magier im Talentbaum bzw. in der Talent-Aura (`game/data/talents/warrior_*.tres`, `game/data/auras/talent_*.tres`).
+
 ### Werte der Charaktere anpassen (Wertesystem #19)
 
 Alle Zahlen des Wertesystems stehen in Tabellen, der Aufbau (welche Formel welche Spalten nutzt, Namen und Tooltips der Werte) in `game/data/stats/stat_rules.tres`. Alle Zahlen sind Platzhalter.
