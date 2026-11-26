@@ -351,8 +351,9 @@ func get_block_reason(ability: AbilityData) -> String:
 
 
 ## Zustand eines Aktionsslots (#33): {"cooldown": Vector2(Rest, Dauer),
-## "gcd": Vector2, "out_of_range", "no_resource", "highlight", "active",
-## "charges" (−1 = ohne Aufladungen)}.
+## "gcd": Vector2, "out_of_range", "no_resource", "unusable" (#53: Waffe,
+## Aura oder Leben des Ziels passen nicht, z. B. Schildschlag ohne Schild),
+## "highlight", "active", "charges" (−1 = ohne Aufladungen)}.
 func get_slot_state(ability: AbilityData) -> Dictionary:
 	var caster := get_caster()
 	if caster == null or ability == null or _player == null:
@@ -380,6 +381,7 @@ func get_slot_state(ability: AbilityData) -> Dictionary:
 		"gcd": gcd,
 		"out_of_range": not caster.is_in_range(ability, target),
 		"no_resource": not caster.has_resource_for(ability),
+		"unusable": caster.get_requirement_block(ability, target)[0] != AbilityError.Code.OK,
 		"highlight": highlight,
 		"active": active,
 		"charges": caster.get_charges_left(ability) if ability.get_charges() > 1 else -1,

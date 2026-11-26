@@ -353,7 +353,7 @@ func apply_aura(data: AuraData, caster: Unit, ctx: EffectContext = null, stacks 
 			inst.caster = caster
 			inst.caster_path = caster.get_path() if caster != null else NodePath()
 		if data.stack_mode != AuraData.StackMode.REFRESH:
-			inst.stacks = mini(data.max_stacks, inst.stacks + maxi(1, stacks))
+			inst.stacks = mini(data.get_max_stacks(caster), inst.stacks + maxi(1, stacks))
 		_set_duration(inst, duration, now)
 		inst.ctx = _make_ctx(inst, ctx)
 		_prepare(inst)
@@ -367,7 +367,7 @@ func apply_aura(data: AuraData, caster: Unit, ctx: EffectContext = null, stacks 
 		inst.data = data
 		inst.caster = caster
 		inst.caster_path = caster.get_path() if caster != null else NodePath()
-		inst.stacks = clampi(stacks, 1, data.max_stacks)
+		inst.stacks = clampi(stacks, 1, data.get_max_stacks(caster))
 		_set_duration(inst, duration, now)
 		inst.ctx = _make_ctx(inst, ctx)
 		_prepare(inst)
@@ -475,6 +475,25 @@ func modify_outgoing_damage(amount: float, school: StringName, target: Unit) -> 
 		if inst.data.logic != null:
 			amount = inst.data.logic.modify_outgoing_damage(inst, self, amount, school, target)
 	return maxf(0.0, amount)
+
+
+## Host (#53): Chancen eines Angriffs auf diese Einheit durch AuraLogic der
+## eigenen Auren verändern (Combat.hit_table).
+func modify_hit_chances(raw: Dictionary, attacker: Unit, kind: HitFormulas.AttackKind) -> Dictionary:
+	for inst in _auras.duplicate():
+		if inst.data.logic != null:
+			raw = inst.data.logic.modify_hit_chances(inst, self, raw, attacker, kind)
+	return raw
+
+
+## Host (#53): Die Einheit hat amount einer Ressource ausgegeben (UnitCaster
+## beim Bezahlen, StrikeEffect beim Verbrauchen zusätzlicher Wut).
+func on_resource_spent(resource: StringName, amount: float) -> void:
+	if not Network.is_host() or amount <= 0.0:
+		return
+	for inst in _auras.duplicate():
+		if _auras.has(inst) and inst.data.logic != null:
+			inst.data.logic.on_resource_spent(inst, self, resource, amount)
 
 
 ## Host: Schadensumleitung. Gibt den Rest zurück, den der Träger selbst nimmt.

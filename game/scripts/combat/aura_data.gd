@@ -53,6 +53,10 @@ const CATEGORY_NAMES := {
 @export_group("Stapel")
 @export_range(1, 99) var max_stacks := 1
 @export var stack_mode: StackMode = StackMode.REFRESH
+## Seit #53: Höchstzahl aus faehigkeitswerte.csv (Zeile ability_id, z. B.
+## „werte.max_stapel“) mit den Veränderungen des Wirkers durch Talente (Tiefe
+## Schnitte: Tiefe Wunde stapelt bis 5). Leer = max_stacks.
+@export var max_stacks_key := ""
 
 @export_group("Periodisch")
 ## Sekunden zwischen zwei Ticks (0 = keine Ticks).
@@ -119,6 +123,17 @@ func get_duration() -> float:
 
 func get_tick_interval() -> float:
 	return _table_number("tick", tick_interval)
+
+
+## Höchstzahl an Stapeln für Auren dieses Wirkers (siehe max_stacks_key).
+func get_max_stacks(caster: Unit = null) -> int:
+	if max_stacks_key == "" or ability_id == &"":
+		return max_stacks
+	var ability := GameData.get_ability(ability_id)
+	if ability == null:
+		return max_stacks
+	var value := int(ability.get_number_for(caster, max_stacks_key))
+	return clampi(value, 1, 99) if value > 0 else max_stacks
 
 
 func get_category_name() -> String:

@@ -409,6 +409,9 @@ func _do_dev_action(action: String, value: Variant) -> void:
 				spend_resource(resource_id, DEV_TOOLS.resource_spent)
 		"build_chi":
 			gain_resource(&"chi", DEV_TOOLS.chi_built)
+		"rage_full":
+			# Krieger (#53): Wut auf das Maximum (100).
+			gain_resource(&"rage", max_rage)
 		"refill":
 			_fill_resources()
 		_:

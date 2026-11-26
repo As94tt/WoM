@@ -361,6 +361,32 @@ func has_resource_for(ability: AbilityData) -> bool:
 	return stats != null and stats.get_resource(resource) >= cost - 0.001
 
 
+## Mindestentfernung zum Ziel in Metern (werte.mindestreichweite aus
+## faehigkeitswerte.csv, #53, z. B. Sturmangriff 8 m); 0 = keine.
+func get_min_range(ability: AbilityData) -> float:
+	return maxf(0.0, ability.get_number_for(_unit, "werte.mindestreichweite"))
+
+
+## Bedingungen, die an Ausrüstung, Auren oder dem Zustand des Ziels hängen
+## (Prüfung 8), als [Code, Zusatz]; OK = erfüllt. Auch für die Aktionsleiste:
+## Ist eine davon nicht erfüllt, ist die Fähigkeit ausgegraut (#53, z. B.
+## Schildschlag ohne Schild, Vergeltung ohne Rache, Hinrichten bei viel Leben).
+## - Waffe (required_weapon), Aura des Wirkers (required_aura),
+## - Leben des Ziels unter werte.ziel_leben_unter Prozent (#53, Hinrichten;
+##   Talente können den Wert erhöhen, z. B. Plötzlicher Tod).
+func get_requirement_block(ability: AbilityData, target: Unit) -> Array:
+	if not _has_weapon(ability.required_weapon):
+		return [AbilityError.Code.NEED_WEAPON, str(ability.required_weapon)]
+	var combat := _unit.get_combat()
+	if ability.required_aura != &"" and (combat == null or combat.get_stacks(ability.required_aura) <= 0):
+		return [AbilityError.Code.NEED_AURA, String(ability.required_aura)]
+	var limit := ability.get_number_for(_unit, "werte.ziel_leben_unter")
+	if limit > 0.0 and target != null and is_instance_valid(target) and target != _unit \
+			and EffectCondition._health_percent(target) >= limit:
+		return [AbilityError.Code.TARGET_HEALTH_TOO_HIGH, ""]
+	return [AbilityError.Code.OK, ""]
+
+
 ## Ziel im Bereich (nur Entfernung, für die Tönung der Aktionsleiste).
 ## true, wenn kein Ziel nötig ist oder keins gewählt ist.
 func is_in_range(ability: AbilityData, target: Unit) -> bool:
@@ -370,7 +396,8 @@ func is_in_range(ability: AbilityData, target: Unit) -> bool:
 		return true
 	if ability.targets_friends() and _unit.get_reaction_to(target) != Unit.Reaction.FRIENDLY:
 		return true
-	return _distance_from(_unit.global_position, target) <= get_range(ability) + 0.001
+	var distance := _distance_from(_unit.global_position, target)
+	return distance <= get_range(ability) + 0.001 and distance >= get_min_range(ability) - 0.001
 
 
 # --- Prüfen ------------------------------------------------------------------
@@ -429,15 +456,14 @@ func check(ability: AbilityData, target: Unit, point := Vector3.ZERO, has_point 
 			and not _is_facing(view, unit_target):
 		return _fail(AbilityError.Code.NOT_FACING)
 	# 8. Besondere Bedingungen
-	if not _has_weapon(ability.required_weapon):
-		return _fail(AbilityError.Code.NEED_WEAPON, str(ability.required_weapon))
 	if ability.requires_stealth and not _unit.is_stealthed():
 		return _fail(AbilityError.Code.NEED_STEALTH)
 	if ability.requires_behind and (unit_target == null or unit_target == _unit \
 			or not _is_behind(view, unit_target)):
 		return _fail(AbilityError.Code.NEED_BEHIND)
-	if ability.required_aura != &"" and (combat == null or combat.get_stacks(ability.required_aura) <= 0):
-		return _fail(AbilityError.Code.NEED_AURA, String(ability.required_aura))
+	var requirement := get_requirement_block(ability, unit_target)
+	if requirement[0] != AbilityError.Code.OK:
+		return _fail(requirement[0], requirement[1])
 	if ability.requires_out_of_combat and _unit.get_stats() != null and _unit.get_stats().is_in_combat():
 		return _fail(AbilityError.Code.IN_COMBAT)
 	if bool(view.get("moving", false)) and not ability.castable_while_moving \
@@ -854,7 +880,10 @@ func _pay_cost(ability: AbilityData) -> void:
 	var cost := get_cost(ability)
 	var stats := _unit.get_stats()
 	if resource != &"" and cost > 0.0 and stats != null:
-		stats.spend_resource(resource, minf(cost, stats.get_resource(resource)))
+		var spent := minf(cost, stats.get_resource(resource))
+		if stats.spend_resource(resource, spent) and _unit.get_combat() != null:
+			# Für Mechaniken wie Raserei (#53: je 30 ausgegebene Wut ein Stapel).
+			_unit.get_combat().on_resource_spent(resource, spent)
 
 
 func _start_cooldown(ability: AbilityData) -> void:
@@ -1032,8 +1061,13 @@ func _swing(target: Unit, row: TableRow, factor: float, source: StringName, sour
 	var stats := _unit.get_stats()
 	var flags := Combat.FLAG_DUAL_WIELD \
 			if not ranged and stats != null and stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON) else 0
-	Combat.roll_damage(_unit, target, amount, &"physisch",
+	var result := Combat.roll_damage(_unit, target, amount, &"physisch",
 			HitFormulas.AttackKind.RANGED if ranged else HitFormulas.AttackKind.MELEE, ctx, flags)
+	# Ereignis für Auslöser, die nur automatische Angriffe betreffen (#53,
+	# z. B. Wutentbrannt: +Wut je automatischem Angriff).
+	if result != null and result.outcome in [HitFormulas.Outcome.HIT, HitFormulas.Outcome.CRIT,
+			HitFormulas.Outcome.BLOCK]:
+		Combat.notify_event(_unit, Combat.Event.AUTO_ATTACK, target, result.amount)
 
 
 ## Nächster Schlag: statt des normalen Schlags die Fähigkeit (Kosten jetzt).
@@ -1347,8 +1381,12 @@ func _check_range(ability: AbilityData, target: Unit, point: Vector3, has_point:
 		return AbilityError.Code.OK
 	if target == null or target == _unit:
 		return AbilityError.Code.OK
-	if _distance_from(pos, target) > reach + 0.001:
+	var distance := _distance_from(pos, target)
+	if distance > reach + 0.001:
 		return AbilityError.Code.OUT_OF_RANGE
+	var min_range := get_min_range(ability)
+	if min_range > 0.0 and distance < min_range - tolerance - 0.001:
+		return AbilityError.Code.TOO_CLOSE
 	if ability.requires_line_of_sight \
 			and not _ray_clear(_eye(pos), target.get_eye_position(), [_unit.get_rid(), target.get_rid()]):
 		return AbilityError.Code.NO_LINE_OF_SIGHT

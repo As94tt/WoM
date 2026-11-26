@@ -16,8 +16,9 @@ extends Button
 ## Zustand (#33, update_state, jedes Bild von der Leiste): Abklingzeit bzw.
 ## globaler Cooldown als Uhrzeiger-Abdunklung (CooldownSweep) mit Restzeit
 ## (ab 2 s ganze Sekunden, darunter eine Nachkommastelle; beim globalen
-## Cooldown ohne Zahl), Tönung rot außer Reichweite bzw. bläulich ohne
-## genug Ressource (Farben aus dem Theme, AbilityColors), leuchtender Rand
+## Cooldown ohne Zahl), Tönung rot außer Reichweite, grau, wenn Waffe, Aura
+## oder Leben des Ziels nicht passen (#53, z. B. Schildschlag ohne Schild),
+## bzw. bläulich ohne genug Ressource (Farben aus dem Theme, AbilityColors), leuchtender Rand
 ## bei einem Proc (SlotProcGlow), heller Rahmen bei aktivem Umschalter,
 ## automatischem Angriff oder vorgemerktem nächsten Schlag (SlotActive),
 ## Zahl der Aufladungen unten links.
@@ -98,6 +99,8 @@ func update_state(state: Dictionary) -> void:
 	var tint := Color.WHITE
 	if bool(state.get("out_of_range", false)):
 		tint = CombatColors.ability_color(&"out_of_range")
+	elif bool(state.get("unusable", false)):
+		tint = CombatColors.ability_color(&"unusable")
 	elif bool(state.get("no_resource", false)):
 		tint = CombatColors.ability_color(&"no_resource")
 	if self_modulate != tint:

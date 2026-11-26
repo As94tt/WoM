@@ -6,7 +6,7 @@ extends RefCounted
 ## - Theme-Typ „SchoolColors“: je Schadensschule (ID aus schadensschulen.csv)
 ##   eine Farbe, z. B. „feuer“; fehlt sie, gilt „physisch“.
 ## - Theme-Typ „AbilityColors“: Tönung der Aktionsslots (out_of_range,
-##   no_resource), Bodenziel (ground_valid, ground_invalid), Deckkraft des
+##   unusable seit #53, no_resource), Bodenziel (ground_valid, ground_invalid), Deckkraft des
 ##   Leuchtens (Konstante glow_alpha_percent).
 ## - Theme-Typ „CombatTextSchool“ (#34): Färbung des Kampftexts für eigenen
 ##   Schaden je Schule; fehlt eine Schule, bleibt die Farbe von

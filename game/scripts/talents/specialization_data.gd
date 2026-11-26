@@ -34,6 +34,10 @@ extends Resource
 ## Verwandlungen „Grundfähigkeit → Variante“ (optional, leer = keine).
 @export var transformations: Array[AbilityTransformData] = []
 @export var talent_tree: TalentTreeData
+## Passive Auren der Spezialisierung (seit #53, z. B. Bollwerk-Haltung oder
+## der Wut-Kreislauf des Berserkers): dauerhaft auf der Figur, solange die
+## Spezialisierung wirksam ist (wie Talent-Auren, ein Stapel). Leer = keine.
+@export var auras: Array[AuraData] = []
 ## Klassenspezifische Erweiterung (optional), siehe SpecializationExtension.
 @export var extension: SpecializationExtension
 

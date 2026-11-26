@@ -159,7 +159,9 @@ func _process_attack(now: float) -> void:
 		rotation.y = atan2(-to.x, -to.z)
 	if now < _next_attack or distance_to_unit(target) > Data.konstante(&"nahkampf_reichweite", 5.0):
 		return
-	_next_attack = now + maxf(0.1, float(_row.get_value("angriff_takt", 2.0)))
+	# Tempo wirkt auf den Takt (#53: Donnerknall des Bollwerks senkt es).
+	var haste := maxf(0.1, 1.0 + _stats.get_value(&"haste_pct") / 100.0)
+	_next_attack = now + maxf(0.1, float(_row.get_value("angriff_takt", 2.0))) / haste
 	var ctx := EffectContext.create(self, target, &"puppe:angriff", "Angriff")
 	Combat.roll_damage(self, target, float(_row.get_value("angriff_schaden", 0.0)), &"physisch",
 			HitFormulas.AttackKind.MELEE, ctx)

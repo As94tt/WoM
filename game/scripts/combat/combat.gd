@@ -47,7 +47,12 @@ extends RefCounted
 ## Ereignisse für Auslöser (ProcData.event). Seit #34 löst sie der echte
 ## Würfel aus: HIT/CRIT beim Angreifer, DODGE/PARRY/BLOCK beim Verteidiger
 ## (other = Angreifer), CRIT auch bei kritischer Heilung.
-enum Event { HIT, CRIT, DAMAGE_TAKEN, DODGE, PARRY, BLOCK, ABILITY_CAST, KILL, AURA_EXPIRED }
+## Seit #53 (Krieger): AUTO_ATTACK beim Angreifer, wenn ein automatischer
+## Angriff trifft (nicht verfehlt, ausgewichen oder pariert), TARGET_DODGED
+## beim Angreifer, wenn das Ziel seinem Angriff ausweicht (other = Ziel).
+## Neue Ereignisse nur hinten anhängen (Daten speichern die Nummer).
+enum Event { HIT, CRIT, DAMAGE_TAKEN, DODGE, PARRY, BLOCK, ABILITY_CAST, KILL, AURA_EXPIRED,
+		AUTO_ATTACK, TARGET_DODGED }
 
 ## Zustände als Bits (AuraData.states).
 const STATE_STUNNED := 1
@@ -88,6 +93,8 @@ const EVENT_NAMES := {
 	Event.ABILITY_CAST: "Fähigkeit gewirkt",
 	Event.KILL: "Tod des Ziels",
 	Event.AURA_EXPIRED: "Ablauf der Aura",
+	Event.AUTO_ATTACK: "Automatischer Angriff trifft",
+	Event.TARGET_DODGED: "Ziel ist ausgewichen",
 }
 
 ## Flags für roll_damage/deal_damage/roll_heal/heal.
@@ -95,6 +102,7 @@ const FLAG_PERIODIC := 1      ## Tick einer Aura oder Fläche (kein „Treffer�
 const FLAG_NO_REDIRECT := 2   ## Schaden wird nicht umgeleitet (verhindert Schleifen)
 const FLAG_NO_PROCS := 4      ## löst keine Auslöser aus
 const FLAG_DUAL_WIELD := 8    ## automatischer Angriff mit zwei Waffen (verfehlt häufiger, #34)
+const FLAG_NO_AVOID := 16     ## kann nicht verfehlen, ausgewichen oder pariert werden (#53, Überwältigen)
 
 ## Größte Verschachtelung von Effekten (Auslöser, die Auslöser auslösen).
 const MAX_DEPTH := 8
@@ -161,6 +169,8 @@ static func roll_damage(caster: Unit, target: Unit, base_amount: float, school: 
 			if flags & FLAG_NO_PROCS == 0:
 				var event := Event.DODGE if result.outcome == HitFormulas.Outcome.DODGE else Event.PARRY
 				notify_event(target, event, caster, base_amount)
+				if result.outcome == HitFormulas.Outcome.DODGE and caster != null and caster != target:
+					notify_event(caster, Event.TARGET_DODGED, target, base_amount)
 			return result
 	var amount := maxf(0.0, base_amount) * damage_factor(caster, target, school)
 	amount = _apply_aura_logic(caster, target, amount, school)
@@ -316,6 +326,15 @@ static func hit_table(caster: Unit, target: Unit, kind: HitFormulas.AttackKind, 
 		raw[HitFormulas.Outcome.BLOCK] = target_stats.get_value(&"block")
 	if caster_stats != null:
 		raw[HitFormulas.Outcome.CRIT] = caster_stats.get_value(&"crit_chance")
+	# Abwehr durch Aura-Logik des Ziels (#53, z. B. Schildorkan: jeder Angriff
+	# von vorne wird geblockt; von hinten bleibt Blocken unten ausgeschlossen).
+	if target != null and target.get_combat() != null and kind != HitFormulas.AttackKind.HEAL:
+		raw = target.get_combat().modify_hit_chances(raw, caster, kind)
+	# Kann nicht verfehlen, ausgewichen oder pariert werden (#53, Überwältigen).
+	if flags & FLAG_NO_AVOID:
+		for outcome: HitFormulas.Outcome in [HitFormulas.Outcome.MISS, HitFormulas.Outcome.DODGE,
+				HitFormulas.Outcome.PARRY]:
+			raw[outcome] = 0.0
 	var from_behind := caster != null and target != null and caster != target and caster.is_behind(target)
 	return HitFormulas.chance_table(kind, raw, from_behind)
 
