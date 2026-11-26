@@ -218,6 +218,23 @@ func gegenstand(id: StringName) -> TableRow:
 	return row("gegenstaende", id)
 
 
+## Alle Gegenstände in Tabellenreihenfolge (z. B. für das Entwickler-Panel, #18).
+func gegenstaende() -> Array[TableRow]:
+	var result: Array[TableRow] = []
+	result.assign(rows("gegenstaende"))
+	return result
+
+
+## Seltenheitsstufe (#18) aus seltenheiten.csv oder null.
+func seltenheit(id: StringName) -> TableRow:
+	return row("seltenheiten", id)
+
+
+## Gegenstandstyp (#18) aus gegenstandstypen.csv oder null.
+func gegenstandstyp(id: StringName) -> TableRow:
+	return row("gegenstandstypen", id)
+
+
 ## Alle Waren eines Händlers.
 func haendler(id: StringName) -> Array[TableRow]:
 	return rows_where("haendler", "haendler", id)
