@@ -1,0 +1,25 @@
+# Welche Gegenstandsart (gegenstaende.csv: slot und handhabung) in welchen Ausrüstungsplatz passt (#29). Gesucht wird erst slot mit handhabung und danach slot mit leerer handhabung.
+# anzeige = Text links im Tooltip. waffentypen = erlaubte Waffentypen (leer = keine Waffe). nebenhand_nur_beidhaendig: in der Nebenhand nur mit Beidhändigkeit.
+slot;handhabung;anzeige;plaetze;belegt_beide_haende;nebenhand_nur_beidhaendig;ruestungsklasse_noetig;immer_einzigartig_angelegt;waffentypen;notiz
+helm;;Kopf;helm;nein;nein;ja;nein;;
+schulter;;Schultern;schulter;nein;nein;ja;nein;;
+brust;;Brust;brust;nein;nein;ja;nein;;
+guertel;;Taille;guertel;nein;nein;ja;nein;;
+beine;;Beine;beine;nein;nein;ja;nein;;
+schuhe;;Füße;schuhe;nein;nein;ja;nein;;
+handschuhe;;Hände;handschuhe;nein;nein;ja;nein;;
+armschienen;;Handgelenke;armschienen;nein;nein;ja;nein;;
+umhang;;Rücken;umhang;nein;nein;nein;nein;;Umhang ohne Rüstungsklasse
+kette;;Hals;kette;nein;nein;nein;nein;;
+ring;;Finger;ring_1|ring_2;nein;nein;nein;nein;;Rechtsklick: erster freier, sonst der erste
+siegel;;Siegel;siegel;nein;nein;nein;ja;;Immer einzigartig angelegt
+talisman;;Talisman;talisman_1|talisman_2|talisman_3;nein;nein;nein;ja;;Drei verschiedene, jeder einzigartig angelegt
+einhand;;Einhand;haupthand|nebenhand;nein;ja;nein;nein;dolch|schwert|axt|streitkolben|faustwaffe;
+einhand;einhand;Einhand;haupthand|nebenhand;nein;ja;nein;nein;dolch|schwert|axt|streitkolben|faustwaffe;
+einhand;haupthand;Waffenhand;haupthand;nein;nein;nein;nein;dolch|schwert|axt|streitkolben|faustwaffe;
+einhand;nebenhand;Schildhand;nebenhand;nein;ja;nein;nein;dolch|schwert|axt|streitkolben|faustwaffe;
+zweihand;;Zweihand;haupthand;ja;nein;nein;nein;zweihandschwert|zweihandaxt|kriegshammer|kampfstab;Belegt Haupt- und Nebenhand
+schild;;Schildhand;nebenhand;nein;nein;nein;nein;schild;
+fokus;;In der Schildhand geführt;nebenhand;nein;nein;nein;nein;fokus;
+zauberstab;;Distanz;fernkampf;nein;nein;nein;nein;zauberstab;
+fernkampfwaffe;;Distanz;fernkampf;nein;nein;nein;nein;bogen|langbogen|kurzbogen|armbrust;

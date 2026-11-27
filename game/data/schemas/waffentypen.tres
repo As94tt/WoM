@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_wtcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_wttab"]
+
+[sub_resource type="Resource" id="Resource_wt_id"]
+script = ExtResource("1_wtcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID des Waffentyps (z. B. dolch, zweihandschwert, zauberstab, schild)."
+
+[sub_resource type="Resource" id="Resource_wt_name"]
+script = ExtResource("1_wtcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip rechts neben dem Platz, z. B. „Schwert“)."
+
+[sub_resource type="Resource" id="Resource_wt_hand"]
+script = ExtResource("1_wtcol")
+name = "handhabung"
+type = 5
+required = true
+choices = PackedStringArray("einhand", "zweihand", "fernkampf", "nebenhand")
+description = "Art der Waffe. nebenhand (Schild, Fokus) macht keinen Waffenschaden."
+
+[sub_resource type="Resource" id="Resource_wt_range"]
+script = ExtResource("1_wtcol")
+name = "reichweite"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Reichweite in Metern für automatische Schüsse (0 = Nahkampf, es gilt nahkampf_reichweite)."
+
+[sub_resource type="Resource" id="Resource_wt_speed"]
+script = ExtResource("1_wtcol")
+name = "standardtempo"
+type = 3
+has_min = true
+choices = PackedStringArray()
+description = "Sekunden je Schlag, wenn der Gegenstand keine Geschwindigkeit hat."
+
+[resource]
+script = ExtResource("2_wttab")
+table = "waffentypen"
+title = "Waffentypen"
+group = "Gegenstände"
+description = "Waffentypen (#29) mit Handhabung, Reichweite und Standardtempo. Bogen, Langbogen, Kurzbogen und Armbrust darf keine heutige Klasse tragen. Schadensfaktoren folgen mit #71."
+key_columns = PackedStringArray("id")
+order = 46
+columns = Array[ExtResource("1_wtcol")]([SubResource("Resource_wt_id"), SubResource("Resource_wt_name"), SubResource("Resource_wt_hand"), SubResource("Resource_wt_range"), SubResource("Resource_wt_speed")])

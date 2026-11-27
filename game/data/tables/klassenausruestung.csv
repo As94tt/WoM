@@ -1,0 +1,7 @@
+# Wer darf was tragen (#29; Platzhalter). ruestungsklasse = höchste erlaubte (leichtere gehen auch). beidhaendig = zwei Einhandwaffen (GDD: Schurke und Mönch). zwei_zweihand ist nur vorgesehen; es gibt noch keine Regel dafür.
+klasse;ruestungsklasse;waffentypen;beidhaendig;zwei_zweihand;notiz
+warrior;platte;schwert|axt|streitkolben|dolch|zweihandschwert|zweihandaxt|kriegshammer|kampfstab|schild;nein;nein;Krieger
+rogue;leder;dolch|schwert|axt|faustwaffe;ja;nein;Schurke
+monk;leder;faustwaffe|kampfstab|streitkolben|fokus;ja;nein;Mönch
+mage;stoff;dolch|schwert|kampfstab|zauberstab|fokus;nein;nein;Magier
+druid;leder;kampfstab|streitkolben|dolch|faustwaffe|fokus;nein;nein;Druide

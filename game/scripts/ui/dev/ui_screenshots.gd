@@ -12,6 +12,17 @@ extends Node
 ##                                        Aktionsleiste, Zauberbuch, Talentfenster
 ##                                        ohne und mit jeder Spezialisierung, HUD
 ##                                        mit den Auren der Klasse
+##   --host --class warrior --ui-screenshots=<Ordner> --ui-screenshots-equipment
+##                                        Ausrüstung (#29): Charakterfenster mit
+##                                        angelegter Ausrüstung, Tooltip mit
+##                                        Vergleich, roter Schleier, Aufleuchten
+##                                        beim Ziehen, Fehlermeldung beim
+##                                        verbotenen Anlegen
+##   --join <IP> --class warrior --ui-screenshots=<Ordner> --ui-screenshots-equipment
+##                                        Zwei-Instanzen-Probe (#29) als Client:
+##                                        Anlegen, Tauschen, verbotenes Anlegen und
+##                                        Ablegen über den Host; gibt den Stand
+##                                        aller Figuren im Log aus („Probe:“)
 ## Optional --ui-screenshots-prefix=<Text> vor jedem Dateinamen (z. B. „1080p_“).
 ## Fenstergröße über Godots --resolution (z. B. --resolution 2560x1440).
 ## Gestartet vom Hauptmenü (MainMenu._ready); die Szene bleibt bei
@@ -20,6 +31,7 @@ extends Node
 const ARG_DIR := "--ui-screenshots"
 const ARG_PREFIX := "--ui-screenshots-prefix"
 const ARG_ICONS := "--ui-screenshots-icons"
+const ARG_EQUIPMENT := "--ui-screenshots-equipment"
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const CHARACTER_CREATION_SCENE := "res://scenes/ui/character_creation.tscn"
 
@@ -27,6 +39,8 @@ var _dir := ""
 var _prefix := ""
 var _hud_tour := false
 var _icon_tour := false
+var _equipment_tour := false
+var _client_tour := false
 
 
 ## Startet die Tour, wenn der Startparameter gesetzt ist.
@@ -40,6 +54,8 @@ static func start_if_requested(tree: SceneTree) -> void:
 	var prefix := ""
 	var hud := false
 	var icons := false
+	var equipment := false
+	var join := false
 	for arg in args:
 		if arg.begins_with(ARG_PREFIX + "="):
 			prefix = arg.get_slice("=", 1)
@@ -47,8 +63,12 @@ static func start_if_requested(tree: SceneTree) -> void:
 			dir = arg.get_slice("=", 1)
 		elif arg == "--host":
 			hud = true
+		elif arg == "--join":
+			join = true
 		elif arg == ARG_ICONS:
 			icons = true
+		elif arg == ARG_EQUIPMENT:
+			equipment = true
 	if dir == "":
 		return
 	var node := UiScreenshots.new()
@@ -57,13 +77,19 @@ static func start_if_requested(tree: SceneTree) -> void:
 	node._prefix = prefix
 	node._hud_tour = hud
 	node._icon_tour = hud and icons
+	node._equipment_tour = hud and equipment
+	node._client_tour = join and equipment
 	node.process_mode = Node.PROCESS_MODE_ALWAYS
 	tree.root.add_child.call_deferred(node)
 
 
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(_dir)
-	if _icon_tour:
+	if _client_tour:
+		_run_equipment_client_tour()
+	elif _equipment_tour:
+		_run_equipment_tour()
+	elif _icon_tour:
 		_run_icon_tour()
 	elif _hud_tour:
 		_run_hud_tour()
@@ -278,3 +304,169 @@ func _icon_shots(hud: Hud, label: String) -> void:
 	await _shot("icons_%s_talente" % label)
 	hud.close_window(&"talents")
 	await _wait(0.2)
+
+
+## Ausrüstung (#29), gedacht für den Krieger (--class warrior): Stufe 15,
+## Satz der Stufe 15 mit Schmuck, Siegel und Talismanen anlegen (wie mit
+## Rechtsklick, der Host prüft), dann Bilder vom Charakterfenster, vom
+## Tooltip mit Vergleich, vom roten Schleier, vom Aufleuchten beim Ziehen und
+## von der Meldung beim verbotenen Anlegen.
+func _run_equipment_tour() -> void:
+	var world := await _await_world()
+	if world == null or not world.has_method(&"get_hud"):
+		push_error("UiScreenshots: Spielwelt nicht gefunden")
+		get_tree().quit(1)
+		return
+	await _wait(2.0)
+	var hud: Hud = world.get_hud()
+	var player: PlayerCharacter = world.get_local_player()
+	var inventory: Inventory = world.get_local_inventory()
+	var equipment := player.get_equipment()
+	player.get_experience().request_dev("set_level", 15)
+	await _wait(1.0)
+	hud.get_level_up_banner().visible = false
+	for bag_slot in range(1, Inventory.BAG_SLOT_COUNT + 1):
+		inventory.add_item(&"tasche_gross")
+		var at := inventory.find_item(&"tasche_gross")
+		inventory.equip_bag(at.x, at.y, bag_slot)
+	var worn: Array[StringName] = [&"eisen_helm", &"stahl_schulter", &"stahl_brust", &"stahl_guertel", &"stahl_beine",
+			&"stahl_schuhe", &"stahl_handschuhe", &"stahl_armschienen", &"umhang_faehrte", &"kette_perlen",
+			&"ring_wachsamkeit", &"ring_kupfer", &"schwert_kriegs", &"schild_eisen", &"siegel_glut",
+			&"talisman_wolfszahn", &"talisman_banditenmuenze", &"talisman_eberhauer"]
+	for id in worn:
+		inventory.add_item(id)
+		var at := inventory.find_item(id)
+		equipment.request_equip_from_bag(at.x, at.y)
+		await _wait(0.05)
+	for id: StringName in [&"stahl_helm", &"zweihandaxt_eisen", &"stab_runen", &"zauberstab_glut", &"klinge_veteran",
+			&"bogen_jagd", &"wildleder_helm", &"leinen_brust", &"ring_kupfer", &"schild_holz"]:
+		inventory.add_item(id)
+	await _wait(0.5)
+	hud.open_window(&"character")
+	await _wait(0.6)
+	await _shot("ausruestung_charakterfenster")
+	hud.open_window(&"bags")
+	await _wait(0.6)
+	await _shot("ausruestung_schleier")
+	# Tooltip mit Vergleich wie beim Überfahren (Inhalt aus dem echten Platz).
+	var panel := hud.find_children("*", "InventoryPanel", true, false)[0] as InventoryPanel
+	var at := inventory.find_item(&"stahl_helm")
+	var slot := panel.get_item_slot(at.x, at.y)
+	var tip := await _show_tooltip(hud, slot._make_custom_tooltip("") as Control, slot)
+	await _wait(0.4)
+	await _shot("ausruestung_tooltip_vergleich")
+	tip.queue_free()
+	at = inventory.find_item(&"klinge_veteran")
+	slot = panel.get_item_slot(at.x, at.y)
+	tip = await _show_tooltip(hud, slot._make_custom_tooltip("") as Control, slot)
+	await _wait(0.4)
+	await _shot("ausruestung_tooltip_nicht_nutzbar")
+	tip.queue_free()
+	# Aufleuchten passender Plätze beim Ziehen (wie NOTIFICATION_DRAG_BEGIN).
+	at = inventory.find_item(&"ring_kupfer")
+	var drag := ItemDragData.from_slot(inventory, at.x, at.y)
+	var character := hud.find_children("*", "CharacterPanel", true, false)[0] as CharacterPanel
+	for place in EquipmentRules.all_places():
+		var eq_slot := character.get_equipment_slot(place)
+		if eq_slot != null:
+			eq_slot._update_highlight(drag)
+	await _wait(0.3)
+	await _shot("ausruestung_ziehen_ringe")
+	for place in EquipmentRules.all_places():
+		var eq_slot := character.get_equipment_slot(place)
+		if eq_slot != null:
+			eq_slot._update_highlight(null)
+	# Verbotenes Anlegen: Runenstab (nur Magier) per Rechtsklick.
+	at = inventory.find_item(&"stab_runen")
+	equipment.request_equip_from_bag(at.x, at.y)
+	await _wait(0.3)
+	await _shot("ausruestung_fehlermeldung")
+	get_tree().quit()
+
+
+func _show_tooltip(hud: Hud, content: Control, near: Control) -> PanelContainer:
+	var tip := PanelContainer.new()
+	tip.theme_type_variation = &"TooltipPanel"
+	tip.add_child(content)
+	hud.add_child(tip)
+	await get_tree().process_frame
+	var rect := near.get_global_rect()
+	var size := tip.get_combined_minimum_size()
+	var view := get_viewport().get_visible_rect().size
+	tip.position = Vector2(clampf(rect.position.x - size.x - 12.0, 8.0, view.x - size.x - 8.0),
+			clampf(rect.position.y - size.y * 0.5, 8.0, view.y - size.y - 8.0))
+	return tip
+
+
+## Zwei-Instanzen-Probe (#29) als Client: Jeder Schritt ist ein Wunsch an den
+## Host; danach steht der vom Host übertragene Stand im Log.
+func _run_equipment_client_tour() -> void:
+	var world := await _await_world()
+	if world == null or not world.has_method(&"get_hud"):
+		push_error("UiScreenshots: Spielwelt nicht gefunden")
+		get_tree().quit(1)
+		return
+	await _wait(2.0)
+	var hud: Hud = world.get_hud()
+	var player: PlayerCharacter = world.get_local_player()
+	var inventory: Inventory = world.get_local_inventory()
+	var equipment := player.get_equipment()
+	var errors: PackedStringArray = []
+	equipment.request_failed.connect(func(reason: String) -> void: errors.append(reason))
+	_probe("Start", world, player)
+	for id: StringName in [&"eisen_helm", &"eisen_brust", &"schwert_eisen", &"schild_holz", &"zweihandschwert_eisen",
+			&"stab_runen", &"talisman_wolfszahn"]:
+		inventory.add_item(id)
+	for id: StringName in [&"eisen_helm", &"eisen_brust", &"schwert_eisen", &"schild_holz", &"talisman_wolfszahn"]:
+		var at := inventory.find_item(id)
+		equipment.request_equip_from_bag(at.x, at.y)
+		await _wait(0.4)
+	_probe("Nach Anlegen", world, player)
+	var at := inventory.find_item(&"zweihandschwert_eisen")
+	equipment.request_equip_from_bag(at.x, at.y)
+	await _wait(0.6)
+	_probe("Nach Zweihand", world, player)
+	at = inventory.find_item(&"stab_runen")
+	equipment.request_equip_from_bag(at.x, at.y)
+	await _wait(0.6)
+	print("Probe: Meldungen: %s" % ", ".join(errors))
+	hud.open_window(&"character")
+	hud.open_window(&"bags")
+	await _wait(0.6)
+	await _shot("ausruestung_client")
+	equipment.request_unequip(&"talisman_1")
+	await _wait(0.6)
+	_probe("Nach Ablegen Talisman", world, player)
+	# Etwas warten, damit eine zweite Probe-Instanz diese Figur sieht.
+	await _wait(8.0)
+	_probe("Ende", world, player)
+	get_tree().quit()
+
+
+func _probe(label: String, world: Node, player: PlayerCharacter) -> void:
+	var inventory: Inventory = world.get_local_inventory()
+	var bag: PackedStringArray = []
+	for container in inventory.get_container_count():
+		for index in inventory.get_container_size(container):
+			var slot := inventory.get_slot(container, index)
+			if not slot.is_empty():
+				bag.append(String(slot["id"]))
+	var auras: PackedStringArray = []
+	for inst in player.get_combat().get_auras():
+		auras.append(String(inst.data.id))
+	print("Probe: %s – eigene Ausrüstung %s, Tasche %s, Rüstung %d, Waffen-Zustände %s, Auren %s" % [label,
+			player.get_equipment().equipment_state, bag, int(player.get_stats().get_value(&"armor")),
+			_flags_text(player.get_stats()), auras])
+	for other: PlayerCharacter in world.get_all_players():
+		if other != player:
+			print("Probe: %s – Figur %s sieht Ausrüstung %s" % [label, other.display_name,
+					other.get_equipment().equipment_state])
+
+
+func _flags_text(stats: CharacterStats) -> String:
+	var parts: PackedStringArray = []
+	for entry: Array in [[StatBlock.FLAG_MELEE_WEAPON, "Nahkampfwaffe"], [StatBlock.FLAG_SHIELD, "Schild"],
+			[StatBlock.FLAG_OFFHAND_WEAPON, "Nebenhandwaffe"], [StatBlock.FLAG_RANGED_WEAPON, "Fernkampfwaffe"]]:
+		if stats.has_flag(entry[0]):
+			parts.append(entry[1])
+	return ", ".join(parts) if not parts.is_empty() else "keine"

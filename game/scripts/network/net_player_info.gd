@@ -23,6 +23,10 @@ var experience: int = 0
 ## CharacterData.get_talent_dict). Der Host gibt sie der Figur beim Erzeugen
 ## mit (PlayerTalents.host_load); danach gilt der Stand der Figur.
 var talents: Dictionary = {}
+## Ausrüstung des mitgebrachten Charakters (#29, Platz → Gegenstand). Der Host
+## gibt sie der Figur beim Erzeugen mit (PlayerEquipment.host_load prüft sie);
+## danach gilt der Stand der Figur.
+var equipment: Dictionary = {}
 ## true, sobald der Spieler die Welt geladen hat und seine Figur existiert.
 var in_world := false
 ## Round-Trip-Zeit zum Host in Millisekunden (vom Host gemessen, 0 beim Host).
@@ -41,6 +45,7 @@ static func from_character(id: int, c: CharacterData) -> NetPlayerInfo:
 	info.level = c.level
 	info.experience = c.experience
 	info.talents = c.get_talent_dict()
+	info.equipment = c.get_equipment_dict()
 	return info
 
 
@@ -67,6 +72,7 @@ func to_dict() -> Dictionary:
 		"level": level,
 		"experience": experience,
 		"talents": talents,
+		"equipment": equipment,
 		"in_world": in_world,
 		"ping_ms": ping_ms,
 	}
@@ -84,6 +90,7 @@ static func from_dict(data: Dictionary) -> NetPlayerInfo:
 	info.experience = int(data.get("experience", 0))
 	var talent_data: Variant = data.get("talents", {})
 	info.talents = talent_data.duplicate(true) if talent_data is Dictionary else {}
+	info.equipment = CharacterData.clean_equipment(data.get("equipment", {}))
 	info.in_world = bool(data.get("in_world", false))
 	info.ping_ms = int(data.get("ping_ms", 0))
 	return info

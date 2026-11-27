@@ -1244,6 +1244,25 @@ texture = ExtResource("t_icons_interface_coin_silver")
 [sub_resource type="StyleBoxTexture" id="SBT_coin_copper"]
 texture = ExtResource("t_icons_interface_coin_copper")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_unusable"]
+bg_color = Color(0.75, 0.08, 0.08, 0.45)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="SBT_slot_drop_allowed"]
+bg_color = Color(0.45, 0.85, 0.35, 0.3)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.95, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -1592,6 +1611,13 @@ RarityColors/colors/rare = Color(0.3, 0.58, 0.98, 1)
 RarityColors/colors/epic = Color(0.72, 0.42, 0.95, 1)
 ItemRarityFrame/base_type = &"Panel"
 ItemRarityFrame/styles/panel = SubResource("SBT_item_rarity")
+ItemColors/colors/stat = Color(0.35, 0.85, 0.35, 1)
+ItemColors/colors/origin = Color(0.9, 0.75, 0.35, 1)
+ItemColors/colors/requirement_missing = Color(0.95, 0.35, 0.35, 1)
+SlotUnusable/base_type = &"Panel"
+SlotUnusable/styles/panel = SubResource("StyleBoxFlat_slot_unusable")
+SlotDropAllowed/base_type = &"Panel"
+SlotDropAllowed/styles/panel = SubResource("SBT_slot_drop_allowed")
 ItemCount/base_type = &"Label"
 ItemCount/colors/font_color = Color(0.95, 0.95, 0.95, 1)
 ItemCount/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)

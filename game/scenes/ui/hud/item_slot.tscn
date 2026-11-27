@@ -8,6 +8,22 @@ focus_mode = 0
 theme_type_variation = &"SlotButton40"
 script = ExtResource("1_slot")
 
+[node name="Unusable" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"SlotUnusable"
+
 [node name="RarityFrame" type="Panel" parent="."]
 unique_name_in_owner = true
 visible = false

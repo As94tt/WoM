@@ -6,6 +6,7 @@ extends Resource
 ## Seit #20 auch Spezialisierung, Talentränge, freigeschaltete Spezialisierungen
 ## und Bonuspunkte; sie gehen beim Beitreten mit to_dict() an den Host und
 ## werden gespeichert, sobald der Host eine Änderung bestätigt (PlayerTalents).
+## Ebenso seit #29 die Ausrüstung (PlayerEquipment).
 
 enum Gender { MALE, FEMALE }
 
@@ -46,6 +47,13 @@ enum Gender { MALE, FEMALE }
 @export var inventory: Dictionary = {}
 ## Geld in Kupfer (100 Kupfer = 1 Silber, 100 Silber = 1 Gold).
 @export var money_copper: int = 0
+@export_group("")
+
+@export_group("Ausrüstung (#29)")
+## Angelegte Gegenstände: Platz-ID → Gegenstands-ID (Strings, nur belegte
+## Plätze), Format von PlayerEquipment.equipment_state. Geht beim Beitreten
+## an den Host, der sie prüft; gespeichert wird der bestätigte Stand.
+@export var equipment: Dictionary = {}
 @export_group("")
 
 ## Datei, aus der der Charakter geladen bzw. in die er gespeichert wurde.
@@ -92,7 +100,24 @@ func to_dict() -> Dictionary:
 		"experience": experience,
 		"last_played": last_played,
 		"talents": get_talent_dict(),
+		"equipment": get_equipment_dict(),
 	}
+
+
+## Ausrüstung (#29) als einfache Strings (Platz → Gegenstand).
+func get_equipment_dict() -> Dictionary:
+	return clean_equipment(equipment)
+
+
+## Nur Einträge mit Text als Schlüssel und Wert (leere fallen weg).
+static func clean_equipment(data: Variant) -> Dictionary:
+	var result := {}
+	if data is Dictionary:
+		for key: Variant in (data as Dictionary).keys():
+			var item := str(data[key])
+			if str(key) != "" and item != "":
+				result[str(key)] = item
+	return result
 
 
 ## Spezialisierung und Talente (#20) im Format von PlayerTalents.talent_state:
@@ -134,4 +159,5 @@ static func from_dict(data: Dictionary) -> CharacterData:
 	var talents: Variant = data.get("talents", {})
 	if talents is Dictionary:
 		c.set_talent_dict(talents)
+	c.equipment = clean_equipment(data.get("equipment", {}))
 	return c

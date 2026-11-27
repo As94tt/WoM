@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_rkcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_rktab"]
+
+[sub_resource type="Resource" id="Resource_rk_id"]
+script = ExtResource("1_rkcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID der Rüstungsklasse (stoff, leder, kette, platte)."
+
+[sub_resource type="Resource" id="Resource_rk_name"]
+script = ExtResource("1_rkcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip rechts neben dem Platz, z. B. „Platte“)."
+
+[sub_resource type="Resource" id="Resource_rk_rang"]
+script = ExtResource("1_rkcol")
+name = "rang"
+type = 2
+required = true
+has_min = true
+min_value = 1.0
+choices = PackedStringArray()
+description = "Reihenfolge von leicht nach schwer. Wer eine Rüstungsklasse tragen darf, darf alle mit kleinerem Rang tragen."
+
+[resource]
+script = ExtResource("2_rktab")
+table = "ruestungsklassen"
+title = "Rüstungsklassen"
+group = "Gegenstände"
+description = "Rüstungsklassen der Ausrüstung (#29) in der Reihenfolge Stoff, Leder, Kette, Platte."
+key_columns = PackedStringArray("id")
+order = 45
+columns = Array[ExtResource("1_rkcol")]([SubResource("Resource_rk_id"), SubResource("Resource_rk_name"), SubResource("Resource_rk_rang")])

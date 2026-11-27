@@ -370,7 +370,7 @@ Eindeutig: die Kombination `rang` + `seltenheit`.
 
 #### gegenstaende.csv – Gegenstände
 
-Ein Gegenstand pro Zeile. Rüstung und Waffenschaden dürfen leer bleiben; dann werden sie berechnet (Gegenstands-Ticket). Die Prüfung des Wertebudgets folgt mit dem Gegenstands-Ticket.
+Ein Gegenstand pro Zeile. Ausrüstung (#29) prüft die Datenprüfung zusätzlich gegen slotzuordnung.csv, waffentypen.csv und die Auren: Waffe ohne passenden Waffentyp, Rüstungsteil ohne Rüstungsklasse, Aura nicht versteckt/dauerhaft oder doppelt genutzt sind Fehler; leere Rüstung bzw. leerer Waffenschaden zählt 0 und gibt eine Warnung. Wertebudget und Berechnung folgen mit #71.
 
 Eindeutig: `id`.
 
@@ -385,13 +385,13 @@ Eindeutig: `id`.
 | `seltenheit` | Verweis |  | gewoehnlich | Seltenheit aus `seltenheiten.csv` | Seltenheit (ID aus seltenheiten.csv). |
 | `gegenstandsstufe` | Ganzzahl |  | 1 | 1 bis 100 | Bestimmt das Wertebudget. |
 | `mindeststufe` | Ganzzahl |  | 1 | 1 bis 100 | Mindeststufe zum Anlegen. |
-| `ruestungsklasse` | Auswahl |  |  | `stoff`, `leder`, `kette`, `platte` | Nur Rüstungsteile. |
-| `waffentyp` | Auswahl |  |  | `dolch`, `schwert`, `axt`, `streitkolben`, `faustwaffe`, `zweihandschwert`, `zweihandaxt`, `kriegshammer`, `kampfstab`, `bogen`, `langbogen`, `kurzbogen`, `armbrust`, `zauberstab`, `schild`, `fokus` | Nur Waffen, Schilde und Fokusse. |
-| `handhabung` | Auswahl |  |  | `haupthand`, `nebenhand`, `einhand`, `zweihand`, `fernkampf` | Nur Waffen. |
-| `schaden_min` | Ganzzahl |  |  | ab 0 | Kleinster Waffenschaden; leer = aus Gegenstandsstufe und Waffentyp berechnet. |
-| `schaden_max` | Ganzzahl |  |  | ab 0 | Größter Waffenschaden; leer = berechnet. |
-| `geschwindigkeit` | Kommazahl |  |  | ab 0 | Sekunden pro Waffenschlag. |
-| `ruestung` | Ganzzahl |  |  | ab 0 | Rüstung; leer = aus Gegenstandsstufe, Slot und Rüstungsklasse berechnet. |
+| `ruestungsklasse` | Verweis |  |  | Rüstungsklasse aus `ruestungsklassen.csv` | Nur Rüstungsteile (Helm bis Armschienen, siehe slotzuordnung.csv); Umhang und Schmuck ohne. |
+| `waffentyp` | Verweis |  |  | Waffentyp aus `waffentypen.csv` | Nur Waffen, Schilde und Fokusse; muss zum Slot passen (slotzuordnung.csv). |
+| `handhabung` | Auswahl |  |  | `haupthand`, `nebenhand`, `einhand`, `zweihand`, `fernkampf` | Nur Waffen: haupthand, nebenhand, einhand, zweihand, fernkampf (zusammen mit slot in slotzuordnung.csv). |
+| `schaden_min` | Ganzzahl |  |  | ab 0 | Kleinster Waffenschaden je Schlag; leer = 0 (Warnung, Berechnung folgt mit #71). |
+| `schaden_max` | Ganzzahl |  |  | ab 0 | Größter Waffenschaden je Schlag; leer = 0 (Warnung). Schaden pro Sekunde = Mittelwert / Geschwindigkeit. |
+| `geschwindigkeit` | Kommazahl |  |  | ab 0 | Sekunden pro Waffenschlag; leer = standardtempo des Waffentyps. |
+| `ruestung` | Ganzzahl |  |  | ab 0 | Rüstung; leer = 0 (Warnung bei Rüstungsteilen und Schilden, Berechnung folgt mit #71). |
 | `blockwert` | Ganzzahl |  |  | ab 0 | Blockwert (Schilde). |
 | `staerke` | Ganzzahl |  |  |  | Stärke. |
 | `gewandtheit` | Ganzzahl |  |  |  | Gewandtheit. |
@@ -405,9 +405,9 @@ Eindeutig: `id`.
 | `abwehr` | Ganzzahl |  |  |  | Abwehr. |
 | `eile` | Ganzzahl |  |  |  | Eile. |
 | `zauberschutz` | Ganzzahl |  |  |  | Zauberschutz. |
-| `effekte` | Liste (Verweis) |  |  | Aura aus `res://data/auras/` | Auren, die der Gegenstand verleiht (IDs der Aura-.tres). |
+| `effekte` | Liste (Verweis) |  |  | Aura aus `res://data/auras/` | Auren, die der Gegenstand angelegt verleiht (IDs der Aura-.tres, Präfix item_): versteckt, nicht beendbar, dauerhaft; jede Aura nur bei einem Gegenstand. |
 | `klassen` | Liste (Verweis) |  |  | Klasse aus `res://data/classes/` | Nur für diese Klassen; leer = alle. |
-| `einzigartig` | Ja/Nein |  | nein |  | Nur einmal im Besitz. |
+| `einzigartig` | Ja/Nein |  | nein |  | Nur einmal im Besitz (Tasche und angelegt zusammen). |
 | `einzigartig_angelegt` | Ja/Nein |  | nein |  | Nur einmal gleichzeitig angelegt. |
 | `bindung` | Auswahl |  | keine | `keine`, `beim_aufheben`, `beim_anlegen` | Bindung (vorerst nur Anzeige). |
 | `stapelgroesse` | Ganzzahl |  | 1 | ab 1 | Wie viele auf einem Platz. |
@@ -462,7 +462,7 @@ Eindeutig: `id`.
 
 #### ausruestungsplaetze.csv – Ausrüstungsplätze
 
-Ausrüstungsplätze im Charakterfenster (#19) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket.
+Ausrüstungsplätze im Charakterfenster (#19, seit #29 mit angelegten Gegenständen) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket.
 
 Eindeutig: `id`.
 
@@ -471,6 +471,71 @@ Eindeutig: `id`.
 | `id` | ID | ja |  |  | Feste ID des Ausrüstungsplatzes (z. B. helm, ring_1). Das Charakterfenster verweist darauf; nie ändern. |
 | `name` | Text | ja |  |  | Anzeigename (Tooltip „Name (leer)“). |
 | `icon` | Text |  |  |  | Pfad zum Bild des leeren Platzes (englischer Dateiname aus dem UI-Paket); leer = nur der Rahmen. |
+| `im_kampf_wechselbar` | Ja/Nein |  | nein |  | Waffenplatz (#29): darf im Kampf gewechselt werden (ohne laufenden globalen Cooldown oder Zauber; startet den globalen Cooldown). Alle anderen Plätze sind im Kampf gesperrt. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### ruestungsklassen.csv – Rüstungsklassen
+
+Rüstungsklassen der Ausrüstung (#29) in der Reihenfolge Stoff, Leder, Kette, Platte.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID der Rüstungsklasse (stoff, leder, kette, platte). |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip rechts neben dem Platz, z. B. „Platte“). |
+| `rang` | Ganzzahl | ja |  | ab 1 | Reihenfolge von leicht nach schwer. Wer eine Rüstungsklasse tragen darf, darf alle mit kleinerem Rang tragen. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### waffentypen.csv – Waffentypen
+
+Waffentypen (#29) mit Handhabung, Reichweite und Standardtempo. Bogen, Langbogen, Kurzbogen und Armbrust darf keine heutige Klasse tragen. Schadensfaktoren folgen mit #71.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID des Waffentyps (z. B. dolch, zweihandschwert, zauberstab, schild). |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip rechts neben dem Platz, z. B. „Schwert“). |
+| `handhabung` | Auswahl | ja |  | `einhand`, `zweihand`, `fernkampf`, `nebenhand` | Art der Waffe. nebenhand (Schild, Fokus) macht keinen Waffenschaden. |
+| `reichweite` | Kommazahl |  |  | ab 0 | Reichweite in Metern für automatische Schüsse (0 = Nahkampf, es gilt nahkampf_reichweite). |
+| `standardtempo` | Kommazahl |  |  | ab 0 | Sekunden je Schlag, wenn der Gegenstand keine Geschwindigkeit hat. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### klassenausruestung.csv – Ausrüstung der Klassen
+
+Wer darf was tragen (#29): Rüstungsklasse, Waffentypen und Beidhändigkeit je Klasse (Platzhalter). Jede Klasse braucht eine Zeile.
+
+Eindeutig: `klasse`.
+
+Zu jeder Ressource in `res://data/classes/` muss es eine Zeile geben (sobald dort Daten liegen).
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `klasse` | Verweis | ja |  | Klasse aus `res://data/classes/` | Klasse (ID der Klassen-.tres). |
+| `ruestungsklasse` | Verweis | ja |  | Rüstungsklasse aus `ruestungsklassen.csv` | Höchste erlaubte Rüstungsklasse; alle leichteren (kleinerer Rang) gehen auch. |
+| `waffentypen` | Liste (Verweis) |  |  | Waffentyp aus `waffentypen.csv` | Erlaubte Waffentypen (auch Schild und Fokus). |
+| `beidhaendig` | Ja/Nein |  | nein |  | Darf zwei Einhandwaffen führen (Einhandwaffe in der Nebenhand). |
+| `zwei_zweihand` | Ja/Nein |  | nein |  | Vorgesehen für zwei Zweihandwaffen (Berserker); es gibt noch keine Regel dafür. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### slotzuordnung.csv – Slotzuordnung
+
+Welche Gegenstandsart in welchen Ausrüstungsplatz passt (#29). Gesucht wird erst die Zeile mit slot und handhabung des Gegenstands, dann die mit leerer handhabung.
+
+Eindeutig: die Kombination `slot` + `handhabung`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `slot` | Auswahl | ja |  | `helm`, `schulter`, `brust`, `guertel`, `beine`, `schuhe`, `handschuhe`, `armschienen`, `umhang`, `ring`, `kette`, `einhand`, `zweihand`, `schild`, `zauberstab`, `fokus`, `fernkampfwaffe`, `siegel`, `talisman` | Gegenstandsart (Spalte slot in gegenstaende.csv). |
+| `handhabung` | Auswahl |  |  | `haupthand`, `nebenhand`, `einhand`, `zweihand`, `fernkampf` | Handhabung des Gegenstands; leer = gilt für alle Handhabungen ohne eigene Zeile. |
+| `anzeige` | Text | ja |  |  | Text links im Tooltip (z. B. „Brust“, „Zweihand“). |
+| `plaetze` | Liste (Verweis) | ja |  | Ausrüstungsplatz aus `ausruestungsplaetze.csv` | Ausrüstungsplätze, in die der Gegenstand passt; Rechtsklick nimmt den ersten freien, sonst den ersten. |
+| `belegt_beide_haende` | Ja/Nein |  | nein |  | Belegt Haupt- und Nebenhand (Zweihand); der Gegenstand der Nebenhand wandert in die Tasche. |
+| `nebenhand_nur_beidhaendig` | Ja/Nein |  | nein |  | In der Nebenhand nur für Klassen mit Beidhändigkeit (klassenausruestung.csv). |
+| `ruestungsklasse_noetig` | Ja/Nein |  | nein |  | Rüstungsteil: braucht eine Rüstungsklasse (die Datenprüfung meldet fehlende). |
+| `immer_einzigartig_angelegt` | Ja/Nein |  | nein |  | Gilt immer als „Einzigartig angelegt“ (Siegel, Talisman). |
+| `waffentypen` | Liste (Verweis) |  |  | Waffentyp aus `waffentypen.csv` | Erlaubte Waffentypen dieser Gegenstandsart; leer = keine Waffe (dann darf kein Waffentyp gesetzt sein). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Charaktere

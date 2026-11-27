@@ -12,9 +12,17 @@ extends Button
 ## - Shift + Klick auf einen Stapel: split_requested (Fenster mit Anzahl).
 ## - Außerhalb des Fensters loslassen: released_outside (Rückfrage zum
 ##   Zerstören, InventoryPanel).
-## - Rechtsklick: vorerst keine Funktion (wird abgefangen, damit sich die
-##   Kamera nicht dreht).
-## Rein lokal; die Logik steckt in Inventory.
+## - Rechtsklick (#29): Ausrüstung anlegen (PlayerEquipment, Platz wie
+##   beim Rechtsklick: Ringe und Talismane erster freier, sonst der erste);
+##   sonst keine Funktion (wird abgefangen, damit sich die Kamera nicht dreht).
+## - Einen angelegten Gegenstand aus dem Charakterfenster hierher ziehen legt
+##   ihn ab (auf diesen Platz, wenn er frei ist).
+## - Kann der Charakter den Gegenstand nicht nutzen (Klasse, Rüstungsklasse,
+##   Waffentyp, Mindeststufe), liegt ein roter Schleier über dem Icon
+##   (SlotUnusable); der Tooltip nennt den Grund in Rot.
+## - Tooltip mit Vergleich (#29): daneben die angelegten Gegenstände.
+## Lokal; die Logik steckt in Inventory und PlayerEquipment (Wünsche an den
+## Host).
 
 ## Eine Aktion ging nicht (z. B. „Die Tasche ist nicht leer.“).
 signal error(message: String)
@@ -22,6 +30,8 @@ signal split_requested(container: int, index: int)
 signal released_outside(container: int, index: int, item_id: StringName)
 
 var inventory: Inventory = null
+## Ausrüstung des eigenen Charakters (#29) oder null (z. B. in Tests).
+var equipment: PlayerEquipment = null
 var container := -1
 var index := -1
 
@@ -61,7 +71,9 @@ func refresh() -> void:
 	frame.visible = _item_id != &"" and ItemInfo.has_rarity_frame(_item_id)
 	if frame.visible:
 		frame.self_modulate = ItemInfo.rarity_color(_item_id)
-	tooltip_text = ItemTooltip.text(_item_id, _count) if _item_id != &"" else ""
+	var unusable: Panel = %Unusable
+	unusable.visible = _item_id != &"" and equipment != null and ItemInfo.is_equipment(_item_id) 			and not equipment.can_use(_item_id)
+	tooltip_text = ItemTooltip.text(_item_id, _count, equipment) if _item_id != &"" else ""
 
 
 func get_item_id() -> StringName:
@@ -75,7 +87,7 @@ func get_count() -> int:
 func _make_custom_tooltip(_for_text: String) -> Object:
 	if _item_id == &"":
 		return null
-	return ItemTooltip.create(_item_id, _count)
+	return ItemTooltip.create(_item_id, _count, equipment, true)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -83,8 +95,10 @@ func _gui_input(event: InputEvent) -> void:
 	if mouse == null or not mouse.pressed:
 		return
 	if mouse.button_index == MOUSE_BUTTON_RIGHT:
-		# Später: benutzen bzw. ausrüsten (#29).
 		accept_event()
+		# Ausrüstung anlegen (#29); Benutzen anderer Gegenstände folgt später.
+		if equipment != null and _item_id != &"" and ItemInfo.is_equipment(_item_id):
+			equipment.request_equip_from_bag(container, index)
 	elif mouse.button_index == MOUSE_BUTTON_LEFT and mouse.shift_pressed and _count > 1:
 		accept_event()
 		split_requested.emit(container, index)
@@ -103,6 +117,8 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var drag := data as ItemDragData
 	if drag == null or drag.inventory != inventory or inventory == null:
 		return false
+	if drag.is_equipment():
+		return equipment != null
 	# Eine angelegte Tasche kann nicht in sich selbst liegen.
 	return not (drag.is_bag_slot() and drag.bag_slot == container)
 
@@ -110,6 +126,9 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var drag := data as ItemDragData
 	var message := ""
+	if drag.is_equipment():
+		equipment.request_unequip(drag.equip_place, container, index)
+		return
 	if drag.is_bag_slot():
 		message = inventory.unequip_bag(drag.bag_slot, container, index)
 	else:

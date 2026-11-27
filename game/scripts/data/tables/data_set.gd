@@ -11,6 +11,9 @@ extends RefCounted
 ## - Verweise auf Tabellen und auf .tres-Ordner (Ordner ohne Daten: nur Format)
 ## - Endlosschleifen bei verschachtelten Verweisen auf die eigene Tabelle
 ## - covers_folder: zu jeder .tres im Ordner gibt es eine Zeile
+## - Ausrüstung (#29, ItemDataCheck): Gegenstände gegen Slotzuordnung,
+##   Waffentypen und Auren; dazu Warnungen (leere Rüstung bzw. leerer
+##   Waffenschaden), die den Stand nicht ungültig machen.
 
 ## Schlüssel mehrerer Spalten werden mit diesem Zeichen verbunden.
 const KEY_JOIN := "|"
@@ -21,6 +24,9 @@ var schemas: Dictionary[String, TableSchema] = {}
 var tables: Dictionary[String, Array] = {}
 ## Gefundene Fehler (leer = Stand ist gültig).
 var errors: Array[DataError] = []
+## Hinweise, die den Stand nicht ungültig machen (#29, z. B. „Rüstung leer,
+## zählt 0“). --daten-pruefen gibt sie aus.
+var warnings: Array[DataError] = []
 ## Prüfsumme über alle Tabelleninhalte (ohne Kommentare und Notizen).
 var checksum := ""
 ## Völker als typisierte Objekte, sortiert nach Reihenfolge.
@@ -51,6 +57,8 @@ static func load_all(schema_dir: String, table_dir: String) -> DataSet:
 		data_set._check_references(table)
 		data_set._check_cycles(table)
 		data_set._check_coverage(table)
+	if data_set.errors.is_empty():
+		ItemDataCheck.check(data_set)
 	data_set.checksum = data_set._compute_checksum()
 	data_set._build_typed()
 	return data_set
@@ -340,3 +348,13 @@ func _build_typed() -> void:
 
 func _add_error(file: String, line: int, column: String, message: String) -> void:
 	errors.append(DataError.create(file, line, column, message))
+
+
+## Fehler aus einer Prüfung außerhalb (ItemDataCheck).
+func add_error(file: String, line: int, column: String, message: String) -> void:
+	_add_error(file, line, column, message)
+
+
+## Warnung (macht den Stand nicht ungültig).
+func add_warning(file: String, line: int, column: String, message: String) -> void:
+	warnings.append(DataError.create(file, line, column, message))

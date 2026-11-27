@@ -316,6 +316,22 @@ func get_wait_time(ability: AbilityData) -> float:
 	return wait
 
 
+## Host: globalen Cooldown starten, ohne eine Fähigkeit zu wirken (#29:
+## Waffenwechsel im Kampf).
+func start_gcd() -> void:
+	if not Network.is_host():
+		return
+	var now := Network.host_time()
+	_gcd = [now, now + get_gcd_duration()]
+	_cd_dirty = true
+
+
+## true, solange der globale Cooldown läuft oder ein Zauber gewirkt wird
+## (#29: dann kein Waffenwechsel im Kampf).
+func is_busy() -> bool:
+	return is_casting() or get_gcd().x > 0.0
+
+
 ## Globaler Cooldown dieser Einheit in Sekunden (gcd / Tempo, mindestens gcd_min).
 func get_gcd_duration() -> float:
 	return maxf(Data.konstante(&"gcd_min", 0.75), Data.konstante(&"gcd", 1.5) / _haste_factor())
@@ -1044,7 +1060,7 @@ func _process_auto_attack(now: float) -> void:
 				_swing(target, row, 1.0, &"auto:haupthand", "Automatischer Angriff")
 	# Nebenhand (Beidhändigkeit): eigener Takt, halber Schaden.
 	if off_ready:
-		var off_row := Data.platzhalterwaffe(&"nebenhand")
+		var off_row := Combat.offhand_row(_unit)
 		if off_row != null:
 			_off_at = now + maxf(0.1, float(off_row.get_value("tempo", 2.0))) / _haste_factor()
 			_swing(target, off_row, Data.konstante(&"nebenhand_faktor", 0.5), &"auto:nebenhand",

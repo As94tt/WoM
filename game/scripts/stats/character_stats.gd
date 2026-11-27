@@ -184,6 +184,37 @@ func remove_source(source: StringName) -> void:
 	_set_state_value("mods", mods)
 
 
+## Ersetzt alle Modifikatoren, deren Quelle mit prefix beginnt, durch mods –
+## in einem Schritt (eine Übertragung). Für die Ausrüstung (#29, „item:“).
+func replace_modifiers_with_prefix(prefix: String, mods: Array[StatModifier]) -> void:
+	if not _require_host("replace_modifiers_with_prefix"):
+		return
+	var kept: Array = stat_state.get("mods", []).filter(
+			func(data: Array) -> bool: return not str(data[0]).begins_with(prefix))
+	for m in mods:
+		kept.append(m.to_array())
+	if kept == stat_state.get("mods", []):
+		return
+	_set_state_value("mods", kept)
+
+
+## Setzt die Waffen-Zustände in einem Schritt (#29, aus der Ausrüstung):
+## flags = {"melee", "shield", "offhand", "ranged"} (bool). Nur Änderungen
+## werden übertragen.
+func set_weapon_flags(flags: Dictionary) -> void:
+	if not _require_host("set_weapon_flags"):
+		return
+	var state := stat_state.duplicate(true)
+	var changed := false
+	for key: String in ["melee", "shield", "offhand", "ranged"]:
+		var on := bool(flags.get(key, false))
+		if bool(stat_state.get(key, false)) != on:
+			state[key] = on
+			changed = true
+	if changed:
+		stat_state = state
+
+
 func set_in_combat(on: bool) -> void:
 	if _require_host("set_in_combat"):
 		_set_state_value("combat", on)
@@ -192,7 +223,8 @@ func set_in_combat(on: bool) -> void:
 ## Zustände „Nahkampfwaffe getragen“ (StatBlock.FLAG_MELEE_WEAPON),
 ## „Schild getragen“ (StatBlock.FLAG_SHIELD) und seit #33 „Nebenhandwaffe“
 ## (Beidhändigkeit, FLAG_OFFHAND_WEAPON) und „Fernkampfwaffe“
-## (FLAG_RANGED_WEAPON); später gesetzt von #29. Schild und Nebenhandwaffe
+## (FLAG_RANGED_WEAPON); bei Spielerfiguren seit #29 aus der Ausrüstung
+## (PlayerEquipment, set_weapon_flags). Schild und Nebenhandwaffe
 ## schließen sich aus: Wer das eine anlegt, legt das andere ab.
 func set_flag(flag: StringName, on: bool) -> void:
 	if not _require_host("set_flag"):

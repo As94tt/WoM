@@ -32,7 +32,8 @@ extends Node3D
 ## - Effects/EffectSpawner (#32): Flächen und Projektile, erzeugt vom Host.
 ## - Fähigkeiten wirken (#33): Fehlermeldungen oben in der Mitte; im
 ##   Entwickler-Panel „Testfähigkeiten erlernen“, „Abklingzeiten
-##   zurücksetzen“, Waffenschalter (Nebenhand, Fernkampf) und „Ziel zaubert“.
+##   zurücksetzen“ und „Ziel zaubert“ (die Waffenschalter ersetzt seit #29 die
+##   Ausrüstung).
 ## - Abschnitt „Auren“ im Entwickler-Panel (#32): CombatDevSection (Kindknoten
 ##   „CombatDev“). Den Schalter „Im Kampf“ aus #19/#31 gibt es nicht mehr;
 ##   den Kampfzustand bestimmt UnitCombat.
@@ -55,6 +56,16 @@ extends Node3D
 ##   (InventoryDevSection). Noch keine Synchronisierung: Das Inventar liegt
 ##   nur beim Spieler; Beute vergibt später der Host über Inventory.add_item
 ##   (meldet ADDED oder FULL).
+##
+## - Ausrüstung (#29): Die Figur hat den Kindknoten „Equipment“
+##   (PlayerEquipment). Für die eigene Figur verbindet _setup_equipment ihn
+##   mit dem Inventar (Gegenstände wandern erst nach der Bestätigung des Hosts
+##   zwischen Tasche und Platz), dem Taschenfenster (Rechtsklick, Schleier,
+##   Vergleich) und dem Charakterfenster; Ablehnungen erscheinen oben in der
+##   Mitte, Hinweise (verworfene Ausrüstung) im Log. Gespeichert wird der
+##   bestätigte Stand in CharacterData.equipment. Die Waffenschalter im
+##   Entwickler-Panel („Werte“) gibt es für Spielerfiguren nicht mehr; Waffen
+##   kommen aus der Ausrüstung (Abschnitt „Inventar“: Testausrüstung).
 ##
 ## - Tod und Wiederbelebung (#35): Kindknoten „Revival“ (RevivalService) für
 ##   Wiedereinstieg, Aufhelfen und gemeinsame Rückkehr; Wiedereinstiegspunkte
@@ -404,6 +415,7 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 		_setup_talents(player)
 		_setup_experience(player)
 		_setup_inventory()
+		_setup_equipment(player)
 		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
 		_hud.setup_local_player(player)
 		_connect_unit_dev(player)
@@ -648,6 +660,19 @@ func _setup_inventory() -> void:
 		_inventory_panel.setup(_inventory)
 
 
+## Eigene Figur ist da (#29): Ausrüstung mit Inventar, Fenstern und Meldungen
+## verbinden (nach _setup_inventory).
+func _setup_equipment(player: PlayerCharacter) -> void:
+	var equipment := player.get_equipment()
+	if equipment == null or _inventory == null:
+		return
+	equipment.request_failed.connect(_hud.show_error)
+	equipment.notice.connect(_hud.add_log_message)
+	equipment.attach_inventory(_inventory)
+	if _inventory_panel != null:
+		_inventory_panel.setup_equipment(equipment)
+
+
 ## Inventar des eigenen Charakters oder null (vor der eigenen Figur).
 func get_local_inventory() -> Inventory:
 	return _inventory
@@ -890,16 +915,10 @@ func _on_data_reloaded(_ok: bool, lines: PackedStringArray) -> void:
 func _setup_stat_dev_section(panel: DevPanel) -> void:
 	var section := panel.add_section("Werte")
 	_stat_dev_info = panel.add_info(section)
-	_stat_dev_toggles["melee"] = panel.add_toggle(section, "Nahkampfwaffe getragen", false,
-			func(on: bool) -> void: _stat_dev_action("melee", on))
-	_stat_dev_toggles["shield"] = panel.add_toggle(section, "Schild getragen", false,
-			func(on: bool) -> void: _stat_dev_action("shield", on))
-	# Waffen für den automatischen Angriff (#33): Platzhalter-Waffen aus
-	# platzhalterwaffen.csv; Nebenhand und Schild schließen sich aus.
-	_stat_dev_toggles["offhand"] = panel.add_toggle(section, "Nebenhandwaffe (beidhändig)", false,
-			func(on: bool) -> void: _stat_dev_action("offhand", on))
-	_stat_dev_toggles["ranged"] = panel.add_toggle(section, "Fernkampfwaffe getragen", false,
-			func(on: bool) -> void: _stat_dev_action("ranged", on))
+	# Waffen und Schild kommen seit #29 aus der Ausrüstung (die Schalter aus
+	# #19/#33 gibt es für Spielerfiguren nicht mehr; Übungspuppen und Gegner
+	# nutzen weiter platzhalterwaffen.csv).
+	panel.add_info(section, "Waffen und Schild: Abschnitt „Inventar“ (Testausrüstung anlegen).")
 	# Stufe ändern seit #27 im Abschnitt „Stufe und Erfahrung“ (echter Aufstieg).
 	panel.add_info(section, "Stufe ändern: Abschnitt „Stufe und Erfahrung“.")
 	panel.add_button(section, "Schaden nehmen (%s %% Leben)" % StatFormat.number(
@@ -940,20 +959,27 @@ func _connect_stat_dev(player: PlayerCharacter) -> void:
 
 ## Schalter und Regler auf den Stand der Figur setzen, ohne Aktionen auszulösen.
 func _sync_stat_dev(stats: CharacterStats) -> void:
-	_stat_dev_toggles["melee"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_MELEE_WEAPON))
-	_stat_dev_toggles["shield"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_SHIELD))
-	_stat_dev_toggles["offhand"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_OFFHAND_WEAPON))
-	_stat_dev_toggles["ranged"].set_pressed_no_signal(stats.has_flag(StatBlock.FLAG_RANGED_WEAPON))
 	for index in STAT_DEV_TOOLS.test_modifiers.size():
 		_stat_dev_toggles["modifier_%d" % index].set_pressed_no_signal(
 				stats.block.has_source(CharacterStats.dev_source(index)))
 	_update_stat_dev_info(stats)
 
 
+## Zustände aus der Ausrüstung als Text (#29), z. B. „Nahkampfwaffe, Schild“.
+func _weapon_flag_text(stats: CharacterStats) -> String:
+	var parts: PackedStringArray = []
+	for entry: Array in [[StatBlock.FLAG_MELEE_WEAPON, "Nahkampfwaffe"], [StatBlock.FLAG_SHIELD, "Schild"],
+			[StatBlock.FLAG_OFFHAND_WEAPON, "Nebenhandwaffe"], [StatBlock.FLAG_RANGED_WEAPON, "Fernkampfwaffe"]]:
+		if stats.has_flag(entry[0]):
+			parts.append(entry[1])
+	return ", ".join(parts) if not parts.is_empty() else "keine"
+
+
 func _update_stat_dev_info(stats: CharacterStats) -> void:
 	var lines: PackedStringArray = ["Leben: %s / %s" % [StatFormat.number(stats.health, 0),
 			StatFormat.number(stats.max_health, 0)],
-			"Kampfzustand: %s" % ("im Kampf" if stats.is_in_combat() else "außerhalb des Kampfes")]
+			"Kampfzustand: %s" % ("im Kampf" if stats.is_in_combat() else "außerhalb des Kampfes"),
+			"Waffen: %s" % _weapon_flag_text(stats)]
 	for resource_id in stats.get_resource_ids():
 		lines.append("%s: %s / %s" % [CharacterStats.RULES.get_resource_name(resource_id),
 				StatFormat.number(stats.get_resource(resource_id), 0),

@@ -410,16 +410,40 @@ static func is_immune(target: Unit, school: StringName) -> bool:
 	return combat != null and (combat.has_state(STATE_INVULNERABLE) or combat.is_immune_to(school))
 
 
-## Platzhalter-Waffe einer Einheit (#33, bis Ausrüstung kommt #29):
-## Fernkampf, wenn ranged und der Schalter gesetzt ist, sonst Haupthand mit
-## Nahkampfwaffe, sonst unbewaffnet. Zeile aus platzhalterwaffen.csv oder null.
+## Waffe einer Einheit für automatische Angriffe und Fähigkeiten mit
+## Waffenschaden. Spielerfiguren (#29): die angelegte Fernkampfwaffe (bei
+## ranged) bzw. Haupthandwaffe (PlayerEquipment, Felder wie
+## platzhalterwaffen.csv). Ohne angelegte Waffe sowie für Übungspuppen und
+## Gegner gilt wie seit #33 die Platzhalter-Waffe aus platzhalterwaffen.csv
+## nach den Zuständen: Fernkampf, wenn ranged und der Zustand gesetzt ist,
+## sonst Haupthand mit Nahkampfwaffe, sonst unbewaffnet. null ohne Daten.
 static func weapon_row(unit: Unit, ranged := false) -> TableRow:
+	var equipment := unit.get_node_or_null(^"Equipment") as PlayerEquipment if unit != null else null
+	if equipment != null:
+		var equipped: TableRow = equipment.get_weapon_row(EquipmentRules.RANGED) if ranged else null
+		if equipped == null:
+			equipped = equipment.get_weapon_row(EquipmentRules.MAIN_HAND)
+		if equipped != null:
+			return equipped
 	var stats := unit.get_stats() if unit != null else null
 	if ranged and stats != null and stats.has_flag(StatBlock.FLAG_RANGED_WEAPON):
 		return Data.platzhalterwaffe(&"fernkampf")
 	if stats != null and stats.has_flag(StatBlock.FLAG_MELEE_WEAPON):
 		return Data.platzhalterwaffe(&"haupthand")
 	return Data.platzhalterwaffe(&"unbewaffnet")
+
+
+## Nebenhandwaffe für den automatischen Angriff (Beidhändigkeit): bei
+## Spielerfiguren die angelegte Nebenhandwaffe (#29), sonst die
+## Platzhalter-Waffe „nebenhand“ (#33). Der Faktor nebenhand_faktor gilt
+## beim Schlag.
+static func offhand_row(unit: Unit) -> TableRow:
+	var equipment := unit.get_node_or_null(^"Equipment") as PlayerEquipment if unit != null else null
+	if equipment != null:
+		var equipped := equipment.get_weapon_row(EquipmentRules.OFF_HAND)
+		if equipped != null:
+			return equipped
+	return Data.platzhalterwaffe(&"nebenhand")
 
 
 ## Waffenschaden eines Schlags mit der Waffe row: Wurf zwischen min und max

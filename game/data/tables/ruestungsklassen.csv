@@ -1,0 +1,6 @@
+# Rüstungsklassen (#29). rang ordnet von leicht nach schwer: Eine Klasse trägt ihre höchste Rüstungsklasse (klassenausruestung.csv) und alle leichteren.
+id;name;rang;notiz
+stoff;Stoff;1;
+leder;Leder;2;
+kette;Kette;3;Für spätere Klassen oder Unterklassen (GDD)
+platte;Platte;4;

@@ -56,6 +56,10 @@ extends Unit
 ## entscheidet der Host; er setzt level und meldet ihn allen (Effekt
 ## LevelUpEffect an der Figur, Meldung beim Besitzer).
 ##
+## Ausrüstung (#29): Kindknoten „Equipment“ (PlayerEquipment); equipment_state
+## läuft über ServerSync (Authority Host). Den Stand vom Beitreten gibt
+## setup_from_info vor dem Erzeugen mit.
+##
 ## Modell und Animationen (#59): Kindknoten „Model/Animator“
 ## (CharacterAnimator) trägt optional ein Modell mit Skelett und wählt die
 ## Animation lokal aus move_state und visual_velocity; nichts Neues wird
@@ -256,6 +260,10 @@ func setup_from_info(info: NetPlayerInfo) -> void:
 		var experience := get_experience()
 		if experience != null:
 			experience.set_initial_experience(info.experience)
+		# Ausrüstung (#29) ebenso; der Host prüft sie in PlayerEquipment.host_load.
+		var equipment := get_equipment()
+		if equipment != null:
+			equipment.set_initial_state(info.equipment)
 
 
 ## Werte und Ressourcen der Figur (#19).
@@ -271,6 +279,11 @@ func get_abilities() -> PlayerAbilities:
 ## Spezialisierung und Talente der Figur (#20).
 func get_talents() -> PlayerTalents:
 	return get_node_or_null(^"Talents") as PlayerTalents
+
+
+## Ausrüstung der Figur (#29).
+func get_equipment() -> PlayerEquipment:
+	return get_node_or_null(^"Equipment") as PlayerEquipment
 
 
 ## Erfahrung und Stufenaufstieg der Figur (#27).

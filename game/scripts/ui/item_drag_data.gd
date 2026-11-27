@@ -1,8 +1,13 @@
 class_name ItemDragData
 extends RefCounted
 ## Was beim Ziehen im Taschenfenster am Mauszeiger hängt (Ticket #18):
-## entweder ein Gegenstand von einem Platz (container, index) oder eine
-## angelegte Tasche aus der Taschenleiste (bag_slot > 0).
+## entweder ein Gegenstand von einem Platz (container, index), eine
+## angelegte Tasche aus der Taschenleiste (bag_slot > 0) oder seit #29 ein
+## angelegter Gegenstand aus dem Charakterfenster (equip_place).
+##
+## Ausrüstung (#29): Gegenstand aus der Tasche auf einen Ausrüstungsplatz
+## (EquipmentSlot) = anlegen; angelegten Gegenstand auf einen Taschenplatz
+## (ItemSlot) = ablegen. Beim Ziehen leuchten passende Plätze auf.
 ##
 ## Ablauf (Godot-Drag-and-Drop, siehe ItemSlot, BagBarSlot und Hud):
 ## - Ablegen auf einem Platz bzw. Taschenplatz: Inventory.move, equip_bag,
@@ -20,6 +25,8 @@ var container := -1
 var index := -1
 ## Taschenplatz 1–4, wenn eine angelegte Tasche gezogen wird (sonst 0).
 var bag_slot := 0
+## Ausrüstungsplatz, wenn ein angelegter Gegenstand gezogen wird (sonst &"").
+var equip_place: StringName = &""
 var cancelled := false
 
 
@@ -40,8 +47,26 @@ static func from_bag_slot(inv: Inventory, slot: int) -> ItemDragData:
 	return data
 
 
+## Angelegter Gegenstand aus dem Charakterfenster (#29).
+static func from_equipment(inv: Inventory, place: StringName, id: StringName) -> ItemDragData:
+	var data := ItemDragData.new()
+	data.inventory = inv
+	data.equip_place = place
+	data.item_id = id
+	return data
+
+
 func is_bag_slot() -> bool:
 	return bag_slot > 0
+
+
+func is_equipment() -> bool:
+	return equip_place != &""
+
+
+## Gegenstand von einem Taschenplatz (weder Tasche der Leiste noch angelegt).
+func is_bag_item() -> bool:
+	return not is_bag_slot() and not is_equipment() and container >= 0
 
 
 ## Vorschau am Mauszeiger: ein Platz mit Icon bzw. Kürzel, mittig.

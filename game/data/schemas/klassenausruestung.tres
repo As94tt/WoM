@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_kacol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_katab"]
+
+[sub_resource type="Resource" id="Resource_ka_klasse"]
+script = ExtResource("1_kacol")
+name = "klasse"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_folder = "res://data/classes/"
+ref_label = "Klasse"
+description = "Klasse (ID der Klassen-.tres)."
+
+[sub_resource type="Resource" id="Resource_ka_ruestung"]
+script = ExtResource("1_kacol")
+name = "ruestungsklasse"
+type = 6
+required = true
+choices = PackedStringArray()
+ref_table = "ruestungsklassen"
+ref_label = "Rüstungsklasse"
+description = "Höchste erlaubte Rüstungsklasse; alle leichteren (kleinerer Rang) gehen auch."
+
+[sub_resource type="Resource" id="Resource_ka_waffen"]
+script = ExtResource("1_kacol")
+name = "waffentypen"
+type = 7
+choices = PackedStringArray()
+ref_table = "waffentypen"
+ref_label = "Waffentyp"
+item_type = 1
+description = "Erlaubte Waffentypen (auch Schild und Fokus)."
+
+[sub_resource type="Resource" id="Resource_ka_beid"]
+script = ExtResource("1_kacol")
+name = "beidhaendig"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Darf zwei Einhandwaffen führen (Einhandwaffe in der Nebenhand)."
+
+[sub_resource type="Resource" id="Resource_ka_zz"]
+script = ExtResource("1_kacol")
+name = "zwei_zweihand"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Vorgesehen für zwei Zweihandwaffen (Berserker); es gibt noch keine Regel dafür."
+
+[resource]
+script = ExtResource("2_katab")
+table = "klassenausruestung"
+title = "Ausrüstung der Klassen"
+group = "Gegenstände"
+description = "Wer darf was tragen (#29): Rüstungsklasse, Waffentypen und Beidhändigkeit je Klasse (Platzhalter). Jede Klasse braucht eine Zeile."
+key_columns = PackedStringArray("klasse")
+covers_folder = "res://data/classes/"
+order = 47
+columns = Array[ExtResource("1_kacol")]([SubResource("Resource_ka_klasse"), SubResource("Resource_ka_ruestung"), SubResource("Resource_ka_waffen"), SubResource("Resource_ka_beid"), SubResource("Resource_ka_zz")])

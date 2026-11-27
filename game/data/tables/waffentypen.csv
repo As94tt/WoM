@@ -1,0 +1,18 @@
+# Waffentypen (#29). handhabung = Art der Waffe; reichweite in Metern (0 = Nahkampf mit nahkampf_reichweite); standardtempo = Sekunden je Schlag ohne eigene Geschwindigkeit des Gegenstands. Schadensfaktoren folgen mit #71.
+id;name;handhabung;reichweite;standardtempo;notiz
+dolch;Dolch;einhand;0;1,8;
+schwert;Schwert;einhand;0;2,6;
+axt;Axt;einhand;0;2,6;
+streitkolben;Streitkolben;einhand;0;2,6;
+faustwaffe;Faustwaffe;einhand;0;2;
+zweihandschwert;Zweihandschwert;zweihand;0;3,4;
+zweihandaxt;Zweihandaxt;zweihand;0;3,5;
+kriegshammer;Kriegshammer;zweihand;0;3,6;
+kampfstab;Kampfstab;zweihand;0;3;
+bogen;Bogen;fernkampf;30;2,8;Keine heutige Klasse darf ihn tragen (kein Jäger, GDD)
+langbogen;Langbogen;fernkampf;35;3;Keine heutige Klasse
+kurzbogen;Kurzbogen;fernkampf;25;2,4;Keine heutige Klasse
+armbrust;Armbrust;fernkampf;30;3,2;Keine heutige Klasse
+zauberstab;Zauberstab;fernkampf;30;1,6;Schießt im Fernkampfplatz wie ein Bogen
+schild;Schild;nebenhand;0;0;Kein Waffenschaden, Blockwert
+fokus;Fokus;nebenhand;0;0;Kein Waffenschaden
