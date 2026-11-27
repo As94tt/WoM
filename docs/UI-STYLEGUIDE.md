@@ -293,8 +293,8 @@ Szene `game/scenes/ui/hud.tscn` mit Teilen in `game/scenes/ui/hud/`. Außenrand 
 | Element | Aufbau | Position |
 |---|---|---|
 | Aktionsleisten | 2 × 12 `SlotButton`-Slots à 48 × 48 px **ohne Abstand** (`ActionBarRow`, 0 px), jede Leiste in einer festen Hülle `ActionBarShell` 600 × 56 px (Slots bei x = 12, y = 4); Leisten in `SlotColumn`; Leiste 1 unten, Leiste 2 darüber; Inhalt siehe „Zauberbuch und Aktionsleisten (#21)“ | unten mittig |
-| Menüleiste | 5 `MenuBarButton` à **20 × 40 px** mit Bediensymbolen (`interface/menu_character`, `menu_spellbook`, `menu_talents`, `menu_map`, `menu_game`), 1 px Abstand (`MenuBarRow`), mittig in der festen Hülle `MenuBarShell` 236 × 44 px (Innenrand x = 8, y = 2); Tooltip „Name (Taste)“ bleibt das zweite Signal. Die Hülle ist für 11 Knöpfe gezeichnet; weitere kommen mit ihren Funktionen (Quests, Gruppe …) | unten rechts, über der Taschenleiste |
-| Taschenleiste | 4 Taschenplätze + Rucksack („R“) à 48 × 48 px, Rucksack ganz rechts; Taschenplatz 1 direkt neben dem Rucksack. Seit #18 zeigen die Taschenplätze die angelegte Tasche (Icon bzw. Kürzel, Tooltip wie im Taschenfenster mit Hinweis „Ziehen: abnehmen (nur wenn leer)“), leer „Taschenplatz (leer)“; am Rucksack steht unten rechts die Zahl freier Plätze aller Taschen (`ItemCount`), der Tooltip nennt „N von M Plätzen frei“ | unten rechts |
+| Menüleiste | 5 `MenuBarButton` à **40 × 40 px** (Rahmen wie die Taschenplätze, `slot_40_*`) mit Bediensymbolen von 32 px (`interface/menu_character`, `menu_spellbook`, `menu_talents`, `menu_map`, `menu_game`), 2 px Abstand (`MenuBarRow`), **ohne Hülle**, rechtsbündig (208 px breit); Tooltip „Name (Taste)“ bleibt das zweite Signal. Entscheidung des Projektverantwortlichen bei der Designkontrolle zu #69 (ersetzt die 20 × 40-Knöpfe in der 236 × 44-Hülle aus dem Paket; `menu_bar_shell` und `menu_button_20x40_*` liegen ungenutzt bereit) | unten rechts, direkt über der Taschenleiste |
+| Taschenleiste | 4 Taschenplätze + Rucksack (Symbol `interface/bag_backpack`) à 48 × 48 px, Rucksack ganz rechts; Taschenplatz 1 direkt neben dem Rucksack. Seit #18 zeigen die Taschenplätze die angelegte Tasche (Icon bzw. Kürzel, Tooltip wie im Taschenfenster mit Hinweis „Ziehen: abnehmen (nur wenn leer)“), leer mit dem Symbol `interface/bag_slot_empty` und Tooltip „Taschenplatz (leer)“; am Rucksack steht unten rechts die Zahl freier Plätze aller Taschen (`ItemCount`), der Tooltip nennt „N von M Plätzen frei“ | unten rechts |
 | Fenster | `PanelContainer` mit `WindowTitle`, Schließen-Button „X“ (`SlotButton` 40 × 40 px) und Inhaltsbereich; leer mit `HintText` „Kommt bald“ | siehe unten |
 | Spielmenü | `DimOverlay` + `DialogPanel` mit `WindowTitle` und `ButtonList`; nicht belegte Punkte deaktiviert | Bildschirmmitte |
 | Spielerrahmen (#31) | `unit_frame.tscn`, feste Rahmengrafik 340 × 90 px (`UnitFramePlayer`, Porträt links), siehe „Spieler- und Zielrahmen“ | oben links |
@@ -382,8 +382,8 @@ Grafikpaket des Projektverantwortlichen (v3, 27.11.2026). Größen, 9-Slice-Rän
 | `VScrollBar` | `frames/scroll_track`, `scroll_thumb_normal/hover/dragged` | 5 / 8 bzw. 4 / 7 | 4 |
 | `SlotButton` (48 px) | `frames/slot_48_*`, Fokus `slot_48_focus` | 5 | 2 |
 | `SlotButton40` (neu, 40 px) | `frames/slot_40_*` | 5 | 2 |
-| `MenuBarButton` (neu, 20 × 40 px) | `frames/menu_button_20x40_*` | 6 | 1 / 2 |
-| `MenuBarShell`, `MenuBarRow` (neu) | `frames/menu_bar_shell` (236 × 44, fest) | – | 8 / 2; Abstand 1 px |
+| `MenuBarButton` (neu, 40 × 40 px) | `frames/slot_40_*`, Fokus `slot_40_focus` | 5 | 4 (Symbol 32 px) |
+| `MenuBarRow` (neu) | – (keine Hülle) | – | Abstand 2 px |
 | `ActionBarShell`, `ActionBarRow` (neu) | `frames/action_bar_shell` (600 × 56, fest) | – | 12 / 4; Abstand 0 px |
 | `IconButton` (neu, `Button`) | keine Fläche; das Icon (mit eigenem Steinhintergrund) ist der Knopf; Hover über Icon-Tönung | – | – |
 | `SlotFlash`, `SlotActive`, `SlotProcGlow` | `frames/slot_flash`, `slot_active`, `slot_proc_glow_00…07` (64 px, 8 Bilder à 0,1 s als `AnimatedTexture`, 8 px Überstand) | 0 / 5 / 0 | – |

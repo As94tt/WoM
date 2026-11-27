@@ -13,6 +13,8 @@ extends Button
 
 signal error(message: String)
 
+const EMPTY_ICON: Texture2D = preload("res://assets/ui/icons/interface/bag_slot_empty.png")
+
 ## Taschenplatz im Inventar (1–4; 1 liegt direkt neben dem Rucksack).
 @export_range(1, 4) var bag_slot := 1
 
@@ -28,6 +30,9 @@ func refresh() -> void:
 	var bag := inventory.get_bag(bag_slot) if inventory != null else &""
 	ItemSlot.apply_icon(self, bag)
 	if bag == &"":
+		# Leerer Taschenplatz: Bediensymbol aus dem UI-Paket.
+		icon = EMPTY_ICON
+		expand_icon = true
 		tooltip_text = "Taschenplatz (leer)"
 	else:
 		tooltip_text = ItemTooltip.text(bag) + "\n" + _hint()

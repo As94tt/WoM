@@ -12,9 +12,9 @@ Das Paket des Projektverantwortlichen beantwortet diese Liste (220 Dateien, Mani
 | Abschnitt | Geliefert | Eingebunden | Offen |
 |---|---|---|---|
 | 1. Schriften | – (Paket enthält bewusst keine Schriften; Vorschlag in `game/assets/ui/fonts/README.txt`) | – | **OFFEN:** Schriften (SIL OFL 1.1) auswählen und mit Lizenz ablegen |
-| 2. Rahmen, Flächen, Knöpfe | alle Elemente inkl. Zustände, 9-Slice-Ränder im Manifest | ja, als `StyleBoxTexture` im Theme; Menüleiste als 20 × 40 px | `DimOverlay` und „nicht nutzbar“ bleiben Farben (keine Grafik nötig) |
+| 2. Rahmen, Flächen, Knöpfe | alle Elemente inkl. Zustände, 9-Slice-Ränder im Manifest | ja, als `StyleBoxTexture` im Theme; Menüleiste 40 × 40 px mit `slot_40`-Rahmen ohne Hülle (Entscheidung bei der Designkontrolle; `menu_bar_shell` und `menu_button_20x40_*` ungenutzt) | `DimOverlay` und „nicht nutzbar“ bleiben Farben (keine Grafik nötig) |
 | 3. Balken | Leben, Ressource, Zweitressource, Zauber, Erfahrung, Boss | alle außer Boss-Leben (kommt mit #36/#37) | Endgültige Farben (Tokens) **OFFEN** |
-| 4.1 Bediensymbole | alle + Menüsymbole für spätere Knöpfe (Taschen, Gruppe, Quests, Gilde, Post, Hilfe, Kampf) | Menüleiste, Rucksack, Schließen, Blättern, Werte, Kampf, Rang, Schild an der Zauberleiste, Münzen, Hinweis-Punkt | `lock`, `bag_slot_empty`, `dialog_*` liegen bereit (kein Platz bzw. Ticket #28) |
+| 4.1 Bediensymbole | alle + Menüsymbole für spätere Knöpfe (Taschen, Gruppe, Quests, Gilde, Post, Hilfe, Kampf) | Menüleiste, Rucksack, Schließen, Blättern, Werte, Kampf, Rang, Schild an der Zauberleiste, Münzen, Hinweis-Punkt, leere Taschenplätze | `lock`, `dialog_*` liegen bereit (kein Platz bzw. Ticket #28) |
 | 4.2 Leere Ausrüstungsplätze | alle (englische Dateinamen) | ja, über `ausruestungsplaetze.csv` | – |
 | 4.3 Gegenstände | alle 10 Testgegenstände | ja, Spalte `icon` in `gegenstaende.csv` | – |
 | 4.4 Allgemeine Fähigkeiten | `auto_attack`, `help_up` (+ `revive`) | ja (`.tres`) | – |
