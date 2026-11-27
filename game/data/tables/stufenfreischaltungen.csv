@@ -1,0 +1,2 @@
+# Weitere Freischaltungen je Stufe (#27). Fähigkeiten (required_level), Spezialisierung und Talentpunkte (spielkonstanten.csv) stehen nicht hier. Beispiel für später: reittier;;20;Du kannst jetzt reiten.;
+id;klasse;stufe;text;fenster;notiz

@@ -279,8 +279,13 @@ func umrechnung(stufe: int) -> TableRow:
 	return best
 
 
-## Höchste Stufe in umrechnung.csv (für den Stufenregler im Entwickler-Panel).
+## Höchststufe (#27): Konstante „hoechststufe“ aus spielkonstanten.csv; fehlt
+## sie, die höchste Stufe in umrechnung.csv. Für Aufstieg, Erfahrungsbalken und
+## die Stufenregler im Entwickler-Panel.
 func hoechste_stufe() -> int:
+	var top := int(konstante(&"hoechststufe", 0.0))
+	if top > 0:
+		return top
 	var result := 1
 	for r: TableRow in rows("umrechnung"):
 		result = maxi(result, int(r.get_value("stufe", 1)))
