@@ -24,6 +24,7 @@ const BOSS_KIND: PlaceholderKind = preload("res://data/world/placeholders/boss.t
 const DEBUG_ALPHA := 0.3
 const DEBUG_POINT_RADIUS := 0.8
 const DEBUG_LABEL_HEIGHT := 3.5
+const DEBUG_LABEL_PIXEL := 0.016
 
 ## ID in spawngruppen.csv.
 @export var spawn_group: StringName
@@ -130,7 +131,7 @@ func _create_debug() -> Node3D:
 			_add_disc(root, point.position, DEBUG_POINT_RADIUS, material)
 	_debug_label = Label3D.new()
 	_debug_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_debug_label.pixel_size = 0.01
+	_debug_label.pixel_size = DEBUG_LABEL_PIXEL
 	_debug_label.no_depth_test = true
 	_debug_label.layers = 1 << (WorldZone.DEV_RENDER_LAYER - 1)
 	_debug_label.position = Vector3.UP * DEBUG_LABEL_HEIGHT

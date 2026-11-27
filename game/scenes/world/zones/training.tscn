@@ -113,36 +113,36 @@ script = ExtResource("7_unit_spawn")
 unit_id = &"angriffspuppe"
 
 [node name="Woelfe" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, -17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, -16)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_woelfe"
 
 [node name="Banditen" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0, -5)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_banditen"
 radius = 3.0
 
 [node name="Schuetzen" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 4)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_schuetzen"
 radius = 3.0
 
 [node name="Hexer" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, -3)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_hexer"
 radius = 2.0
 
 [node name="Grizzly" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 13)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_grizzly"
 radius = 2.0
 
 [node name="Hauptmann" type="Marker3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, 18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0, 20)
 script = ExtResource("8_enemy_spawn")
 spawn_group = &"training_hauptmann"
 radius = 0.0

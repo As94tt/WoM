@@ -23,6 +23,18 @@ extends Node
 ##                                        Anlegen, Tauschen, verbotenes Anlegen und
 ##                                        Ablegen über den Host; gibt den Stand
 ##                                        aller Figuren im Log aus („Probe:“)
+##   --host --ui-screenshots=<Ordner> --ui-screenshots-enemies
+##                                        Gegner (#36): Testgelände mit Gegnern,
+##                                        Zielrahmen (Elite, Selten, Boss), Leiche
+##                                        nach dem Tod, Spawnbereiche und
+##                                        Entwickler-Panel-Abschnitt „Gegner“
+##   --host --ui-screenshots=<Ordner> --ui-screenshots-enemies-probe
+##   --join <IP> --ui-screenshots=<Ordner> --ui-screenshots-enemies-probe
+##                                        Zwei-Instanzen-Probe (#36): Der Host tötet
+##                                        Gegner (schneller Respawn), der Client
+##                                        steht zuerst bei den Wölfen (Respawn wird
+##                                        verschoben) und geht dann weg; beide
+##                                        geben ihren Stand im Log aus („Probe:“)
 ## Optional --ui-screenshots-prefix=<Text> vor jedem Dateinamen (z. B. „1080p_“).
 ## Fenstergröße über Godots --resolution (z. B. --resolution 2560x1440).
 ## Gestartet vom Hauptmenü (MainMenu._ready); die Szene bleibt bei
@@ -32,6 +44,12 @@ const ARG_DIR := "--ui-screenshots"
 const ARG_PREFIX := "--ui-screenshots-prefix"
 const ARG_ICONS := "--ui-screenshots-icons"
 const ARG_EQUIPMENT := "--ui-screenshots-equipment"
+const ARG_ENEMIES := "--ui-screenshots-enemies"
+const ARG_ENEMIES_PROBE := "--ui-screenshots-enemies-probe"
+## Zwei-Instanzen-Probe (#36): So lange steht der Client bei den Wölfen, so
+## lange läuft die Probe insgesamt (länger als leiche_dauer).
+const PROBE_STAY_NEAR := 35.0
+const PROBE_DURATION := 135.0
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const CHARACTER_CREATION_SCENE := "res://scenes/ui/character_creation.tscn"
 
@@ -41,6 +59,9 @@ var _hud_tour := false
 var _icon_tour := false
 var _equipment_tour := false
 var _client_tour := false
+var _enemy_tour := false
+var _enemy_probe := false
+var _is_client := false
 
 
 ## Startet die Tour, wenn der Startparameter gesetzt ist.
@@ -55,6 +76,8 @@ static func start_if_requested(tree: SceneTree) -> void:
 	var hud := false
 	var icons := false
 	var equipment := false
+	var enemies := false
+	var enemy_probe := false
 	var join := false
 	for arg in args:
 		if arg.begins_with(ARG_PREFIX + "="):
@@ -69,6 +92,10 @@ static func start_if_requested(tree: SceneTree) -> void:
 			icons = true
 		elif arg == ARG_EQUIPMENT:
 			equipment = true
+		elif arg == ARG_ENEMIES:
+			enemies = true
+		elif arg == ARG_ENEMIES_PROBE:
+			enemy_probe = true
 	if dir == "":
 		return
 	var node := UiScreenshots.new()
@@ -79,13 +106,23 @@ static func start_if_requested(tree: SceneTree) -> void:
 	node._icon_tour = hud and icons
 	node._equipment_tour = hud and equipment
 	node._client_tour = join and equipment
+	node._enemy_tour = hud and enemies
+	node._enemy_probe = enemy_probe and (hud or join)
+	node._is_client = join
 	node.process_mode = Node.PROCESS_MODE_ALWAYS
 	tree.root.add_child.call_deferred(node)
 
 
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(_dir)
-	if _client_tour:
+	if _enemy_probe:
+		if _is_client:
+			_run_enemy_probe_client()
+		else:
+			_run_enemy_probe_host()
+	elif _enemy_tour:
+		_run_enemy_tour()
+	elif _client_tour:
 		_run_equipment_client_tour()
 	elif _equipment_tour:
 		_run_equipment_tour()
@@ -470,3 +507,223 @@ func _flags_text(stats: CharacterStats) -> String:
 		if stats.has_flag(entry[0]):
 			parts.append(entry[1])
 	return ", ".join(parts) if not parts.is_empty() else "keine"
+
+
+# --- Gegner (#36) --------------------------------------------------------------
+
+## Wartet, bis der Host die Spawnbereiche gefüllt hat (NavMesh gebacken).
+func _await_enemies() -> EnemySpawnManager:
+	for i in 160:
+		var manager := EnemySpawnManager.get_instance(get_tree())
+		if manager != null and not manager.get_enemies().is_empty():
+			return manager
+		await _wait(0.25)
+	return EnemySpawnManager.get_instance(get_tree())
+
+
+func _training_zone() -> Node3D:
+	for node in get_tree().get_nodes_in_group(WorldZone.GROUP):
+		var zone := node as WorldZone
+		if zone != null and zone.data != null and zone.data.id == &"trainingsgelaende":
+			return zone
+	return null
+
+
+func _spawn_area(area_name: String) -> EnemySpawnArea:
+	for node in get_tree().get_nodes_in_group(EnemySpawnArea.GROUP):
+		if node.name == area_name:
+			return node as EnemySpawnArea
+	return null
+
+
+## Erster lebender Gegner des Typs (oder null).
+func _enemy_of(manager: EnemySpawnManager, enemy_id: StringName) -> Enemy:
+	for enemy in manager.get_enemies():
+		if enemy.enemy_id == enemy_id and not enemy.is_dead():
+			return enemy
+	return null
+
+
+## Eigene Figur an eine Stelle im Testgelände (lokal), Blick nach Osten (+X).
+func _place_in_training(world: Node, local: Vector3) -> void:
+	var zone := _training_zone()
+	var origin := (zone.global_position if zone != null else Vector3.ZERO) + local
+	world.teleport_local_player(Transform3D(Basis(Vector3.UP, -PI / 2.0), origin + Vector3.UP * 0.3))
+
+
+func _run_enemy_tour() -> void:
+	var world := await _await_world()
+	if world == null or not world.has_method(&"get_hud"):
+		push_error("UiScreenshots: Spielwelt nicht gefunden")
+		get_tree().quit(1)
+		return
+	var manager := await _await_enemies()
+	if manager == null or manager.get_enemies().is_empty():
+		push_error("UiScreenshots: keine Gegner erschienen")
+		get_tree().quit(1)
+		return
+	var player: PlayerCharacter = world.get_local_player()
+	var targeting := player.get_targeting()
+	var zone := _training_zone()
+	# Grauschnauze für das Bild sicher dabei (wie „am Mauszeiger“ im Panel).
+	if _enemy_of(manager, &"grauschnauze") == null:
+		manager.spawn_free(&"grauschnauze", 6, Transform3D(Basis(Vector3.UP, PI / 2.0),
+				zone.global_position + Vector3(44, 0, -13)))
+	_place_in_training(world, Vector3(37, 0, 0))
+	# Namensplaketten der Gegner zeigen (nur für die Bilder, nicht gespeichert).
+	for node in world.get_hud().find_children("*", "NameplateLayer", true, false):
+		(node as NameplateLayer).show_enemies = true
+	var cameras := player.find_children("*", "PlayerCamera", true, false)
+	var camera := cameras[0] as PlayerCamera if not cameras.is_empty() else null
+	if camera != null:
+		camera.zoom(1.0)
+		camera.add_pitch(deg_to_rad(-8.0))
+	await _wait(2.5)
+	var lines: PackedStringArray = []
+	for enemy in manager.get_enemies():
+		lines.append("%s (%s, Stufe %d, %s)" % [enemy.get_unit_name(), enemy.enemy_id, enemy.level,
+				enemy.get_rank_id()])
+	print("UiScreenshots: Gegner: %s" % ", ".join(lines))
+	await _shot("gegner_trainingsgelaende")
+	for entry: Array in [[&"grizzly_alt", "gegner_zielrahmen_elite"], [&"grauschnauze", "gegner_zielrahmen_selten"],
+			[&"banditenhauptmann", "gegner_zielrahmen_boss"], [&"banditenhexer", "gegner_zielrahmen_normal"]]:
+		var enemy := _enemy_of(manager, entry[0])
+		if enemy == null:
+			continue
+		targeting.select(enemy)
+		await _wait(0.6)
+		await _shot(entry[1])
+	# Tod: Bandit durch die eigene Figur (Erfahrung), Leiche kippt.
+	var bandit := _enemy_of(manager, &"bandit")
+	if bandit != null:
+		targeting.select(bandit)
+		await _wait(0.3)
+		Combat.deal_damage(player, bandit, bandit.get_stats().health + 1.0, &"physisch")
+		await _wait(0.8)
+		await _shot("gegner_leiche")
+	targeting.clear()
+	# Spawnbereiche mit Respawnzeiten und Entwickler-Panel (ohne Plaketten,
+	# damit die Beschriftungen lesbar sind).
+	for node in world.get_hud().find_children("*", "NameplateLayer", true, false):
+		(node as NameplateLayer).show_enemies = false
+	manager.set_debug_visible(true)
+	await _wait(1.0)
+	await _shot("gegner_spawnbereiche")
+	var panel := DevPanel.find_in(get_tree())
+	if panel != null:
+		panel.get_node(^"%Panel").visible = true
+		await _wait(0.3)
+		var scroll := panel.get_node(^"%Panel/Rows/Scroll") as ScrollContainer
+		for child in panel.find_children("*", "Label", true, false):
+			var label := child as Label
+			if label.text == "Gegner" and label.theme_type_variation == &"Subtitle":
+				scroll.scroll_vertical = int(label.position.y)
+				break
+		await _wait(0.6)
+		await _shot("gegner_entwickler_panel")
+	get_tree().quit()
+
+
+## Stand der Gegner im Log (beide Instanzen gleich formatiert).
+func _log_enemy_state(label: String) -> void:
+	var manager := EnemySpawnManager.get_instance(get_tree())
+	if manager == null:
+		return
+	var alive: PackedStringArray = []
+	var dead: PackedStringArray = []
+	for enemy in manager.get_enemies():
+		var text := "%s/%s/St%d" % [enemy.name, enemy.enemy_id, enemy.level]
+		if enemy.is_dead():
+			dead.append(text)
+		else:
+			alive.append(text)
+	alive.sort()
+	dead.sort()
+	print("Probe: %s – %d lebend, Leichen %s" % [label, alive.size(), dead])
+	print("Probe: %s – lebend %s" % [label, alive])
+
+
+## Host der Zwei-Instanzen-Probe: wartet auf den Client, schaltet schnellen
+## Respawn ein, tötet einen Jungen Wolf und einen Banditen und gibt alle zwei
+## Sekunden den Stand des Wolf-Platzes aus.
+func _run_enemy_probe_host() -> void:
+	var world := await _await_world()
+	var manager := await _await_enemies()
+	if world == null or manager == null:
+		push_error("UiScreenshots: Spielwelt oder Gegner fehlen")
+		get_tree().quit(1)
+		return
+	for i in 240:
+		if world.get_all_players().size() >= 2:
+			break
+		await _wait(0.5)
+	print("Probe: Client ist da")
+	await _wait(3.0)
+	manager.request_dev("fast", true)
+	var wolves := _spawn_area("Woelfe")
+	var slot: EnemySpawnManager.Slot = null
+	for s in manager.get_slots():
+		if s.area == wolves and s.get_enemy() != null and s.get_enemy().enemy_id == &"wolf_jung":
+			slot = s
+			break
+	var wolf := slot.get_enemy()
+	print("Probe: Host tötet %s (%s)" % [wolf.name, wolf.get_unit_name()])
+	Combat.deal_damage(world.get_local_player(), wolf, wolf.get_stats().health + 1.0, &"physisch")
+	var bandit := _enemy_of(manager, &"bandit")
+	if bandit != null:
+		print("Probe: Host tötet %s (Bandit)" % bandit.name)
+		Combat.deal_damage(null, bandit, bandit.get_stats().health + 1.0, &"physisch")
+	_log_enemy_state("Host nach dem Töten")
+	manager.set_debug_visible(true)
+	var start := Time.get_ticks_msec() / 1000.0
+	var shot_taken := false
+	while Time.get_ticks_msec() / 1000.0 - start < PROBE_DURATION:
+		await _wait(2.0)
+		var t := Time.get_ticks_msec() / 1000.0 - start
+		var enemy := slot.get_enemy()
+		print("Probe: Host t=%d s – Wolf-Platz: %s, verschoben ×%d, Leiche %s noch da: %s" % [t,
+				("%s lebt" % enemy.name) if enemy != null else "leer", slot.delays, wolf.name if is_instance_valid(wolf) else "?",
+				"ja" if is_instance_valid(wolf) and not wolf.is_queued_for_deletion() else "nein"])
+		if not shot_taken and slot.delays >= 2:
+			# Mehr als 15 m vom Bereich entfernt, damit nur der Client verschiebt.
+			_place_in_training(world, Vector3(30, 0, -17))
+			await _wait(1.0)
+			await _shot("gegner_probe_host_verschoben")
+			shot_taken = true
+	_log_enemy_state("Host Ende")
+	get_tree().quit()
+
+
+## Client der Zwei-Instanzen-Probe: steht bei den Wölfen (verschiebt den
+## Respawn), geht dann 40 m weg und gibt alle zwei Sekunden aus, was er sieht.
+func _run_enemy_probe_client() -> void:
+	var world := await _await_world()
+	if world == null:
+		push_error("UiScreenshots: Spielwelt nicht gefunden")
+		get_tree().quit(1)
+		return
+	var wolves := _spawn_area("Woelfe")
+	var zone := _training_zone()
+	_place_in_training(world, wolves.position if wolves != null else Vector3(56, 0, -17))
+	await _wait(2.0)
+	_log_enemy_state("Client Start")
+	var start := Time.get_ticks_msec() / 1000.0
+	var moved := false
+	var corpse_shot := false
+	while Time.get_ticks_msec() / 1000.0 - start < PROBE_DURATION:
+		await _wait(2.0)
+		var t := Time.get_ticks_msec() / 1000.0 - start
+		if not moved and t >= PROBE_STAY_NEAR:
+			_place_in_training(world, Vector3(10, 0, 20))
+			moved = true
+			print("Probe: Client geht weg (t=%d s)" % t)
+		_log_enemy_state("Client t=%d s" % t)
+		var manager := EnemySpawnManager.get_instance(get_tree())
+		if not corpse_shot and manager != null:
+			for enemy in manager.get_enemies():
+				if enemy.is_dead():
+					await _shot("gegner_probe_client_leiche")
+					corpse_shot = true
+					break
+	print("Probe: Client Zone %s" % (zone.name if zone != null else "?"))
+	get_tree().quit()
