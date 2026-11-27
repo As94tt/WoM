@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/talents/player_talents.gd" id="tal_talents"]
 [ext_resource type="Script" path="res://scripts/player/character_animator.gd" id="anm_animator"]
 [ext_resource type="Script" path="res://scripts/progress/player_experience.gd" id="exp_experience"]
+[ext_resource type="Script" path="res://scripts/items/player_equipment.gd" id="eqp_equipment"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.4
@@ -66,6 +67,9 @@ properties/8/replication_mode = 2
 properties/9/path = NodePath("Experience:experience")
 properties/9/spawn = true
 properties/9/replication_mode = 2
+properties/10/path = NodePath("Equipment:equipment_state")
+properties/10/spawn = true
+properties/10/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="Replication_movement"]
 properties/0/path = NodePath(".:net_time")
@@ -225,3 +229,6 @@ script = ExtResource("tal_talents")
 
 [node name="Experience" type="Node" parent="."]
 script = ExtResource("exp_experience")
+
+[node name="Equipment" type="Node" parent="."]
+script = ExtResource("eqp_equipment")

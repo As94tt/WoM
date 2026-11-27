@@ -139,6 +139,158 @@ static func short_name(id: StringName) -> String:
 	return (words[0].left(1) + words[1].left(1)).to_upper()
 
 
+# --- Ausrüstung (#29) --------------------------------------------------------
+
+const EQUIPMENT_TYPE := &"ausruestung"
+const BINDING_TEXTS := {
+	"beim_aufheben": "Wird beim Aufheben gebunden",
+	"beim_anlegen": "Wird beim Anlegen gebunden",
+}
+
+
+static func is_equipment(id: StringName) -> bool:
+	return type_id(id) == EQUIPMENT_TYPE
+
+
+static func _text(id: StringName, column: String) -> String:
+	var r := row(id)
+	return str(r.get_value(column, "")) if r != null else ""
+
+
+## Gegenstandsart (Spalte slot, z. B. &"einhand", &"ring").
+static func slot(id: StringName) -> StringName:
+	return StringName(_text(id, "slot"))
+
+
+## Handhabung (haupthand, nebenhand, einhand, zweihand, fernkampf) oder &"".
+static func handling(id: StringName) -> StringName:
+	return StringName(_text(id, "handhabung"))
+
+
+static func weapon_type(id: StringName) -> StringName:
+	return StringName(_text(id, "waffentyp"))
+
+
+static func armor_class(id: StringName) -> StringName:
+	return StringName(_text(id, "ruestungsklasse"))
+
+
+static func item_level(id: StringName) -> int:
+	var r := row(id)
+	return maxi(1, int(r.get_value("gegenstandsstufe", 1))) if r != null else 1
+
+
+static func required_level(id: StringName) -> int:
+	var r := row(id)
+	return maxi(1, int(r.get_value("mindeststufe", 1))) if r != null else 1
+
+
+## Klassen, die den Gegenstand nutzen dürfen (leer = alle).
+static func class_ids(id: StringName) -> Array[StringName]:
+	var result: Array[StringName] = []
+	var r := row(id)
+	if r != null:
+		for entry: Variant in r.get_value("klassen", []):
+			result.append(StringName(str(entry)))
+	return result
+
+
+## „Einzigartig“: nur einmal im Besitz (Tasche und angelegt zusammen).
+static func is_unique(id: StringName) -> bool:
+	var r := row(id)
+	return r != null and bool(r.get_value("einzigartig", false))
+
+
+## „Einzigartig angelegt“: Spalte oder Slot (Siegel, Talisman: immer).
+static func is_unique_equipped(id: StringName) -> bool:
+	var r := row(id)
+	if r == null:
+		return false
+	if bool(r.get_value("einzigartig_angelegt", false)):
+		return true
+	var mapping := slot_mapping(id)
+	return mapping != null and bool(mapping.get_value("immer_einzigartig_angelegt", false))
+
+
+## Zeile aus slotzuordnung.csv oder null.
+static func slot_mapping(id: StringName) -> TableRow:
+	if not is_equipment(id):
+		return null
+	return Data.slotzuordnung(slot(id), handling(id))
+
+
+## Bindungstext für den Tooltip („Wird beim Anlegen gebunden“) oder "".
+static func binding_text(id: StringName) -> String:
+	return BINDING_TEXTS.get(_text(id, "bindung"), "")
+
+
+## Herkunftstext (Goldschrift im Tooltip) oder "".
+static func origin(id: StringName) -> String:
+	return _text(id, "herkunft")
+
+
+## Text links im Tooltip (z. B. „Brust“, „Zweihand“).
+static func slot_text(id: StringName) -> String:
+	var mapping := slot_mapping(id)
+	return str(mapping.get_value("anzeige", "")) if mapping != null else ""
+
+
+## Text rechts im Tooltip: Waffentyp bzw. Rüstungsklasse („Schwert“, „Platte“).
+static func kind_text(id: StringName) -> String:
+	var weapon := Data.waffentyp(weapon_type(id)) if weapon_type(id) != &"" else null
+	if weapon != null:
+		return str(weapon.get_value("name", weapon_type(id)))
+	var armor := Data.ruestungsklasse(armor_class(id)) if armor_class(id) != &"" else null
+	return str(armor.get_value("name", armor_class(id))) if armor != null else ""
+
+
+## Zahl einer Wertespalte (z. B. „staerke“, „ruestung“); leer = 0.
+static func number(id: StringName, column: String) -> int:
+	var r := row(id)
+	return int(r.get_value(column, 0)) if r != null else 0
+
+
+## true für Waffen mit Waffenschaden (nicht Schild und Fokus).
+static func is_damage_weapon(id: StringName) -> bool:
+	var weapon := Data.waffentyp(weapon_type(id)) if weapon_type(id) != &"" else null
+	return weapon != null and str(weapon.get_value("handhabung", "")) != "nebenhand"
+
+
+## Sekunden je Schlag (Gegenstand, sonst standardtempo des Waffentyps).
+static func weapon_speed(id: StringName) -> float:
+	var r := row(id)
+	if r != null and not r.is_blank("geschwindigkeit") and float(r.get_value("geschwindigkeit", 0.0)) > 0.0:
+		return float(r.get_value("geschwindigkeit", 0.0))
+	var weapon := Data.waffentyp(weapon_type(id)) if weapon_type(id) != &"" else null
+	return maxf(0.1, float(weapon.get_value("standardtempo", 2.0))) if weapon != null else 2.0
+
+
+## Reichweite für automatische Schüsse (0 = Nahkampf).
+static func weapon_range(id: StringName) -> float:
+	var weapon := Data.waffentyp(weapon_type(id)) if weapon_type(id) != &"" else null
+	return float(weapon.get_value("reichweite", 0.0)) if weapon != null else 0.0
+
+
+## Schaden pro Sekunde aus Schaden und Geschwindigkeit.
+static func dps(id: StringName) -> float:
+	if not is_damage_weapon(id):
+		return 0.0
+	return (number(id, "schaden_min") + number(id, "schaden_max")) / 2.0 / weapon_speed(id)
+
+
+## Auren aus der Spalte „effekte“ (unbekannte entfallen).
+static func effect_auras(id: StringName) -> Array[AuraData]:
+	var result: Array[AuraData] = []
+	var r := row(id)
+	if r == null:
+		return result
+	for aura_id: Variant in r.get_value("effekte", []):
+		var aura := GameData.get_aura(StringName(str(aura_id)))
+		if aura != null:
+			result.append(aura)
+	return result
+
+
 ## Gold, Silber und Kupfer eines Betrags in Kupfer.
 static func money_parts(copper: int) -> Vector3i:
 	var value := maxi(0, copper)

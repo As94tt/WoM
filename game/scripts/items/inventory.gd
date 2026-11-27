@@ -25,6 +25,13 @@ extends RefCounted
 ##   Name A–Z.
 ## - Geld ist eine Ganzzahl in Kupfer; Gold/Silber/Kupfer ist nur Anzeige.
 ##
+## - „Einzigartig“ (#29): add_item meldet UNIQUE („Ihr besitzt diesen
+##   Gegenstand bereits.“), wenn der Gegenstand schon in den Taschen liegt
+##   oder angelegt ist (owned_elsewhere, gesetzt von der Ausrüstung).
+## - Anlegen (#29): replace_item nimmt einen Gegenstand von seinem Platz und
+##   legt die verdrängten Gegenstände in einem Schritt hinein (der erste auf
+##   den frei gewordenen Platz).
+##
 ## Multiplayer: Noch keine Synchronisierung. Das Inventar gehört dem Charakter
 ## und liegt beim Spieler (gespeichert mit CharacterData). Später vergibt der
 ## Host Beute; add_item meldet dafür Erfolg oder „voll“.
@@ -32,7 +39,7 @@ extends RefCounted
 ## Nach jeder Änderung an Plätzen, Taschen oder Geld.
 signal changed
 
-enum AddResult { ADDED, FULL, UNKNOWN }
+enum AddResult { ADDED, FULL, UNKNOWN, UNIQUE }
 
 const BACKPACK := 0
 ## Taschenplätze in der Taschenleiste (fest wie die Leiste im HUD, #17).
@@ -46,6 +53,11 @@ const MSG_BAG_NOT_EMPTY := "Die Tasche ist nicht leer."
 const MSG_NOT_A_BAG := "Das ist keine Tasche."
 const MSG_NO_BAG := "Dort liegt keine Tasche."
 const MSG_INVALID := "Das geht nicht."
+const MSG_UNIQUE := "Ihr besitzt diesen Gegenstand bereits."
+
+## Wie oft ein Gegenstand außerhalb der Taschen besessen wird (#29: angelegt),
+## Callable(id: StringName) -> int; leer = nirgends.
+var owned_elsewhere: Callable
 
 ## Geld in Kupfer.
 var money := 0:
@@ -142,6 +154,71 @@ func count_item(id: StringName) -> int:
 	return total
 
 
+## Wie oft der Gegenstand besessen wird: Taschen und angelegt (#29).
+func count_owned(id: StringName) -> int:
+	var elsewhere := int(owned_elsewhere.call(id)) if owned_elsewhere.is_valid() else 0
+	return count_item(id) + elsewhere
+
+
+## Erster Platz mit diesem Gegenstand als Vector2i(Behälter, Platz) oder
+## (-1, -1).
+func find_item(id: StringName) -> Vector2i:
+	for container in get_container_count():
+		var slots: Array = _slots[container]
+		for index in slots.size():
+			var slot: Dictionary = slots[index]
+			if not slot.is_empty() and slot["id"] == id:
+				return Vector2i(container, index)
+	return Vector2i(-1, -1)
+
+
+## Für das Anlegen (#29): Nimmt ein Stück id vom Platz (container, index) –
+## liegt es dort nicht mehr, vom ersten Platz mit id – und legt die
+## Gegenstände incoming hinein, den ersten auf den frei gewordenen Platz.
+## Prüft vorher, ob alles Platz hat; dann ändert sich nichts (MSG_FULL).
+## Gibt "" oder eine Fehlermeldung zurück.
+func replace_item(container: int, index: int, id: StringName, incoming: Array[StringName]) -> String:
+	var at := Vector2i(container, index)
+	var slot := get_slot(container, index)
+	if slot.get("id", &"") != id:
+		at = find_item(id)
+	var freed := at.x >= 0 and int(get_slot(at.x, at.y).get("count", 0)) <= 1
+	var needed := incoming.size() - (1 if freed else 0)
+	if needed > get_free_slots():
+		return MSG_FULL
+	if at.x >= 0:
+		var source: Dictionary = _slots[at.x][at.y]
+		if int(source["count"]) > 1:
+			source["count"] = int(source["count"]) - 1
+		else:
+			_slots[at.x][at.y] = {}
+	var rest: Array[StringName] = incoming.duplicate()
+	if freed and not rest.is_empty():
+		_slots[at.x][at.y] = _stack(rest.pop_front(), 1)
+	for item in rest:
+		var free := _first_free_slot()
+		if free.x >= 0:
+			_slots[free.x][free.y] = _stack(item, 1)
+	changed.emit()
+	return ""
+
+
+## Für das Ablegen (#29): legt ein Stück auf den Platz (container, index),
+## wenn er leer ist, sonst in den ersten freien Platz (ohne Prüfung auf
+## „Einzigartig“, es ist der eigene Gegenstand). "" oder MSG_FULL.
+func put_item(id: StringName, container := -1, index := -1) -> String:
+	if not ItemInfo.exists(id):
+		return MSG_INVALID
+	var target := Vector2i(container, index)
+	if not is_slot_empty(container, index):
+		target = _first_free_slot()
+	if target.x < 0:
+		return MSG_FULL
+	_slots[target.x][target.y] = _stack(id, 1)
+	changed.emit()
+	return ""
+
+
 ## true, wenn alle count Stück hineinpassen.
 func can_add(id: StringName, count := 1) -> bool:
 	if count <= 0 or not ItemInfo.exists(id):
@@ -162,10 +239,14 @@ func can_add(id: StringName, count := 1) -> bool:
 # --- Gegenstände -------------------------------------------------------------
 
 ## Legt count Stück hinein: erst auf nicht volle Stapel, dann in freie Plätze.
-## Passt nicht alles, ändert sich nichts (FULL).
-func add_item(id: StringName, count := 1) -> AddResult:
+## Passt nicht alles, ändert sich nichts (FULL). „Einzigartig“ (#29) nur,
+## wenn er danach höchstens einmal besessen wird (sonst UNIQUE);
+## check_unique = false beim Zurücklegen eigener Gegenstände (Ablegen).
+func add_item(id: StringName, count := 1, check_unique := true) -> AddResult:
 	if count <= 0 or not ItemInfo.exists(id):
 		return AddResult.UNKNOWN
+	if check_unique and ItemInfo.is_unique(id) and count_owned(id) + count > 1:
+		return AddResult.UNIQUE
 	if not can_add(id, count):
 		return AddResult.FULL
 	var stack := ItemInfo.stack_size(id)
@@ -460,7 +541,7 @@ func load_save(data: Dictionary) -> PackedStringArray:
 				else:
 					overflow.append(_stack(id, count))
 	for item in overflow:
-		if add_item(item["id"], item["count"]) != AddResult.ADDED:
+		if add_item(item["id"], item["count"], false) != AddResult.ADDED:
 			warnings.append("Kein Platz für %s (%d), entfernt." % [ItemInfo.display_name(item["id"]), item["count"]])
 	changed.emit()
 	return warnings
