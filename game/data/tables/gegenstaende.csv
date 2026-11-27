@@ -1,8 +1,8 @@
-﻿# Gegenstände. Rüstung und Waffenschaden dürfen leer bleiben (werden dann berechnet).
+﻿# Gegenstände. Rüstung und Waffenschaden stehen bei Ausrüstung ausdrücklich in der Zeile; leer zählt 0 (Warnung bei --daten-pruefen; Berechnung folgt mit #71).
 id;name;beschreibung;icon;typ;slot;seltenheit;gegenstandsstufe;mindeststufe;ruestungsklasse;waffentyp;handhabung;schaden_min;schaden_max;geschwindigkeit;ruestung;blockwert;staerke;gewandtheit;intellekt;ausdauer;willenskraft;praezision;verheerung;tempo;durchschlag;abwehr;eile;zauberschutz;effekte;klassen;einzigartig;einzigartig_angelegt;bindung;stapelgroesse;verkaufswert;taschenplaetze;herkunft;modell;notiz
 wolfsfell;Wolfsfell;Ein struppiges Fell.;res://assets/ui/icons/items/wolf_pelt.png;material;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;5;;;;Beispiel
-schwert_rostig;Rostiges Schwert;Hat schon bessere Tage gesehen.;res://assets/ui/icons/items/rusty_sword.png;ausruestung;einhand;gewoehnlich;2;1;;schwert;einhand;;;2,6;;;1;;;;;;;;;;;;;warrior|rogue;nein;nein;beim_anlegen;1;12;;;;Beispiel, Schaden wird berechnet
-lederkappe;Lederkappe;;res://assets/ui/icons/items/leather_cap.png;ausruestung;helm;ungewoehnlich;2;1;leder;;;;;;;;;1;;1;;;;;;;;;;;nein;nein;keine;1;8;;;;Beispiel (seit #18 ungewöhnlich, zum Testen des Seltenheitsrahmens)
+schwert_rostig;Rostiges Schwert;Hat schon bessere Tage gesehen.;res://assets/ui/icons/items/rusty_sword.png;ausruestung;einhand;gewoehnlich;2;1;;schwert;einhand;4;7;2,6;;;1;;;;;;;;;;;;;warrior|rogue;nein;nein;beim_anlegen;1;12;;;;Beispiel (seit #29 mit festem Schaden), nur Krieger und Schurke
+lederkappe;Lederkappe;;res://assets/ui/icons/items/leather_cap.png;ausruestung;helm;ungewoehnlich;2;1;leder;;;;;;6;;;1;;1;;;;;;;;;;;nein;nein;keine;1;8;;;;Beispiel (seit #18 ungewöhnlich, zum Testen des Seltenheitsrahmens)
 # Testgegenstände für Inventar und Taschen (#18)
 tasche_klein;Kleiner Beutel;Ein schlichter Beutel aus Leinen.;res://assets/ui/icons/items/small_bag.png;tasche;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;25;6;;;Test #18: Tasche mit 6 Plätzen
 tasche_mittel;Lederbeutel;Fest genäht und mit Riemen.;res://assets/ui/icons/items/medium_bag.png;tasche;;ungewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;100;8;;;Test #18: Tasche mit 8 Plätzen
@@ -11,3 +11,82 @@ leuchtkristall;Leuchtkristall;Ein Splitter, der schwach von innen glimmt.;res://
 brot_hart;Hartes Brot;Satt macht es trotzdem.;res://assets/ui/icons/items/hard_bread.png;verbrauchsgut;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;1;;;;Test #18: Verbrauchsgut (Benutzen folgt später)
 zahn_zerbrochen;Zerbrochener Zahn;Zu nichts mehr zu gebrauchen.;res://assets/ui/icons/items/broken_tooth.png;plunder;;minderwertig;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;10;3;;;;Test #18: Plunder
 brief_versiegelt;Versiegelter Brief;Das Siegel ist unversehrt.;res://assets/ui/icons/items/sealed_letter.png;questgegenstand;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;;;;;Test #18: Questgegenstand
+# Testgegenstände für Ausrüstung (#29): Rüstung und Waffenschaden stehen ausdrücklich in der Zeile (Berechnung folgt mit #71).
+leinen_helm;Leinenkapuze;;;ausruestung;helm;ungewoehnlich;5;1;stoff;;;;;;5;;;;3;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz stoff Stufe 5
+leinen_schulter;Leinenschultern;;;ausruestung;schulter;ungewoehnlich;5;1;stoff;;;;;;4;;;;3;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz stoff Stufe 5
+leinen_brust;Leinenrobe;;;ausruestung;brust;ungewoehnlich;5;1;stoff;;;;;;6;;;;4;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz stoff Stufe 5
+leinen_guertel;Leinenschärpe;;;ausruestung;guertel;ungewoehnlich;5;1;stoff;;;;;;3;;;;2;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz stoff Stufe 5
+leinen_beine;Leinenhose;;;ausruestung;beine;ungewoehnlich;5;1;stoff;;;;;;5;;;;4;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz stoff Stufe 5
+leinen_schuhe;Leinenschuhe;;;ausruestung;schuhe;ungewoehnlich;5;1;stoff;;;;;;4;;;;2;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz stoff Stufe 5
+leinen_handschuhe;Leinenhandschuhe;;;ausruestung;handschuhe;ungewoehnlich;5;1;stoff;;;;;;4;;;;2;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz stoff Stufe 5
+leinen_armschienen;Leinenarmbinden;;;ausruestung;armschienen;ungewoehnlich;5;1;stoff;;;;;;3;;;;2;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz stoff Stufe 5
+seide_helm;Seidenkapuze;;;ausruestung;helm;selten;15;10;stoff;;;;;;11;;;;8;6;;;4;;;;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz stoff Stufe 15
+seide_schulter;Seidenschultern;;;ausruestung;schulter;selten;15;10;stoff;;;;;;10;;;;8;6;;;;4;;;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz stoff Stufe 15
+seide_brust;Seidenrobe;;;ausruestung;brust;selten;15;10;stoff;;;;;;14;;;;10;8;;;5;;;;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz stoff Stufe 15
+seide_guertel;Seidenschärpe;;;ausruestung;guertel;selten;15;10;stoff;;;;;;8;;;;6;5;;;;3;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz stoff Stufe 15
+seide_beine;Seidenhose;;;ausruestung;beine;selten;15;10;stoff;;;;;;13;;;;10;8;;;5;;;;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz stoff Stufe 15
+seide_schuhe;Seidenschuhe;;;ausruestung;schuhe;selten;15;10;stoff;;;;;;10;;;;6;5;;;;3;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz stoff Stufe 15
+seide_handschuhe;Seidenhandschuhe;;;ausruestung;handschuhe;selten;15;10;stoff;;;;;;8;;;;6;5;;;3;;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz stoff Stufe 15
+seide_armschienen;Seidenarmbinden;;;ausruestung;armschienen;selten;15;10;stoff;;;;;;7;;;;6;5;;;;3;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz stoff Stufe 15
+wildleder_helm;Wildlederkappe;;res://assets/ui/icons/items/leather_cap.png;ausruestung;helm;ungewoehnlich;5;1;leder;;;;;;10;;;3;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz leder Stufe 5
+wildleder_schulter;Wildlederschultern;;;ausruestung;schulter;ungewoehnlich;5;1;leder;;;;;;9;;;3;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz leder Stufe 5
+wildleder_brust;Wildlederweste;;;ausruestung;brust;ungewoehnlich;5;1;leder;;;;;;12;;;4;;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz leder Stufe 5
+wildleder_guertel;Wildledergürtel;;;ausruestung;guertel;ungewoehnlich;5;1;leder;;;;;;7;;;2;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz leder Stufe 5
+wildleder_beine;Wildlederhose;;;ausruestung;beine;ungewoehnlich;5;1;leder;;;;;;11;;;4;;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz leder Stufe 5
+wildleder_schuhe;Wildlederstiefel;;;ausruestung;schuhe;ungewoehnlich;5;1;leder;;;;;;8;;;2;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz leder Stufe 5
+wildleder_handschuhe;Wildlederhandschuhe;;;ausruestung;handschuhe;ungewoehnlich;5;1;leder;;;;;;7;;;2;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz leder Stufe 5
+wildleder_armschienen;Wildlederarmschienen;;;ausruestung;armschienen;ungewoehnlich;5;1;leder;;;;;;6;;;2;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz leder Stufe 5
+schattenleder_helm;Schattenlederkappe;;;ausruestung;helm;selten;15;10;leder;;;;;;22;;;8;;6;;4;;;;;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz leder Stufe 15
+schattenleder_schulter;Schattenlederschultern;;;ausruestung;schulter;selten;15;10;leder;;;;;;21;;;8;;6;;;;;;;4;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz leder Stufe 15
+schattenleder_brust;Schattenlederweste;;;ausruestung;brust;selten;15;10;leder;;;;;;28;;;10;;8;;5;;;;;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz leder Stufe 15
+schattenleder_guertel;Schattenledergürtel;;;ausruestung;guertel;selten;15;10;leder;;;;;;15;;;6;;5;;;;;;;3;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz leder Stufe 15
+schattenleder_beine;Schattenlederhose;;;ausruestung;beine;selten;15;10;leder;;;;;;25;;;10;;8;;5;;;;;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz leder Stufe 15
+schattenleder_schuhe;Schattenlederstiefel;;;ausruestung;schuhe;selten;15;10;leder;;;;;;20;;;6;;5;;;;;;;3;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz leder Stufe 15
+schattenleder_handschuhe;Schattenlederhandschuhe;;;ausruestung;handschuhe;selten;15;10;leder;;;;;;17;;;6;;5;;3;;;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz leder Stufe 15
+schattenleder_armschienen;Schattenlederarmschienen;;;ausruestung;armschienen;selten;15;10;leder;;;;;;14;;;6;;5;;;;;;;3;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz leder Stufe 15
+eisen_helm;Eisenhelm;;;ausruestung;helm;ungewoehnlich;5;1;platte;;;;;;19;;3;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz platte Stufe 5
+eisen_schulter;Eisenschultern;;;ausruestung;schulter;ungewoehnlich;5;1;platte;;;;;;18;;3;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;45;;;;Test #29: Satz platte Stufe 5
+eisen_brust;Eisenbrustplatte;;;ausruestung;brust;ungewoehnlich;5;1;platte;;;;;;24;;4;;;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz platte Stufe 5
+eisen_guertel;Eisengürtel;;;ausruestung;guertel;ungewoehnlich;5;1;platte;;;;;;13;;2;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz platte Stufe 5
+eisen_beine;Eisenbeinschienen;;;ausruestung;beine;ungewoehnlich;5;1;platte;;;;;;22;;4;;;3;;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Satz platte Stufe 5
+eisen_schuhe;Eisenstiefel;;;ausruestung;schuhe;ungewoehnlich;5;1;platte;;;;;;17;;2;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz platte Stufe 5
+eisen_handschuhe;Eisenhandschuhe;;;ausruestung;handschuhe;ungewoehnlich;5;1;platte;;;;;;14;;2;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz platte Stufe 5
+eisen_armschienen;Eisenarmschienen;;;ausruestung;armschienen;ungewoehnlich;5;1;platte;;;;;;12;;2;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;30;;;;Test #29: Satz platte Stufe 5
+stahl_helm;Stahlhelm;;;ausruestung;helm;selten;15;10;platte;;;;;;45;;8;;;6;;;;;;4;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz platte Stufe 15
+stahl_schulter;Stahlschultern;;;ausruestung;schulter;selten;15;10;platte;;;;;;42;;8;;;6;;4;;;;;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Satz platte Stufe 15
+stahl_brust;Stahlbrustplatte;;;ausruestung;brust;selten;15;10;platte;;;;;;56;;10;;;8;;;;;;5;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz platte Stufe 15
+stahl_guertel;Stahlgürtel;;;ausruestung;guertel;selten;15;10;platte;;;;;;31;;6;;;5;;3;;;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz platte Stufe 15
+stahl_beine;Stahlbeinschienen;;;ausruestung;beine;selten;15;10;platte;;;;;;50;;10;;;8;;;;;;5;;;;;nein;nein;beim_anlegen;1;600;;;;Test #29: Satz platte Stufe 15
+stahl_schuhe;Stahlstiefel;;;ausruestung;schuhe;selten;15;10;platte;;;;;;39;;6;;;5;;3;;;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz platte Stufe 15
+stahl_handschuhe;Stahlhandschuhe;;;ausruestung;handschuhe;selten;15;10;platte;;;;;;34;;6;;;5;;;;;;3;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz platte Stufe 15
+stahl_armschienen;Stahlarmschienen;;;ausruestung;armschienen;selten;15;10;platte;;;;;;28;;6;;;5;;3;;;;;;;;;nein;nein;beim_anlegen;1;300;;;;Test #29: Satz platte Stufe 15
+umhang_wolle;Wollumhang;;;ausruestung;umhang;ungewoehnlich;5;1;;;;;;;5;;;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;40;;;;Test #29: Umhang Stufe 5
+umhang_faehrte;Umhang des Fährtenlesers;;;ausruestung;umhang;selten;15;10;;;;;;;12;;;;;5;;4;;;;;;;;;nein;nein;beim_anlegen;1;420;;;;Test #29: Umhang Stufe 15
+dolch_eisen;Eisendolch;;;ausruestung;einhand;ungewoehnlich;5;1;;dolch;einhand;12;17;1,8;;;;2;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp dolch
+schwert_eisen;Eisenschwert;;;ausruestung;einhand;ungewoehnlich;5;1;;schwert;einhand;17;25;2,6;;;2;;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp schwert
+axt_eisen;Eisenaxt;;;ausruestung;einhand;ungewoehnlich;5;1;;axt;einhand;17;25;2,6;;;2;;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp axt
+streitkolben_eisen;Eisenstreitkolben;;;ausruestung;einhand;ungewoehnlich;5;1;;streitkolben;einhand;17;25;2,6;;;;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp streitkolben
+faustwaffe_eisen;Eisenkrallen;;;ausruestung;einhand;ungewoehnlich;5;1;;faustwaffe;einhand;13;19;2;;;;2;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp faustwaffe
+zweihandschwert_eisen;Eiserner Zweihänder;;;ausruestung;zweihand;ungewoehnlich;5;1;;zweihandschwert;zweihand;30;45;3,4;;;4;;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp zweihandschwert
+zweihandaxt_eisen;Eiserne Streitaxt;;;ausruestung;zweihand;ungewoehnlich;5;1;;zweihandaxt;zweihand;31;46;3,5;;;4;;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp zweihandaxt
+kriegshammer_eisen;Eiserner Kriegshammer;;;ausruestung;zweihand;ungewoehnlich;5;1;;kriegshammer;zweihand;32;48;3,6;;;3;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp kriegshammer
+kampfstab_eiche;Eichenstab;;;ausruestung;zweihand;ungewoehnlich;5;1;;kampfstab;zweihand;26;40;3;;;;;3;1;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp kampfstab
+bogen_jagd;Jagdbogen;;;ausruestung;fernkampfwaffe;ungewoehnlich;5;1;;bogen;fernkampf;16;24;2,8;;;;2;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp bogen
+langbogen_eibe;Eibenlangbogen;;;ausruestung;fernkampfwaffe;ungewoehnlich;5;1;;langbogen;fernkampf;17;25;3;;;;2;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp langbogen
+kurzbogen_esche;Eschenkurzbogen;;;ausruestung;fernkampfwaffe;ungewoehnlich;5;1;;kurzbogen;fernkampf;13;20;2,4;;;;2;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp kurzbogen
+armbrust_leicht;Leichte Armbrust;;;ausruestung;fernkampfwaffe;ungewoehnlich;5;1;;armbrust;fernkampf;18;27;3,2;;;;;;2;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp armbrust
+zauberstab_glut;Glutzauberstab;;;ausruestung;zauberstab;ungewoehnlich;5;1;;zauberstab;fernkampf;12;17;1,6;;;;;2;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Waffentyp zauberstab
+dolch_parier;Parierdolch;;;ausruestung;einhand;ungewoehnlich;5;1;;dolch;nebenhand;10;15;1,6;;;;1;;;;;;;;2;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Handhabung Nebenhand (nur mit Beidhändigkeit)
+schwert_kriegs;Kriegsschwert;;;ausruestung;einhand;ungewoehnlich;5;1;;schwert;haupthand;20;30;2,8;;;3;;;;;;;;;;;;;;nein;nein;beim_anlegen;1;75;;;;Test #29: Handhabung Haupthand
+klinge_veteran;Klinge des Veteranen;Getragen von jemandem, der viele Schlachten überlebt hat.;;ausruestung;einhand;episch;25;25;;schwert;einhand;38;58;2,4;;;8;;;6;;5;;;;;;;;;nein;nein;beim_anlegen;1;375;;;;Test #29: Mindeststufe 25
+stab_runen;Runenstab des Lehrlings;;;ausruestung;zweihand;ungewoehnlich;5;1;;kampfstab;zweihand;24;36;3;;;;;4;;2;;;;;;;;;mage;nein;nein;beim_anlegen;1;75;;;;Test #29: Klasseneinschränkung (nur Magier)
+schild_holz;Holzschild;;;ausruestung;schild;ungewoehnlich;5;1;;schild;nebenhand;;;;30;8;;;;1;;;;;;;;;;;nein;nein;beim_anlegen;1;50;;;;Test #29: Schild Stufe 5
+schild_eisen;Eisenbeschlagener Schild;;;ausruestung;schild;selten;15;10;;schild;nebenhand;;;;70;20;2;;;4;;;;;;;;;;;nein;nein;beim_anlegen;1;450;;;;Test #29: Schild Stufe 15
+fokus_kristall;Kristallfokus;;;ausruestung;fokus;ungewoehnlich;5;1;;fokus;nebenhand;;;;;;;;3;;2;;;;;;;;;;nein;nein;beim_anlegen;1;60;;;;Test #29: Fokus
+ring_kupfer;Kupferring;;;ausruestung;ring;ungewoehnlich;5;1;;;;;;;;;;1;;2;;;;;;;;;;;nein;nein;keine;1;70;;;;Test #29: Ring (zweimal anlegbar)
+ring_wachsamkeit;Ring der Wachsamkeit;;;ausruestung;ring;selten;10;1;;;;;;;;;;;;2;;3;;;;;;;;;nein;ja;beim_anlegen;1;250;;;;Test #29: Ring, einzigartig angelegt
+kette_perlen;Flussperlenkette;;;ausruestung;kette;ungewoehnlich;5;1;;;;;;;;;;;2;1;;;;;;;;;;;nein;nein;beim_anlegen;1;80;;;;Test #29: Kette
+siegel_glut;Siegel der Glut;;;ausruestung;siegel;selten;10;1;;;;;;;;;;;;;;;;;;;;;item_siegel_glut;;nein;ja;beim_anlegen;1;300;;;;Test #29: Siegel mit Effekt
+talisman_wolfszahn;Zahn des Rudelführers;;;ausruestung;talisman;selten;10;1;;;;;;;;;;;;;;;;;;;;;item_talisman_wolfszahn;;nein;ja;beim_aufheben;1;200;;Aus dem Maul des grauen Rudelführers, der die Wolfswiese drei Winter lang beherrschte.;;Test #29: Talisman mit Effekt und Herkunft
+talisman_banditenmuenze;Münze des Banditenkönigs;;;ausruestung;talisman;selten;10;1;;;;;;;;;;;;;;;;;;;;;item_talisman_banditenmuenze;;nein;ja;beim_aufheben;1;200;;Der Banditenkönig warf sie, um über Leben und Tod zu entscheiden. Sie fiel nie so, wie er es wollte.;;Test #29: Talisman mit Effekt und Herkunft
+talisman_eberhauer;Hauer des Eisenebers;;;ausruestung;talisman;episch;15;1;;;;;;;;;;;;;;;;;;;;;item_talisman_eberhauer;;ja;ja;beim_aufheben;1;500;;Im dunklen Wald abgebrochen, als der Eisenkeiler einen Jäger zu Boden warf. Der Keiler lebt noch, heißt es.;;Test #29: Talisman mit Effekt und Herkunft, einzigartig (nur einmal im Besitz)

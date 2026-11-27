@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_szcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_sztab"]
+
+[sub_resource type="Resource" id="Resource_sz_slot"]
+script = ExtResource("1_szcol")
+name = "slot"
+type = 5
+required = true
+choices = PackedStringArray("helm", "schulter", "brust", "guertel", "beine", "schuhe", "handschuhe", "armschienen", "umhang", "ring", "kette", "einhand", "zweihand", "schild", "zauberstab", "fokus", "fernkampfwaffe", "siegel", "talisman")
+description = "Gegenstandsart (Spalte slot in gegenstaende.csv)."
+
+[sub_resource type="Resource" id="Resource_sz_hand"]
+script = ExtResource("1_szcol")
+name = "handhabung"
+type = 5
+choices = PackedStringArray("haupthand", "nebenhand", "einhand", "zweihand", "fernkampf")
+description = "Handhabung des Gegenstands; leer = gilt für alle Handhabungen ohne eigene Zeile."
+
+[sub_resource type="Resource" id="Resource_sz_anzeige"]
+script = ExtResource("1_szcol")
+name = "anzeige"
+required = true
+choices = PackedStringArray()
+description = "Text links im Tooltip (z. B. „Brust“, „Zweihand“)."
+
+[sub_resource type="Resource" id="Resource_sz_plaetze"]
+script = ExtResource("1_szcol")
+name = "plaetze"
+type = 7
+required = true
+choices = PackedStringArray()
+ref_table = "ausruestungsplaetze"
+ref_label = "Ausrüstungsplatz"
+item_type = 1
+description = "Ausrüstungsplätze, in die der Gegenstand passt; Rechtsklick nimmt den ersten freien, sonst den ersten."
+
+[sub_resource type="Resource" id="Resource_sz_beide"]
+script = ExtResource("1_szcol")
+name = "belegt_beide_haende"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Belegt Haupt- und Nebenhand (Zweihand); der Gegenstand der Nebenhand wandert in die Tasche."
+
+[sub_resource type="Resource" id="Resource_sz_beid"]
+script = ExtResource("1_szcol")
+name = "nebenhand_nur_beidhaendig"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "In der Nebenhand nur für Klassen mit Beidhändigkeit (klassenausruestung.csv)."
+
+[sub_resource type="Resource" id="Resource_sz_ruestung"]
+script = ExtResource("1_szcol")
+name = "ruestungsklasse_noetig"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Rüstungsteil: braucht eine Rüstungsklasse (die Datenprüfung meldet fehlende)."
+
+[sub_resource type="Resource" id="Resource_sz_unique"]
+script = ExtResource("1_szcol")
+name = "immer_einzigartig_angelegt"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Gilt immer als „Einzigartig angelegt“ (Siegel, Talisman)."
+
+[sub_resource type="Resource" id="Resource_sz_waffen"]
+script = ExtResource("1_szcol")
+name = "waffentypen"
+type = 7
+choices = PackedStringArray()
+ref_table = "waffentypen"
+ref_label = "Waffentyp"
+item_type = 1
+description = "Erlaubte Waffentypen dieser Gegenstandsart; leer = keine Waffe (dann darf kein Waffentyp gesetzt sein)."
+
+[resource]
+script = ExtResource("2_sztab")
+table = "slotzuordnung"
+title = "Slotzuordnung"
+group = "Gegenstände"
+description = "Welche Gegenstandsart in welchen Ausrüstungsplatz passt (#29). Gesucht wird erst die Zeile mit slot und handhabung des Gegenstands, dann die mit leerer handhabung."
+key_columns = PackedStringArray("slot", "handhabung")
+order = 48
+columns = Array[ExtResource("1_szcol")]([SubResource("Resource_sz_slot"), SubResource("Resource_sz_hand"), SubResource("Resource_sz_anzeige"), SubResource("Resource_sz_plaetze"), SubResource("Resource_sz_beide"), SubResource("Resource_sz_beid"), SubResource("Resource_sz_ruestung"), SubResource("Resource_sz_unique"), SubResource("Resource_sz_waffen")])

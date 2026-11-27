@@ -1,21 +1,21 @@
 # Ausrüstungsplätze im Charakterfenster (#19). icon = Bild für den leeren Platz (UI-Paket „Stone & Brass“, englische Dateinamen; Zuordnung siehe docs/ui-assets/german_to_english_icon_ids.csv).
-id;name;icon;notiz
-helm;Helm;res://assets/ui/icons/interface/slot_helm.png;
-kette;Kette;res://assets/ui/icons/interface/slot_necklace.png;
-schulter;Schulter;res://assets/ui/icons/interface/slot_shoulders.png;
-umhang;Umhang;res://assets/ui/icons/interface/slot_cloak.png;
-brust;Brust;res://assets/ui/icons/interface/slot_chest.png;
-armschienen;Armschienen;res://assets/ui/icons/interface/slot_bracers.png;
-handschuhe;Handschuhe;res://assets/ui/icons/interface/slot_gloves.png;
-guertel;Gürtel;res://assets/ui/icons/interface/slot_belt.png;
-beine;Beine;res://assets/ui/icons/interface/slot_legs.png;
-schuhe;Schuhe;res://assets/ui/icons/interface/slot_boots.png;
-ring_1;Ring 1;res://assets/ui/icons/interface/slot_ring.png;
-ring_2;Ring 2;res://assets/ui/icons/interface/slot_ring.png;
-haupthand;Haupthand;res://assets/ui/icons/interface/slot_main_hand.png;
-nebenhand;Nebenhand;res://assets/ui/icons/interface/slot_off_hand.png;
-fernkampf;Fernkampf;res://assets/ui/icons/interface/slot_ranged.png;
-siegel;Siegel;res://assets/ui/icons/interface/slot_seal.png;
-talisman_1;Talisman 1;res://assets/ui/icons/interface/slot_talisman.png;
-talisman_2;Talisman 2;res://assets/ui/icons/interface/slot_talisman.png;
-talisman_3;Talisman 3;res://assets/ui/icons/interface/slot_talisman.png;
+id;name;icon;im_kampf_wechselbar;notiz
+helm;Helm;res://assets/ui/icons/interface/slot_helm.png;nein;
+kette;Kette;res://assets/ui/icons/interface/slot_necklace.png;nein;
+schulter;Schulter;res://assets/ui/icons/interface/slot_shoulders.png;nein;
+umhang;Umhang;res://assets/ui/icons/interface/slot_cloak.png;nein;
+brust;Brust;res://assets/ui/icons/interface/slot_chest.png;nein;
+armschienen;Armschienen;res://assets/ui/icons/interface/slot_bracers.png;nein;
+handschuhe;Handschuhe;res://assets/ui/icons/interface/slot_gloves.png;nein;
+guertel;Gürtel;res://assets/ui/icons/interface/slot_belt.png;nein;
+beine;Beine;res://assets/ui/icons/interface/slot_legs.png;nein;
+schuhe;Schuhe;res://assets/ui/icons/interface/slot_boots.png;nein;
+ring_1;Ring 1;res://assets/ui/icons/interface/slot_ring.png;nein;
+ring_2;Ring 2;res://assets/ui/icons/interface/slot_ring.png;nein;
+haupthand;Haupthand;res://assets/ui/icons/interface/slot_main_hand.png;ja;
+nebenhand;Nebenhand;res://assets/ui/icons/interface/slot_off_hand.png;ja;
+fernkampf;Fernkampf;res://assets/ui/icons/interface/slot_ranged.png;ja;
+siegel;Siegel;res://assets/ui/icons/interface/slot_seal.png;nein;
+talisman_1;Talisman 1;res://assets/ui/icons/interface/slot_talisman.png;nein;
+talisman_2;Talisman 2;res://assets/ui/icons/interface/slot_talisman.png;nein;
+talisman_3;Talisman 3;res://assets/ui/icons/interface/slot_talisman.png;nein;

@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://d2e22pxmdkf3k"
+
+[deps]
+
+source_file="res://data/tables/klassenausruestung.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

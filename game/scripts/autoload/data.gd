@@ -236,6 +236,39 @@ func ausruestungsplatz(id: StringName) -> TableRow:
 	return row("ausruestungsplaetze", id)
 
 
+## Alle Ausrüstungsplätze in Tabellenreihenfolge (#29).
+func ausruestungsplaetze() -> Array[TableRow]:
+	var result: Array[TableRow] = []
+	result.assign(rows("ausruestungsplaetze"))
+	return result
+
+
+## Waffentyp (#29) aus waffentypen.csv oder null.
+func waffentyp(id: StringName) -> TableRow:
+	return row("waffentypen", id)
+
+
+## Rüstungsklasse (#29) aus ruestungsklassen.csv oder null.
+func ruestungsklasse(id: StringName) -> TableRow:
+	return row("ruestungsklassen", id)
+
+
+## Was eine Klasse tragen darf (#29) aus klassenausruestung.csv oder null.
+func klassenausruestung(klasse: StringName) -> TableRow:
+	return row("klassenausruestung", klasse)
+
+
+## Zuordnung einer Gegenstandsart zu Ausrüstungsplätzen (#29) aus
+## slotzuordnung.csv: erst slot + handhabung, sonst slot mit leerer
+## handhabung; null, wenn keine passt.
+func slotzuordnung(slot: StringName, handhabung: StringName = &"") -> TableRow:
+	if handhabung != &"":
+		var exact := row("slotzuordnung", [slot, handhabung])
+		if exact != null:
+			return exact
+	return row("slotzuordnung", [slot, ""])
+
+
 ## Gegenstandstyp (#18) aus gegenstandstypen.csv oder null.
 func gegenstandstyp(id: StringName) -> TableRow:
 	return row("gegenstandstypen", id)
@@ -362,6 +395,20 @@ func _ensure_loaded() -> void:
 		_print_errors(_data.errors)
 
 
+## Warnungen der Datenprüfung (#29), z. B. leere Rüstung, die als 0 zählt.
+func get_warnings() -> Array[DataError]:
+	_ensure_loaded()
+	return _data.warnings
+
+
+func _print_warnings(warnings: Array[DataError]) -> void:
+	if warnings.is_empty():
+		return
+	print("Daten: %d Warnungen:" % warnings.size())
+	for w in warnings:
+		print("  " + w.to_text())
+
+
 func _print_errors(errors: Array[DataError]) -> void:
 	printerr("Daten: %d Fehler in den Tabellen:" % errors.size())
 	for e in errors:
@@ -398,8 +445,10 @@ func _run_command_line(check: bool, doc: bool) -> void:
 		else:
 			print("Daten-Doku geschrieben: " + path)
 	if check:
+		_print_warnings(_data.warnings)
 		if _valid:
-			print("Datenprüfung: alles in Ordnung (%d Tabellen, Prüfsumme %s)." % [_data.schemas.size(), short_checksum()])
+			print("Datenprüfung: alles in Ordnung (%d Tabellen, Prüfsumme %s, %d Warnungen)." % [
+					_data.schemas.size(), short_checksum(), _data.warnings.size()])
 		else:
 			print("Datenprüfung: %d Fehler gefunden (Liste oben)." % _last_errors.size())
 			code = 1

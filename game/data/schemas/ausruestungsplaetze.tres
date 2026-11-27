@@ -24,12 +24,20 @@ name = "icon"
 choices = PackedStringArray()
 description = "Pfad zum Bild des leeren Platzes (englischer Dateiname aus dem UI-Paket); leer = nur der Rahmen."
 
+[sub_resource type="Resource" id="Resource_ap_kampf"]
+script = ExtResource("1_apcol")
+name = "im_kampf_wechselbar"
+type = 4
+default_value = "nein"
+choices = PackedStringArray()
+description = "Waffenplatz (#29): darf im Kampf gewechselt werden (ohne laufenden globalen Cooldown oder Zauber; startet den globalen Cooldown). Alle anderen Plätze sind im Kampf gesperrt."
+
 [resource]
 script = ExtResource("2_aptab")
 table = "ausruestungsplaetze"
 title = "Ausrüstungsplätze"
 group = "Gegenstände"
-description = "Ausrüstungsplätze im Charakterfenster (#19) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket."
+description = "Ausrüstungsplätze im Charakterfenster (#19, seit #29 mit angelegten Gegenständen) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket."
 key_columns = PackedStringArray("id")
 order = 44
-columns = Array[ExtResource("1_apcol")]([SubResource("Resource_ap_id"), SubResource("Resource_ap_name"), SubResource("Resource_ap_icon")])
+columns = Array[ExtResource("1_apcol")]([SubResource("Resource_ap_id"), SubResource("Resource_ap_name"), SubResource("Resource_ap_icon"), SubResource("Resource_ap_kampf")])

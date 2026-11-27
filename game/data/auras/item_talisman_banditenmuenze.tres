@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="1_aura"]
+[ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="2_mod"]
+
+[sub_resource type="Resource" id="Resource_muenze_speed"]
+script = ExtResource("2_mod")
+stat = &"movement_speed"
+value = 5.0
+
+[resource]
+script = ExtResource("1_aura")
+id = &"item_talisman_banditenmuenze"
+display_name = "Münze des Banditenkönigs"
+description = "Anlegen: +5 % Laufgeschwindigkeit."
+hidden = true
+cancelable = false
+stat_modifiers = Array[ExtResource("2_mod")]([SubResource("Resource_muenze_speed")])

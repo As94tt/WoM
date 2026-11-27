@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AuraData" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_eff"]
+[ext_resource type="Script" path="res://scripts/combat/proc_data.gd" id="2_proc"]
+[ext_resource type="Script" path="res://scripts/combat/effects/damage_effect.gd" id="3_dmg"]
+[ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="4_aura"]
+
+[sub_resource type="Resource" id="Resource_glut_dmg"]
+script = ExtResource("3_dmg")
+school = &"feuer"
+base_amount = 40.0
+
+[sub_resource type="Resource" id="Resource_glut_proc"]
+script = ExtResource("2_proc")
+chance = 10.0
+internal_cooldown = 1.0
+effects = Array[ExtResource("1_eff")]([SubResource("Resource_glut_dmg")])
+
+[resource]
+script = ExtResource("4_aura")
+id = &"item_siegel_glut"
+display_name = "Siegel der Glut"
+description = "Treffer: 10 % Chance, dem Ziel 40 Feuerschaden zuzufügen."
+hidden = true
+cancelable = false
+procs = Array[ExtResource("2_proc")]([SubResource("Resource_glut_proc")])
