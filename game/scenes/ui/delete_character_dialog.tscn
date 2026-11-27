@@ -39,7 +39,7 @@ theme_type_variation = &"ButtonList"
 
 [node name="TitleLabel" type="Label" parent="Center/Panel/Content"]
 layout_mode = 2
-theme_type_variation = &"WindowTitle"
+theme_type_variation = &"PanelTitle"
 text = "Charakter löschen"
 
 [node name="MessageLabel" type="Label" parent="Center/Panel/Content"]

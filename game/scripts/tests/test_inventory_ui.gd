@@ -67,7 +67,10 @@ func test_platz_zeigt_gegenstand() -> void:
 	_inv.add_item(&"wolfsfell", 7)
 	_inv.add_item(&"lederkappe")
 	var fell := _panel.get_item_slot(0, 0)
-	check_equal(fell.text, "Wo", "Kürzel als Platzhalter-Icon")
+	# Seit dem UI-Paket haben die Testgegenstände Icons (Spalte icon); ohne
+	# Icon stünde wie bisher das Kürzel da.
+	check(fell.icon != null and fell.text == "", "Icon aus der Spalte icon statt Kürzel")
+	check_equal(fell.icon, ItemInfo.icon(&"wolfsfell"), "Icon des Gegenstands")
 	var count: Label = fell.get_node("%Count")
 	check(count.visible and count.text == "7", "Anzahl unten rechts")
 	check(not (fell.get_node("%RarityFrame") as Panel).visible, "Kein Rahmen bei Gewöhnlich")
@@ -77,6 +80,17 @@ func test_platz_zeigt_gegenstand() -> void:
 	check_equal(frame.self_modulate, ItemInfo.rarity_color(&"lederkappe"), "Rahmen in Seltenheitsfarbe")
 	check(not (kappe.get_node("%Count") as Label).visible, "Keine Anzahl bei 1")
 	check_equal(_panel.get_item_slot(0, 2).text, "", "Leerer Platz ohne Text")
+
+
+## UI-Paket: Jeder eingetragene Icon-Pfad (Gegenstände, Ausrüstungsplätze,
+## Schadensschulen) zeigt auf eine vorhandene Grafik; deutsche IDs bleiben.
+func test_icon_pfade_aus_den_daten() -> void:
+	for table in ["gegenstaende", "ausruestungsplaetze", "schadensschulen"]:
+		for r: TableRow in Data.rows(table):
+			var path := str(r.get_value("icon", ""))
+			check(path == "" or ResourceLoader.exists(path), "%s: Icon %s fehlt" % [table, path])
+	check(Data.ausruestungsplatz(&"helm") != null, "Ausrüstungsplatz helm vorhanden")
+	check(ItemInfo.icon(&"wolfsfell") != null, "Wolfsfell hat ein Icon")
 
 
 func test_tooltip() -> void:
@@ -102,7 +116,7 @@ func test_tasche_anlegen_ueber_taschenleiste() -> void:
 	check(bag_slot._can_drop_data(Vector2.ZERO, drag), "Tasche passt auf den Taschenplatz")
 	bag_slot._drop_data(Vector2.ZERO, drag)
 	check_equal(_inv.get_bag(1), &"tasche_klein", "Tasche angelegt")
-	check_equal(bag_slot.text, "KB", "Taschenplatz zeigt die Tasche (Kürzel)")
+	check_equal(bag_slot.icon, ItemInfo.icon(&"tasche_klein"), "Taschenplatz zeigt die Tasche (Icon)")
 	check_equal(_hud.get_free_slot_text(), "22", "16 + 6 frei")
 	check(_panel.get_item_slot(1, 5) != null, "Neue Gruppe mit 6 Plätzen")
 	check_equal(_panel.get_group_title(1), "Kleiner Beutel (6 / 6 frei)", "Gruppe heißt wie die Tasche")

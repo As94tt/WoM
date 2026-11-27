@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45474a"/><stop offset="0.48" stop-color="#272a2d"/><stop offset="1" stop-color="#171b1f"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#20252a"/><stop offset="1" stop-color="#101419"/></linearGradient>
+<linearGradient id="brass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2bb88"/><stop offset="0.43" stop-color="#a68c5d"/><stop offset="1" stop-color="#635038"/></linearGradient>
+<linearGradient id="whitish" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#b8b8b8"/></linearGradient>
+</defs><rect x="2" y="2" width="44" height="44" rx="3" fill="none" stroke="white" stroke-width="2" opacity=".95"/><path d="M 3 10 V 3 H 10 M 38 3 H 45 V 10" fill="none" stroke="white" stroke-width="1"/></svg>

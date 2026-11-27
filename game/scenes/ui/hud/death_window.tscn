@@ -22,7 +22,7 @@ theme_type_variation = &"ButtonList"
 
 [node name="TitleLabel" type="Label" parent="Content"]
 layout_mode = 2
-theme_type_variation = &"WindowTitle"
+theme_type_variation = &"PanelTitle"
 text = "Ihr seid gestorben"
 horizontal_alignment = 1
 

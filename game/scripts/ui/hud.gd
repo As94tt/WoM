@@ -180,10 +180,11 @@ func set_window_hint(window_id: StringName, on: bool, hint := "") -> void:
 		dot.theme_type_variation = &"MenuHintDot"
 		dot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dot.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-		dot.offset_left = -HINT_DOT_SIZE - 2.0
-		dot.offset_right = -2.0
-		dot.offset_top = 2.0
-		dot.offset_bottom = HINT_DOT_SIZE + 2.0
+		# Menüleisten-Buttons sind nur 20 px breit: Punkt bündig in die Ecke.
+		dot.offset_left = -HINT_DOT_SIZE
+		dot.offset_right = 0.0
+		dot.offset_top = 0.0
+		dot.offset_bottom = HINT_DOT_SIZE
 		button.add_child(dot)
 	if dot != null:
 		dot.visible = on

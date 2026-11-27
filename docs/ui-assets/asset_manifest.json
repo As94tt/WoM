@@ -1,0 +1,2898 @@
+{
+  "pack_name": "WoM Stone & Brass UI Assets",
+  "version": "0.9-design-pack",
+  "created_utc": "2026-11-27",
+  "base_resolution": [
+    1920,
+    1080
+  ],
+  "target_engine": "Godot (exact version to be verified from project.godot)",
+  "image_encoding": "PNG RGBA 8-bit/channel, sRGB display intent",
+  "nine_slice_order": "left,top,right,bottom in source pixels (texture margins, not content margins)",
+  "design": {
+    "palette": {
+      "ink": "#111519",
+      "stone": "#262a2d",
+      "stone_hi": "#414448",
+      "gold": "#a48b5e",
+      "gold_hi": "#d0b781",
+      "metal": "#909092",
+      "text": "#e5d8ba",
+      "white": "#ffffff"
+    },
+    "principles": [
+      "charcoal stone",
+      "matte restrained brass",
+      "slim slots",
+      "no runes",
+      "minimal distraction",
+      "use UI theme tints for status and resource fills"
+    ]
+  },
+  "resource_color_suggestions_only": {
+    "health": "#A53238",
+    "mana": "#2C68B0",
+    "energy": "#C5A434",
+    "rage": "#B87935",
+    "ki": "#3A9690"
+  },
+  "important": "UI-STYLEGUIDE.md and actual game data were NOT included. Verify approved rarity colors/class tokens against the repository before using proposals. No proprietary game assets included.",
+  "non_image_tasks": [
+    "Fonts are intentionally not bundled. Obtain appropriate SIL OFL font family directly from original distributor.",
+    "Dim overlay and unusable-item tint use Godot ColorRect/Modulate; no image.",
+    "Live character/NPC portraits must come from game models or approved character art."
+  ],
+  "mouse_hotspots": {
+    "cursors/standard_32.png": [
+      2,
+      2
+    ],
+    "cursors/standard_48.png": [
+      3,
+      3
+    ],
+    "cursors/attack_32.png": [
+      2,
+      2
+    ],
+    "cursors/attack_48.png": [
+      3,
+      3
+    ],
+    "cursors/talk_32.png": [
+      2,
+      2
+    ],
+    "cursors/talk_48.png": [
+      3,
+      3
+    ],
+    "cursors/merchant_32.png": [
+      2,
+      2
+    ],
+    "cursors/merchant_48.png": [
+      3,
+      3
+    ],
+    "cursors/trainer_32.png": [
+      2,
+      2
+    ],
+    "cursors/trainer_48.png": [
+      3,
+      3
+    ],
+    "cursors/loot_32.png": [
+      2,
+      2
+    ],
+    "cursors/loot_48.png": [
+      3,
+      3
+    ],
+    "cursors/interact_32.png": [
+      2,
+      2
+    ],
+    "cursors/interact_48.png": [
+      3,
+      3
+    ],
+    "cursors/unavailable_32.png": [
+      2,
+      2
+    ],
+    "cursors/unavailable_48.png": [
+      3,
+      3
+    ]
+  },
+  "assets": [
+    {
+      "path": "frames/window_panel.png",
+      "width": 480,
+      "height": 352,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        18,
+        35,
+        18,
+        18
+      ],
+      "theme_tint": false,
+      "notes": "Title zone 35px; content 16px padding; separate close button",
+      "source": "frames/window_panel.svg"
+    },
+    {
+      "path": "frames/dialog_panel.png",
+      "width": 480,
+      "height": 320,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        22,
+        42,
+        22,
+        22
+      ],
+      "theme_tint": false,
+      "notes": "24px inner content padding",
+      "source": "frames/dialog_panel.svg"
+    },
+    {
+      "path": "frames/tooltip_panel.png",
+      "width": 300,
+      "height": 176,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Dark background, slim 1px brass border; 8px horizontal/4px vertical padding",
+      "source": "frames/tooltip_panel.svg"
+    },
+    {
+      "path": "frames/button_normal.png",
+      "width": 192,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/button_normal.svg"
+    },
+    {
+      "path": "frames/button_hover.png",
+      "width": 192,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/button_hover.svg"
+    },
+    {
+      "path": "frames/button_pressed.png",
+      "width": 192,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/button_pressed.svg"
+    },
+    {
+      "path": "frames/button_disabled.png",
+      "width": 192,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/button_disabled.svg"
+    },
+    {
+      "path": "frames/button_focus.png",
+      "width": 192,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/button_focus.svg"
+    },
+    {
+      "path": "frames/enter_world_button_normal.png",
+      "width": 280,
+      "height": 56,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/enter_world_button_normal.svg"
+    },
+    {
+      "path": "frames/enter_world_button_hover.png",
+      "width": 280,
+      "height": 56,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/enter_world_button_hover.svg"
+    },
+    {
+      "path": "frames/enter_world_button_pressed.png",
+      "width": 280,
+      "height": 56,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/enter_world_button_pressed.svg"
+    },
+    {
+      "path": "frames/enter_world_button_disabled.png",
+      "width": 280,
+      "height": 56,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/enter_world_button_disabled.svg"
+    },
+    {
+      "path": "frames/enter_world_button_focus.png",
+      "width": 280,
+      "height": 56,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/enter_world_button_focus.svg"
+    },
+    {
+      "path": "frames/list_entry_normal.png",
+      "width": 320,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/list_entry_normal.svg"
+    },
+    {
+      "path": "frames/list_entry_hover.png",
+      "width": 320,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/list_entry_hover.svg"
+    },
+    {
+      "path": "frames/list_entry_selected.png",
+      "width": 320,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/list_entry_selected.svg"
+    },
+    {
+      "path": "frames/list_entry_disabled.png",
+      "width": 320,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/list_entry_disabled.svg"
+    },
+    {
+      "path": "frames/choice_button_normal.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/choice_button_normal.svg"
+    },
+    {
+      "path": "frames/choice_button_hover.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/choice_button_hover.svg"
+    },
+    {
+      "path": "frames/choice_button_selected.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/choice_button_selected.svg"
+    },
+    {
+      "path": "frames/choice_button_disabled.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/choice_button_disabled.svg"
+    },
+    {
+      "path": "frames/choice_button_focus.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/choice_button_focus.svg"
+    },
+    {
+      "path": "frames/log_tab_normal.png",
+      "width": 120,
+      "height": 34,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/log_tab_normal.svg"
+    },
+    {
+      "path": "frames/log_tab_hover.png",
+      "width": 120,
+      "height": 34,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/log_tab_hover.svg"
+    },
+    {
+      "path": "frames/log_tab_selected.png",
+      "width": 120,
+      "height": 34,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/log_tab_selected.svg"
+    },
+    {
+      "path": "frames/log_tab_disabled.png",
+      "width": 120,
+      "height": 34,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        6,
+        8,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/log_tab_disabled.svg"
+    },
+    {
+      "path": "frames/locked_choice_button_normal.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/locked_choice_button_normal.svg"
+    },
+    {
+      "path": "frames/locked_choice_button_hover.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/locked_choice_button_hover.svg"
+    },
+    {
+      "path": "frames/locked_choice_button_selected.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/locked_choice_button_selected.svg"
+    },
+    {
+      "path": "frames/locked_choice_button_disabled.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/locked_choice_button_disabled.svg"
+    },
+    {
+      "path": "frames/locked_choice_button_focus.png",
+      "width": 160,
+      "height": 42,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        8,
+        7,
+        8,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/locked_choice_button_focus.svg"
+    },
+    {
+      "path": "frames/input_field_normal.png",
+      "width": 320,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/input_field_normal.svg"
+    },
+    {
+      "path": "frames/input_field_focus.png",
+      "width": 320,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/input_field_focus.svg"
+    },
+    {
+      "path": "frames/input_field_disabled.png",
+      "width": 320,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "Keep text/icon as separate Godot controls",
+      "source": "frames/input_field_disabled.svg"
+    },
+    {
+      "path": "frames/slot_40_normal.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_40_normal.svg"
+    },
+    {
+      "path": "frames/slot_40_hover.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_40_hover.svg"
+    },
+    {
+      "path": "frames/slot_40_pressed.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_40_pressed.svg"
+    },
+    {
+      "path": "frames/slot_40_disabled.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_40_disabled.svg"
+    },
+    {
+      "path": "frames/slot_40_focus.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_40_focus.svg"
+    },
+    {
+      "path": "frames/item_rarity_frame_40.png",
+      "width": 40,
+      "height": 40,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "White alpha: modulate with exact rarity color from UI-STYLEGUIDE",
+      "source": "frames/item_rarity_frame_40.svg"
+    },
+    {
+      "path": "frames/slot_48_normal.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_48_normal.svg"
+    },
+    {
+      "path": "frames/slot_48_hover.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_48_hover.svg"
+    },
+    {
+      "path": "frames/slot_48_pressed.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_48_pressed.svg"
+    },
+    {
+      "path": "frames/slot_48_disabled.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_48_disabled.svg"
+    },
+    {
+      "path": "frames/slot_48_focus.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "theme_tint": false,
+      "notes": "Slim 1-2px edges; icon is drawn separately and should fill center",
+      "source": "frames/slot_48_focus.svg"
+    },
+    {
+      "path": "frames/item_rarity_frame_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "White alpha: modulate with exact rarity color from UI-STYLEGUIDE",
+      "source": "frames/item_rarity_frame_48.svg"
+    },
+    {
+      "path": "frames/slot_flash.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Animate opacity 1->0 over 0.25s; draw above slot",
+      "source": "frames/slot_flash.svg"
+    },
+    {
+      "path": "frames/slot_active.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/slot_active.svg"
+    },
+    {
+      "path": "frames/talent_pending.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "",
+      "source": "frames/talent_pending.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_00.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_00.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_01.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_01.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_02.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_02.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_03.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_03.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_04.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_04.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_05.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_05.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_06.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_06.svg"
+    },
+    {
+      "path": "frames/slot_proc_glow_07.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "animation_frame",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "8 frames at approx 10 FPS; anchored center on 48px slot",
+      "source": "frames/slot_proc_glow_07.svg"
+    },
+    {
+      "path": "frames/cooldown_sweep_mask.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Use Godot radial progress/shader for actual moving sweep; static darkness texture only",
+      "source": "frames/cooldown_sweep_mask.svg"
+    },
+    {
+      "path": "frames/unit_frame_player.png",
+      "width": 340,
+      "height": 90,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Fixed 340x90. Add live portrait at x=8, y=18, 54x54. Names and bars separate. No 9-slice.",
+      "source": "frames/unit_frame_player.svg"
+    },
+    {
+      "path": "frames/unit_frame_target.png",
+      "width": 340,
+      "height": 90,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Fixed 340x90. Add live portrait at x=278, y=18, 54x54. Names and bars separate. No 9-slice.",
+      "source": "frames/unit_frame_target.svg"
+    },
+    {
+      "path": "frames/unit_portrait_frame.png",
+      "width": 64,
+      "height": 64,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Put over live-rendered portrait or texture",
+      "source": "frames/unit_portrait_frame.svg"
+    },
+    {
+      "path": "frames/unit_badge.png",
+      "width": 120,
+      "height": 20,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        6,
+        4,
+        6,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Badge TEXT lives on top (elite, rare, boss, combat, uninterruptible)",
+      "source": "frames/unit_badge.svg"
+    },
+    {
+      "path": "frames/nameplate_normal.png",
+      "width": 140,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Warning also uses dashed line: color alone does not convey status",
+      "source": "frames/nameplate_normal.svg"
+    },
+    {
+      "path": "frames/nameplate_target.png",
+      "width": 140,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Warning also uses dashed line: color alone does not convey status",
+      "source": "frames/nameplate_target.svg"
+    },
+    {
+      "path": "frames/nameplate_warning.png",
+      "width": 140,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Warning also uses dashed line: color alone does not convey status",
+      "source": "frames/nameplate_warning.svg"
+    },
+    {
+      "path": "frames/nameplate_target_warning.png",
+      "width": 140,
+      "height": 40,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "theme_tint": false,
+      "notes": "Warning also uses dashed line: color alone does not convey status",
+      "source": "frames/nameplate_target_warning.svg"
+    },
+    {
+      "path": "frames/aura_buff_20.png",
+      "width": 20,
+      "height": 20,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_buff_20.svg"
+    },
+    {
+      "path": "frames/aura_debuff_20.png",
+      "width": 20,
+      "height": 20,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_debuff_20.svg"
+    },
+    {
+      "path": "frames/aura_buff_24.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_buff_24.svg"
+    },
+    {
+      "path": "frames/aura_debuff_24.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_debuff_24.svg"
+    },
+    {
+      "path": "frames/aura_buff_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_buff_32.svg"
+    },
+    {
+      "path": "frames/aura_debuff_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_debuff_32.svg"
+    },
+    {
+      "path": "frames/aura_buff_36.png",
+      "width": 36,
+      "height": 36,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_buff_36.svg"
+    },
+    {
+      "path": "frames/aura_debuff_36.png",
+      "width": 36,
+      "height": 36,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Debuff white for category modulate; tighter buff framing",
+      "source": "frames/aura_debuff_36.svg"
+    },
+    {
+      "path": "frames/checkbox_off.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/checkbox_off.svg"
+    },
+    {
+      "path": "frames/checkbox_on.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/checkbox_on.svg"
+    },
+    {
+      "path": "frames/checkbox_hover.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/checkbox_hover.svg"
+    },
+    {
+      "path": "frames/checkbox_disabled.png",
+      "width": 24,
+      "height": 24,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/checkbox_disabled.svg"
+    },
+    {
+      "path": "frames/scroll_track.png",
+      "width": 16,
+      "height": 160,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        8,
+        5,
+        8
+      ],
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/scroll_track.svg"
+    },
+    {
+      "path": "frames/scroll_thumb_normal.png",
+      "width": 14,
+      "height": 44,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        4,
+        7,
+        4,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/scroll_thumb_normal.svg"
+    },
+    {
+      "path": "frames/scroll_thumb_hover.png",
+      "width": 14,
+      "height": 44,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        4,
+        7,
+        4,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/scroll_thumb_hover.svg"
+    },
+    {
+      "path": "frames/scroll_thumb_dragged.png",
+      "width": 14,
+      "height": 44,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        4,
+        7,
+        4,
+        7
+      ],
+      "theme_tint": false,
+      "notes": "",
+      "source": "frames/scroll_thumb_dragged.svg"
+    },
+    {
+      "path": "frames/action_bar_shell.png",
+      "width": 600,
+      "height": 56,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "SHELL ONLY. Overlay 12 slot_48 assets at 0 gap; rescale when using 20x40 menu buttons. Bar centered end caps, avoid extra ornaments.",
+      "source": "frames/action_bar_shell.svg"
+    },
+    {
+      "path": "frames/menu_bar_shell.png",
+      "width": 236,
+      "height": 44,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "SHELL ONLY. Overlay 11 slot_40 assets at 0 gap; rescale when using 20x40 menu buttons. Bar centered end caps, avoid extra ornaments.",
+      "source": "frames/menu_bar_shell.svg"
+    },
+    {
+      "path": "frames/menu_button_20x40_normal.png",
+      "width": 20,
+      "height": 40,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.",
+      "source": "frames/menu_button_20x40_normal.svg"
+    },
+    {
+      "path": "frames/menu_button_20x40_hover.png",
+      "width": 20,
+      "height": 40,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.",
+      "source": "frames/menu_button_20x40_hover.svg"
+    },
+    {
+      "path": "frames/menu_button_20x40_pressed.png",
+      "width": 20,
+      "height": 40,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.",
+      "source": "frames/menu_button_20x40_pressed.svg"
+    },
+    {
+      "path": "frames/menu_button_20x40_disabled.png",
+      "width": 20,
+      "height": 40,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.",
+      "source": "frames/menu_button_20x40_disabled.svg"
+    },
+    {
+      "path": "frames/menu_button_20x40_focus.png",
+      "width": 20,
+      "height": 40,
+      "priority": "P1",
+      "kind": "fixed",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.",
+      "source": "frames/menu_button_20x40_focus.svg"
+    },
+    {
+      "path": "bars/health_background.png",
+      "width": 240,
+      "height": 22,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/health_background.svg"
+    },
+    {
+      "path": "bars/health_fill_white.png",
+      "width": 240,
+      "height": 22,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/health_fill_white.svg"
+    },
+    {
+      "path": "bars/health_nameplate_background.png",
+      "width": 120,
+      "height": 8,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/health_nameplate_background.svg"
+    },
+    {
+      "path": "bars/health_nameplate_fill_white.png",
+      "width": 120,
+      "height": 8,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/health_nameplate_fill_white.svg"
+    },
+    {
+      "path": "bars/resource_background.png",
+      "width": 240,
+      "height": 18,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/resource_background.svg"
+    },
+    {
+      "path": "bars/resource_fill_white.png",
+      "width": 240,
+      "height": 18,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/resource_fill_white.svg"
+    },
+    {
+      "path": "bars/secondary_resource_background.png",
+      "width": 240,
+      "height": 8,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/secondary_resource_background.svg"
+    },
+    {
+      "path": "bars/secondary_resource_fill_white.png",
+      "width": 240,
+      "height": 8,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/secondary_resource_fill_white.svg"
+    },
+    {
+      "path": "bars/cast_player_background.png",
+      "width": 360,
+      "height": 22,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/cast_player_background.svg"
+    },
+    {
+      "path": "bars/cast_player_fill_white.png",
+      "width": 360,
+      "height": 22,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/cast_player_fill_white.svg"
+    },
+    {
+      "path": "bars/cast_target_background.png",
+      "width": 240,
+      "height": 18,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/cast_target_background.svg"
+    },
+    {
+      "path": "bars/cast_target_fill_white.png",
+      "width": 240,
+      "height": 18,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/cast_target_fill_white.svg"
+    },
+    {
+      "path": "bars/cast_nameplate_background.png",
+      "width": 120,
+      "height": 14,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/cast_nameplate_background.svg"
+    },
+    {
+      "path": "bars/cast_nameplate_fill_white.png",
+      "width": 120,
+      "height": 14,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/cast_nameplate_fill_white.svg"
+    },
+    {
+      "path": "bars/experience_background.png",
+      "width": 640,
+      "height": 10,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/experience_background.svg"
+    },
+    {
+      "path": "bars/experience_fill_white.png",
+      "width": 640,
+      "height": 10,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/experience_fill_white.svg"
+    },
+    {
+      "path": "bars/boss_health_background.png",
+      "width": 600,
+      "height": 24,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": false,
+      "notes": "Background only. Frame/track; does not encode current value",
+      "source": "bars/boss_health_background.svg"
+    },
+    {
+      "path": "bars/boss_health_fill_white.png",
+      "width": 600,
+      "height": 24,
+      "priority": "P1",
+      "kind": "nine_slice",
+      "nine_slice": [
+        5,
+        4,
+        5,
+        4
+      ],
+      "theme_tint": true,
+      "notes": "White/gray fill; modulate per resource type, update progress ratio at runtime",
+      "source": "bars/boss_health_fill_white.svg"
+    },
+    {
+      "path": "bars/cast_edge_marker.png",
+      "width": 10,
+      "height": 22,
+      "priority": "P1",
+      "kind": "overlay",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "",
+      "source": "bars/cast_edge_marker.svg"
+    },
+    {
+      "path": "overlays/level_up_banner.png",
+      "width": 480,
+      "height": 84,
+      "priority": "P2",
+      "kind": "nine_slice",
+      "nine_slice": [
+        24,
+        20,
+        24,
+        20
+      ],
+      "theme_tint": false,
+      "notes": "Decorative textless backing; text on separate Godot label",
+      "source": "overlays/level_up_banner.svg"
+    },
+    {
+      "path": "overlays/rare_loot_banner.png",
+      "width": 480,
+      "height": 68,
+      "priority": "P2",
+      "kind": "nine_slice",
+      "nine_slice": [
+        24,
+        20,
+        24,
+        20
+      ],
+      "theme_tint": false,
+      "notes": "Decorative textless backing; text on separate Godot label",
+      "source": "overlays/rare_loot_banner.svg"
+    },
+    {
+      "path": "icons/interface/menu_character.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_character.svg"
+    },
+    {
+      "path": "icons/interface/menu_spellbook.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_spellbook.svg"
+    },
+    {
+      "path": "icons/interface/menu_talents.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_talents.svg"
+    },
+    {
+      "path": "icons/interface/menu_map.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_map.svg"
+    },
+    {
+      "path": "icons/interface/menu_game.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_game.svg"
+    },
+    {
+      "path": "icons/interface/bag_backpack.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/bag_backpack.svg"
+    },
+    {
+      "path": "icons/interface/bag_slot_empty.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/bag_slot_empty.svg"
+    },
+    {
+      "path": "icons/interface/window_close.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/window_close.svg"
+    },
+    {
+      "path": "icons/interface/page_prev.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/page_prev.svg"
+    },
+    {
+      "path": "icons/interface/page_next.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/page_next.svg"
+    },
+    {
+      "path": "icons/interface/stats_show.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/stats_show.svg"
+    },
+    {
+      "path": "icons/interface/stats_hide.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/stats_hide.svg"
+    },
+    {
+      "path": "icons/interface/cast_uninterruptible.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/cast_uninterruptible.svg"
+    },
+    {
+      "path": "icons/interface/state_combat.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/state_combat.svg"
+    },
+    {
+      "path": "icons/interface/rank_elite.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/rank_elite.svg"
+    },
+    {
+      "path": "icons/interface/rank_rare.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/rank_rare.svg"
+    },
+    {
+      "path": "icons/interface/rank_boss.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/rank_boss.svg"
+    },
+    {
+      "path": "icons/interface/lock.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/lock.svg"
+    },
+    {
+      "path": "icons/interface/coin_gold.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/coin_gold.svg"
+    },
+    {
+      "path": "icons/interface/coin_silver.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/coin_silver.svg"
+    },
+    {
+      "path": "icons/interface/coin_copper.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/coin_copper.svg"
+    },
+    {
+      "path": "icons/interface/menu_hint.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_hint.svg"
+    },
+    {
+      "path": "icons/interface/slot_helm.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_helm.svg"
+    },
+    {
+      "path": "icons/interface/slot_necklace.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_necklace.svg"
+    },
+    {
+      "path": "icons/interface/slot_shoulders.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_shoulders.svg"
+    },
+    {
+      "path": "icons/interface/slot_cloak.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_cloak.svg"
+    },
+    {
+      "path": "icons/interface/slot_chest.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_chest.svg"
+    },
+    {
+      "path": "icons/interface/slot_bracers.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_bracers.svg"
+    },
+    {
+      "path": "icons/interface/slot_gloves.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_gloves.svg"
+    },
+    {
+      "path": "icons/interface/slot_belt.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_belt.svg"
+    },
+    {
+      "path": "icons/interface/slot_legs.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_legs.svg"
+    },
+    {
+      "path": "icons/interface/slot_boots.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_boots.svg"
+    },
+    {
+      "path": "icons/interface/slot_ring.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_ring.svg"
+    },
+    {
+      "path": "icons/interface/slot_main_hand.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_main_hand.svg"
+    },
+    {
+      "path": "icons/interface/slot_off_hand.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_off_hand.svg"
+    },
+    {
+      "path": "icons/interface/slot_ranged.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_ranged.svg"
+    },
+    {
+      "path": "icons/interface/slot_seal.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_seal.svg"
+    },
+    {
+      "path": "icons/interface/slot_talisman.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Empty equipment slot silhouette; draw monochrome/desaturated at 40px",
+      "source": "icons/interface/slot_talisman.svg"
+    },
+    {
+      "path": "icons/items/wolf_pelt.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/wolf_pelt.svg"
+    },
+    {
+      "path": "icons/items/rusty_sword.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/rusty_sword.svg"
+    },
+    {
+      "path": "icons/items/leather_cap.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/leather_cap.svg"
+    },
+    {
+      "path": "icons/items/small_bag.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/small_bag.svg"
+    },
+    {
+      "path": "icons/items/medium_bag.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/medium_bag.svg"
+    },
+    {
+      "path": "icons/items/large_bag.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/large_bag.svg"
+    },
+    {
+      "path": "icons/items/glowing_crystal.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/glowing_crystal.svg"
+    },
+    {
+      "path": "icons/items/hard_bread.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/hard_bread.svg"
+    },
+    {
+      "path": "icons/items/broken_tooth.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/broken_tooth.svg"
+    },
+    {
+      "path": "icons/items/sealed_letter.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/items/sealed_letter.svg"
+    },
+    {
+      "path": "icons/abilities/auto_attack.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/abilities/auto_attack.svg"
+    },
+    {
+      "path": "icons/abilities/help_up.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/abilities/help_up.svg"
+    },
+    {
+      "path": "icons/schools/physical.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/physical.svg"
+    },
+    {
+      "path": "icons/schools/arcane.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/arcane.svg"
+    },
+    {
+      "path": "icons/schools/fire.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/fire.svg"
+    },
+    {
+      "path": "icons/schools/frost.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/frost.svg"
+    },
+    {
+      "path": "icons/schools/lightning.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/lightning.svg"
+    },
+    {
+      "path": "icons/schools/nature.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/nature.svg"
+    },
+    {
+      "path": "icons/schools/chi.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/chi.svg"
+    },
+    {
+      "path": "icons/schools/shadow.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/shadow.svg"
+    },
+    {
+      "path": "icons/schools/holy.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/schools/holy.svg"
+    },
+    {
+      "path": "icons/interface/dialog_talk.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/dialog_talk.svg"
+    },
+    {
+      "path": "icons/interface/dialog_trade.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/dialog_trade.svg"
+    },
+    {
+      "path": "icons/interface/dialog_train.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/dialog_train.svg"
+    },
+    {
+      "path": "icons/interface/menu_bags.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_bags.svg"
+    },
+    {
+      "path": "icons/interface/menu_social.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_social.svg"
+    },
+    {
+      "path": "icons/interface/menu_quests.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_quests.svg"
+    },
+    {
+      "path": "icons/interface/menu_guild.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_guild.svg"
+    },
+    {
+      "path": "icons/interface/menu_mail.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_mail.svg"
+    },
+    {
+      "path": "icons/interface/menu_help.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_help.svg"
+    },
+    {
+      "path": "icons/interface/menu_combat.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.",
+      "source": "icons/interface/menu_combat.svg"
+    },
+    {
+      "path": "icons/map/map_player.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/map_player.svg"
+    },
+    {
+      "path": "icons/map/map_party.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/map_party.svg"
+    },
+    {
+      "path": "icons/map/map_respawn.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P1",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/map_respawn.svg"
+    },
+    {
+      "path": "icons/map/quest_available.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/quest_available.svg"
+    },
+    {
+      "path": "icons/map/quest_complete.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/quest_complete.svg"
+    },
+    {
+      "path": "icons/map/quest_unavailable.png",
+      "width": 128,
+      "height": 128,
+      "priority": "P2",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Render at map/UI size; map_player arrow points straight up, rotate by facing angle",
+      "source": "icons/map/quest_unavailable.svg"
+    },
+    {
+      "path": "icons/races/human.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/human.svg"
+    },
+    {
+      "path": "icons/races/high_elf.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/high_elf.svg"
+    },
+    {
+      "path": "icons/races/dark_elf.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/dark_elf.svg"
+    },
+    {
+      "path": "icons/races/dwarf.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/dwarf.svg"
+    },
+    {
+      "path": "icons/races/orc.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/orc.svg"
+    },
+    {
+      "path": "icons/races/troll.png",
+      "width": 128,
+      "height": 128,
+      "priority": "OPEN",
+      "kind": "icon",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Selection emblem concept only; 32px display. GDD playable race canon not verified.",
+      "source": "icons/races/troll.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_human.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/human.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_high_elf.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/high_elf.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_dark_elf.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/dark_elf.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_dwarf.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/dwarf.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_orc.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/orc.svg"
+    },
+    {
+      "path": "portraits/portrait_silhouette_troll.png",
+      "width": 64,
+      "height": 64,
+      "priority": "OPEN",
+      "kind": "concept_portrait",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Generic silhouette only; replace with actual portrait or 3D viewport at runtime",
+      "source": "icons/races/troll.svg"
+    },
+    {
+      "path": "world/target_ring_white.png",
+      "width": 256,
+      "height": 256,
+      "priority": "P1",
+      "kind": "world_decal",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Projected decal transparent texture; tint in engine based on friendly/hostile or valid/invalid. Avoid baked colors",
+      "source": "world/target_ring_white.svg"
+    },
+    {
+      "path": "world/ground_target_white.png",
+      "width": 256,
+      "height": 256,
+      "priority": "P1",
+      "kind": "world_decal",
+      "nine_slice": null,
+      "theme_tint": true,
+      "notes": "Projected decal transparent texture; tint in engine based on friendly/hostile or valid/invalid. Avoid baked colors",
+      "source": "world/ground_target_white.svg"
+    },
+    {
+      "path": "cursors/standard_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/standard_32.svg"
+    },
+    {
+      "path": "cursors/standard_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/standard_48.svg"
+    },
+    {
+      "path": "cursors/attack_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/attack_32.svg"
+    },
+    {
+      "path": "cursors/attack_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/attack_48.svg"
+    },
+    {
+      "path": "cursors/talk_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/talk_32.svg"
+    },
+    {
+      "path": "cursors/talk_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/talk_48.svg"
+    },
+    {
+      "path": "cursors/merchant_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/merchant_32.svg"
+    },
+    {
+      "path": "cursors/merchant_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/merchant_48.svg"
+    },
+    {
+      "path": "cursors/trainer_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/trainer_32.svg"
+    },
+    {
+      "path": "cursors/trainer_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/trainer_48.svg"
+    },
+    {
+      "path": "cursors/loot_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/loot_32.svg"
+    },
+    {
+      "path": "cursors/loot_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/loot_48.svg"
+    },
+    {
+      "path": "cursors/interact_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/interact_32.svg"
+    },
+    {
+      "path": "cursors/interact_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/interact_48.svg"
+    },
+    {
+      "path": "cursors/unavailable_32.png",
+      "width": 32,
+      "height": 32,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (2,2), must not be UI-scaled",
+      "source": "cursors/unavailable_32.svg"
+    },
+    {
+      "path": "cursors/unavailable_48.png",
+      "width": 48,
+      "height": 48,
+      "priority": "P2",
+      "kind": "cursor",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Click hotspot (3,3), must not be UI-scaled",
+      "source": "cursors/unavailable_48.svg"
+    },
+    {
+      "path": "branding/wom_wordmark.png",
+      "width": 1024,
+      "height": 256,
+      "priority": "P1",
+      "kind": "branding",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Provisional WoM wordmark, transparent PNG; actual full title not specified",
+      "source": "branding/wom_wordmark.svg"
+    },
+    {
+      "path": "branding/app_icon_512.png",
+      "width": 512,
+      "height": 512,
+      "priority": "P1",
+      "kind": "branding",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Original monogram, raster base for .ico",
+      "source": "branding/app_icon_512.svg"
+    },
+    {
+      "path": "branding/app_icon.ico",
+      "width": 512,
+      "height": 512,
+      "priority": "P1",
+      "kind": "ico",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Windows ICO with 16,32,48,256 sizes (not an RGBA PNG)",
+      "source": "branding/app_icon_512.svg"
+    },
+    {
+      "path": "branding/main_menu_background_2560x1440.png",
+      "width": 2560,
+      "height": 1440,
+      "priority": "P1",
+      "kind": "background",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Dark uncluttered world backdrop: reserved central area for menu controls, no lettering",
+      "source": null
+    },
+    {
+      "path": "branding/boot_splash_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "priority": "P1",
+      "kind": "background",
+      "nine_slice": null,
+      "theme_tint": false,
+      "notes": "Boot splash with tentative WoM wordmark; no game-title expansion assumed",
+      "source": null
+    }
+  ]
+}

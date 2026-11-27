@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs>
+<linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45474a"/><stop offset="0.48" stop-color="#272a2d"/><stop offset="1" stop-color="#171b1f"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#20252a"/><stop offset="1" stop-color="#101419"/></linearGradient>
+<linearGradient id="brass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2bb88"/><stop offset="0.43" stop-color="#a68c5d"/><stop offset="1" stop-color="#635038"/></linearGradient>
+<linearGradient id="whitish" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#b8b8b8"/></linearGradient>
+</defs><rect x="5" y="5" width="54" height="54" rx="6" fill="none" stroke="#bba779" opacity=".25" stroke-width="7"/><circle cx="60.30" cy="25.67" r="2.0" fill="white" opacity="0.9"/><circle cx="61.00" cy="32.00" r="1.72" fill="white" opacity="0.7"/><circle cx="60.30" cy="38.33" r="1.44" fill="white" opacity="0.5"/><rect x="5" y="5" width="54" height="54" rx="6" fill="none" stroke="#dbc393" stroke-width="2" opacity=".92"/></svg>

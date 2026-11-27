@@ -18,6 +18,12 @@
 [ext_resource type="Script" path="res://scripts/ui/bag_bar_slot.gd" id="16_bagslot"]
 [ext_resource type="Script" path="res://scripts/ui/experience_bar.gd" id="17_xpbar"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/level_up_banner.tscn" id="18_levelup"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/menu_character.png" id="30_mchar"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/menu_spellbook.png" id="31_mbook"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/menu_talents.png" id="32_mtal"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/menu_map.png" id="33_mmap"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/menu_game.png" id="34_mgame"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/bag_backpack.png" id="35_pack"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -199,19 +205,33 @@ step = 1.0
 show_percentage = false
 script = ExtResource("17_xpbar")
 
-[node name="ActionBar2" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
+[node name="ActionBar2Shell" type="PanelContainer" parent="SafeArea/Layout/ActionBars"]
+custom_minimum_size = Vector2(600, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"ActionBarShell"
+
+[node name="ActionBar2" type="HBoxContainer" parent="SafeArea/Layout/ActionBars/ActionBar2Shell"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_type_variation = &"SlotRow"
+theme_type_variation = &"ActionBarRow"
 script = ExtResource("2_bar")
 bar_index = 1
 
-[node name="ActionBar1" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
+[node name="ActionBar1Shell" type="PanelContainer" parent="SafeArea/Layout/ActionBars"]
+custom_minimum_size = Vector2(600, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_type_variation = &"ActionBarShell"
+
+[node name="ActionBar1" type="HBoxContainer" parent="SafeArea/Layout/ActionBars/ActionBar1Shell"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_type_variation = &"SlotRow"
+theme_type_variation = &"ActionBarRow"
 script = ExtResource("2_bar")
 action_prefix = "action_bar_1_slot_"
 
@@ -236,48 +256,65 @@ window_id = &"bags"
 title = "Taschen"
 toggle_action = &"toggle_bags"
 
-[node name="MicroMenu" type="HBoxContainer" parent="SafeArea/Layout/BottomRight"]
-unique_name_in_owner = true
+[node name="MicroMenuShell" type="PanelContainer" parent="SafeArea/Layout/BottomRight"]
+custom_minimum_size = Vector2(236, 44)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
-theme_type_variation = &"SlotRow"
+theme_type_variation = &"MenuBarShell"
 
-[node name="CharacterButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "C"
-
-[node name="SpellbookButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "Z"
-
-[node name="TalentsButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "T"
-
-[node name="MapButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "K"
-
-[node name="GameMenuButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenu"]
+[node name="MicroMenu" type="HBoxContainer" parent="SafeArea/Layout/BottomRight/MicroMenuShell"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"MenuBarRow"
+alignment = 1
+
+[node name="CharacterButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenuShell/MicroMenu"]
+custom_minimum_size = Vector2(20, 40)
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "S"
+theme_type_variation = &"MenuBarButton"
+icon = ExtResource("30_mchar")
+icon_alignment = 1
+expand_icon = true
+
+[node name="SpellbookButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenuShell/MicroMenu"]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"MenuBarButton"
+icon = ExtResource("31_mbook")
+icon_alignment = 1
+expand_icon = true
+
+[node name="TalentsButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenuShell/MicroMenu"]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"MenuBarButton"
+icon = ExtResource("32_mtal")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MapButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenuShell/MicroMenu"]
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"MenuBarButton"
+icon = ExtResource("33_mmap")
+icon_alignment = 1
+expand_icon = true
+
+[node name="GameMenuButton" type="Button" parent="SafeArea/Layout/BottomRight/MicroMenuShell/MicroMenu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 40)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"MenuBarButton"
+icon = ExtResource("34_mgame")
+icon_alignment = 1
+expand_icon = true
 
 [node name="BagBar" type="HBoxContainer" parent="SafeArea/Layout/BottomRight"]
 unique_name_in_owner = true
@@ -327,7 +364,9 @@ custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"SlotButton"
-text = "R"
+icon = ExtResource("35_pack")
+icon_alignment = 1
+expand_icon = true
 
 [node name="FreeSlots" type="Label" parent="SafeArea/Layout/BottomRight/BagBar/BackpackButton"]
 unique_name_in_owner = true

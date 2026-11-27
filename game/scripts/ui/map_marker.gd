@@ -36,6 +36,14 @@ func place_at(point: Vector2) -> void:
 
 
 func _draw() -> void:
+	# UI-Paket „Stone & Brass“: Symbole als Grafik aus dem Theme (Pfeil zeigt
+	# im Bild nach oben, Mitspieler-Punkt ist weiß und wird in Klassenfarbe
+	# getönt). Ohne Grafik zeichnet der alte Platzhalter.
+	var icon_name: StringName = [&"player", &"respawn", &"mate"][kind]
+	if has_theme_icon(icon_name, THEME_TYPE):
+		var tint := fill_color if kind == Kind.MATE else Color.WHITE
+		draw_texture_rect(get_theme_icon(icon_name, THEME_TYPE), Rect2(Vector2.ZERO, size), false, tint)
+		return
 	var outline := get_theme_color(&"outline_color", THEME_TYPE)
 	var line := float(get_theme_constant(&"outline_width", THEME_TYPE))
 	var r := size.x / 2.0

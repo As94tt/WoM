@@ -5,6 +5,26 @@ Heute ist **alles außer den Klassen-/Magier-Icons Graubox**: Flächen sind `Sty
 
 **Priorität:** **P1** = im Spiel schon sichtbar (ersetzt einen Platzhalter) · **P2** = kommt mit einem geplanten Ticket.
 
+## Stand: Lieferung UI-Paket „Stone & Brass“ (27.11.2026)
+
+Das Paket des Projektverantwortlichen beantwortet diese Liste (220 Dateien, Manifest in `docs/ui-assets/`). Stilrichtung siehe `docs/UI-STYLEGUIDE.md`, Abschnitt 2 und „UI-Grafiken (Stone & Brass)“.
+
+| Abschnitt | Geliefert | Eingebunden | Offen |
+|---|---|---|---|
+| 1. Schriften | – (Paket enthält bewusst keine Schriften; Vorschlag in `game/assets/ui/fonts/README.txt`) | – | **OFFEN:** Schriften (SIL OFL 1.1) auswählen und mit Lizenz ablegen |
+| 2. Rahmen, Flächen, Knöpfe | alle Elemente inkl. Zustände, 9-Slice-Ränder im Manifest | ja, als `StyleBoxTexture` im Theme; Menüleiste als 20 × 40 px | `DimOverlay` und „nicht nutzbar“ bleiben Farben (keine Grafik nötig) |
+| 3. Balken | Leben, Ressource, Zweitressource, Zauber, Erfahrung, Boss | alle außer Boss-Leben (kommt mit #36/#37) | Endgültige Farben (Tokens) **OFFEN** |
+| 4.1 Bediensymbole | alle + Menüsymbole für spätere Knöpfe (Taschen, Gruppe, Quests, Gilde, Post, Hilfe, Kampf) | Menüleiste, Rucksack, Schließen, Blättern, Werte, Kampf, Rang, Schild an der Zauberleiste, Münzen, Hinweis-Punkt | `lock`, `bag_slot_empty`, `dialog_*` liegen bereit (kein Platz bzw. Ticket #28) |
+| 4.2 Leere Ausrüstungsplätze | alle (englische Dateinamen) | ja, über `ausruestungsplaetze.csv` | – |
+| 4.3 Gegenstände | alle 10 Testgegenstände | ja, Spalte `icon` in `gegenstaende.csv` | – |
+| 4.4 Allgemeine Fähigkeiten | `auto_attack`, `help_up` (+ `revive`) | ja (`.tres`) | – |
+| 4.5 Schadensschulen | alle 9 | Spalte `icon` in `schadensschulen.csv` (Anzeige folgt) | Anzeige im Tooltip |
+| 4.6 Völker | 6 Embleme | nein | **OFFEN:** nur Konzept, nicht freigegeben |
+| 4.7 Porträts | 6 Silhouetten | nein (Porträt zeigt weiter den Anfangsbuchstaben) | **OFFEN:** echte Porträts bzw. 3D-Porträt |
+| 5. Karte, Welt | Pfeil, Mitspieler, Wiedereinstieg, Quest-Symbole, Zielkreis, Bodenziel | Karte (Pfeil, Mitspieler, Wiedereinstieg) | Zielkreis/Bodenziel als Textur statt Mesh, Quest-Symbole (#28) |
+| 6. Mauszeiger | alle 8 in 32 und 48 px mit Hotspots | Standardzeiger (32/48 px nach Bildschirmhöhe) | übrige Zeiger mit #28, #36, #38 |
+| 7. Bildschirme | App-Symbol, Startbild, Hauptmenü-Hintergrund, Wortmarke, Banner | App-Symbol, Startbild, Hauptmenü-Hintergrund | Wortmarke „WoM“ vorläufig (Spieltitel **OFFEN**); Banner für Aufstieg und Beute noch nicht eingebunden |
+
 ---
 
 ## 0. Regeln, die für alles gelten

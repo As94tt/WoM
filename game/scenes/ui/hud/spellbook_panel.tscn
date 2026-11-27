@@ -1,6 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/spellbook_panel.gd" id="1_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/page_prev.png" id="90_prev"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/page_next.png" id="91_next"]
 
 [node name="SpellbookPanel" type="VBoxContainer"]
 size_flags_horizontal = 3
@@ -32,12 +34,15 @@ alignment = 1
 
 [node name="PrevButton" type="Button" parent="Paging"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_vertical = 4
 tooltip_text = "Vorherige Seite"
 focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "‹"
+theme_type_variation = &"IconButton"
+icon = ExtResource("90_prev")
+icon_alignment = 1
+expand_icon = true
 
 [node name="PageLabel" type="Label" parent="Paging"]
 unique_name_in_owner = true
@@ -47,9 +52,12 @@ text = "Seite 1 / 1"
 
 [node name="NextButton" type="Button" parent="Paging"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_vertical = 4
 tooltip_text = "Nächste Seite"
 focus_mode = 0
-theme_type_variation = &"SlotButton"
-text = "›"
+theme_type_variation = &"IconButton"
+icon = ExtResource("91_next")
+icon_alignment = 1
+expand_icon = true

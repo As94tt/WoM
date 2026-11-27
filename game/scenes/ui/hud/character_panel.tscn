@@ -51,14 +51,15 @@ text = "Klasse"
 
 [node name="StatsToggle" type="Button" parent="Equipment/Header"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Werte anzeigen"
 focus_mode = 0
-theme_type_variation = &"SlotButton"
+theme_type_variation = &"IconButton"
+icon_alignment = 1
+expand_icon = true
 toggle_mode = true
-text = "»"
 
 [node name="Middle" type="HBoxContainer" parent="Equipment"]
 layout_mode = 2

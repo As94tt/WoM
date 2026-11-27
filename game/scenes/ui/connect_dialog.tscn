@@ -40,7 +40,7 @@ theme_type_variation = &"ButtonList"
 [node name="TitleLabel" type="Label" parent="Center/Panel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"WindowTitle"
+theme_type_variation = &"PanelTitle"
 text = "Spiel beitreten"
 
 [node name="HintLabel" type="Label" parent="Center/Panel/Content"]

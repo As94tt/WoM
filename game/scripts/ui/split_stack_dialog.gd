@@ -32,7 +32,7 @@ func open(item_name: String, count: int) -> void:
 	content.theme_type_variation = &"ButtonList"
 	panel.add_child(content)
 	var title := Label.new()
-	title.theme_type_variation = &"WindowTitle"
+	title.theme_type_variation = &"PanelTitle"
 	title.text = "Stapel teilen"
 	content.add_child(title)
 	var message := Label.new()

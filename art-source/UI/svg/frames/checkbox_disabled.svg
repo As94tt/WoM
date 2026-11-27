@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs>
+<linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45474a"/><stop offset="0.48" stop-color="#272a2d"/><stop offset="1" stop-color="#171b1f"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#20252a"/><stop offset="1" stop-color="#101419"/></linearGradient>
+<linearGradient id="brass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2bb88"/><stop offset="0.43" stop-color="#a68c5d"/><stop offset="1" stop-color="#635038"/></linearGradient>
+<linearGradient id="whitish" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#b8b8b8"/></linearGradient>
+</defs><rect x="1.0" y="1.0" width="22" height="22" rx="3.3600000000000003" fill="url(#stone)" stroke="#0b0d0f" stroke-width="1.8"/><rect x="3" y="3" width="18" height="18" rx="2" fill="url(#dark)" stroke="#725e3f" stroke-width=".85"/><rect x="3" y="3" width="18" height="18" rx="2" fill="#070a0d" opacity="0.62"/></svg>

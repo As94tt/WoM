@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="1_0r1wa"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/abilities/auto_attack.png" id="9_icon"]
 
 [resource]
 script = ExtResource("1_ability")
 id = &"automatischer_angriff"
+icon = ExtResource("9_icon")
 display_name = "Automatischer Angriff"
 description = "Schaltet den automatischen Angriff auf das Ziel ein oder aus (auch Rechtsklick auf einen Feind)."
 requires_facing = false

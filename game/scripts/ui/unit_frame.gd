@@ -2,7 +2,10 @@ class_name UnitFrame
 extends PanelContainer
 ## Spieler- bzw. Zielrahmen im HUD (Ticket #31). Zeigt eine Einheit:
 ## Platzhalter-Porträt (Anfangsbuchstabe), Name, Stufe, Lebensbalken,
-## Ressourcenbalken in Ressourcenfarbe und Kennzeichen.
+## Ressourcenbalken in Ressourcenfarbe und Kennzeichen. Seit dem UI-Paket
+## „Stone & Brass“ liegt alles auf einer festen Rahmengrafik (340 × 90,
+## UnitFramePlayer/UnitFrameTarget); der Zielrahmen ist gespiegelt
+## (Porträt rechts), Texte und Balken laufen normal von links nach rechts.
 ##
 ## - Spielerrahmen (mode PLAYER, oben links): Leben als „1.250 / 2.000“,
 ##   Hauptressource, darunter klein eine Zweitressource (Chi beim Mönch; Mana
@@ -39,6 +42,22 @@ const RANK_TEXTS := {
 	Unit.Rank.RARE: "Selten",
 	Unit.Rank.BOSS: "Boss",
 }
+## Symbol des Rangs im Kennzeichen (Theme-Typ „UnitFrameIcons“); der Text
+## bleibt als zweites Signal daneben.
+const RANK_ICONS := {
+	Unit.Rank.ELITE: &"rank_elite",
+	Unit.Rank.RARE: &"rank_rare",
+	Unit.Rank.BOSS: &"rank_boss",
+}
+const ICON_THEME_TYPE := &"UnitFrameIcons"
+## Feste Rahmengrafik 340 × 90 (UI-Paket): Porträt beim Spieler links, beim
+## Ziel rechts gespiegelt. Gespiegelt werden nur die Plätze, nie Text oder
+## Bilder. Werte in Pixeln der Grafik (Porträt 54 × 54 im Kreis, Inhalt
+## im rechteckigen Teil des Rahmens).
+const FRAME_WIDTH := 340.0
+const PORTRAIT_X := 8.0
+const CONTENT_X := 84.0
+const CONTENT_RIGHT := 332.0
 ## Theme-Variationen der Bedrohungsanzeige (#35).
 const THREAT_VARIATIONS := {
 	ThreatFormulas.Level.SAFE: &"ThreatSafe",
@@ -56,6 +75,8 @@ var _viewer: Unit = null
 
 func _ready() -> void:
 	gui_input.connect(_on_gui_input)
+	if mode == Mode.TARGET:
+		_mirror_layout()
 	visible = mode == Mode.PLAYER and _unit != null
 	set_process(mode == Mode.TARGET)
 
@@ -63,6 +84,18 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if visible:
 		_refresh_threat()
+
+
+## Zielrahmen: Rahmengrafik mit Porträt rechts, Inhalt links davon.
+func _mirror_layout() -> void:
+	%Frame.theme_type_variation = &"UnitFrameTarget"
+	var portrait: Control = %Portrait
+	var portrait_width := portrait.offset_right - portrait.offset_left
+	portrait.offset_left = FRAME_WIDTH - PORTRAIT_X - portrait_width
+	portrait.offset_right = FRAME_WIDTH - PORTRAIT_X
+	for part: Control in [%Header, %HealthBar, %ResourceBar, %SecondaryBar]:
+		part.offset_left = FRAME_WIDTH - CONTENT_RIGHT
+		part.offset_right = FRAME_WIDTH - CONTENT_X
 
 
 ## Bedrohungsanzeige (#35) aus dem übertragenen Stand der Liste des Ziels.
@@ -156,6 +189,8 @@ func refresh() -> void:
 	var rank_text: String = RANK_TEXTS.get(_unit.get_rank(), "")
 	%RankBadge.visible = rank_text != ""
 	%RankLabel.text = rank_text
+	var rank_icon: StringName = RANK_ICONS.get(_unit.get_rank(), &"")
+	%RankIcon.texture = get_theme_icon(rank_icon, ICON_THEME_TYPE) if rank_icon != &"" else null
 	_on_combat_changed(_stats != null and _stats.is_in_combat())
 	_refresh_bars()
 
@@ -173,7 +208,7 @@ func _refresh_bars() -> void:
 		%HealthText.text = "%d %%" % ceili(percent) if percent < 100.0 else "100 %"
 	var resources := _stats.get_resource_ids()
 	var main: StringName = resources[0] if not resources.is_empty() else &""
-	_show_resource(%ResourceBar, %ResourceText, main)
+	_show_resource(%ResourceBar, %ResourceText, main, &"Bar")
 	# Zweitressource klein darunter: weitere Leiste der Klasse (Chi beim
 	# Mönch) bzw. Mana, falls die Hauptressource nicht Mana ist (Druide in
 	# Gestalt, sobald es Gestalten gibt).
@@ -183,16 +218,18 @@ func _refresh_bars() -> void:
 			secondary = resources[1]
 		elif main != &"mana" and _stats.max_mana > 0.0:
 			secondary = &"mana"
-	_show_resource(%SecondaryBar, null, secondary)
+	_show_resource(%SecondaryBar, null, secondary, &"SecondaryBar")
 
 
-func _show_resource(bar: ProgressBar, text: Label, resource_id: StringName) -> void:
+## suffix: „Bar“ (Ressourcenbalken 18 px, z. B. ManaBar) bzw. „SecondaryBar“
+## (Zweitressource 8 px, z. B. ChiSecondaryBar).
+func _show_resource(bar: ProgressBar, text: Label, resource_id: StringName, suffix: StringName) -> void:
 	var maximum := _stats.get_resource_max(resource_id) if resource_id != &"" else 0.0
 	bar.visible = maximum > 0.0
 	if not bar.visible:
 		return
 	var current := _stats.get_resource(resource_id)
-	var variation := StringName(String(resource_id).capitalize() + "Bar")
+	var variation := StringName(String(resource_id).capitalize() + suffix)
 	if bar.theme_type_variation != variation:
 		bar.theme_type_variation = variation
 	bar.max_value = maximum

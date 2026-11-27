@@ -19,13 +19,17 @@ extends HBoxContainer
 ## übertragen per StatsSync). Änderungen erscheinen sofort (Signale
 ## stats_changed und resources_changed).
 
-## Ausrüstungsplätze (GDD, Abschnitt Ausrüstung) in Anzeigereihenfolge.
-const LEFT_SLOTS: PackedStringArray = ["Helm", "Kette", "Schulter", "Umhang", "Brust", "Armschienen"]
-const RIGHT_SLOTS: PackedStringArray = ["Handschuhe", "Gürtel", "Beine", "Schuhe", "Ring 1", "Ring 2"]
-const WEAPON_SLOTS: PackedStringArray = ["Haupthand", "Nebenhand", "Fernkampf"]
-const SPECIAL_SLOTS: PackedStringArray = ["Siegel", "Talisman 1", "Talisman 2", "Talisman 3"]
+## Ausrüstungsplätze (GDD, Abschnitt Ausrüstung) in Anzeigereihenfolge; IDs
+## aus ausruestungsplaetze.csv (Name und Bild des leeren Platzes).
+const LEFT_SLOTS: Array[StringName] = [&"helm", &"kette", &"schulter", &"umhang", &"brust", &"armschienen"]
+const RIGHT_SLOTS: Array[StringName] = [&"handschuhe", &"guertel", &"beine", &"schuhe", &"ring_1", &"ring_2"]
+const WEAPON_SLOTS: Array[StringName] = [&"haupthand", &"nebenhand", &"fernkampf"]
+const SPECIAL_SLOTS: Array[StringName] = [&"siegel", &"talisman_1", &"talisman_2", &"talisman_3"]
 ## Größe eines Ausrüstungsplatzes (wie Menüleiste und Schließen-Button).
 const SLOT_SIZE := Vector2(40, 40)
+## Umschalter des Wertebereichs (Bediensymbole aus dem UI-Paket).
+const STATS_SHOW_ICON: Texture2D = preload("res://assets/ui/icons/interface/stats_show.png")
+const STATS_HIDE_ICON: Texture2D = preload("res://assets/ui/icons/interface/stats_hide.png")
 const RULES: StatRules = preload("res://data/stats/stat_rules.tres")
 
 var _player: PlayerCharacter = null
@@ -77,17 +81,25 @@ func _set_stats_visible(on: bool) -> void:
 	_stats_area.visible = on
 	%StatsSeparator.visible = on
 	_stats_toggle.set_pressed_no_signal(on)
-	_stats_toggle.text = "«" if on else "»"
+	_stats_toggle.icon = STATS_HIDE_ICON if on else STATS_SHOW_ICON
 	_stats_toggle.tooltip_text = "Werte ausblenden" if on else "Werte anzeigen"
 
 
-func _add_slots(container: Container, names: PackedStringArray) -> void:
-	for slot_name in names:
+func _add_slots(container: Container, ids: Array[StringName]) -> void:
+	for slot_id in ids:
+		var row := Data.ausruestungsplatz(slot_id)
 		var slot := Button.new()
-		slot.theme_type_variation = &"SlotButton"
+		slot.theme_type_variation = &"SlotButton40"
 		slot.custom_minimum_size = SLOT_SIZE
 		slot.focus_mode = Control.FOCUS_NONE
-		slot.tooltip_text = "%s (leer)" % slot_name
+		slot.tooltip_text = "%s (leer)" % (str(row.get_value("name", slot_id)) if row != null else String(slot_id))
+		# Leerer Platz: blasses Bild aus den Daten (Spalte icon), sonst nur der Rahmen.
+		var path := str(row.get_value("icon", "")) if row != null else ""
+		if path != "" and ResourceLoader.exists(path):
+			slot.icon = load(path) as Texture2D
+			slot.expand_icon = true
+			slot.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			slot.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		container.add_child(slot)
 
 
