@@ -63,6 +63,11 @@ extends Control
 ## schließt das Taschenfenster wie der Rucksack. Rechtsklick und Esc brechen
 ## auch das Ziehen eines Gegenstands ab (ItemDragData.cancelled).
 ##
+## Stufen und Erfahrung (#27): Erfahrungsbalken über den Aktionsleisten
+## (ExperienceBar, setup_experience), Aufstiegsmeldung in der Bildschirmmitte
+## (LevelUpBanner, show_level_up; Klick auf einen Hinweis öffnet Zauberbuch
+## bzw. Talente) und „+120 EP“ über der eigenen Figur (show_floating_text).
+##
 ## Eingabe: Tastenkürzel laufen über _unhandled_input, damit ein Textfeld mit
 ## Fokus (später der Chat) sie zuerst bekommt; zusätzlich sind sie gesperrt,
 ## solange ein Textfeld den Fokus hat oder hotkeys_enabled false ist. Solange
@@ -121,6 +126,8 @@ func _ready() -> void:
 	for slot in get_bag_bar_slots():
 		slot.pressed.connect(toggle_window.bind(&"bags"))
 		slot.error.connect(show_error)
+	# Aufstiegsmeldung (#27): Klick auf einen Hinweis öffnet das Fenster.
+	(%LevelUpBanner as LevelUpBanner).window_requested.connect(open_window)
 	_update_layout()
 
 
@@ -318,6 +325,29 @@ func setup_local_player(player: PlayerCharacter) -> void:
 	target_frame.set_unit(_targeting.target)
 	# Klick auf den eigenen Rahmen wählt sich selbst (wie F1).
 	player_frame.clicked.connect(func(unit: Unit) -> void: _targeting.select(unit))
+
+
+## Erfahrungsbalken (#27) mit der Erfahrung der eigenen Figur verbinden.
+func setup_experience(experience: PlayerExperience) -> void:
+	(%ExperienceBar as ExperienceBar).setup(experience)
+
+
+## Aufstiegsmeldung (#27) in der Bildschirmmitte.
+func show_level_up(summary: LevelUpSummary) -> void:
+	(%LevelUpBanner as LevelUpBanner).show_summary(summary)
+
+
+func get_level_up_banner() -> LevelUpBanner:
+	return %LevelUpBanner
+
+
+func get_experience_bar() -> ExperienceBar:
+	return %ExperienceBar
+
+
+## Kurzer Text, der über unit aufsteigt (#27: „+120 EP“), wie Kampftext.
+func show_floating_text(unit: Unit, text: String, variation: StringName) -> void:
+	(%CombatTextLayer as CombatTextLayer).show_text(unit, text, variation)
 
 
 ## Fenster „Ihr seid gestorben“ (#35) mit der eigenen Figur verbinden.

@@ -40,7 +40,8 @@ extends Node3D
 ## - Spezialisierung und Talente (#20): Inhalt des Talentfensters (N) ist
 ##   TalentPanel mit der eigenen Figur; Rückfragen über Hud.ask, Ablehnungen
 ##   des Hosts oben in der Mitte. Erreicht die eigene Figur Stufe 10 ohne
-##   Spezialisierung, erscheint ein Hinweis („Talente öffnen“); solange keine
+##   Spezialisierung, erscheint ein Hinweis (seit #27 als Zeile der
+##   Aufstiegsmeldung, Klick öffnet die Talente); solange keine
 ##   gewählt ist, trägt der Menüleisten-Button einen Hinweis-Punkt. Fähigkeiten
 ##   aus Talenten verschwinden beim Zurücksetzen von den Leisten. Abschnitt
 ##   „Talente“ im Entwickler-Panel (TalentDevSection).
@@ -59,6 +60,12 @@ extends Node3D
 ##   Wiedereinstieg, Aufhelfen und gemeinsame Rückkehr; Wiedereinstiegspunkte
 ##   aus #15 (get_respawn_transform). unit_died meldet auf dem Host jeden Tod
 ##   einer Einheit (Ereignis für spätere Systeme: Erfahrung, Beute, Respawn).
+##
+## - Stufen und Erfahrung (#27): Kindknoten „Experience“ (ExperienceService)
+##   verteilt auf dem Host die Erfahrung für Kills (unit_died). Für die eigene
+##   Figur: Erfahrungsbalken, „+120 EP“ und Log, Aufstiegsmeldung mit
+##   Zusammenfassung (LevelUpSummary); Aufstiege von Mitspielern im Log.
+##   Abschnitt „Stufe und Erfahrung“ im Entwickler-Panel (LevelDevSection).
 ##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
@@ -109,8 +116,6 @@ var _bar_layout: ActionBarLayout = null
 ## Entwickler-Panel, Abschnitt „Werte“ (#19): Infozeilen und Bedienelemente,
 ## die dem Stand der eigenen Figur folgen.
 var _stat_dev_info: Label = null
-var _stat_dev_level_label: Label = null
-var _stat_dev_level_slider: HSlider = null
 var _stat_dev_toggles: Dictionary[String, CheckBox] = {}
 ## Entwickler-Panel, Abschnitt „Einheiten“ (#31).
 var _unit_dev_info: Label = null
@@ -119,6 +124,8 @@ var _unit_dev_level_slider: HSlider = null
 var _unit_dev_dot_timer: Timer = null
 ## Rückkehr nach dem Tod (#35).
 var _revival: RevivalService = null
+## Erfahrung für Kills (#27).
+var _experience_service: ExperienceService = null
 ## Inventar des eigenen Charakters (#18).
 var _inventory: Inventory = null
 var _inventory_saver: InventorySaver = null
@@ -152,6 +159,10 @@ func _ready() -> void:
 	_revival = RevivalService.new()
 	add_child(_revival)
 	_revival.setup(self)
+	# Erfahrung für Kills (#27), entscheidet der Host.
+	_experience_service = ExperienceService.new()
+	add_child(_experience_service)
+	_experience_service.setup(self)
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
 	Network.players_changed.connect(_on_players_changed)
@@ -207,6 +218,11 @@ func get_all_players() -> Array[PlayerCharacter]:
 ## Rückkehr nach dem Tod (#35).
 func get_revival() -> RevivalService:
 	return _revival
+
+
+## Erfahrung für Kills (#27).
+func get_experience_service() -> ExperienceService:
+	return _experience_service
 
 
 ## Ort für die Rückkehr am nächsten Wiedereinstiegspunkt (#35); ohne Punkte
@@ -386,10 +402,15 @@ func _on_player_ready(player: PlayerCharacter) -> void:
 		_connect_stat_dev(player)
 		_setup_abilities(player)
 		_setup_talents(player)
+		_setup_experience(player)
 		_setup_inventory()
 		# Spieler- und Zielrahmen, Namensplaketten, Esc hebt das Ziel auf (#31).
 		_hud.setup_local_player(player)
 		_connect_unit_dev(player)
+	elif player.get_experience() != null:
+		# Aufstieg eines Mitspielers (#27) im Log; den Effekt spielt die Figur selbst.
+		player.get_experience().leveled_up.connect(func(_previous: int, level: int) -> void:
+			_hud.add_log_message("%s hat Stufe %d erreicht." % [player.display_name, level]))
 	if _map_view == null:
 		return
 	if player.is_local():
@@ -548,14 +569,54 @@ func _update_talent_hint(talents: PlayerTalents) -> void:
 			"Spezialisierung wählbar")
 
 
-## Stufe von unter 10 auf 10 oder mehr (auch per Entwickler-Panel): Hinweis.
-## Beim Laden eines Charakters ab Stufe 10 erscheint er nicht (nur der Punkt).
-func _on_local_level_changed(level: int, previous: int, talents: PlayerTalents) -> void:
+## Stufe geändert: Hinweis-Punkt aktualisieren. Den Hinweis „Du kannst jetzt
+## eine Spezialisierung wählen.“ zeigt seit #27 die Aufstiegsmeldung
+## (LevelUpBanner, Klick öffnet das Talentfenster) statt einer Rückfrage, damit
+## beide sich nicht überdecken.
+func _on_local_level_changed(_level: int, _previous: int, talents: PlayerTalents) -> void:
 	_update_talent_hint(talents)
-	var needed := TalentRules.spec_level()
-	if previous < needed and level >= needed and not talents.has_spec() 			and not talents.get_specializations().is_empty():
-		_hud.ask("Spezialisierung", "Du kannst jetzt eine Spezialisierung wählen.",
-				"Talente öffnen", "Später", func() -> void: _hud.open_window(&"talents"))
+
+
+# --- Stufen und Erfahrung (#27) ----------------------------------------------
+
+## Eigene Figur ist da: Erfahrungsbalken, „+120 EP“ und Log bei Erfahrung,
+## Aufstiegsmeldung mit Zusammenfassung.
+func _setup_experience(player: PlayerCharacter) -> void:
+	var experience := player.get_experience()
+	if experience == null:
+		return
+	_hud.setup_experience(experience)
+	experience.experience_gained.connect(_on_local_experience_gained.bind(player))
+	experience.leveled_up.connect(_on_local_leveled_up.bind(player))
+
+
+func _on_local_experience_gained(amount: int, source: StringName, source_name: String,
+		player: PlayerCharacter) -> void:
+	var amount_text := StatFormat.grouped(amount)
+	_hud.show_floating_text(player, "+%s EP" % amount_text, &"CombatTextExperience")
+	var origin := ""
+	match source:
+		PlayerExperience.SOURCE_QUEST:
+			origin = " (Quest: %s)" % source_name if source_name != "" else " (Quest)"
+		_:
+			origin = " (%s)" % source_name if source_name != "" else ""
+	_hud.add_log_message("Du erhältst %s Erfahrung%s." % [amount_text, origin])
+
+
+func _on_local_leveled_up(previous: int, level: int, player: PlayerCharacter) -> void:
+	var abilities := player.get_abilities()
+	var all: Array[AbilityData] = abilities.get_all_abilities() if abilities != null else []
+	var talent_abilities: Array[AbilityData] = []
+	var talents := player.get_talents()
+	if talents != null:
+		for ability in all:
+			if talents.is_talent_ability(ability):
+				talent_abilities.append(ability)
+	var summary := LevelUpSummary.build(player.class_id, previous, level, all, talent_abilities)
+	_hud.show_level_up(summary)
+	_hud.add_log_message(summary.title())
+	if summary.stat_text() != "":
+		_hud.add_log_message(summary.stat_text())
 
 
 # --- Inventar (#18) ----------------------------------------------------------
@@ -599,6 +660,16 @@ func get_inventory_saver() -> InventorySaver:
 ## Meldung des Inventars oben in der Mitte (z. B. „Inventar ist voll.“).
 func show_inventory_error(message: String) -> void:
 	_hud.show_error(message)
+
+
+## Fehlermeldung oben in der Mitte (z. B. aus dem Entwickler-Panel).
+func show_error(message: String) -> void:
+	_hud.show_error(message)
+
+
+## Das HUD der Welt (z. B. für Tests).
+func get_hud() -> Hud:
+	return _hud
 
 
 func _exit_tree() -> void:
@@ -743,6 +814,12 @@ func _setup_dev_panel() -> void:
 
 	_setup_stat_dev_section(panel)
 
+	# Stufe und Erfahrung (#27): Stufe setzen, Erfahrung, Aufstieg, Kill.
+	var level_dev := LevelDevSection.new()
+	level_dev.name = "LevelDev"
+	add_child(level_dev)
+	level_dev.setup(panel, self)
+
 	# Fähigkeiten (#21): nur diese Sitzung bzw. die eigene Belegung.
 	var ability_section := panel.add_section("Fähigkeiten")
 	panel.add_button(ability_section, "Alle Fähigkeiten der Klasse erlernen", func() -> void:
@@ -823,12 +900,8 @@ func _setup_stat_dev_section(panel: DevPanel) -> void:
 			func(on: bool) -> void: _stat_dev_action("offhand", on))
 	_stat_dev_toggles["ranged"] = panel.add_toggle(section, "Fernkampfwaffe getragen", false,
 			func(on: bool) -> void: _stat_dev_action("ranged", on))
-	_stat_dev_level_label = panel.add_info(section)
-	_stat_dev_level_slider = panel.add_slider(section, 1.0, Data.hoechste_stufe(), 1.0, 1.0,
-			func(value: float) -> void:
-				_stat_dev_level_label.text = "Stufe (nur diese Sitzung): %d" % int(value)
-				_stat_dev_action("level", int(value)))
-	_stat_dev_level_label.text = "Stufe (nur diese Sitzung): 1"
+	# Stufe ändern seit #27 im Abschnitt „Stufe und Erfahrung“ (echter Aufstieg).
+	panel.add_info(section, "Stufe ändern: Abschnitt „Stufe und Erfahrung“.")
 	panel.add_button(section, "Schaden nehmen (%s %% Leben)" % StatFormat.number(
 			STAT_DEV_TOOLS.damage_taken_percent, 0), _stat_dev_action.bind("take_damage", null))
 	# Tod (#35): eigene Figur stirbt sofort (Leben 0).
@@ -874,8 +947,6 @@ func _sync_stat_dev(stats: CharacterStats) -> void:
 	for index in STAT_DEV_TOOLS.test_modifiers.size():
 		_stat_dev_toggles["modifier_%d" % index].set_pressed_no_signal(
 				stats.block.has_source(CharacterStats.dev_source(index)))
-	_stat_dev_level_slider.set_value_no_signal(stats.get_level())
-	_stat_dev_level_label.text = "Stufe (nur diese Sitzung): %d" % stats.get_level()
 	_update_stat_dev_info(stats)
 
 

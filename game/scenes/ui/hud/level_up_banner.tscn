@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/level_up_banner.gd" id="1_levelup"]
+
+[node name="LevelUpBanner" type="VBoxContainer"]
+anchors_preset = -1
+anchor_top = 0.3
+anchor_right = 1.0
+anchor_bottom = 0.3
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"
+script = ExtResource("1_levelup")
+
+[node name="TitleLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LevelUpTitle"
+text = "Stufe 2 erreicht!"
+horizontal_alignment = 1
+
+[node name="Lines" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SlotColumn"

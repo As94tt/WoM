@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://scripts/ui/error_messages.gd" id="14_errors"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/death_window.tscn" id="15_death"]
 [ext_resource type="Script" path="res://scripts/ui/bag_bar_slot.gd" id="16_bagslot"]
+[ext_resource type="Script" path="res://scripts/ui/experience_bar.gd" id="17_xpbar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/level_up_banner.tscn" id="18_levelup"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -185,6 +187,17 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="ExperienceBar" type="ProgressBar" parent="SafeArea/Layout/ActionBars"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"ExperienceBar"
+step = 1.0
+show_percentage = false
+script = ExtResource("17_xpbar")
 
 [node name="ActionBar2" type="HBoxContainer" parent="SafeArea/Layout/ActionBars"]
 unique_name_in_owner = true
@@ -357,6 +370,10 @@ unique_name_in_owner = true
 layout_mode = 1
 
 [node name="ZoneBanner" parent="." instance=ExtResource("5_banner")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="LevelUpBanner" parent="." instance=ExtResource("18_levelup")]
 unique_name_in_owner = true
 layout_mode = 1
 

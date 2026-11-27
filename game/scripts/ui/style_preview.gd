@@ -1,5 +1,5 @@
 extends Control
-## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31, #32, #20 und #18).
+## Vorschauszene für das zentrale UI-Theme (Ticket #10, erweitert in #6, #8, #17, #15, #30, #21, #31, #32, #20, #18 und #27).
 ## Zeigt alle Button-Zustände gleichzeitig. Hover lässt sich nicht statisch
 ## erzwingen, deshalb bekommen die Hover-Beispiele die Hover-Werte aus dem
 ## Theme als Normalzustand. Es werden keine eigenen Farben gesetzt, nur Werte
@@ -46,8 +46,43 @@ func _ready() -> void:
 	_add_casting_samples()
 	_add_talent_samples()
 	_add_inventory_samples()
+	_add_level_samples()
 
 	%FocusButton.grab_focus()
+
+
+## Stufen und Erfahrung (#27): Erfahrungsbalken, „+120 EP“, Aufstiegsmeldung
+## mit Zeilen und Hinweisen, Totenkopf statt Stufe. Alles Platzhalter.
+func _add_level_samples() -> void:
+	var grid: GridContainer = $ScrollContainer/MarginContainer/Content/HudGrid
+	_add_row(grid, "Erfahrungsbalken (#27, ExperienceBar), Tooltip „1.250 / 4.000 (31 %)“")
+	var bar := ProgressBar.new()
+	bar.theme_type_variation = &"ExperienceBar"
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(320, 10)
+	bar.max_value = 4000
+	bar.value = 1250
+	bar.tooltip_text = "Erfahrung (Stufe 5): %s" % PlayerExperience.progress_text(1250, 4000)
+	grid.add_child(bar)
+	_add_row(grid, "Erfahrung über der Figur (#27, CombatTextExperience)")
+	grid.add_child(CombatTextLayer.make_label({"text": "+120 EP", "variation": &"CombatTextExperience",
+			"school": &""}))
+	_add_row(grid, "Aufstiegsmeldung (#27): LevelUpTitle, LevelUpText, Hinweise LevelUpLink (Klick öffnet Fenster)")
+	var banner: LevelUpBanner = preload("res://scenes/ui/hud/level_up_banner.tscn").instantiate()
+	grid.add_child(banner)
+	var summary := LevelUpSummary.build(&"warrior", 9, 12)
+	summary.abilities = [GameData.get_ability(&"spott")]
+	banner.show_summary(summary, false)
+	_add_row(grid, "Stufe am Ziel (#27): Zahl bzw. Totenkopf ab 10 Stufen höher (UnitColors level_impossible)")
+	var levels := HBoxContainer.new()
+	levels.theme_type_variation = &"InlineRow"
+	grid.add_child(levels)
+	for target_level in [12, 20]:
+		var label := Label.new()
+		label.theme_type_variation = &"NameplateText"
+		label.text = UnitColors.level_text(target_level, 10)
+		label.add_theme_color_override("font_color", UnitColors.difficulty_color(UnitColors.difficulty(target_level, 10)))
+		levels.add_child(label)
 
 
 ## Zauberbuch und Aktionsleisten (#21): Einträge (erlernt, passiv, nicht

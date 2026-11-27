@@ -58,6 +58,21 @@ static func difficulty(target_level: int, own_level: int) -> Difficulty:
 	return Difficulty.TRIVIAL
 
 
+## Text der Stufe an Zielrahmen und Namensplakette (#27): die Zahl, bei
+## Gegnern ab stufe_totenkopf_ab Stufen über der eigenen ein Totenkopf
+## (SKULL_TEXT) statt der Zahl.
+const SKULL_TEXT := "☠"
+
+
+static func level_text(target_level: int, own_level: int) -> String:
+	return SKULL_TEXT if LevelRules.shows_skull(target_level, own_level) else str(target_level)
+
+
+## Stufe für Tooltips: „Stufe 12“ bzw. „Stufe ??“ beim Totenkopf.
+static func level_label(target_level: int, own_level: int) -> String:
+	return "Stufe ??" if LevelRules.shows_skull(target_level, own_level) else "Stufe %d" % target_level
+
+
 static func difficulty_color(value: Difficulty) -> Color:
 	return _color(DIFFICULTY_KEYS.get(value, &"level_even"))
 
