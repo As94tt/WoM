@@ -668,6 +668,31 @@ corner_radius_top_right = 9
 corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_experience"]
+bg_color = Color(0.55, 0.35, 0.8, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_up_link"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_up_link_hover"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.45)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 16
 ButtonRow/base_type = &"HBoxContainer"
@@ -1033,3 +1058,36 @@ CoinCopper/styles/panel = SubResource("StyleBoxFlat_coin_copper")
 CoinText/base_type = &"Label"
 CoinText/colors/font_color = Color(0.05, 0.05, 0.05, 1)
 CoinText/font_sizes/font_size = 14
+ExperienceBar/base_type = &"ProgressBar"
+ExperienceBar/styles/background = SubResource("StyleBoxFlat_bar_background")
+ExperienceBar/styles/fill = SubResource("StyleBoxFlat_bar_experience")
+LevelUpTitle/base_type = &"Label"
+LevelUpTitle/colors/font_color = Color(1, 0.9, 0.55, 1)
+LevelUpTitle/colors/font_outline_color = Color(0.08, 0.08, 0.08, 1)
+LevelUpTitle/constants/outline_size = 8
+LevelUpTitle/font_sizes/font_size = 48
+LevelUpText/base_type = &"Label"
+LevelUpText/colors/font_color = Color(0.95, 0.95, 0.95, 1)
+LevelUpText/colors/font_outline_color = Color(0.08, 0.08, 0.08, 1)
+LevelUpText/constants/outline_size = 6
+LevelUpText/font_sizes/font_size = 20
+LevelUpLink/base_type = &"Button"
+LevelUpLink/colors/font_color = Color(1, 0.9, 0.55, 1)
+LevelUpLink/colors/font_hover_color = Color(1, 1, 1, 1)
+LevelUpLink/colors/font_pressed_color = Color(1, 1, 1, 1)
+LevelUpLink/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+LevelUpLink/colors/font_focus_color = Color(1, 0.9, 0.55, 1)
+LevelUpLink/colors/font_outline_color = Color(0.08, 0.08, 0.08, 1)
+LevelUpLink/constants/outline_size = 6
+LevelUpLink/font_sizes/font_size = 20
+LevelUpLink/styles/normal = SubResource("StyleBoxFlat_level_up_link")
+LevelUpLink/styles/hover = SubResource("StyleBoxFlat_level_up_link_hover")
+LevelUpLink/styles/pressed = SubResource("StyleBoxFlat_level_up_link_hover")
+LevelUpLink/styles/hover_pressed = SubResource("StyleBoxFlat_level_up_link_hover")
+LevelUpLink/styles/focus = SubResource("StyleBoxFlat_level_up_link")
+CombatTextExperience/base_type = &"Label"
+CombatTextExperience/colors/font_color = Color(0.75, 0.6, 1, 1)
+CombatTextExperience/colors/font_outline_color = Color(0.05, 0.05, 0.05, 1)
+CombatTextExperience/constants/outline_size = 5
+CombatTextExperience/font_sizes/font_size = 22
+LevelUpEffect/colors/glow = Color(1, 0.9, 0.55, 1)

@@ -507,7 +507,7 @@ Eindeutig: die Kombination `klasse` + `stufe`.
 
 #### erfahrung.csv – Erfahrungskurve
 
-Benötigte Erfahrung, um von einer Stufe zur nächsten aufzusteigen.
+Benötigte Erfahrung, um von einer Stufe zur nächsten aufzusteigen (#27). Je Stufe von 1 bis eine unter der Höchststufe (spielkonstanten.csv, hoechststufe) eine Zeile; fehlt eine Stufe, geht es dort nicht weiter. Erfahrung für Kills: gegner_stufenwerte.csv (erfahrung) und gegner_raenge.csv (erfahrung_faktor).
 
 Eindeutig: `stufe`.
 
@@ -515,6 +515,21 @@ Eindeutig: `stufe`.
 | --- | --- | --- | --- | --- | --- |
 | `stufe` | Ganzzahl | ja |  | 1 bis 100 | Aktuelle Stufe. |
 | `benoetigte_erfahrung` | Ganzzahl | ja |  | ab 0 | Erfahrung bis zur nächsten Stufe. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
+#### stufenfreischaltungen.csv – Weitere Freischaltungen je Stufe
+
+Was eine Stufe außer Werten, Fähigkeiten (Feld required_level der Fähigkeit), Spezialisierung und Talentpunkten (spielkonstanten.csv) noch freischaltet, z. B. später ein Reittier oder eine neue Funktion. Erscheint in der Aufstiegsmeldung; abfragbar über LevelUpSummary.has_unlock. Neue Freischaltungen brauchen keine Code-Änderung.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Eindeutige ID der Freischaltung (z. B. „reittier“). Andere Systeme fragen sie mit LevelUpSummary.has_unlock ab. |
+| `klasse` | Verweis |  |  | Klasse aus `res://data/classes/` | Nur für diese Klasse (ID wie in res://data/classes/); leer = für alle Klassen. |
+| `stufe` | Ganzzahl | ja |  | 2 bis 100 | Stufe, ab der die Freischaltung gilt. |
+| `text` | Text | ja |  |  | Zeile in der Aufstiegsmeldung, z. B. „Du kannst jetzt reiten.“ |
+| `fenster` | Auswahl |  |  | `character`, `spellbook`, `talents`, `map`, `bags` | Fenster, das ein Klick auf die Zeile öffnet (leer = keins). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 #### umrechnung.csv – Umrechnung je Stufe

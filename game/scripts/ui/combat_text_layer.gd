@@ -54,6 +54,14 @@ func show_hit(result: HitResult) -> void:
 			_add(unit, item)
 
 
+## Freier Text über unit (#27: Erfahrung „+120 EP“, CombatTextExperience).
+## Gilt nicht als Kampftext und erscheint deshalb auch, wenn der Kampftext im
+## Spielmenü abgeschaltet ist.
+func show_text(unit: Unit, text: String, variation: StringName) -> void:
+	if unit != null and is_instance_valid(unit):
+		_add(unit, _item(text, variation, false))
+
+
 ## Was der Spieler viewer_path zu result sieht: Liste von
 ## {"text", "variation", "school" (Färbung, leer = keine), "pop", "on_self"}.
 ## Leer, wenn ihn das Ereignis nicht betrifft. Auch für die Style-Vorschau.

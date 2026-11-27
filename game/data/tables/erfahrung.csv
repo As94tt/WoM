@@ -1,5 +1,31 @@
-﻿# Benötigte Erfahrung bis zur nächsten Stufe (Platzhalterzahlen bis #27).
+﻿# Benötigte Erfahrung bis zur nächsten Stufe (#27). Platzhalter: 400 + 500 × (Stufe − 1) + 40 × (Stufe − 1)², auf 10 gerundet; Balancing folgt. Die Höchststufe (spielkonstanten.csv, hoechststufe) braucht keine Zeile.
 stufe;benoetigte_erfahrung;notiz
 1;400;Platzhalter
-2;900;Platzhalter
-3;1400;Platzhalter
+2;940;
+3;1560;
+4;2260;
+5;3040;
+6;3900;
+7;4840;
+8;5860;
+9;6960;
+10;8140;
+11;9400;
+12;10740;
+13;12160;
+14;13660;
+15;15240;
+16;16900;
+17;18640;
+18;20460;
+19;22360;
+20;24340;
+21;26400;
+22;28540;
+23;30760;
+24;33060;
+25;35440;
+26;37900;
+27;40440;
+28;43060;
+29;45760;

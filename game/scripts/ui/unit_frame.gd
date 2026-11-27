@@ -141,9 +141,15 @@ func refresh() -> void:
 	var reaction := _unit.get_reaction_to(_viewer)
 	if mode == Mode.TARGET:
 		%NameLabel.add_theme_color_override("font_color", UnitColors.reaction_color(reaction))
-		var difficulty := UnitColors.difficulty(_unit.get_level(), _viewer.get_level() if _viewer != null else 1)
+		var own_level := _viewer.get_level() if _viewer != null else 1
+		var difficulty := UnitColors.difficulty(_unit.get_level(), own_level)
+		# Totenkopf statt Zahl bei sehr viel höheren Gegnern (#27); Spieler nie.
+		if not _unit.is_player_unit():
+			%LevelLabel.text = UnitColors.level_text(_unit.get_level(), own_level)
 		%LevelLabel.add_theme_color_override("font_color", UnitColors.difficulty_color(difficulty))
-		tooltip_text = "%s · Stufe %d (%s) · %s" % [unit_name, _unit.get_level(),
+		var level_label := "Stufe %d" % _unit.get_level() if _unit.is_player_unit() \
+				else UnitColors.level_label(_unit.get_level(), own_level)
+		tooltip_text = "%s · %s (%s) · %s" % [unit_name, level_label,
 				UnitColors.DIFFICULTY_NAMES[difficulty], UnitColors.REACTION_NAMES[reaction]]
 	else:
 		tooltip_text = "%s · Stufe %d" % [unit_name, _unit.get_level()]

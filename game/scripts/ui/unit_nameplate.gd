@@ -55,9 +55,11 @@ func update_from(p_unit: Unit, viewer: Unit, is_target: bool, show_plate: bool) 
 	%Auras.enabled = show_plate and hostile
 	if hostile:
 		var level := unit.get_level()
-		%LevelLabel.text = str(level)
+		var own_level := viewer.get_level() if viewer != null else 1
+		# Totenkopf statt Zahl bei sehr viel höheren Gegnern (#27).
+		%LevelLabel.text = UnitColors.level_text(level, own_level)
 		%LevelLabel.add_theme_color_override("font_color", UnitColors.difficulty_color(
-				UnitColors.difficulty(level, viewer.get_level() if viewer != null else 1)))
+				UnitColors.difficulty(level, own_level)))
 		var stats := unit.get_stats()
 		var bar: ProgressBar = %HealthBar
 		bar.max_value = maxf(1.0, stats.max_health if stats != null else 1.0)

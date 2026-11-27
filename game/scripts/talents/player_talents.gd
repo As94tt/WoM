@@ -12,9 +12,9 @@ extends Node
 ##
 ## Wirksam ist die Spezialisierung ab Stufe 10 (spezialisierung_ab_stufe),
 ## die Talente, solange die ausgegebenen Punkte nicht mehr sind als die
-## vorhandenen. Sinkt die Stufe (nur über das Entwickler-Panel möglich, die
-## Stufe dort gilt nur für die Sitzung), bleibt die Wahl gespeichert und
-## „ruht“, bis die Stufe wieder reicht.
+## vorhandenen. Sinkt die Stufe (nur über das Entwickler-Panel möglich, seit
+## #27 „Stufe setzen“ im Abschnitt „Stufe und Erfahrung“), bleibt die Wahl
+## gespeichert und „ruht“, bis die Stufe wieder reicht.
 ##
 ## Netzwerk (Host entscheidet):
 ## - Der Host bekommt den Stand beim Beitreten mit dem Charakter

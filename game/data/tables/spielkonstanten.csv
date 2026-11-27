@@ -59,11 +59,20 @@ plaketten_reichweite;40;Namensplaketten erscheinen bis zu dieser Entfernung in M
 blickwinkel_vorne;180;Winkel in Grad, in dem eine Einheit „vor mir“ steht (Tab, später Fähigkeiten)
 blickwinkel_hinten;180;Winkel in Grad hinter dem Ziel, in dem man „hinter dem Ziel“ steht
 klickweg_max;6;Größte Mausbewegung in Pixeln, bei der Drücken und Loslassen noch als Klick (Zielauswahl) statt als Kamera drehen zählt
-# Stufenunterschied (#31): Farbe der Stufe am Zielrahmen. Unterschied = Stufe des Ziels − eigene Stufe. Kann vom Stufen-Ticket #27 übernommen werden.
+# Stufenunterschied (#31, #27): Farbe der Stufe an Zielrahmen und Namensplakette. Unterschied = Stufe des Ziels − eigene Stufe.
 stufe_rot_ab;5;Ab diesem Unterschied gilt das Ziel als „sehr schwer“ (rot)
 stufe_orange_ab;3;Ab diesem Unterschied gilt das Ziel als „schwer“ (orange)
 stufe_gruen_bis;-3;Bis zu diesem Unterschied gilt das Ziel als „leicht“ (grün), dazwischen als „ebenbürtig“ (gelb)
-stufe_grau_bis;-8;Bis zu diesem Unterschied gilt das Ziel als „trivial“ (grau)
+stufe_grau_bis;-8;Bis zu diesem Unterschied gilt das Ziel als „trivial“ (grau) und gibt keine Erfahrung (#27)
+stufe_totenkopf_ab;10;Ab diesem Unterschied steht statt der Stufe ein Totenkopf (#27)
+# Stufen und Erfahrung (#27, Platzhalter, Balancing folgt)
+hoechststufe;30;Höchste Stufe, auf der keine Erfahrung mehr gesammelt wird
+erfahrung_bonus_pro_stufe;5;Mehr Erfahrung in Prozent je Stufe, die ein Gegner höher ist
+erfahrung_bonus_max;20;Höchstens so viel Prozent mehr Erfahrung für höhere Gegner
+erfahrung_malus_pro_stufe;10;Weniger Erfahrung in Prozent je Stufe, die ein Gegner niedriger ist (graue Gegner geben nichts)
+gruppe_erfahrung_radius;50;Gruppenmitglieder in diesem Abstand in Metern zum getöteten Gegner bekommen ihren Anteil, weiter entfernte nichts
+gruppe_erfahrung_bonus_pro_mitglied;10;Gruppenbonus in Prozent je weiterem Mitglied in der Nähe, die Summe wird nach Stufe gewichtet aufgeteilt
+aufstieg_anzeige_dauer;6;Sekunden, die die Aufstiegsmeldung in der Bildschirmmitte voll sichtbar bleibt
 # Übungspuppen (#31)
 puppe_anzeige_fenster;60;Schaden bzw. Heilung pro Sekunde wird über so viele Sekunden gemittelt
 puppe_ruecksetzen_nach;10;Sekunden ohne Schaden bzw. Heilung, nach denen sich eine Puppe zurücksetzt

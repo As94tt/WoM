@@ -51,6 +51,11 @@ extends Unit
 ## der Stand (talent_state) läuft über ServerSync (Authority Host). Den Stand
 ## vom Beitreten gibt setup_from_info vor dem Erzeugen mit.
 ##
+## Stufe und Erfahrung (#27): Kindknoten „Experience“ (PlayerExperience) mit
+## der Erfahrung innerhalb der Stufe (ServerSync, Authority Host). Den Aufstieg
+## entscheidet der Host; er setzt level und meldet ihn allen (Effekt
+## LevelUpEffect an der Figur, Meldung beim Besitzer).
+##
 ## Modell und Animationen (#59): Kindknoten „Model/Animator“
 ## (CharacterAnimator) trägt optional ein Modell mit Skelett und wählt die
 ## Animation lokal aus move_state und visual_velocity; nichts Neues wird
@@ -197,6 +202,11 @@ func _ready() -> void:
 	_setup_model()
 	_update_appearance()
 	_on_stats_changed()
+	# Aufstiegseffekt (#27) auf jeder Instanz, die den Aufstieg gemeldet bekommt.
+	var experience := get_experience()
+	if experience != null:
+		experience.leveled_up.connect(func(_previous: int, _level: int) -> void:
+			LevelUpEffect.play_on(self))
 
 	_movement_sync.replication_interval = 1.0 / NETWORK_SETTINGS.sync_rate_hz
 	# Figuren nur an Peers senden, die die Welt geladen haben.
@@ -242,6 +252,10 @@ func setup_from_info(info: NetPlayerInfo) -> void:
 		var talents := get_node_or_null(^"Talents") as PlayerTalents
 		if talents != null:
 			talents.set_initial_state(info.talents)
+		# Erfahrung (#27) ebenso nur vor dem Erzeugen.
+		var experience := get_experience()
+		if experience != null:
+			experience.set_initial_experience(info.experience)
 
 
 ## Werte und Ressourcen der Figur (#19).
@@ -257,6 +271,11 @@ func get_abilities() -> PlayerAbilities:
 ## Spezialisierung und Talente der Figur (#20).
 func get_talents() -> PlayerTalents:
 	return get_node_or_null(^"Talents") as PlayerTalents
+
+
+## Erfahrung und Stufenaufstieg der Figur (#27).
+func get_experience() -> PlayerExperience:
+	return get_node_or_null(^"Experience") as PlayerExperience
 
 
 ## Zielauswahl (#31); nur beim Besitzer, sonst null.

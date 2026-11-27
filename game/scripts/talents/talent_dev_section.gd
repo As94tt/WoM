@@ -22,7 +22,7 @@ func setup(panel: DevPanel, world: GameWorld) -> void:
 	panel.add_button(section, "Talentpunkte geben (+1)", _dev.bind("points", 1))
 	panel.add_button(section, "Talentpunkte geben (+5)", _dev.bind("points", 5))
 	panel.add_button(section, "Spezialisierung zurücksetzen", _dev.bind("reset_spec", null))
-	panel.add_info(section, "Stufe ändern: Abschnitt „Werte“ (Spezialisierung ab Stufe %d, Punkte ab Stufe %d)."
+	panel.add_info(section, "Stufe ändern: Abschnitt „Stufe und Erfahrung“ (Spezialisierung ab Stufe %d, Punkte ab Stufe %d)."
 			% [TalentRules.spec_level(), TalentRules.first_point_level()])
 	var timer := Timer.new()
 	timer.wait_time = 0.5

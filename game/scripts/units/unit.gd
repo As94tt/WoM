@@ -104,6 +104,21 @@ func get_rank() -> Rank:
 	return Rank.NORMAL
 
 
+## Gibt die Einheit beim Tod Erfahrung (#27)? Spielfiguren und Übungspuppen
+## nicht; Gegner (#38) überschreiben das. Stufe und Rang bestimmen die Menge
+## (LevelRules.kill_experience).
+func gives_experience() -> bool:
+	return false
+
+
+## ID des Rangs wie in gegner_raenge.csv („normal“, „elite“, „selten“, „boss“).
+func get_rank_id() -> String:
+	for id: String in RANK_IDS:
+		if RANK_IDS[id] == get_rank():
+			return id
+	return "normal"
+
+
 ## Text, der über der Einheit dauerhaft steht (Übungspuppen: Schaden pro
 ## Sekunde). Leer = keiner.
 func get_overhead_text() -> String:
