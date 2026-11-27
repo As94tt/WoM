@@ -74,6 +74,11 @@ func get_unit_name() -> String:
 	return String(name)
 
 
+## Optionaler Titel, z. B. „<Rudelführer>“ (Gegner, #36). Leer = keiner.
+func get_unit_title() -> String:
+	return ""
+
+
 ## Stufe, mit der gerechnet wird.
 func get_level() -> int:
 	var stats := get_stats()
@@ -105,8 +110,8 @@ func get_rank() -> Rank:
 
 
 ## Gibt die Einheit beim Tod Erfahrung (#27)? Spielfiguren und Übungspuppen
-## nicht; Gegner (#38) überschreiben das. Stufe und Rang bestimmen die Menge
-## (LevelRules.kill_experience).
+## nicht; Gegner (Enemy, #36) überschreiben das. Stufe und Rang bestimmen die
+## Menge (LevelRules.kill_experience).
 func gives_experience() -> bool:
 	return false
 
