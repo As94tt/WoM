@@ -565,10 +565,17 @@ func _run_enemy_tour() -> void:
 	var player: PlayerCharacter = world.get_local_player()
 	var targeting := player.get_targeting()
 	var zone := _training_zone()
-	# Grauschnauze für das Bild sicher dabei (wie „am Mauszeiger“ im Panel).
-	if _enemy_of(manager, &"grauschnauze") == null:
-		manager.spawn_free(&"grauschnauze", 6, Transform3D(Basis(Vector3.UP, PI / 2.0),
-				zone.global_position + Vector3(44, 0, -13)))
+	# Grauschnauze für das Bild sicher dabei, über den Weg des Entwickler-Panels
+	# („am Mauszeiger“: Typ und Stufe wählen, Wunsch an den Host).
+	var dev := world.get_node_or_null(^"EnemyDev") as EnemyDevSection
+	if dev != null and _enemy_of(manager, &"grauschnauze") == null:
+		var before := manager.get_enemies().size()
+		dev._type_index = dev._ids.find(&"grauschnauze")
+		dev._level = 6
+		dev.request_spawn_at(Transform3D(Basis(Vector3.UP, PI / 2.0), zone.global_position + Vector3(44, 0, -13)))
+		await _wait(0.2)
+		print("UiScreenshots: Entwickler-Panel hat Grauschnauze erzeugt: %s (%d → %d Gegner)" % [
+				_enemy_of(manager, &"grauschnauze") != null, before, manager.get_enemies().size()])
 	_place_in_training(world, Vector3(37, 0, 0))
 	# Namensplaketten der Gegner zeigen (nur für die Bilder, nicht gespeichert).
 	for node in world.get_hud().find_children("*", "NameplateLayer", true, false):
