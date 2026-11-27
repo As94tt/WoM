@@ -85,12 +85,61 @@ default_value = "nein"
 choices = PackedStringArray()
 description = "ja = wird einer angegriffen, greifen alle an."
 
+[sub_resource type="Resource" id="Resource_sg_rare"]
+script = ExtResource("1_r16qi")
+name = "selten_gegner"
+type = 6
+choices = PackedStringArray()
+ref_table = "gegner"
+ref_label = "Gegner"
+description = "Optionaler seltener Gegner der Gruppe (#36). Höchstens einer gleichzeitig je Spawnbereich."
+
+[sub_resource type="Resource" id="Resource_sg_rare_level"]
+script = ExtResource("1_r16qi")
+name = "selten_stufe"
+type = 2
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Stufe des seltenen Gegners; 0 = wie die Gruppe (stufe_min bis stufe_max)."
+
+[sub_resource type="Resource" id="Resource_sg_rare_chance"]
+script = ExtResource("1_r16qi")
+name = "selten_chance"
+type = 3
+default_value = "0"
+has_min = true
+has_max = true
+max_value = 100.0
+choices = PackedStringArray()
+description = "Chance in Prozent, dass bei einem Erscheinen statt des normalen Gegners der seltene erscheint (0 = nicht genutzt)."
+
+[sub_resource type="Resource" id="Resource_sg_rare_min"]
+script = ExtResource("1_r16qi")
+name = "selten_zeit_min_s"
+type = 3
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Alternativ: Der seltene Gegner erscheint zusätzlich nach einer zufälligen Zeit zwischen selten_zeit_min_s und selten_zeit_max_s (ab Start bzw. ab seinem Tod). 0 = nicht genutzt."
+
+[sub_resource type="Resource" id="Resource_sg_rare_max"]
+script = ExtResource("1_r16qi")
+name = "selten_zeit_max_s"
+type = 3
+default_value = "0"
+has_min = true
+choices = PackedStringArray()
+description = "Größte Zeit in Sekunden bis zum Erscheinen des seltenen Gegners (siehe selten_zeit_min_s)."
+
 [resource]
 script = ExtResource("2_agdqy")
 table = "spawngruppen"
 title = "Spawngruppen"
 group = "Welt"
-description = "Was in einem Spawnbereich erscheint. Die Spawnbereiche in der Welt bestimmen nur Ort, Radius bzw. feste Punkte und verweisen auf eine Spawngruppe."
+description = "Was in einem Spawnbereich erscheint. Die Spawnbereiche in der Welt (EnemySpawnArea, #36) bestimmen nur Ort, Radius bzw. feste Punkte und verweisen auf eine Spawngruppe. Jeder Gegner hat einen eigenen Respawn-Timer ab seinem Tod; die Stufe wird bei jedem Erscheinen gleichverteilt gewürfelt."
 key_columns = PackedStringArray("id")
 order = 21
-columns = Array[ExtResource("1_r16qi")]([SubResource("Resource_p1ssc"), SubResource("Resource_ikw4j"), SubResource("Resource_5qh4d"), SubResource("Resource_i53e4"), SubResource("Resource_auhna"), SubResource("Resource_e4nfc"), SubResource("Resource_e8sud"), SubResource("Resource_uxbwd")])
+columns = Array[ExtResource("1_r16qi")]([SubResource("Resource_p1ssc"), SubResource("Resource_ikw4j"), SubResource("Resource_5qh4d"), SubResource("Resource_i53e4"), SubResource("Resource_auhna"), SubResource("Resource_e4nfc"), SubResource("Resource_e8sud"), SubResource("Resource_uxbwd"), SubResource("Resource_sg_rare"), SubResource("Resource_sg_rare_level"), SubResource("Resource_sg_rare_chance"), SubResource("Resource_sg_rare_min"), SubResource("Resource_sg_rare_max")])

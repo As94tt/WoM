@@ -11,7 +11,12 @@ tank_bedrohung_faktor;3;Ab diesem Faktor auf erzeugte Bedrohung (Auren) gilt ein
 wiedereinstieg_leben;50;Leben in Prozent nach „Am Wiedereinstiegspunkt erscheinen“
 wiedereinstieg_ressourcen;50;Mana und Energie in Prozent nach „Am Wiedereinstiegspunkt erscheinen“ (Wut und Chi 0)
 alle_tot_wartezeit;5;Sekunden, nach denen alle am Wiedereinstiegspunkt erscheinen, wenn alle Spieler einer Sitzung tot sind
-leiche_dauer;30;Sekunden, nach denen ein gestorbener Gegner verschwindet
+leiche_dauer;120;Sekunden, nach denen ein gestorbener Gegner verschwindet (#36: 2 min)
+leiche_dauer_nach_beute;30;Sekunden, nach denen die Leiche verschwindet, sobald ihre Beute genommen wurde (#36 angelegt, genutzt ab #38)
+# Gegner erscheinen (#36)
+respawn_naehe_radius;15;Steht eine lebende Spielfigur näher als so viele Meter an der Stelle, verschiebt sich das Wiedererscheinen eines Gegners
+respawn_verschiebung_s;10;Sekunden, um die sich das Wiedererscheinen dann verschiebt (danach wird erneut geprüft)
+respawn_schnell_s;10;Entwickler-Panel: Respawnzeit in Sekunden mit dem Schalter „Schneller Respawn“
 # Wertesystem (#19): Umrechnung von Attributen (Platzhalter, Balancing folgt)
 leben_pro_ausdauer;10;Maximales Leben je Punkt Ausdauer
 kampfkraft_pro_hauptattribut;2;Kampfkraft je Punkt Hauptattribut (Stärke beim Krieger, Gewandtheit bei Schurke und Mönch)

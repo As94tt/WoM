@@ -78,6 +78,12 @@ extends Node3D
 ##   Zusammenfassung (LevelUpSummary); Aufstiege von Mitspielern im Log.
 ##   Abschnitt „Stufe und Erfahrung“ im Entwickler-Panel (LevelDevSection).
 ##
+## - Gegner (#36): Kindknoten „EnemySpawns“ (EnemySpawnManager) füllt auf dem
+##   Host die Spawnbereiche (EnemySpawnArea) der Gebiete, sobald das NavMesh
+##   gebacken ist, und lässt tote Gegner nach ihren Regeln neu erscheinen. Die
+##   Gegner (enemy.tscn) liegen unter %Units, der UnitSpawner überträgt sie.
+##   Abschnitt „Gegner“ im Entwickler-Panel (EnemyDevSection).
+##
 ## Multiplayer (#30): Alle Spieler laden dieselbe Szene; Gelände, Wald und
 ## Berge entstehen auf jeder Instanz gleich aus denselben Daten. Die
 ## Verbindung baut vorher der Autoload „Network“ auf. Ist die Welt geladen,
@@ -97,6 +103,7 @@ const TALENT_PANEL_SCENE := preload("res://scenes/ui/hud/talent_panel.tscn")
 const INVENTORY_PANEL_SCENE := preload("res://scenes/ui/hud/inventory_panel.tscn")
 const STAT_DEV_TOOLS: StatDevTools = preload("res://data/stats/dev_tools.tres")
 const DUMMY_SCENE := preload("res://scenes/units/training_dummy.tscn")
+const ENEMY_SCENE := preload("res://scenes/units/enemy.tscn")
 const UNIT_DEV_TOOLS: UnitDevTools = preload("res://data/units/dev_tools.tres")
 ## Flächen und Projektile (#32), erzeugt vom Host unter „Effects“.
 const EFFECT_SCENES: Array[String] = [AreaEffect.AREA_SCENE, ProjectileEffect.PROJECTILE_SCENE]
@@ -107,6 +114,8 @@ const START_SPACING := 1.5
 const NETWORK_SETTINGS: NetworkSettings = preload("res://data/network/network_settings.tres")
 ## Teleportziele werden so weit über dem Boden gesetzt (Figur fällt kurz).
 const TELEPORT_LIFT := 0.3
+## Sekunden nach dem Backen des NavMesh, bis die Gegner erscheinen (#36).
+const ENEMY_START_DELAY := 0.2
 
 ## Nur Host (#35): Eine Einheit (Spieler, Puppe, später Gegner) ist gestorben.
 signal unit_died(unit: Unit, killer: Unit)
@@ -137,6 +146,8 @@ var _unit_dev_dot_timer: Timer = null
 var _revival: RevivalService = null
 ## Erfahrung für Kills (#27).
 var _experience_service: ExperienceService = null
+## Gegner der Spawnbereiche (#36).
+var _enemy_spawns: EnemySpawnManager = null
 ## Inventar des eigenen Charakters (#18).
 var _inventory: Inventory = null
 var _inventory_saver: InventorySaver = null
@@ -162,6 +173,7 @@ func _ready() -> void:
 	_zone_tracker.zone_changed.connect(_on_zone_changed)
 	_spawner.add_spawnable_scene(PLAYER_SCENE.resource_path)
 	_unit_spawner.add_spawnable_scene(DUMMY_SCENE.resource_path)
+	_unit_spawner.add_spawnable_scene(ENEMY_SCENE.resource_path)
 	for scene_path in EFFECT_SCENES:
 		_effect_spawner.add_spawnable_scene(scene_path)
 	_players.child_entered_tree.connect(_on_player_node_added)
@@ -174,6 +186,10 @@ func _ready() -> void:
 	_experience_service = ExperienceService.new()
 	add_child(_experience_service)
 	_experience_service.setup(self)
+	# Gegner der Spawnbereiche (#36): startet auf dem Host nach dem NavMesh.
+	_enemy_spawns = EnemySpawnManager.new()
+	add_child(_enemy_spawns)
+	_enemy_spawns.setup(_units)
 	Network.player_entered_world.connect(_on_player_entered_world)
 	Network.player_left_world.connect(_on_player_left_world)
 	Network.players_changed.connect(_on_players_changed)
@@ -771,6 +787,9 @@ func _bake_navigation() -> void:
 		var polygons := _navigation.navigation_mesh.get_polygon_count()
 		_nav_status = "%d Polygone, %d ms" % [polygons, Time.get_ticks_msec() - start]
 		print("NavMesh fertig: ", _nav_status)
+		# Gegner (#36) erst jetzt, damit sie auf dem NavMesh stehen. Der
+		# NavigationServer übernimmt das neue Mesh im nächsten Physikschritt.
+		get_tree().create_timer(ENEMY_START_DELAY).timeout.connect(_enemy_spawns.start)
 	_navigation.bake_finished.connect(on_baked, CONNECT_ONE_SHOT)
 	_navigation.bake_navigation_mesh(true)
 
@@ -866,6 +885,12 @@ func _setup_dev_panel() -> void:
 			_bar_layout.reset(player.get_abilities().get_default_bar_abilities()))
 
 	_setup_unit_dev_section(panel)
+
+	# Gegner (#36): erscheinen lassen, töten, Spawnbereiche zurücksetzen/zeigen.
+	var enemy_dev := EnemyDevSection.new()
+	enemy_dev.name = "EnemyDev"
+	add_child(enemy_dev)
+	enemy_dev.setup(panel, self)
 
 	# Auren (#32): Testeffekte und Testauren auf Ziel oder sich selbst.
 	var combat_dev := CombatDevSection.new()
@@ -1123,7 +1148,11 @@ func _do_unit_dev_action(target: Unit, source: Unit, action: String, value: Vari
 		"kill":
 			Combat.deal_damage(source, target, stats.health, &"physisch")
 		"level":
-			stats.set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
+			if target is Enemy:
+				# Gegner (#36): echte Stufe (Werte aus gegner_stufenwerte.csv).
+				(target as Enemy).level = clampi(int(value), 1, Data.hoechste_stufe())
+			else:
+				stats.set_level_override(clampi(int(value), 1, Data.hoechste_stufe()))
 		"rank":
 			if target is TrainingDummy:
 				(target as TrainingDummy).rank_override = int(value)

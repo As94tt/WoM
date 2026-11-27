@@ -1,5 +1,10 @@
 ﻿# Gegnertypen. Leben und Schaden ergeben sich aus Stufe (Spawn), Rang und Modifikatoren.
 id;name;titel;familie;rang;gesinnung;kampfart;angriffstempo;schule;leben_mod;schaden_mod;ruestung_mod;zauberschutz_mod;ausweichen;parieren;blocken;immunitaeten;faehigkeiten;ki_profil;beutetabelle;modell;groesse;farbe;notiz
-wolf_jung;Junger Wolf;;tier;normal;feindlich;nahkampf;2;physisch;1;1;1;1;5;0;0;;;;wolf_jung;;0,8;;Beispiel, in Rudeln
-bandit;Bandit;;humanoid;normal;feindlich;nahkampf;2;physisch;1;1;1;1;0;5;0;;;;;;1;;Beispiel
-grauschnauze;Grauschnauze;<Rudelführer>;tier;selten;feindlich;nahkampf;1,8;physisch;1;1;1,5;1;10;0;0;betaeubung;;;wolf_jung;;1,2;;Beispiel: +50 % Rüstung, immun gegen Betäubung
+# Test-Gegner (#36). Fähigkeiten und KI-Profile legt #37 an, kampfart, angriffstempo und schule werden bis dahin nur geprüft.
+wolf_jung;Junger Wolf;;tier;normal;feindlich;nahkampf;2;physisch;1;1;1;1;5;0;0;;;;wolf_jung;;0,8;;In Rudeln
+bandit;Bandit;;humanoid;normal;feindlich;nahkampf;2;physisch;1;1;1;1;0;5;0;;;;;;1;;
+banditenschuetze;Banditenschütze;;humanoid;normal;feindlich;fernkampf;2,5;physisch;0,9;1;0,8;1;5;0;0;;;;;;1;;Fernkampf, etwas weniger Leben und Rüstung
+banditenhexer;Banditenhexer;;humanoid;normal;feindlich;zauberwirker;2;schatten;0,8;1;0,5;1,5;0;0;0;;;;;;1;;Zauberwirker, der unterbrechbare Zauber kommt mit #37
+grizzly_alt;Alter Grizzly;;tier;elite;feindlich;nahkampf;2,5;physisch;1;1;1,2;1;0;0;0;;;;;;1,6;;Elite: dreifaches Leben aus dem Rang, +20 % Rüstung
+grauschnauze;Grauschnauze;<Rudelführer>;tier;selten;feindlich;nahkampf;1,8;physisch;1;1;1,5;1;10;0;0;betaeubung;;;wolf_jung;;1,2;;Selten: +50 % Rüstung, immun gegen Betäubung, Ausweichen 10 %
+banditenhauptmann;Banditenhauptmann;<Anführer der Banditen>;humanoid;boss;feindlich;nahkampf;2;physisch;1;1;1,5;1;0;10;10;betaeubung;;;;;1,3;;Boss, Fähigkeiten kommen mit #37

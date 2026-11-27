@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/world/world_zone.gd" id="5_world_zone"]
 [ext_resource type="Resource" path="res://data/zones/trainingsgelaende.tres" id="6_trainingsgelaende"]
 [ext_resource type="Script" path="res://scripts/world/unit_spawn_point.gd" id="7_unit_spawn"]
+[ext_resource type="Script" path="res://scripts/world/enemy_spawn_area.gd" id="8_enemy_spawn"]
 
 [sub_resource type="StandardMaterial3D" id="Material_fence"]
 albedo_color = Color(0.55, 0.5, 0.45, 1)
@@ -56,6 +57,8 @@ size = Vector3(10, 3.6, 2)
 [node name="Placeholders" type="Node3D" parent="."]
 
 [node name="Dummies" type="Node3D" parent="."]
+
+[node name="Enemies" type="Node3D" parent="."]
 
 [node name="Teleport" type="Marker3D" parent="Points"]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -62, 0, -1.5)
@@ -108,3 +111,41 @@ unit_id = &"angriffspuppe"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 0, 18.5)
 script = ExtResource("7_unit_spawn")
 unit_id = &"angriffspuppe"
+
+[node name="Woelfe" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, -16)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_woelfe"
+
+[node name="Banditen" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0, -5)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_banditen"
+radius = 3.0
+
+[node name="Schuetzen" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 4)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_schuetzen"
+radius = 3.0
+
+[node name="Hexer" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 0, -3)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_hexer"
+radius = 2.0
+
+[node name="Grizzly" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 13)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_grizzly"
+radius = 2.0
+
+[node name="Hauptmann" type="Marker3D" parent="Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0, 20)
+script = ExtResource("8_enemy_spawn")
+spawn_group = &"training_hauptmann"
+radius = 0.0
+
+[node name="Thron" type="Marker3D" parent="Enemies/Hauptmann"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)

@@ -3,3 +3,10 @@ stufe;leben;schaden_min;schaden_max;ruestung;zauberschutz;erfahrung;geld_min;gel
 1;40;2;4;10;0;20;1;5;Platzhalter
 2;55;3;5;20;0;30;2;8;Platzhalter
 3;70;4;7;30;5;40;3;12;Platzhalter
+4;85;5;8;40;5;50;4;15;Platzhalter (#36, linear weiter)
+5;100;6;10;50;10;60;5;18;Platzhalter (#36, linear weiter)
+6;115;7;11;60;10;70;6;22;Platzhalter (#36, linear weiter)
+7;130;8;13;70;15;80;7;25;Platzhalter (#36, linear weiter)
+8;145;9;14;80;15;90;8;28;Platzhalter (#36, linear weiter)
+9;160;10;16;90;20;100;9;32;Platzhalter (#36, linear weiter)
+10;175;11;17;100;20;110;10;35;Platzhalter (#36, linear weiter)

@@ -1,3 +1,10 @@
-﻿# Was in einem Spawnbereich erscheint. Gegner als Werte-Paare gegner_id:gewichtung.
-id;gebiet;gegner;stufe_min;stufe_max;anzahl;respawn_s;gemeinsamer_angriff;notiz
-wolfswiese_rudel;wolfswiese;wolf_jung:3|grauschnauze:1;1;3;4;180;ja;Beispiel
+﻿# Was in einem Spawnbereich erscheint. Gegner als Werte-Paare gegner_id:gewichtung. Seltene Gegner (#36) über die Spalten selten_*: Chance je Erscheinen oder zufällige Zeit, höchstens einer gleichzeitig.
+id;gebiet;gegner;stufe_min;stufe_max;anzahl;respawn_s;gemeinsamer_angriff;selten_gegner;selten_stufe;selten_chance;selten_zeit_min_s;selten_zeit_max_s;notiz
+wolfswiese_rudel;wolfswiese;wolf_jung:1;1;3;4;180;ja;grauschnauze;6;0;1200;2400;Beispiel: Grauschnauze erscheint nach 20–40 min zusätzlich
+# Testgelände (#36): eigene Spawnbereiche in training.tscn, Abstand zu den Puppen.
+training_woelfe;trainingsgelaende;wolf_jung:1;1;3;4;180;ja;grauschnauze;6;15;0;0;Rudel, 15 % Chance je Erscheinen auf Grauschnauze
+training_banditen;trainingsgelaende;bandit:1;3;5;2;180;ja;;0;0;0;0;
+training_schuetzen;trainingsgelaende;banditenschuetze:1;3;5;2;180;ja;;0;0;0;0;
+training_hexer;trainingsgelaende;banditenhexer:1;4;6;1;180;nein;;0;0;0;0;
+training_grizzly;trainingsgelaende;grizzly_alt:1;7;7;1;300;nein;;0;0;0;0;Elite
+training_hauptmann;trainingsgelaende;banditenhauptmann:1;10;10;1;1800;nein;;0;0;0;0;Boss an festem Punkt, 30 min Respawn
