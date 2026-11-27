@@ -415,7 +415,7 @@ Grafikpaket des Projektverantwortlichen (v3, 27.11.2026). Größen, 9-Slice-Rän
 
 ### Icons (#55)
 
-Eingebaut sind die Klassen-, Magier-Spezialisierungs- und Magier-Zauber-Icons (#55, unverändert) und seit dem UI-Paket die allgemeinen Icons im Stil „Stone & Brass“ (Bediensymbole, leere Ausrüstungsplätze, Münzen, Testgegenstände, allgemeine Fähigkeiten, Schadensschulen, Karte). Alte SVG-Icon-Entwürfe werden nicht verwendet.
+Eingebaut sind die Klassen- und Magier-Spezialisierungs-Icons (#55, unverändert), seit dem 27.11.2026 die Zauber-Icons von Magier und Krieger im neuen Design (ersetzen die alten Magier-Zauber-Icons aus #55) und seit dem UI-Paket die allgemeinen Icons im Stil „Stone & Brass“ (Bediensymbole, leere Ausrüstungsplätze, Münzen, Testgegenstände, allgemeine Fähigkeiten, Schadensschulen, Karte). Alte SVG-Icon-Entwürfe werden nicht verwendet.
 
 **Format:** PNG, 128 × 128 px, quadratisch, RGBA (32 Bit), sRGB. Arbeitsfassungen (512–1254 px) legt der Projektverantwortliche in `art-source/` ab; Agenten verändern dort nichts. Verkleinert wird hochwertig (bikubisch) auf 128 px.
 
@@ -427,8 +427,9 @@ Eingebaut sind die Klassen-, Magier-Spezialisierungs- und Magier-Zauber-Icons (#
 
 | Ordner | Für | ID aus | Beispiel |
 |---|---|---|---|
-| `abilities/` | Fähigkeiten | Dateiname in `game/data/abilities/` | `abilities/feuerball.png` |
-| `auras/` | Buffs, Debuffs | Dateiname in `game/data/auras/` | `auras/eisschild.png` |
+| `abilities/` | Fähigkeiten | Dateiname in `game/data/abilities/` | `abilities/auto_attack.png` (UI-Paket) |
+| `abilities/<klasse>/<schule>/` | Zauber einer Klasse, je Schule bzw. Spezialisierung ein Ordner (englische Namen aus dem Paket) | Zuordnung über das Feld `icon` | `abilities/mage/fire/fireball.png`, `abilities/warrior/bulwark/shield_wall.png` |
+| `auras/` | Buffs, Debuffs mit eigenem Bild (derzeit keine) | Dateiname in `game/data/auras/` | `auras/<id>.png` |
 | `talents/` | einzelne Talente | ID des Talents im Talentbaum | `talents/eiskalte_praezision.png` |
 | `specializations/` | Spezialisierungen | Dateiname in `game/data/specializations/` | `specializations/mage_frost.png` |
 | `classes/` | Klassen | Dateiname in `game/data/classes/` | `classes/warrior.png` |
@@ -441,7 +442,11 @@ Eingebaut sind die Klassen-, Magier-Spezialisierungs- und Magier-Zauber-Icons (#
 
 **Ausnahme UI-Paket (englische Dateinamen):** Die Dateien aus dem UI-Paket behalten die englischen Namen des Pakets (`items/wolf_pelt.png`, `schools/fire.png`, `interface/slot_necklace.png`, `abilities/auto_attack.png`). Die deutschen Spiel-IDs bleiben unverändert; die Verbindung steht in den Daten: Spalte `icon` in `gegenstaende.csv` und `schadensschulen.csv`, Tabelle `ausruestungsplaetze.csv` (leere Ausrüstungsplätze), Feld `icon` der Fähigkeit (`.tres`). Die vollständige Zuordnung steht in `docs/ui-assets/german_to_english_icon_ids.csv`. Neue Icons mit Datensatz folgen weiter der ID-Regel oben.
 
-Gleiche IDs in verschiedenen Kategorien (z. B. Fähigkeit und Aura `eisschild`) sind erlaubt; es gibt dann zwei Dateien, auch wenn sie gleich aussehen. Ändert sich eine ID, wird das Icon im selben Pull Request umbenannt.
+**Klassen-Zauber (Magier, Krieger; neues Design 27.11.2026):** Ablage `icons/abilities/<klasse>/<schule>/<englischer_name>.png` wie im Paket: Magier `mage/arcane|fire|frost|lightning/`, Krieger `warrior/base|bulwark|berserker|battle_master/`. Die englischen Dateinamen sind keine Spiel-IDs; jede Fähigkeit (Grundzauber und Variante der Spezialisierung) nennt ihr Bild ausdrücklich im Feld `icon`. Die Variante einer Spezialisierung ersetzt das Bild im selben Aktionsleisten-Platz. Zuordnung: `docs/ui-assets/class_spell_icon_ids.csv`, Paket-Manifeste `docs/ui-assets/mage_spell_icon_manifest.*`, `warrior_ability_icon_manifest.*`. Die Icons sind **volle Quadrate mit dunklem Hintergrund** (deckend, ohne eigenen Rahmen); sie stehen direkt im vorhandenen Stein-Gold-Slot, **kein zweiter Rahmen** darum. Talent-Fähigkeiten ohne Bild im Paket zeigen weiter das Kürzel.
+
+**Aura-Icons:** Eine Aura, die zu genau einem Zauber gehört (z. B. Eisschild, Erfrierung, Kampfschrei, Schildwall), nutzt im Feld `icon` dasselbe Bild wie der Zauber, der sie anwendet; es gibt dafür keine eigene Datei unter `auras/`. Auren ohne passenden Zauber (z. B. Brand, Ladung, Tiefe Wunde, Raserei) zeigen weiter das Kürzel.
+
+Gleiche IDs in verschiedenen Kategorien sind erlaubt; braucht eine Aura ein eigenes Bild, liegt es unter `auras/<id>.png`. Ändert sich eine ID, wird das Icon im selben Pull Request umbenannt.
 
 **Einbinden:** Das Icon steht im Datensatz im Feld `icon` (`AbilityData`, `AuraData`, `TalentData`, `SpecializationData`, `ClassData`; bei Gegenständen die Spalte `icon` in `gegenstaende.csv`, bei Schadensschulen die Spalte `icon` in `schadensschulen.csv`, bei Ausrüstungsplätzen `ausruestungsplaetze.csv`). Leer = Kürzel als Platzhalter wie bisher.
 

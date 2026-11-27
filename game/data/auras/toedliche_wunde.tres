@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
 [ext_resource type="Script" path="res://scripts/combat/amount_modifier_data.gd" id="x2"]
+[ext_resource type="Texture2D" uid="uid://vy8ru81ddaw6" path="res://assets/ui/icons/abilities/warrior/battle_master/mortal_strike.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x2")
@@ -11,6 +12,7 @@ percent = -50.0
 [resource]
 script = ExtResource("x1")
 id = &"toedliche_wunde"
+icon = ExtResource("icon")
 display_name = "Tödliche Wunde"
 description = "Erhaltene Heilung um 50 % verringert."
 ability_id = &"toedlicher_stoss"

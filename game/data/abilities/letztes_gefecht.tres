@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x3"]
+[ext_resource type="Texture2D" uid="uid://hxdvvwyem0lx" path="res://assets/ui/icons/abilities/warrior/base/last_stand.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -12,6 +13,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"letztes_gefecht"
+icon = ExtResource("icon")
 display_name = "Letztes Gefecht"
 description = "+30 % maximales Leben für 15 Sekunden. Außerhalb des globalen Cooldowns."
 class_id = &"warrior"

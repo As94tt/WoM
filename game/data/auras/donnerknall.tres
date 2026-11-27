@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="AuraData" format=3]
 
 [ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
+[ext_resource type="Texture2D" uid="uid://bkq0ci7uqfcpe" path="res://assets/ui/icons/abilities/warrior/base/thunder_clap.png" id="icon"]
 
 [resource]
 script = ExtResource("x1")
 id = &"donnerknall"
+icon = ExtResource("icon")
 display_name = "Donnerknall"
 description = "Verlangsamt: Bewegungsgeschwindigkeit um 20 % verringert."
 ability_id = &"donnerknall"

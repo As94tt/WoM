@@ -1,0 +1,58 @@
+{
+  "warrior_resource": "Rage / Wut",
+  "base_gating": {
+    "shield_bash": "Requires shield. Grey out without a shield and show German error: \"Benötigt einen Schild\". This applies to base and bulwark variants only."
+  },
+  "bulwark": {
+    "stance": {
+      "name_de": "Bollwerk-Haltung",
+      "threat_multiplier": 3,
+      "damage_taken_multiplier": 0.9
+    },
+    "revenge_proc": {
+      "name_de": "Rache",
+      "triggers": [
+        "dodge",
+        "parry",
+        "block"
+      ],
+      "available_seconds": 5,
+      "unlocks_ability": "retaliation",
+      "retaliation_rage_cost": 0,
+      "proc_glow": "Use existing SlotProcGlow from UI pack"
+    },
+    "block_rage_gain": 5,
+    "thunder_clap_extra": "-10 % Angriffstempo auf Treffer"
+  },
+  "berserker": {
+    "frenzy": {
+      "name_de": "Raserei",
+      "max_stacks": 5,
+      "duration_seconds": 10,
+      "rage_spent_per_stack": 30,
+      "haste_bonus_per_stack_percent": 3
+    },
+    "bloodlust": {
+      "name_de": "Blutrausch",
+      "trigger_frenzy_stacks": 5,
+      "duration_seconds": 8,
+      "rage_costs_zero_during_effect": true,
+      "remove_all_frenzy_stacks_after": true
+    }
+  },
+  "battle_master": {
+    "deep_wound": {
+      "name_de": "Tiefe Wunde",
+      "max_stacks": 3,
+      "duration_seconds": 12,
+      "type": "bleed_dot"
+    },
+    "execute": {
+      "name_de": "Hinrichten",
+      "target_health_below_percent": 20,
+      "maximum_additional_rage_spent": 40,
+      "extra_rage_increases_damage": true
+    }
+  },
+  "caution": "These are spec notes only. Integrate using existing gameplay data and IDs; do not implement new mechanics based solely on art or metadata."
+}

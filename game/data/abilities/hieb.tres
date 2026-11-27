@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x4"]
+[ext_resource type="Texture2D" uid="uid://drs63430j2ivs" path="res://assets/ui/icons/abilities/warrior/base/strike.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -19,6 +20,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"hieb"
+icon = ExtResource("icon")
 display_name = "Hieb"
 description = "Ein schneller Waffenschlag. Erzeugt 10 Wut."
 class_id = &"warrior"

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/movement_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x5"]
+[ext_resource type="Texture2D" uid="uid://bo0c4ck6t61md" path="res://assets/ui/icons/abilities/warrior/base/charge.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -25,6 +26,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"sturmangriff"
+icon = ExtResource("icon")
 display_name = "Sturmangriff"
 description = "Springt zum Ziel (8–25 m) und betäubt es 1 Sekunde. Erzeugt 20 Wut. Nur außerhalb des Nahkampfs."
 class_id = &"warrior"

@@ -7,6 +7,11 @@ extends Node
 ##                                        und -erstellung
 ##   --host --ui-screenshots=<Ordner>     HUD mit Ziel, Zauber, Auren und die
 ##                                        Fenster (Taschen, Charakter, …)
+##   --host --ui-screenshots=<Ordner> --ui-screenshots-icons [--class warrior]
+##                                        Zauber-Icons der Klasse: Stufe 30,
+##                                        Aktionsleiste, Zauberbuch, Talentfenster
+##                                        ohne und mit jeder Spezialisierung, HUD
+##                                        mit den Auren der Klasse
 ## Optional --ui-screenshots-prefix=<Text> vor jedem Dateinamen (z. B. „1080p_“).
 ## Fenstergröße über Godots --resolution (z. B. --resolution 2560x1440).
 ## Gestartet vom Hauptmenü (MainMenu._ready); die Szene bleibt bei
@@ -14,12 +19,14 @@ extends Node
 
 const ARG_DIR := "--ui-screenshots"
 const ARG_PREFIX := "--ui-screenshots-prefix"
+const ARG_ICONS := "--ui-screenshots-icons"
 const CHARACTER_SELECT_SCENE := "res://scenes/ui/character_select.tscn"
 const CHARACTER_CREATION_SCENE := "res://scenes/ui/character_creation.tscn"
 
 var _dir := ""
 var _prefix := ""
 var _hud_tour := false
+var _icon_tour := false
 
 
 ## Startet die Tour, wenn der Startparameter gesetzt ist.
@@ -32,6 +39,7 @@ static func start_if_requested(tree: SceneTree) -> void:
 	var dir := ""
 	var prefix := ""
 	var hud := false
+	var icons := false
 	for arg in args:
 		if arg.begins_with(ARG_PREFIX + "="):
 			prefix = arg.get_slice("=", 1)
@@ -39,6 +47,8 @@ static func start_if_requested(tree: SceneTree) -> void:
 			dir = arg.get_slice("=", 1)
 		elif arg == "--host":
 			hud = true
+		elif arg == ARG_ICONS:
+			icons = true
 	if dir == "":
 		return
 	var node := UiScreenshots.new()
@@ -46,13 +56,16 @@ static func start_if_requested(tree: SceneTree) -> void:
 	node._dir = dir
 	node._prefix = prefix
 	node._hud_tour = hud
+	node._icon_tour = hud and icons
 	node.process_mode = Node.PROCESS_MODE_ALWAYS
 	tree.root.add_child.call_deferred(node)
 
 
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(_dir)
-	if _hud_tour:
+	if _icon_tour:
+		_run_icon_tour()
+	elif _hud_tour:
 		_run_hud_tour()
 	else:
 		_run_menu_tour()
@@ -196,3 +209,72 @@ func _run_hud_tour() -> void:
 	await _wait(0.5)
 	await _shot("spielmenue")
 	get_tree().quit()
+
+
+## Wartet auf die Spielwelt mit eigener Figur (null, wenn sie nicht kommt).
+func _await_world() -> Node:
+	for i in 120:
+		await _wait(0.25)
+		var world := get_tree().current_scene
+		if world != null and world.has_method(&"get_local_player") and world.get_local_player() != null:
+			return world
+	return null
+
+
+## Zauber-Icons einer Klasse (Magier bzw. Krieger über --class): Stufe 30,
+## alle Fähigkeiten auf der Leiste, dann Talentfenster, Zauberbuch und
+## Aktionsleiste ohne und mit jeder Spezialisierung, zuletzt die Auren.
+func _run_icon_tour() -> void:
+	var world := await _await_world()
+	if world == null or not world.has_method(&"get_hud"):
+		push_error("UiScreenshots: Spielwelt nicht gefunden")
+		get_tree().quit(1)
+		return
+	await _wait(2.0)
+	var hud: Hud = world.get_hud()
+	var player: PlayerCharacter = world.get_local_player()
+	var class_id := String(player.get_talents().get_class_data().id)
+	player.get_experience().request_dev("set_level", 30)
+	await _wait(1.0)
+	player.get_talents().request_dev("unlock", "")
+	await _wait(0.5)
+	hud.get_level_up_banner().visible = false
+	await _icon_shots(hud, "%s_basis" % class_id)
+	for spec in player.get_talents().get_specializations():
+		if spec.transformations.is_empty():
+			continue
+		player.get_talents().request_clear_spec()
+		await _wait(0.3)
+		player.get_talents().request_choose_spec(spec.id)
+		await _wait(0.8)
+		await _icon_shots(hud, String(spec.id))
+	# Auren der Klasse an sich selbst (wie die Testauren im Entwickler-Panel).
+	var count := 0
+	for file in ResourceLoader.list_directory("res://data/auras/"):
+		var data := load("res://data/auras/" + file) as AuraData
+		if data == null or data.icon == null or data.hidden:
+			continue
+		if not data.icon.resource_path.contains("/abilities/%s/" % class_id):
+			continue
+		player.get_combat().apply_aura(data, player)
+		count += 1
+	print("UiScreenshots: %d Auren mit Icon angewendet" % count)
+	await _wait(0.5)
+	await _shot("icons_%s_hud_auren" % class_id)
+	get_tree().quit()
+
+
+func _icon_shots(hud: Hud, label: String) -> void:
+	await _shot("icons_%s_aktionsleiste" % label)
+	hud.open_window(&"spellbook")
+	var books := hud.find_children("*", "SpellbookPanel", true, false)
+	if not books.is_empty():
+		(books[0] as SpellbookPanel).show_tab(1)  # Reiter der Klasse
+	await _wait(0.5)
+	await _shot("icons_%s_zauberbuch" % label)
+	hud.close_window(&"spellbook")
+	hud.open_window(&"talents")
+	await _wait(0.5)
+	await _shot("icons_%s_talente" % label)
+	hud.close_window(&"talents")
+	await _wait(0.2)

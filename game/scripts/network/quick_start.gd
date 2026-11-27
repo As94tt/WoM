@@ -6,6 +6,7 @@ extends RefCounted
 ##   --port <Port>          anderer Port als der Standard (optional)
 ##   --character <Name>     nimmt einen gespeicherten Charakter; fehlt er oder
 ##                          gibt es ihn nicht, wird ein Testcharakter erzeugt
+##   --class <ID>           Klasse des Testcharakters (z. B. warrior; Standard mage)
 ## Die Parameter dürfen vor oder nach „--“ stehen (z. B. im Editor unter
 ## Debug → Ausführungsinstanzen anpassen → Startargumente).
 
@@ -15,6 +16,7 @@ var mode: Mode = Mode.NONE
 var address := ""
 var port := 0
 var character_name := ""
+var class_id := ""
 
 
 ## Liest die Startparameter des laufenden Spiels.
@@ -46,6 +48,8 @@ static func parse(args: PackedStringArray) -> QuickStart:
 				qs.port = value.to_int()
 			"--character":
 				qs.character_name = value
+			"--class":
+				qs.class_id = value
 		i += 1
 	return qs
 
@@ -57,4 +61,7 @@ func get_character() -> CharacterData:
 			if c.character_name.nocasecmp_to(character_name) == 0:
 				return c
 		push_warning("Startparameter: Charakter „%s“ nicht gefunden, nehme einen Testcharakter." % character_name)
-	return CharacterData.make_test_character()
+	var test := CharacterData.make_test_character()
+	if class_id != "":
+		test.class_id = StringName(class_id)
+	return test

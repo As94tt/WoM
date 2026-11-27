@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x4"]
+[ext_resource type="Texture2D" uid="uid://cxr3edg5gtq1c" path="res://assets/ui/icons/abilities/warrior/bulwark/shield_strike.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -20,6 +21,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"schildstoss"
+icon = ExtResource("icon")
 display_name = "Schildstoß"
 description = "Wie Hieb, erzeugt aber 50 % mehr Bedrohung. Erzeugt 10 Wut."
 class_id = &"warrior"
