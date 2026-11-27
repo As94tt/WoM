@@ -119,7 +119,7 @@ func test_stufenunterschied() -> void:
 func test_kill_erfahrung() -> void:
 	var base := LevelRules.kill_base(2)
 	check_equal(base, 30, "Grundwert Stufe 2 (gegner_stufenwerte.csv)")
-	check_equal(LevelRules.kill_base(25), LevelRules.kill_base(3), "fehlende Stufe: höchste darunter")
+	check_equal(LevelRules.kill_base(25), LevelRules.kill_base(10), "fehlende Stufe: höchste darunter (#36: bis 10)")
 	check_equal(LevelRules.kill_experience(2, "normal", 2), 30, "normal, gleiche Stufe")
 	check_equal(LevelRules.kill_experience(2, "elite", 2), 60, "Elite: Faktor 2 (gegner_raenge.csv)")
 	check_equal(LevelRules.kill_experience(2, "boss", 2), 150, "Boss: Faktor 5")
