@@ -16,6 +16,9 @@ var race_id: StringName = &""
 var gender: int = CharacterData.Gender.MALE
 var class_id: StringName = &""
 var level: int = 1
+## Erfahrung des mitgebrachten Charakters (#27). Der Host gibt sie der Figur
+## beim Erzeugen mit (PlayerExperience); danach gilt der Stand der Figur.
+var experience: int = 0
 ## Spezialisierung und Talente des mitgebrachten Charakters (#20,
 ## CharacterData.get_talent_dict). Der Host gibt sie der Figur beim Erzeugen
 ## mit (PlayerTalents.host_load); danach gilt der Stand der Figur.
@@ -36,6 +39,7 @@ static func from_character(id: int, c: CharacterData) -> NetPlayerInfo:
 	info.gender = c.gender
 	info.class_id = c.class_id
 	info.level = c.level
+	info.experience = c.experience
 	info.talents = c.get_talent_dict()
 	return info
 
@@ -61,6 +65,7 @@ func to_dict() -> Dictionary:
 		"gender": gender,
 		"class_id": String(class_id),
 		"level": level,
+		"experience": experience,
 		"talents": talents,
 		"in_world": in_world,
 		"ping_ms": ping_ms,
@@ -76,6 +81,7 @@ static func from_dict(data: Dictionary) -> NetPlayerInfo:
 	info.gender = int(data.get("gender", CharacterData.Gender.MALE))
 	info.class_id = StringName(str(data.get("class_id", "")))
 	info.level = int(data.get("level", 1))
+	info.experience = int(data.get("experience", 0))
 	var talent_data: Variant = data.get("talents", {})
 	info.talents = talent_data.duplicate(true) if talent_data is Dictionary else {}
 	info.in_world = bool(data.get("in_world", false))

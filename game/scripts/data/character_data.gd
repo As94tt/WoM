@@ -14,6 +14,10 @@ enum Gender { MALE, FEMALE }
 @export var gender: Gender = Gender.MALE
 @export var class_id: StringName
 @export var level: int = 1
+## Gesammelte Erfahrung innerhalb der Stufe (#27). Geht beim Beitreten an den
+## Host; gespeichert wird, sobald der Host Erfahrung oder Stufe bestätigt
+## (PlayerExperience).
+@export var experience: int = 0
 ## Unix-Zeit, zu der zuletzt mit dem Charakter gespielt wurde (0 = nie).
 @export var last_played: int = 0
 ## Belegung der Aktionsleisten (#21, ActionBarLayout.to_save): je Leiste
@@ -85,6 +89,7 @@ func to_dict() -> Dictionary:
 		"gender": int(gender),
 		"class_id": String(class_id),
 		"level": level,
+		"experience": experience,
 		"last_played": last_played,
 		"talents": get_talent_dict(),
 	}
@@ -124,6 +129,7 @@ static func from_dict(data: Dictionary) -> CharacterData:
 	c.gender = clampi(int(data.get("gender", Gender.MALE)), Gender.MALE, Gender.FEMALE) as Gender
 	c.class_id = StringName(str(data.get("class_id", "")))
 	c.level = maxi(1, int(data.get("level", 1)))
+	c.experience = maxi(0, int(data.get("experience", 0)))
 	c.last_played = maxi(0, int(data.get("last_played", 0)))
 	var talents: Variant = data.get("talents", {})
 	if talents is Dictionary:

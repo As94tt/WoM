@@ -275,6 +275,18 @@ func save_local_character() -> void:
 	CharacterStore.save(c)
 
 
+## Nur Host (#27): Stufe eines Spielers nach einem Aufstieg in die
+## Spielerliste übernehmen und an alle schicken (Spielerliste, Gruppenrahmen,
+## setup_from_info der Figur). Ohne Eintrag (z. B. Tests) passiert nichts.
+func host_set_player_level(peer_id: int, level: int) -> void:
+	if not is_host() or not _players.has(peer_id) or _players[peer_id].level == level:
+		return
+	var players := _copy_players()
+	players[peer_id].level = level
+	_set_players(players)
+	_broadcast_players()
+
+
 ## Wird von der Welt gerufen, sobald sie geladen ist. Host bzw. offline: die
 ## eigene Figur wird erzeugt. Client: dem Host melden, dass er bereit ist.
 func notify_world_ready() -> void:
