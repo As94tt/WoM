@@ -14,6 +14,8 @@ extends RefCounted
 ## - Ausrüstung (#29, ItemDataCheck): Gegenstände gegen Slotzuordnung,
 ##   Waffentypen und Auren; dazu Warnungen (leere Rüstung bzw. leerer
 ##   Waffenschaden), die den Stand nicht ungültig machen.
+## - Spawngruppen (#36, EnemyDataCheck): Stufenbereich, Regeln für seltene
+##   Gegner; Warnung bei fehlenden Stufenwerten.
 
 ## Schlüssel mehrerer Spalten werden mit diesem Zeichen verbunden.
 const KEY_JOIN := "|"
@@ -59,6 +61,7 @@ static func load_all(schema_dir: String, table_dir: String) -> DataSet:
 		data_set._check_coverage(table)
 	if data_set.errors.is_empty():
 		ItemDataCheck.check(data_set)
+		EnemyDataCheck.check(data_set)
 	data_set.checksum = data_set._compute_checksum()
 	data_set._build_typed()
 	return data_set

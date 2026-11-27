@@ -1,0 +1,8 @@
+﻿# Gegnerfamilien (#36): für Talente, Fähigkeiten, Immunitäten und Familienbeute. Farbe = Graubox-Platzhalter der Kapsel (gegner.csv „farbe“ überschreibt sie).
+familie;name;farbe;notiz
+tier;Tier;#8a6d4b;Platzhalterfarbe
+humanoid;Humanoid;#7d8494;Platzhalterfarbe
+untoter;Untoter;#9aa391;Platzhalterfarbe
+elementar;Elementar;#6b8fa3;Platzhalterfarbe
+daemon;Dämon;#8f6273;Platzhalterfarbe
+riese;Riese;#8c8272;Platzhalterfarbe

@@ -1,3 +1,4 @@
 ﻿# Flache Werte zu den Gebieten. Die Gebiete selbst sind .tres in data/zones/.
 id;gebietsbeute;notiz
 wolfswiese;tier_plunder;Beispiel
+trainingsgelaende;;Test-Gegner (#36)

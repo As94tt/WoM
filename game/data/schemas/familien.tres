@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_fam01"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_fam02"]
+
+[sub_resource type="Resource" id="Resource_fam_id"]
+script = ExtResource("1_fam01")
+name = "familie"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID der Familie (z. B. tier). Neue Familie = neue Zeile."
+
+[sub_resource type="Resource" id="Resource_fam_name"]
+script = ExtResource("1_fam01")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename."
+
+[sub_resource type="Resource" id="Resource_fam_color"]
+script = ExtResource("1_fam01")
+name = "farbe"
+type = 9
+required = true
+choices = PackedStringArray()
+description = "Platzhalterfarbe der Gegner-Kapsel als Hex-Code (Graubox); die Spalte „farbe“ in gegner.csv überschreibt sie."
+
+[resource]
+script = ExtResource("2_fam02")
+table = "familien"
+title = "Gegnerfamilien"
+group = "Gegner"
+description = "Familien der Gegner (für spätere Talente, Fähigkeiten, Immunitäten und die Familienbeute) mit ihrer Platzhalterfarbe."
+key_columns = PackedStringArray("familie")
+order = 13
+columns = Array[ExtResource("1_fam01")]([SubResource("Resource_fam_id"), SubResource("Resource_fam_name"), SubResource("Resource_fam_color")])

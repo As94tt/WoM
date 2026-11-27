@@ -59,7 +59,7 @@ Nur eine Sammlung: `--tests=hit_formulas`. Die Tests liegen in `game/scripts/tes
 
 1. `gegner.csv` öffnen und eine Zeile ergänzen, z. B.:
    `wolf_alt;Alter Wolf;;tier;normal;feindlich;nahkampf;2;physisch;1,2;1;1;1;5;0;0;;;;wolf_jung;;1;;`
-2. Pflicht sind `id`, `name` und `familie`. Für die anderen Spalten gilt der Standardwert, wenn die Zelle leer bleibt.
+2. Pflicht sind `id`, `name` und `familie` (ID aus `familien.csv`; eine neue Familie ist eine neue Zeile dort). Für die anderen Spalten gilt der Standardwert, wenn die Zelle leer bleibt.
 3. Leben und Schaden stehen nicht beim Gegner. Sie kommen aus `gegner_stufenwerte.csv` (je Stufe), werden mit dem Rang aus `gegner_raenge.csv` multipliziert und mit `leben_mod`, `schaden_mod` usw. angepasst. `1,2` bei `leben_mod` heißt: 20 % mehr Leben.
 4. Speichern, F6 drücken bzw. `--daten-pruefen` ausführen.
 
@@ -67,9 +67,16 @@ Nur eine Sammlung: `--tests=hit_formulas`. Die Tests liegen in `game/scripts/tes
 
 1. Das Gebiet muss in `gebiete.csv` stehen (die ID wie in `game/data/zones/`, z. B. `wolfswiese`).
 2. In `spawngruppen.csv` eine Gruppe anlegen:
-   `wolfswiese_alte;wolfswiese;wolf_alt:1;3;4;2;240;nein;`
-   Das heißt: Alte Wölfe der Stufe 3–4, zwei gleichzeitig, sie erscheinen nach 240 s neu und greifen nicht gemeinsam an. Mehrere Gegnertypen mischt man mit Gewichtung, z. B. `wolf_jung:3|wolf_alt:1` (drei von vier sind junge Wölfe).
-3. In der Welt verweist ein Spawnbereich auf die ID der Spawngruppe. Er bestimmt nur Ort und Radius. Die Spawnbereiche kommen mit dem Gegner-Ticket (#36).
+   `wolfswiese_alte;wolfswiese;wolf_alt:1;3;4;2;240;nein;;0;0;0;0;`
+   Das heißt: Alte Wölfe der Stufe 3–4, zwei gleichzeitig, jeder erscheint 240 s nach seinem Tod neu (eigener Timer je Gegner), sie greifen nicht gemeinsam an. Die Stufe wird bei jedem Erscheinen zufällig zwischen `stufe_min` und `stufe_max` gewürfelt. Mehrere Gegnertypen mischt man mit Gewichtung, z. B. `wolf_jung:3|wolf_alt:1` (drei von vier sind junge Wölfe).
+3. **Seltene Gegner** stehen nicht in der Gewichtung, sondern in `selten_gegner` (höchstens einer gleichzeitig je Spawnbereich, Stufe aus `selten_stufe`, 0 = wie die Gruppe). Zwei Regeln:
+   - `selten_chance` (Prozent): Bei jedem Erscheinen ersetzt er mit dieser Chance einen normalen Gegner.
+   - `selten_zeit_min_s` / `selten_zeit_max_s`: Er erscheint zusätzlich nach einer zufälligen Zeit dazwischen (ab Start bzw. ab seinem Tod), z. B. `1200` / `2400` = nach 20–40 min. 0 = nicht genutzt.
+4. In der Welt verweist ein **Spawnbereich** (Knoten mit dem Skript `enemy_spawn_area.gd`, in der Szene des Gebiets) auf die ID der Spawngruppe. Er bestimmt nur den Ort:
+   - `radius` > 0: Die Gegner erscheinen an zufälligen Stellen im Kreis auf begehbarem Boden.
+   - **Feste Punkte:** `Marker3D`-Kinder des Bereichs. Je Punkt steht ein Gegner (die `anzahl` der Gruppe gilt dann nicht), er blickt in Richtung des Punkts. So stehen Wachen und Bosse; ein Boss bekommt eine eigene Gruppe mit langer `respawn_s`.
+5. Steht beim Wiedererscheinen ein lebender Spieler näher als `respawn_naehe_radius` (15 m), wartet der Gegner `respawn_verschiebung_s` (10 s) und prüft dann erneut. Die Leiche bleibt `leiche_dauer` (120 s) liegen, unabhängig vom Respawn.
+6. Die Farbe des Platzhalters kommt aus `familien.csv` (Spalte `farbe` in `gegner.csv` überschreibt sie), die Größe aus `groesse`.
 
 ### Einen neuen Gegenstand anlegen und in eine Beutetabelle aufnehmen
 
@@ -206,7 +213,7 @@ Eindeutig: `id`.
 | `id` | ID | ja |  |  | Feste ID, wird nie geändert (z. B. wolf_jung). |
 | `name` | Text | ja |  |  | Anzeigename. |
 | `titel` | Text |  |  |  | Optionaler Titel unter dem Namen, z. B. <Anführer der Banditen>. |
-| `familie` | Auswahl | ja |  | `tier`, `humanoid`, `untoter`, `elementar`, `daemon`, `riese` | Familie (für Talente, Fähigkeiten, Immunitäten, Familienbeute). |
+| `familie` | Verweis | ja |  | Familie aus `familien.csv` | Familie (ID aus familien.csv; für Talente, Fähigkeiten, Immunitäten, Familienbeute und die Platzhalterfarbe). |
 | `rang` | Auswahl |  | normal | `normal`, `elite`, `selten`, `boss` | Rang; die Faktoren stehen in gegner_raenge.csv. |
 | `gesinnung` | Auswahl |  | feindlich | `feindlich`, `neutral` | feindlich greift an, neutral erst wenn angegriffen. |
 | `kampfart` | Auswahl |  | nahkampf | `nahkampf`, `fernkampf`, `zauberwirker` | Art des Kampfes. |
@@ -262,6 +269,19 @@ Eindeutig: `rang`.
 | `geld_faktor` | Kommazahl |  | 1 | ab 0 | Faktor auf die Geldbeute. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
+#### familien.csv – Gegnerfamilien
+
+Familien der Gegner (für spätere Talente, Fähigkeiten, Immunitäten und die Familienbeute) mit ihrer Platzhalterfarbe.
+
+Eindeutig: `familie`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `familie` | ID | ja |  |  | Feste ID der Familie (z. B. tier). Neue Familie = neue Zeile. |
+| `name` | Text | ja |  |  | Anzeigename. |
+| `farbe` | Farbe | ja |  |  | Platzhalterfarbe der Gegner-Kapsel als Hex-Code (Graubox); die Spalte „farbe“ in gegner.csv überschreibt sie. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
 #### uebungspuppen.csv – Übungspuppen
 
 Übungspuppen im Trainingsbereich (#31). Eine Zeile pro Puppentyp; aufgestellt werden sie über Aufstellpunkte (UnitSpawnPoint) in der Szene des Trainingsgeländes. Anzeigefenster und Rücksetzzeit stehen in spielkonstanten.csv.
@@ -306,7 +326,7 @@ Eindeutig: `id`.
 
 #### spawngruppen.csv – Spawngruppen
 
-Was in einem Spawnbereich erscheint. Die Spawnbereiche in der Welt bestimmen nur Ort, Radius bzw. feste Punkte und verweisen auf eine Spawngruppe.
+Was in einem Spawnbereich erscheint. Die Spawnbereiche in der Welt (EnemySpawnArea, #36) bestimmen nur Ort, Radius bzw. feste Punkte und verweisen auf eine Spawngruppe. Jeder Gegner hat einen eigenen Respawn-Timer ab seinem Tod; die Stufe wird bei jedem Erscheinen gleichverteilt gewürfelt.
 
 Eindeutig: `id`.
 
@@ -320,6 +340,11 @@ Eindeutig: `id`.
 | `anzahl` | Ganzzahl |  | 1 | ab 1 | Wie viele Gegner gleichzeitig. |
 | `respawn_s` | Kommazahl |  | 180 | ab 0 | Sekunden bis zum Wiedererscheinen. |
 | `gemeinsamer_angriff` | Ja/Nein |  | nein |  | ja = wird einer angegriffen, greifen alle an. |
+| `selten_gegner` | Verweis |  |  | Gegner aus `gegner.csv` | Optionaler seltener Gegner der Gruppe (#36). Höchstens einer gleichzeitig je Spawnbereich. |
+| `selten_stufe` | Ganzzahl |  | 0 | 0 bis 100 | Stufe des seltenen Gegners; 0 = wie die Gruppe (stufe_min bis stufe_max). |
+| `selten_chance` | Kommazahl |  | 0 | 0 bis 100 | Chance in Prozent, dass bei einem Erscheinen statt des normalen Gegners der seltene erscheint (0 = nicht genutzt). |
+| `selten_zeit_min_s` | Kommazahl |  | 0 | ab 0 | Alternativ: Der seltene Gegner erscheint zusätzlich nach einer zufälligen Zeit zwischen selten_zeit_min_s und selten_zeit_max_s (ab Start bzw. ab seinem Tod). 0 = nicht genutzt. |
+| `selten_zeit_max_s` | Kommazahl |  | 0 | ab 0 | Größte Zeit in Sekunden bis zum Erscheinen des seltenen Gegners (siehe selten_zeit_min_s). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 ### Beute

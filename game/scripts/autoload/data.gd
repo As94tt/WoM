@@ -168,6 +168,18 @@ func gegner_rang(rang: String) -> TableRow:
 	return row("gegner_raenge", rang)
 
 
+## Alle Gegnertypen in Tabellenreihenfolge (#36, z. B. für das Entwickler-Panel).
+func alle_gegner() -> Array[TableRow]:
+	var result: Array[TableRow] = []
+	result.assign(rows("gegner"))
+	return result
+
+
+## Gegnerfamilie (#36) aus familien.csv oder null.
+func familie(id: StringName) -> TableRow:
+	return row("familien", id)
+
+
 ## Übungspuppe (#31) aus uebungspuppen.csv oder null.
 func uebungspuppe(id: StringName) -> TableRow:
 	return row("uebungspuppen", id)
