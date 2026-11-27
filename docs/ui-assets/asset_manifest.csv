@@ -1,0 +1,221 @@
+relative_path_from_game_assets_ui,width_px,height_px,kind,priority,margin_left,margin_top,margin_right,margin_bottom,tintable,notes
+frames/window_panel.png,480,352,nine_slice,P1,18,35,18,18,False,Title zone 35px; content 16px padding; separate close button
+frames/dialog_panel.png,480,320,nine_slice,P1,22,42,22,22,False,24px inner content padding
+frames/tooltip_panel.png,300,176,nine_slice,P1,7,7,7,7,False,"Dark background, slim 1px brass border; 8px horizontal/4px vertical padding"
+frames/button_normal.png,192,48,nine_slice,P1,8,8,8,8,False,Keep text/icon as separate Godot controls
+frames/button_hover.png,192,48,nine_slice,P1,8,8,8,8,False,Keep text/icon as separate Godot controls
+frames/button_pressed.png,192,48,nine_slice,P1,8,8,8,8,False,Keep text/icon as separate Godot controls
+frames/button_disabled.png,192,48,nine_slice,P1,8,8,8,8,False,Keep text/icon as separate Godot controls
+frames/button_focus.png,192,48,nine_slice,P1,8,8,8,8,False,Keep text/icon as separate Godot controls
+frames/enter_world_button_normal.png,280,56,nine_slice,P1,12,12,12,12,False,Keep text/icon as separate Godot controls
+frames/enter_world_button_hover.png,280,56,nine_slice,P1,12,12,12,12,False,Keep text/icon as separate Godot controls
+frames/enter_world_button_pressed.png,280,56,nine_slice,P1,12,12,12,12,False,Keep text/icon as separate Godot controls
+frames/enter_world_button_disabled.png,280,56,nine_slice,P1,12,12,12,12,False,Keep text/icon as separate Godot controls
+frames/enter_world_button_focus.png,280,56,nine_slice,P1,12,12,12,12,False,Keep text/icon as separate Godot controls
+frames/list_entry_normal.png,320,42,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/list_entry_hover.png,320,42,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/list_entry_selected.png,320,42,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/list_entry_disabled.png,320,42,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/choice_button_normal.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/choice_button_hover.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/choice_button_selected.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/choice_button_disabled.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/choice_button_focus.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/log_tab_normal.png,120,34,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/log_tab_hover.png,120,34,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/log_tab_selected.png,120,34,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/log_tab_disabled.png,120,34,nine_slice,P1,8,6,8,6,False,Keep text/icon as separate Godot controls
+frames/locked_choice_button_normal.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/locked_choice_button_hover.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/locked_choice_button_selected.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/locked_choice_button_disabled.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/locked_choice_button_focus.png,160,42,nine_slice,P1,8,7,8,7,False,Keep text/icon as separate Godot controls
+frames/input_field_normal.png,320,40,nine_slice,P1,7,7,7,7,False,Keep text/icon as separate Godot controls
+frames/input_field_focus.png,320,40,nine_slice,P1,7,7,7,7,False,Keep text/icon as separate Godot controls
+frames/input_field_disabled.png,320,40,nine_slice,P1,7,7,7,7,False,Keep text/icon as separate Godot controls
+frames/slot_40_normal.png,40,40,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_40_hover.png,40,40,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_40_pressed.png,40,40,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_40_disabled.png,40,40,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_40_focus.png,40,40,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/item_rarity_frame_40.png,40,40,overlay,P1,,,,,True,White alpha: modulate with exact rarity color from UI-STYLEGUIDE
+frames/slot_48_normal.png,48,48,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_48_hover.png,48,48,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_48_pressed.png,48,48,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_48_disabled.png,48,48,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/slot_48_focus.png,48,48,nine_slice,P1,5,5,5,5,False,Slim 1-2px edges; icon is drawn separately and should fill center
+frames/item_rarity_frame_48.png,48,48,overlay,P1,,,,,True,White alpha: modulate with exact rarity color from UI-STYLEGUIDE
+frames/slot_flash.png,48,48,overlay,P1,,,,,False,Animate opacity 1->0 over 0.25s; draw above slot
+frames/slot_active.png,48,48,overlay,P1,,,,,False,
+frames/talent_pending.png,48,48,overlay,P1,,,,,True,
+frames/slot_proc_glow_00.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_01.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_02.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_03.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_04.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_05.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_06.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/slot_proc_glow_07.png,64,64,animation_frame,P1,,,,,False,8 frames at approx 10 FPS; anchored center on 48px slot
+frames/cooldown_sweep_mask.png,48,48,overlay,P1,,,,,False,Use Godot radial progress/shader for actual moving sweep; static darkness texture only
+frames/unit_frame_player.png,340,90,fixed,P1,,,,,False,"Fixed 340x90. Add live portrait at x=8, y=18, 54x54. Names and bars separate. No 9-slice."
+frames/unit_frame_target.png,340,90,fixed,P1,,,,,False,"Fixed 340x90. Add live portrait at x=278, y=18, 54x54. Names and bars separate. No 9-slice."
+frames/unit_portrait_frame.png,64,64,overlay,P1,,,,,False,Put over live-rendered portrait or texture
+frames/unit_badge.png,120,20,nine_slice,P1,6,4,6,4,False,"Badge TEXT lives on top (elite, rare, boss, combat, uninterruptible)"
+frames/nameplate_normal.png,140,40,nine_slice,P1,6,6,6,6,False,Warning also uses dashed line: color alone does not convey status
+frames/nameplate_target.png,140,40,nine_slice,P1,6,6,6,6,False,Warning also uses dashed line: color alone does not convey status
+frames/nameplate_warning.png,140,40,nine_slice,P1,6,6,6,6,False,Warning also uses dashed line: color alone does not convey status
+frames/nameplate_target_warning.png,140,40,nine_slice,P1,6,6,6,6,False,Warning also uses dashed line: color alone does not convey status
+frames/aura_buff_20.png,20,20,overlay,P1,,,,,False,Debuff white for category modulate; tighter buff framing
+frames/aura_debuff_20.png,20,20,overlay,P1,,,,,True,Debuff white for category modulate; tighter buff framing
+frames/aura_buff_24.png,24,24,overlay,P1,,,,,False,Debuff white for category modulate; tighter buff framing
+frames/aura_debuff_24.png,24,24,overlay,P1,,,,,True,Debuff white for category modulate; tighter buff framing
+frames/aura_buff_32.png,32,32,overlay,P1,,,,,False,Debuff white for category modulate; tighter buff framing
+frames/aura_debuff_32.png,32,32,overlay,P1,,,,,True,Debuff white for category modulate; tighter buff framing
+frames/aura_buff_36.png,36,36,overlay,P1,,,,,False,Debuff white for category modulate; tighter buff framing
+frames/aura_debuff_36.png,36,36,overlay,P1,,,,,True,Debuff white for category modulate; tighter buff framing
+frames/checkbox_off.png,24,24,fixed,P1,,,,,False,
+frames/checkbox_on.png,24,24,fixed,P1,,,,,False,
+frames/checkbox_hover.png,24,24,fixed,P1,,,,,False,
+frames/checkbox_disabled.png,24,24,fixed,P1,,,,,False,
+frames/scroll_track.png,16,160,nine_slice,P1,5,8,5,8,False,
+frames/scroll_thumb_normal.png,14,44,nine_slice,P1,4,7,4,7,False,
+frames/scroll_thumb_hover.png,14,44,nine_slice,P1,4,7,4,7,False,
+frames/scroll_thumb_dragged.png,14,44,nine_slice,P1,4,7,4,7,False,
+frames/action_bar_shell.png,600,56,fixed,P1,,,,,False,"SHELL ONLY. Overlay 12 slot_48 assets at 0 gap; rescale when using 20x40 menu buttons. Bar centered end caps, avoid extra ornaments."
+frames/menu_bar_shell.png,236,44,fixed,P1,,,,,False,"SHELL ONLY. Overlay 11 slot_40 assets at 0 gap; rescale when using 20x40 menu buttons. Bar centered end caps, avoid extra ornaments."
+frames/menu_button_20x40_normal.png,20,40,fixed,P1,,,,,False,Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.
+frames/menu_button_20x40_hover.png,20,40,fixed,P1,,,,,False,Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.
+frames/menu_button_20x40_pressed.png,20,40,fixed,P1,,,,,False,Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.
+frames/menu_button_20x40_disabled.png,20,40,fixed,P1,,,,,False,Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.
+frames/menu_button_20x40_focus.png,20,40,fixed,P1,,,,,False,Slim 1:2 menu control. Use simplified icons fitting 20 px. Keep accessibility tooltip.
+bars/health_background.png,240,22,nine_slice,P1,5,4,5,4,False,Background only. Frame/track; does not encode current value
+bars/health_fill_white.png,240,22,nine_slice,P1,5,4,5,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/health_nameplate_background.png,120,8,nine_slice,P1,2,2,2,2,False,Background only. Frame/track; does not encode current value
+bars/health_nameplate_fill_white.png,120,8,nine_slice,P1,2,2,2,2,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/resource_background.png,240,18,nine_slice,P1,5,4,5,4,False,Background only. Frame/track; does not encode current value
+bars/resource_fill_white.png,240,18,nine_slice,P1,5,4,5,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/secondary_resource_background.png,240,8,nine_slice,P1,2,2,2,2,False,Background only. Frame/track; does not encode current value
+bars/secondary_resource_fill_white.png,240,8,nine_slice,P1,2,2,2,2,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/cast_player_background.png,360,22,nine_slice,P1,5,4,5,4,False,Background only. Frame/track; does not encode current value
+bars/cast_player_fill_white.png,360,22,nine_slice,P1,5,4,5,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/cast_target_background.png,240,18,nine_slice,P1,5,4,5,4,False,Background only. Frame/track; does not encode current value
+bars/cast_target_fill_white.png,240,18,nine_slice,P1,5,4,5,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/cast_nameplate_background.png,120,14,nine_slice,P1,4,4,4,4,False,Background only. Frame/track; does not encode current value
+bars/cast_nameplate_fill_white.png,120,14,nine_slice,P1,4,4,4,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/experience_background.png,640,10,nine_slice,P1,3,3,3,3,False,Background only. Frame/track; does not encode current value
+bars/experience_fill_white.png,640,10,nine_slice,P1,3,3,3,3,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/boss_health_background.png,600,24,nine_slice,P1,5,4,5,4,False,Background only. Frame/track; does not encode current value
+bars/boss_health_fill_white.png,600,24,nine_slice,P1,5,4,5,4,True,"White/gray fill; modulate per resource type, update progress ratio at runtime"
+bars/cast_edge_marker.png,10,22,overlay,P1,,,,,True,
+overlays/level_up_banner.png,480,84,nine_slice,P2,24,20,24,20,False,Decorative textless backing; text on separate Godot label
+overlays/rare_loot_banner.png,480,68,nine_slice,P2,24,20,24,20,False,Decorative textless backing; text on separate Godot label
+icons/interface/menu_character.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_spellbook.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_talents.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_map.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_game.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/bag_backpack.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/bag_slot_empty.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/window_close.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/page_prev.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/page_next.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/stats_show.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/stats_hide.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/cast_uninterruptible.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/state_combat.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/rank_elite.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/rank_rare.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/rank_boss.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/lock.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/coin_gold.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/coin_silver.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/coin_copper.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_hint.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/slot_helm.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_necklace.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_shoulders.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_cloak.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_chest.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_bracers.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_gloves.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_belt.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_legs.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_boots.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_ring.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_main_hand.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_off_hand.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_ranged.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_seal.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/interface/slot_talisman.png,128,128,icon,P1,,,,,False,Empty equipment slot silhouette; draw monochrome/desaturated at 40px
+icons/items/wolf_pelt.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/rusty_sword.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/leather_cap.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/small_bag.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/medium_bag.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/large_bag.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/glowing_crystal.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/hard_bread.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/broken_tooth.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/items/sealed_letter.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/abilities/auto_attack.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/abilities/help_up.png,128,128,icon,P1,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/physical.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/arcane.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/fire.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/frost.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/lightning.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/nature.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/chi.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/shadow.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/schools/holy.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/dialog_talk.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/dialog_trade.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/dialog_train.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_bags.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_social.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_quests.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_guild.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_mail.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_help.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/interface/menu_combat.png,128,128,icon,P2,,,,,False,No frame or text. Draw at 20-48px and leave bottom-right for count/key labels.
+icons/map/map_player.png,128,128,icon,P1,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/map/map_party.png,128,128,icon,P1,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/map/map_respawn.png,128,128,icon,P1,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/map/quest_available.png,128,128,icon,P2,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/map/quest_complete.png,128,128,icon,P2,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/map/quest_unavailable.png,128,128,icon,P2,,,,,False,"Render at map/UI size; map_player arrow points straight up, rotate by facing angle"
+icons/races/human.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+icons/races/high_elf.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+icons/races/dark_elf.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+icons/races/dwarf.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+icons/races/orc.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+icons/races/troll.png,128,128,icon,OPEN,,,,,False,Selection emblem concept only; 32px display. GDD playable race canon not verified.
+portraits/portrait_silhouette_human.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+portraits/portrait_silhouette_high_elf.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+portraits/portrait_silhouette_dark_elf.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+portraits/portrait_silhouette_dwarf.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+portraits/portrait_silhouette_orc.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+portraits/portrait_silhouette_troll.png,64,64,concept_portrait,OPEN,,,,,False,Generic silhouette only; replace with actual portrait or 3D viewport at runtime
+world/target_ring_white.png,256,256,world_decal,P1,,,,,True,Projected decal transparent texture; tint in engine based on friendly/hostile or valid/invalid. Avoid baked colors
+world/ground_target_white.png,256,256,world_decal,P1,,,,,True,Projected decal transparent texture; tint in engine based on friendly/hostile or valid/invalid. Avoid baked colors
+cursors/standard_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/standard_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/attack_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/attack_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/talk_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/talk_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/merchant_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/merchant_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/trainer_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/trainer_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/loot_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/loot_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/interact_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/interact_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+cursors/unavailable_32.png,32,32,cursor,P2,,,,,False,"Click hotspot (2,2), must not be UI-scaled"
+cursors/unavailable_48.png,48,48,cursor,P2,,,,,False,"Click hotspot (3,3), must not be UI-scaled"
+branding/wom_wordmark.png,1024,256,branding,P1,,,,,False,"Provisional WoM wordmark, transparent PNG; actual full title not specified"
+branding/app_icon_512.png,512,512,branding,P1,,,,,False,"Original monogram, raster base for .ico"
+branding/app_icon.ico,512,512,ico,P1,,,,,False,"Windows ICO with 16,32,48,256 sizes (not an RGBA PNG)"
+branding/main_menu_background_2560x1440.png,2560,1440,background,P1,,,,,False,"Dark uncluttered world backdrop: reserved central area for menu controls, no lettering"
+branding/boot_splash_1920x1080.png,1920,1080,background,P1,,,,,False,Boot splash with tentative WoM wordmark; no game-title expansion assumed

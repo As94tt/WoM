@@ -3,28 +3,39 @@
 [ext_resource type="Script" path="res://scripts/ui/unit_frame.gd" id="1_frame"]
 [ext_resource type="Script" path="res://scripts/ui/aura_bar.gd" id="2_auras"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/cast_bar.tscn" id="cb_cast"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/state_combat.png" id="3_combat"]
 
 [node name="UnitFrame" type="PanelContainer"]
 custom_minimum_size = Vector2(340, 0)
 offset_right = 340.0
-offset_bottom = 92.0
+offset_bottom = 90.0
 size_flags_vertical = 0
 theme_type_variation = &"UnitFramePanel"
 script = ExtResource("1_frame")
 
-[node name="Row" type="HBoxContainer" parent="."]
+[node name="Column" type="VBoxContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
-theme_type_variation = &"InlineRow"
+theme_type_variation = &"SlotColumn"
 
-[node name="Portrait" type="PanelContainer" parent="Row"]
-custom_minimum_size = Vector2(64, 64)
+[node name="Frame" type="Panel" parent="Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 90)
 layout_mode = 2
-size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"UnitFramePlayer"
+
+[node name="Portrait" type="PanelContainer" parent="Column/Frame"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 18.0
+offset_right = 62.0
+offset_bottom = 72.0
 mouse_filter = 2
 theme_type_variation = &"UnitPortrait"
 
-[node name="PortraitLabel" type="Label" parent="Row/Portrait"]
+[node name="PortraitLabel" type="Label" parent="Column/Frame/Portrait"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"WindowTitle"
@@ -32,26 +43,26 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Content" type="VBoxContainer" parent="Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_type_variation = &"SlotColumn"
-
-[node name="Header" type="HBoxContainer" parent="Row/Content"]
-layout_mode = 2
+[node name="Header" type="HBoxContainer" parent="Column/Frame"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 84.0
+offset_top = 9.0
+offset_right = 332.0
+offset_bottom = 31.0
 mouse_filter = 2
 theme_type_variation = &"InlineRow"
 
-[node name="NameLabel" type="Label" parent="Row/Content/Header"]
+[node name="NameLabel" type="Label" parent="Column/Frame/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"BodyText"
 text = "Name"
+vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="RankBadge" type="PanelContainer" parent="Row/Content/Header"]
+[node name="RankBadge" type="PanelContainer" parent="Column/Frame/Header"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -59,33 +70,44 @@ size_flags_vertical = 4
 mouse_filter = 2
 theme_type_variation = &"UnitBadge"
 
-[node name="RankLabel" type="Label" parent="Row/Content/Header/RankBadge"]
+[node name="RankRow" type="HBoxContainer" parent="Column/Frame/Header/RankBadge"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"InlineRow"
+
+[node name="RankIcon" type="TextureRect" parent="Column/Frame/Header/RankBadge/RankRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RankLabel" type="Label" parent="Column/Frame/Header/RankBadge/RankRow"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 text = "Elite"
 
-[node name="CombatBadge" type="PanelContainer" parent="Row/Content/Header"]
+[node name="CombatBadge" type="TextureRect" parent="Column/Frame/Header"]
 unique_name_in_owner = true
 visible = false
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 2
 tooltip_text = "Im Kampf"
-theme_type_variation = &"UnitBadge"
+texture = ExtResource("3_combat")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="CombatLabel" type="Label" parent="Row/Content/Header/CombatBadge"]
-layout_mode = 2
-theme_type_variation = &"SmallLabel"
-text = "Im Kampf"
-
-[node name="LevelLabel" type="Label" parent="Row/Content/Header"]
+[node name="LevelLabel" type="Label" parent="Column/Frame/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 text = "1"
 
-[node name="ThreatLabel" type="Label" parent="Row/Content/Header"]
+[node name="ThreatLabel" type="Label" parent="Column/Frame/Header"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -94,17 +116,20 @@ mouse_filter = 1
 theme_type_variation = &"ThreatSafe"
 text = "Bedrohung 0 %"
 
-[node name="HealthBar" type="ProgressBar" parent="Row/Content"]
+[node name="HealthBar" type="ProgressBar" parent="Column/Frame"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
+layout_mode = 0
+offset_left = 84.0
+offset_top = 35.0
+offset_right = 332.0
+offset_bottom = 57.0
 mouse_filter = 2
 theme_type_variation = &"HealthBar"
 max_value = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="HealthText" type="Label" parent="Row/Content/HealthBar"]
+[node name="HealthText" type="Label" parent="Column/Frame/HealthBar"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -117,16 +142,19 @@ text = "1 / 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ResourceBar" type="ProgressBar" parent="Row/Content"]
+[node name="ResourceBar" type="ProgressBar" parent="Column/Frame"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
+layout_mode = 0
+offset_left = 84.0
+offset_top = 59.0
+offset_right = 332.0
+offset_bottom = 77.0
 theme_type_variation = &"ManaBar"
 max_value = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="ResourceText" type="Label" parent="Row/Content/ResourceBar"]
+[node name="ResourceText" type="Label" parent="Column/Frame/ResourceBar"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -139,23 +167,26 @@ text = "1 / 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SecondaryBar" type="ProgressBar" parent="Row/Content"]
+[node name="SecondaryBar" type="ProgressBar" parent="Column/Frame"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-theme_type_variation = &"ChiBar"
+layout_mode = 0
+offset_left = 84.0
+offset_top = 82.0
+offset_right = 332.0
+offset_bottom = 90.0
+theme_type_variation = &"ChiSecondaryBar"
 max_value = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="ClassResourceSlot" type="HBoxContainer" parent="Row/Content"]
+[node name="ClassResourceSlot" type="HBoxContainer" parent="Column"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"SlotRow"
 
-[node name="AuraSlot" type="HFlowContainer" parent="Row/Content"]
+[node name="AuraSlot" type="HFlowContainer" parent="Column"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -165,7 +196,7 @@ script = ExtResource("2_auras")
 filter = 2
 max_icons = 16
 
-[node name="CastBar" parent="Row/Content" instance=ExtResource("cb_cast")]
+[node name="CastBar" parent="Column" instance=ExtResource("cb_cast")]
 unique_name_in_owner = true
 layout_mode = 2
 bar_height = 18.0

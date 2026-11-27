@@ -35,6 +35,12 @@ has_min = true
 choices = PackedStringArray()
 description = "Sortierung in Listen (kleiner = weiter vorn)."
 
+[sub_resource type="Resource" id="Resource_ss_icon"]
+script = ExtResource("1_sscol")
+name = "icon"
+choices = PackedStringArray()
+description = "Pfad zum Schulsymbol (UI-Paket „Stone & Brass“, englischer Dateiname, z. B. icons/schools/fire.png für feuer); leer = kein Symbol."
+
 [resource]
 script = ExtResource("2_sstab")
 table = "schadensschulen"
@@ -43,4 +49,4 @@ group = "Kampf"
 description = "Schadensschulen (#32, Liste aus #39 um die Schulen aus #34 ergänzt). Schadenseffekte, Gegner (Spalte schule) und Immunitäten verweisen über die ID. Neue Schule = neue Zeile."
 key_columns = PackedStringArray("id")
 order = 55
-columns = Array[ExtResource("1_sscol")]([SubResource("Resource_ss_id"), SubResource("Resource_ss_name"), SubResource("Resource_ss_art"), SubResource("Resource_ss_reihenfolge")])
+columns = Array[ExtResource("1_sscol")]([SubResource("Resource_ss_id"), SubResource("Resource_ss_name"), SubResource("Resource_ss_art"), SubResource("Resource_ss_reihenfolge"), SubResource("Resource_ss_icon")])

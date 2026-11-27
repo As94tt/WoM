@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_ability"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/abilities/help_up.png" id="9_icon"]
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="2_effect"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resurrect_effect.gd" id="3_resurrect"]
 
@@ -10,6 +11,7 @@ script = ExtResource("3_resurrect")
 [resource]
 script = ExtResource("1_ability")
 id = &"aufhelfen"
+icon = ExtResource("9_icon")
 display_name = "Aufhelfen"
 description = "Taste F gedrückt halten: Einem gefallenen Mitspieler aufhelfen. Nur außerhalb des Kampfes; Bewegung oder Schaden brechen ab. Der Gefallene muss die Hilfe annehmen und steht mit 30 % Leben auf."
 innate = true

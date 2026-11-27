@@ -460,6 +460,19 @@ Eindeutig: `id`.
 | `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Sortieren im Taschenfenster (kleiner = weiter vorn). |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
+#### ausruestungsplaetze.csv – Ausrüstungsplätze
+
+Ausrüstungsplätze im Charakterfenster (#19) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket.
+
+Eindeutig: `id`.
+
+| Spalte | Typ | Pflicht | Standard | Erlaubt | Erklärung |
+| --- | --- | --- | --- | --- | --- |
+| `id` | ID | ja |  |  | Feste ID des Ausrüstungsplatzes (z. B. helm, ring_1). Das Charakterfenster verweist darauf; nie ändern. |
+| `name` | Text | ja |  |  | Anzeigename (Tooltip „Name (leer)“). |
+| `icon` | Text |  |  |  | Pfad zum Bild des leeren Platzes (englischer Dateiname aus dem UI-Paket); leer = nur der Rahmen. |
+| `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
+
 ### Charaktere
 
 #### voelker.csv – Völker
@@ -565,6 +578,7 @@ Eindeutig: `id`.
 | `name` | Text | ja |  |  | Anzeigename (Tooltip, Kampftext, Entwickler-Panel). |
 | `art` | Auswahl |  | magisch | `koerperlich`, `magisch` | koerperlich: Rüstung verringert den Schaden; magisch: Zauberschutz verringert ihn (Trefferberechnung #34). |
 | `reihenfolge` | Ganzzahl |  | 0 | ab 0 | Sortierung in Listen (kleiner = weiter vorn). |
+| `icon` | Text |  |  |  | Pfad zum Schulsymbol (UI-Paket „Stone & Brass“, englischer Dateiname, z. B. icons/schools/fire.png für feuer); leer = kein Symbol. |
 | `notiz` | Text | | | | Freie Anmerkung, wird vom Spiel ignoriert. |
 
 #### platzhalterwaffen.csv – Platzhalter-Waffen

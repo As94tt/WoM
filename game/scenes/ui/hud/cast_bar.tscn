@@ -1,24 +1,23 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/cast_bar.gd" id="1_cast"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/interface/cast_uninterruptible.png" id="2_shield"]
 
 [node name="CastBar" type="HBoxContainer"]
 mouse_filter = 2
 theme_type_variation = &"InlineRow"
 script = ExtResource("1_cast")
 
-[node name="Shield" type="PanelContainer" parent="."]
+[node name="Shield" type="TextureRect" parent="."]
 unique_name_in_owner = true
 visible = false
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
-theme_type_variation = &"UnitBadge"
-
-[node name="ShieldLabel" type="Label" parent="Shield"]
-layout_mode = 2
-theme_type_variation = &"SmallLabel"
-text = "Schild"
+texture = ExtResource("2_shield")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Bar" type="ProgressBar" parent="."]
 unique_name_in_owner = true

@@ -23,6 +23,9 @@ const WORLD_SCENE := "res://scenes/world/world.tscn"
 
 
 func _ready() -> void:
+	MouseCursors.install(get_tree())
+	# Entwickler-Hilfsmittel: --ui-screenshots=<Ordner> (nur Debug-Builds).
+	UiScreenshots.start_if_requested(get_tree())
 	%HostButton.pressed.connect(_on_host_pressed)
 	%JoinButton.pressed.connect(_on_join_pressed)
 	%QuitButton.pressed.connect(_on_quit_pressed)

@@ -230,6 +230,12 @@ func seltenheit(id: StringName) -> TableRow:
 	return row("seltenheiten", id)
 
 
+## Ausrüstungsplatz (#19, Bild des leeren Platzes aus dem UI-Paket) aus
+## ausruestungsplaetze.csv oder null.
+func ausruestungsplatz(id: StringName) -> TableRow:
+	return row("ausruestungsplaetze", id)
+
+
 ## Gegenstandstyp (#18) aus gegenstandstypen.csv oder null.
 func gegenstandstyp(id: StringName) -> TableRow:
 	return row("gegenstandstypen", id)

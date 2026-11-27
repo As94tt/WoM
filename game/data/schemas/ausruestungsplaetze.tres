@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="TableSchema" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tables/column_schema.gd" id="1_apcol"]
+[ext_resource type="Script" path="res://scripts/data/tables/table_schema.gd" id="2_aptab"]
+
+[sub_resource type="Resource" id="Resource_ap_id"]
+script = ExtResource("1_apcol")
+name = "id"
+type = 1
+required = true
+choices = PackedStringArray()
+description = "Feste ID des Ausrüstungsplatzes (z. B. helm, ring_1). Das Charakterfenster verweist darauf; nie ändern."
+
+[sub_resource type="Resource" id="Resource_ap_name"]
+script = ExtResource("1_apcol")
+name = "name"
+required = true
+choices = PackedStringArray()
+description = "Anzeigename (Tooltip „Name (leer)“)."
+
+[sub_resource type="Resource" id="Resource_ap_icon"]
+script = ExtResource("1_apcol")
+name = "icon"
+choices = PackedStringArray()
+description = "Pfad zum Bild des leeren Platzes (englischer Dateiname aus dem UI-Paket); leer = nur der Rahmen."
+
+[resource]
+script = ExtResource("2_aptab")
+table = "ausruestungsplaetze"
+title = "Ausrüstungsplätze"
+group = "Gegenstände"
+description = "Ausrüstungsplätze im Charakterfenster (#19) mit dem Bild für den leeren Platz (UI-Paket „Stone & Brass“). Die deutsche ID bleibt, die Datei trägt den englischen Namen aus dem Paket."
+key_columns = PackedStringArray("id")
+order = 44
+columns = Array[ExtResource("1_apcol")]([SubResource("Resource_ap_id"), SubResource("Resource_ap_name"), SubResource("Resource_ap_icon")])

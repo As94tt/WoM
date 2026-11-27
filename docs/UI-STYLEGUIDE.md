@@ -1,6 +1,6 @@
 # UI-STYLEGUIDE – High-Fantasy-Koop-RPG
 
-> **Status:** Entwurf / Stil noch nicht freigegeben.  
+> **Status:** Stilrichtung „Stone & Brass“ vom Projektverantwortlichen freigegeben (27.11.2026, über das UI-Asset-Paket); Farb-Tokens (Abschnitt 3) und Schriften (Abschnitt 4) weiter **OFFEN**.  
 > **Geltungsbereich:** Alle Ingame- und Menüoberflächen des Godot-Spiels.  
 > **Abhängigkeiten:** Vor verbindlicher Festlegung `docs/GDD.md`, `CLAUDE.md` und `docs/GAME-STYLEGUIDE.md` lesen. Bei Widersprüchen Entscheidungen mit dem Projektverantwortlichen klären.
 
@@ -15,18 +15,20 @@ Das Spiel ist ein WoW-artiges Koop-RPG mit einem eigenständigen, gut lesbaren C
 4. **Eigenständige Fantasy-Identität:** Neue Motive statt Nachbildungen bekannter MMORPG-UI.
 5. **Skalierbarkeit:** Gute Lesbarkeit bei 1920×1080 und 2560×1440; UI-Skalierung und lange Texte berücksichtigen.
 
-## 2. Stilentscheidungen – Freigabe erforderlich
+## 2. Stilentscheidungen
 
-Folgende Angaben werden in Phase 1 abgefragt und in Phase 2 als drei Varianten vorgeschlagen:
+Freigegeben vom Projektverantwortlichen am 27.11.2026 über das UI-Asset-Paket „Stone & Brass“ (Grafiken unter `game/assets/ui/`, Quellen unter `art-source/UI/`, Freigabe-Referenzbilder in `art-source/UI/style_references/`):
 
 | Entscheidung | Beispiele | Final |
 |---|---|---|
-| Stimmung | episch, warm-abenteuerlich, mystisch, düster | **OFFEN** |
-| Rahmenmaterial | Metall, Holz, Stein, Pergament | **OFFEN** |
-| Detailgrad | schlicht, mittel, stark verziert | **OFFEN** |
-| Formen | kantig, weich, ornamental | **OFFEN** |
-| Referenzen | 1–3 Spiele/Illustrationsstile | **OFFEN** |
-| Informationsdichte | minimal, mittel, klassisches MMORPG | **OFFEN** |
+| Stimmung | episch, warm-abenteuerlich, mystisch, düster | **dunkel, ruhig, ernsthaft** (dunkler Stein) |
+| Rahmenmaterial | Metall, Holz, Stein, Pergament | **dunkler Stein mit mattem Messing/Gold** |
+| Detailgrad | schlicht, mittel, stark verziert | **schlicht** (keine Runen, keine klassenspezifischen Motive auf gemeinsamer UI) |
+| Formen | kantig, weich, ornamental | **kantig**, dezente Eckbeschläge |
+| Referenzen | 1–3 Spiele/Illustrationsstile | eigene Konzeptbilder in `art-source/UI/style_references/` (keine Spielvorlage) |
+| Informationsdichte | minimal, mittel, klassisches MMORPG | **kompakt** (Aktionsleiste ohne Abstände, sehr schmale Menüleiste) |
+
+Höchstens zwei tragende Strukturfarben (Stein, Messing). Die Farbwerte der Paket-Palette sind **keine** Tokens; die Tokens in Abschnitt 3 bleiben TBD.
 
 ## 3. Design-Tokens und Farben
 
@@ -163,8 +165,8 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 
 - Zentrales Theme unter `game/assets/ui/theme.tres`.
 - Schriftdateien und zugehörige Lizenzen unter `game/assets/ui/fonts/`.
-- Vorläufige Rahmen ausschließlich mit Godot-`StyleBoxFlat`: Flächen, Rahmenbreite, Ecken, Schatten.
-- Keine handgezeichneten oder aus fremden Spielen übernommenen Rahmen in der ersten Iteration. Icons: nur eigene bzw. ordnungsgemäß lizenzierte, siehe Abschnitt „Icons“ unten.
+- Rahmen, Flächen und Balken sind Grafiken aus dem UI-Paket „Stone & Brass“ als `StyleBoxTexture` im Theme (siehe „UI-Grafiken (Stone & Brass)“ unten). `StyleBoxFlat` bleibt nur, wo das Paket bewusst keine Grafik liefert (`DimOverlay`, Reserve-Variationen).
+- Keine aus fremden Spielen übernommenen Rahmen. Icons: nur eigene bzw. ordnungsgemäß lizenzierte, siehe Abschnitt „Icons“ unten.
 - Theme-Overrides nur, wenn sie als dokumentierte, wiederverwendbare Variation im Theme-System etabliert sind.
 - **Keine Farben und Schriften direkt in Gameplay- oder UI-Code hardcoden.**
 - Pflicht-Vorschauszene: `game/scenes/ui/style_preview.tscn` mit sämtlichen Komponenten und States.
@@ -174,7 +176,7 @@ Jede Komponente erhält explizite Zustände und eine Vorschau in `game/scenes/ui
 
 `game/assets/ui/theme.tres` ist in `game/project.godot` unter `[gui] theme/custom` als projektweites Standard-Theme eingetragen. Szenen setzen kein eigenes Theme und keine `theme_override_*`-Werte, sondern wählen über `theme_type_variation` eine der folgenden Variationen.
 
-**Alle Werte im Theme sind Graubox-Platzhalter** (neutrale Grau-/Weißtöne, Godot-Standardschrift, nur `StyleBoxFlat`). Sie sind keine Tokens; die Tokens in Abschnitt 3 bleiben TBD, bis die Stilrichtung freigegeben ist. Neue Variationen werden hier eingetragen und in `style_preview.tscn` gezeigt.
+**Rahmen und Flächen kommen seit dem UI-Paket aus Grafiken** (`StyleBoxTexture`, Abschnitt „UI-Grafiken (Stone & Brass)“). **Farbwerte im Theme sind weiter Platzhalter** (Schrift Grau/Weiß, Godot-Standardschrift; Lebens-, Ressourcen-, Zauber-, Seltenheits- und Debufffarben tönen jetzt die weißen Grafiken per `modulate_color`). Sie sind keine Tokens; die Tokens in Abschnitt 3 bleiben TBD. Wo die Tabelle unten noch `StyleBoxFlat` beschreibt, gilt für das Aussehen die Grafik laut Abschnitt „UI-Grafiken“; Bedeutung, Größen und Verwendung bleiben. Neue Variationen werden hier eingetragen und in `style_preview.tscn` gezeigt.
 
 | Variation | Basistyp | Wert | Verwendung |
 |---|---|---|---|
@@ -290,12 +292,12 @@ Szene `game/scenes/ui/hud.tscn` mit Teilen in `game/scenes/ui/hud/`. Außenrand 
 
 | Element | Aufbau | Position |
 |---|---|---|
-| Aktionsleisten | 2 × 12 `SlotButton`-Slots à 48 × 48 px in `SlotRow`, Leisten in `SlotColumn`; Leiste 1 unten, Leiste 2 darüber; Inhalt siehe „Zauberbuch und Aktionsleisten (#21)“ | unten mittig |
-| Menüleiste | 5 `SlotButton` à 40 × 40 px mit Platzhalter-Buchstaben (C, Z, T, K, S), Tooltip „Name (Taste)“ | unten rechts, über der Taschenleiste |
-| Taschenleiste | 4 Taschenplätze + Rucksack („R“) à 48 × 48 px, Rucksack ganz rechts; Taschenplatz 1 direkt neben dem Rucksack. Seit #18 zeigen die Taschenplätze die angelegte Tasche (Icon bzw. Kürzel, Tooltip wie im Taschenfenster mit Hinweis „Ziehen: abnehmen (nur wenn leer)“), leer „Taschenplatz (leer)“; am Rucksack steht unten rechts die Zahl freier Plätze aller Taschen (`ItemCount`), der Tooltip nennt „N von M Plätzen frei“ | unten rechts |
+| Aktionsleisten | 2 × 12 `SlotButton`-Slots à 48 × 48 px **ohne Abstand** (`ActionBarRow`, 0 px), jede Leiste in einer festen Hülle `ActionBarShell` 600 × 56 px (Slots bei x = 12, y = 4); Leisten in `SlotColumn`; Leiste 1 unten, Leiste 2 darüber; Inhalt siehe „Zauberbuch und Aktionsleisten (#21)“ | unten mittig |
+| Menüleiste | 5 `MenuBarButton` à **40 × 40 px** (Rahmen wie die Taschenplätze, `slot_40_*`) mit Bediensymbolen von 32 px (`interface/menu_character`, `menu_spellbook`, `menu_talents`, `menu_map`, `menu_game`), 2 px Abstand (`MenuBarRow`), **ohne Hülle**, rechtsbündig (208 px breit); Tooltip „Name (Taste)“ bleibt das zweite Signal. Entscheidung des Projektverantwortlichen bei der Designkontrolle zu #69 (ersetzt die 20 × 40-Knöpfe in der 236 × 44-Hülle aus dem Paket; `menu_bar_shell` und `menu_button_20x40_*` liegen ungenutzt bereit) | unten rechts, direkt über der Taschenleiste |
+| Taschenleiste | 4 Taschenplätze + Rucksack (Symbol `interface/bag_backpack`) à 48 × 48 px, Rucksack ganz rechts; Taschenplatz 1 direkt neben dem Rucksack. Seit #18 zeigen die Taschenplätze die angelegte Tasche (Icon bzw. Kürzel, Tooltip wie im Taschenfenster mit Hinweis „Ziehen: abnehmen (nur wenn leer)“), leer mit dem Symbol `interface/bag_slot_empty` und Tooltip „Taschenplatz (leer)“; am Rucksack steht unten rechts die Zahl freier Plätze aller Taschen (`ItemCount`), der Tooltip nennt „N von M Plätzen frei“ | unten rechts |
 | Fenster | `PanelContainer` mit `WindowTitle`, Schließen-Button „X“ (`SlotButton` 40 × 40 px) und Inhaltsbereich; leer mit `HintText` „Kommt bald“ | siehe unten |
 | Spielmenü | `DimOverlay` + `DialogPanel` mit `WindowTitle` und `ButtonList`; nicht belegte Punkte deaktiviert | Bildschirmmitte |
-| Spielerrahmen (#31) | `unit_frame.tscn`, 340 px breit, siehe „Spieler- und Zielrahmen“ | oben links |
+| Spielerrahmen (#31) | `unit_frame.tscn`, feste Rahmengrafik 340 × 90 px (`UnitFramePlayer`, Porträt links), siehe „Spieler- und Zielrahmen“ | oben links |
 | Zielrahmen (#31) | dieselbe Szene, nur mit Ziel sichtbar | oben, rechts neben dem Spielerrahmen (12 px Abstand) |
 | Namensplaketten (#31) | `unit_nameplate.tscn` je Einheit, unter allen Fenstern | über dem Kopf jeder Einheit |
 | Eigene Auren (#32) | `PlayerAuras` (`SlotColumn`) mit zwei `AuraBar` (`AuraFlow`, rechtsbündig): Buffs, darunter Debuffs; Symbole 36 × 36 px | oben rechts, 560 px breit |
@@ -355,9 +357,65 @@ Fenstergrößen und Plätze: Charakter 400 × 520 px und Zauberbuch 480 × 520 p
 
 **Klassenfarben (vorläufig):** Solange die Tokens `class/*` in Abschnitt 3 TBD sind, steht die Klassenfarbe als vorläufiger Wert in den Klassendaten (`ClassData.color` in `game/data/classes/*.tres`) und wird zur Laufzeit auf den Klassennamen gesetzt. Das ist die einzige Farbe, die nicht aus dem Theme kommt, weil sie aus Daten stammt. Nach Freigabe der Tokens werden die Werte in den `.tres`-Dateien durch die Token-Werte ersetzt. Dieselbe Farbe färbt in der Charakterauswahl und -erstellung auch das Platzhaltermodell (Kapsel) in der 3D-Vorschau, im Spiel die Kapsel jeder Spielfigur, den Namen auf ihrer Namensplakette (#31: HUD-Plakette), die Klasse in der Spielerliste und den Mitspieler-Punkt auf der Karte (#30). Der Klassenname steht immer zusätzlich als Text da (Farbe nie als einziger Bedeutungsträger).
 
+### UI-Grafiken (Stone & Brass)
+
+Grafikpaket des Projektverantwortlichen (v3, 27.11.2026). Größen, 9-Slice-Ränder und Hotspots stehen in `docs/ui-assets/asset_manifest.json` (bzw. `.csv`), die Zuordnung deutsche ID → englische Datei in `docs/ui-assets/german_to_english_icon_ids.csv`.
+
+**Ordner unter `game/assets/ui/`:** `frames/` (9-Slice-Rahmen, Slots, Hüllen, Einheitenrahmen, Aura-Rahmen, Zustände), `bars/` (Hintergrund + weiße Füllung je Balken), `icons/` (siehe „Icons“), `cursors/` (32 und 48 px), `branding/` (App-Symbol `.ico` + 512 px, Startbild, Hauptmenü-Hintergrund, vorläufige Wortmarke), `overlays/` (Banner für Aufstieg und seltene Beute, noch nicht eingebunden), `portraits/` (Silhouetten, **Konzept/OFFEN**, nicht eingebunden), `world/` (Zielkreis und Bodenziel 256 px, weiß, noch nicht eingebunden). Quellen: `art-source/UI/svg/` (Nicht-Icons), `art-source/UI/png-icon-sheets/` (Icon-Quellbögen); alte SVG-Icon-Entwürfe werden nicht verwendet.
+
+**9-Slice-Regeln:** Jede Fläche ist eine `StyleBoxTexture` mit den Texturrändern aus dem Manifest (links, oben, rechts, unten); Ecken werden nie gestreckt. Innenabstand (Content Margins) ist davon getrennt. Feste Grafiken (`fixed`: Aktionsleisten- und Menüleisten-Hülle, Einheitenrahmen, Häkchen, Menüknöpfe) werden **nie** gedehnt; der Knoten hat genau ihre Größe. Weiße Grafiken (Balkenfüllungen, Debuff-Rahmen, Seltenheitsrahmen, `talent_pending`) werden zur Laufzeit bzw. im Theme getönt (`modulate_color` bzw. `self_modulate`), die Farbe kommt aus dem Theme. Fokus-Grafiken (`*_focus`) sind Rahmen über dem jeweiligen Zustand (`draw_center = false`), nie eine dauerhafte Fläche.
+
+| Variation / Theme-Typ | Grafik | Texturränder | Innenabstand |
+|---|---|---|---|
+| `Panel`, `PanelContainer` (allgemein) | `frames/tooltip_panel` | 7 | 16 |
+| `WindowPanel` (neu, HUD-Fenster) | `frames/window_panel` (Titelzone oben) | 18 / 35 / 18 / 18 | 16, oben 3 (Titel in der Titelzone) |
+| `DialogPanel` | `frames/dialog_panel` (Titelzone oben) | 22 / 42 / 22 / 22 | 24, oben 6 |
+| `TooltipPanel` | `frames/tooltip_panel` | 7 | 8 / 4 |
+| `PanelTitle` (neu, `Label`) | – | – | Schriftgröße 18 px; Titel in der Titelzone von `WindowPanel` und `DialogPanel` (die Zone ist rund 20 px hoch, deshalb nicht `WindowTitle`) |
+| `Button` | `frames/button_normal/hover/pressed/disabled`, Fokus `button_focus` | 8 | 16 / 12 |
+| `EnterWorldButton` | `frames/enter_world_button_*` | 12 | 16 / 12 |
+| `ListEntryButton` | `frames/list_entry_*` (gedrückt = `selected`) | 8 / 6 | 16 / 12 |
+| `ChoiceButton`, `LockedChoiceButton` | `frames/choice_button_*`, `frames/locked_choice_button_*` | 8 / 7 | 16 / 12 |
+| `LogTab` | `frames/log_tab_*` | 8 / 6 | 12 / 6 |
+| `LineEdit` | `frames/input_field_normal/focus/disabled` | 7 | 12 / 8 |
+| `CheckBox` | `frames/checkbox_on/off/disabled` (24 px, fest) | – | – |
+| `VScrollBar` | `frames/scroll_track`, `scroll_thumb_normal/hover/dragged` | 5 / 8 bzw. 4 / 7 | 4 |
+| `SlotButton` (48 px) | `frames/slot_48_*`, Fokus `slot_48_focus` | 5 | 2 |
+| `SlotButton40` (neu, 40 px) | `frames/slot_40_*` | 5 | 2 |
+| `MenuBarButton` (neu, 40 × 40 px) | `frames/slot_40_*`, Fokus `slot_40_focus` | 5 | 4 (Symbol 32 px) |
+| `MenuBarRow` (neu) | – (keine Hülle) | – | Abstand 2 px |
+| `ActionBarShell`, `ActionBarRow` (neu) | `frames/action_bar_shell` (600 × 56, fest) | – | 12 / 4; Abstand 0 px |
+| `IconButton` (neu, `Button`) | keine Fläche; das Icon (mit eigenem Steinhintergrund) ist der Knopf; Hover über Icon-Tönung | – | – |
+| `SlotFlash`, `SlotActive`, `SlotProcGlow` | `frames/slot_flash`, `slot_active`, `slot_proc_glow_00…07` (64 px, 8 Bilder à 0,1 s als `AnimatedTexture`, 8 px Überstand) | 0 / 5 / 0 | – |
+| `TalentPending`, `ItemRarityFrame` | `frames/talent_pending`, `item_rarity_frame_40` (weiß, getönt) | 5 | – |
+| `HealthBar`, `ManaBar`, `RageBar`, `EnergyBar`, `ChiBar` | `bars/health_*` (22 px), `bars/resource_*` (18 px), weiße Füllung getönt | 5 / 4 | – |
+| `ManaSecondaryBar`, `RageSecondaryBar`, `EnergySecondaryBar`, `ChiSecondaryBar` (neu) | `bars/secondary_resource_*` (8 px) | 2 | Zweitressource im Spielerrahmen (`<Ressource>SecondaryBar`) |
+| `NameplateHealthBar` (neu) | `bars/health_nameplate_*` (8 px) | 2 | Lebensbalken der Namensplaketten |
+| `CastBar`, `CastBarChannel`, `CastBarDone`, `CastBarFailed` | `bars/cast_player_*` | 5 / 4 | – |
+| `ExperienceBar` | `bars/experience_*` (10 px) | 3 | – |
+| `UnitFramePanel` | keine Fläche (`StyleBoxEmpty`) | – | 0 |
+| `UnitFramePlayer`, `UnitFrameTarget` (neu, `Panel`) | `frames/unit_frame_player`, `unit_frame_target` (340 × 90, fest, gespiegelt) | – | – |
+| `UnitPortrait` | keine Fläche (der Kreis ist Teil der Rahmengrafik) | – | – |
+| `UnitBadge` | `frames/unit_badge` | 6 / 4 | 6 / 0 |
+| `UnitFrameIcons` (neu, Theme-Typ) | Icons `rank_elite`, `rank_rare`, `rank_boss` | – | – |
+| `NameplatePanel`, `NameplateTargetPanel`, `NameplateWarningPanel`, `NameplateTargetWarningPanel` | `frames/nameplate_normal/target/warning/target_warning` (Warnung zusätzlich gestrichelt) | 6 | 6 / 3 |
+| `AuraBuff`, `AuraDebuff*` | `frames/aura_buff_36`, `aura_debuff_36` (weiß, je Kategorie getönt) | 5 | 2 (Rahmen 1 bzw. 2 px nach außen) |
+| `CoinGold`, `CoinSilver`, `CoinCopper` | `icons/interface/coin_*` | – | Buchstabe G/S/K bleibt als zweites Signal |
+| `MenuHintDot` | `icons/interface/menu_hint` (10 px, bündig in der Ecke des 20-px-Knopfs) | – | – |
+| `MapMarker` | Icons `player` (`map/map_player`, Spitze oben, wird gedreht), `respawn` (`map/map_respawn`), `mate` (`map/map_party`, weiß, in Klassenfarbe getönt) | – | – |
+| `MouseCursor` (neu, Theme-Typ) | `cursors/<zeiger>_32` und `_48`, Konstanten `hotspot_32` (2), `hotspot_48` (3), `large_from_height` (1440) | – | gesetzt von `scripts/ui/mouse_cursors.gd`; nicht mit der UI skaliert |
+
+**Spieler- und Zielrahmen:** Rahmengrafik 340 × 90 px; Porträtfläche 54 × 54 px bei x = 8, y = 18 (Spieler) bzw. x = 278 (Ziel, gespiegelt); Kopfzeile (Name, Kennzeichen, Stufe, Bedrohung) und Balken liegen im rechteckigen Teil (Spieler x = 84–332, Ziel x = 8–256): Leben 22 px (y = 35), Ressource 18 px (y = 59), Zweitressource 8 px (y = 82). Gespiegelt werden nur die Plätze, nie Texte, Zahlen oder Bilder. „Im Kampf“ ist das Symbol `interface/state_combat` (20 px, Tooltip „Im Kampf“), der Rang zeigt Symbol und Text („Elite“). Nicht unterbrechbare Zauber zeigen `interface/cast_uninterruptible` (20 px) statt des Worts „Schild“; der Tooltip „Nicht unterbrechbar“ bleibt.
+
+**Fensterbedienung:** Schließen-Knopf `interface/window_close` (24 px, `IconButton`), Blättern im Zauberbuch `page_prev`/`page_next` (32 px), Wertebereich `stats_show`/`stats_hide` (32 px). Taschenfenster-Plätze und Ausrüstungsplätze sind 40 × 40 px (`SlotButton40`); leere Ausrüstungsplätze zeigen ihr Bild aus `ausruestungsplaetze.csv`.
+
+**Bildschirme:** Hauptmenü mit Hintergrund `branding/main_menu_background_2560x1440` (füllt den Bildschirm, Seitenverhältnis bleibt); App-Symbol (`config/icon`, `config/windows_native_icon`) und Startbild (`application/boot_splash`) in `project.godot`. Die Wortmarke „WoM“ ist vorläufig und nicht eingebunden (Spieltitel weiter als Text).
+
+**Texturfilter:** Projektweit „Linear Mipmap“ für Oberflächen (`rendering/textures/canvas_textures/default_texture_filter`); Icons werden mit Mipmaps importiert, Rahmen, Balken und Mauszeiger ohne.
+
 ### Icons (#55)
 
-Erste Icons (Klassen, Magier-Spezialisierungen, Magier-Zauber) sind eingebaut. Die **Stilrichtung ist weiter OFFEN** (Abschnitt 2); die Icons sind ein Stand zum Ansehen, kein freigegebener Stil.
+Eingebaut sind die Klassen-, Magier-Spezialisierungs- und Magier-Zauber-Icons (#55, unverändert) und seit dem UI-Paket die allgemeinen Icons im Stil „Stone & Brass“ (Bediensymbole, leere Ausrüstungsplätze, Münzen, Testgegenstände, allgemeine Fähigkeiten, Schadensschulen, Karte). Alte SVG-Icon-Entwürfe werden nicht verwendet.
 
 **Format:** PNG, 128 × 128 px, quadratisch, RGBA (32 Bit), sRGB. Arbeitsfassungen (512–1254 px) legt der Projektverantwortliche in `art-source/` ab; Agenten verändern dort nichts. Verkleinert wird hochwertig (bikubisch) auf 128 px.
 
@@ -377,11 +435,15 @@ Erste Icons (Klassen, Magier-Spezialisierungen, Magier-Zauber) sind eingebaut. D
 | `schools/` | Schadensschulen | ID in `schadensschulen.csv` | `schools/frost.png` |
 | `items/` | Gegenstände | ID in `gegenstaende.csv` | `items/schwert_rostig.png` |
 | `interface/` | Bediensymbole ohne Datensatz | `<bereich>_<bedeutung>` | `interface/window_close.png` |
+| `map/` | Karten- und Quest-Markierungen | `<bedeutung>` | `map/map_player.png` |
+| `races/` | Völker-Embleme (**Konzept, OFFEN**, nicht eingebunden) | englischer Name | `races/high_elf.png` |
 | `_test/` | Graubox-Testicons (werden entfernt) | frei | `_test/kreis.png` |
+
+**Ausnahme UI-Paket (englische Dateinamen):** Die Dateien aus dem UI-Paket behalten die englischen Namen des Pakets (`items/wolf_pelt.png`, `schools/fire.png`, `interface/slot_necklace.png`, `abilities/auto_attack.png`). Die deutschen Spiel-IDs bleiben unverändert; die Verbindung steht in den Daten: Spalte `icon` in `gegenstaende.csv` und `schadensschulen.csv`, Tabelle `ausruestungsplaetze.csv` (leere Ausrüstungsplätze), Feld `icon` der Fähigkeit (`.tres`). Die vollständige Zuordnung steht in `docs/ui-assets/german_to_english_icon_ids.csv`. Neue Icons mit Datensatz folgen weiter der ID-Regel oben.
 
 Gleiche IDs in verschiedenen Kategorien (z. B. Fähigkeit und Aura `eisschild`) sind erlaubt; es gibt dann zwei Dateien, auch wenn sie gleich aussehen. Ändert sich eine ID, wird das Icon im selben Pull Request umbenannt.
 
-**Einbinden:** Das Icon steht im Datensatz im Feld `icon` (`AbilityData`, `AuraData`, `TalentData`, `SpecializationData`, `ClassData`; bei Gegenständen die Spalte `icon` in `gegenstaende.csv`). Leer = Kürzel als Platzhalter wie bisher.
+**Einbinden:** Das Icon steht im Datensatz im Feld `icon` (`AbilityData`, `AuraData`, `TalentData`, `SpecializationData`, `ClassData`; bei Gegenständen die Spalte `icon` in `gegenstaende.csv`, bei Schadensschulen die Spalte `icon` in `schadensschulen.csv`, bei Ausrüstungsplätzen `ausruestungsplaetze.csv`). Leer = Kürzel als Platzhalter wie bisher.
 
 **Import:** In der `.import`-Datei jedes Icons `mipmaps/generate=true` (im Editor: Icon auswählen → Reiter „Import“ → „Mipmaps → Generate“ → „Reimport“). Alle Anzeige-Stellen nutzen den Texturfilter „Linear Mipmap“ (`TEXTURE_FILTER_LINEAR_WITH_MIPMAPS`): `AbilityIcon`, `TalentNodeButton`, `aura_icon.tscn`, Klassenwahl in der Charaktererstellung, Spezialisierungs-Reiter im Talentfenster. Ohne Mipmaps flimmern verkleinerte Icons.
 

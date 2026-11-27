@@ -1,13 +1,13 @@
 ﻿# Gegenstände. Rüstung und Waffenschaden dürfen leer bleiben (werden dann berechnet).
 id;name;beschreibung;icon;typ;slot;seltenheit;gegenstandsstufe;mindeststufe;ruestungsklasse;waffentyp;handhabung;schaden_min;schaden_max;geschwindigkeit;ruestung;blockwert;staerke;gewandtheit;intellekt;ausdauer;willenskraft;praezision;verheerung;tempo;durchschlag;abwehr;eile;zauberschutz;effekte;klassen;einzigartig;einzigartig_angelegt;bindung;stapelgroesse;verkaufswert;taschenplaetze;herkunft;modell;notiz
-wolfsfell;Wolfsfell;Ein struppiges Fell.;;material;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;5;;;;Beispiel
-schwert_rostig;Rostiges Schwert;Hat schon bessere Tage gesehen.;;ausruestung;einhand;gewoehnlich;2;1;;schwert;einhand;;;2,6;;;1;;;;;;;;;;;;;warrior|rogue;nein;nein;beim_anlegen;1;12;;;;Beispiel, Schaden wird berechnet
-lederkappe;Lederkappe;;;ausruestung;helm;ungewoehnlich;2;1;leder;;;;;;;;;1;;1;;;;;;;;;;;nein;nein;keine;1;8;;;;Beispiel (seit #18 ungewöhnlich, zum Testen des Seltenheitsrahmens)
+wolfsfell;Wolfsfell;Ein struppiges Fell.;res://assets/ui/icons/items/wolf_pelt.png;material;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;5;;;;Beispiel
+schwert_rostig;Rostiges Schwert;Hat schon bessere Tage gesehen.;res://assets/ui/icons/items/rusty_sword.png;ausruestung;einhand;gewoehnlich;2;1;;schwert;einhand;;;2,6;;;1;;;;;;;;;;;;;warrior|rogue;nein;nein;beim_anlegen;1;12;;;;Beispiel, Schaden wird berechnet
+lederkappe;Lederkappe;;res://assets/ui/icons/items/leather_cap.png;ausruestung;helm;ungewoehnlich;2;1;leder;;;;;;;;;1;;1;;;;;;;;;;;nein;nein;keine;1;8;;;;Beispiel (seit #18 ungewöhnlich, zum Testen des Seltenheitsrahmens)
 # Testgegenstände für Inventar und Taschen (#18)
-tasche_klein;Kleiner Beutel;Ein schlichter Beutel aus Leinen.;;tasche;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;25;6;;;Test #18: Tasche mit 6 Plätzen
-tasche_mittel;Lederbeutel;Fest genäht und mit Riemen.;;tasche;;ungewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;100;8;;;Test #18: Tasche mit 8 Plätzen
-tasche_gross;Reisetasche;Viel Platz für lange Wege.;;tasche;;selten;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;400;10;;;Test #18: Tasche mit 10 Plätzen
-leuchtkristall;Leuchtkristall;Ein Splitter, der schwach von innen glimmt.;;material;;episch;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;250;;;;Test #18: stapelbares Material
-brot_hart;Hartes Brot;Satt macht es trotzdem.;;verbrauchsgut;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;1;;;;Test #18: Verbrauchsgut (Benutzen folgt später)
-zahn_zerbrochen;Zerbrochener Zahn;Zu nichts mehr zu gebrauchen.;;plunder;;minderwertig;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;10;3;;;;Test #18: Plunder
-brief_versiegelt;Versiegelter Brief;Das Siegel ist unversehrt.;;questgegenstand;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;;;;;Test #18: Questgegenstand
+tasche_klein;Kleiner Beutel;Ein schlichter Beutel aus Leinen.;res://assets/ui/icons/items/small_bag.png;tasche;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;25;6;;;Test #18: Tasche mit 6 Plätzen
+tasche_mittel;Lederbeutel;Fest genäht und mit Riemen.;res://assets/ui/icons/items/medium_bag.png;tasche;;ungewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;100;8;;;Test #18: Tasche mit 8 Plätzen
+tasche_gross;Reisetasche;Viel Platz für lange Wege.;res://assets/ui/icons/items/large_bag.png;tasche;;selten;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;400;10;;;Test #18: Tasche mit 10 Plätzen
+leuchtkristall;Leuchtkristall;Ein Splitter, der schwach von innen glimmt.;res://assets/ui/icons/items/glowing_crystal.png;material;;episch;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;250;;;;Test #18: stapelbares Material
+brot_hart;Hartes Brot;Satt macht es trotzdem.;res://assets/ui/icons/items/hard_bread.png;verbrauchsgut;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;20;1;;;;Test #18: Verbrauchsgut (Benutzen folgt später)
+zahn_zerbrochen;Zerbrochener Zahn;Zu nichts mehr zu gebrauchen.;res://assets/ui/icons/items/broken_tooth.png;plunder;;minderwertig;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;10;3;;;;Test #18: Plunder
+brief_versiegelt;Versiegelter Brief;Das Siegel ist unversehrt.;res://assets/ui/icons/items/sealed_letter.png;questgegenstand;;gewoehnlich;1;1;;;;;;;;;;;;;;;;;;;;;;;nein;nein;keine;1;;;;;Test #18: Questgegenstand
