@@ -3,9 +3,10 @@ extends HBoxContainer
 ## Inhalt des Charakterfensters (Taste C, Ticket #19), eingesetzt über
 ## Hud.get_hud_window(&"character").set_content() (GameWorld).
 ##
-## Links: Name, Stufe, Volk, Klasse (Klasse in Klassenfarbe), Platzhaltermodell
-## und die leeren Ausrüstungsplätze (Tooltip = Name des Platzes; Gegenstände
-## kommen in M4). Rechts: der ausklappbare Wertebereich (standardmäßig
+## Links: Name, Stufe, Volk, Klasse (Klasse in Klassenfarbe), seit #29 die
+## durchschnittliche Gegenstandsstufe, Platzhaltermodell und die
+## Ausrüstungsplätze (EquipmentSlot, #29: Icon mit Seltenheitsrahmen, Tooltip,
+## Anlegen und Ablegen durch Ziehen). Rechts: der ausklappbare Wertebereich (standardmäßig
 ## eingeklappt). Ausgeklappt wird das Fenster breiter; das Zauberbuch rückt im
 ## HUD automatisch weiter nach rechts (LeftWindows ist ein HBoxContainer).
 ##
@@ -21,6 +22,7 @@ extends HBoxContainer
 
 ## Ausrüstungsplätze (GDD, Abschnitt Ausrüstung) in Anzeigereihenfolge; IDs
 ## aus ausruestungsplaetze.csv (Name und Bild des leeren Platzes).
+const EQUIPMENT_SLOT_SCENE := preload("res://scenes/ui/hud/equipment_slot.tscn")
 const LEFT_SLOTS: Array[StringName] = [&"helm", &"kette", &"schulter", &"umhang", &"brust", &"armschienen"]
 const RIGHT_SLOTS: Array[StringName] = [&"handschuhe", &"guertel", &"beine", &"schuhe", &"ring_1", &"ring_2"]
 const WEAPON_SLOTS: Array[StringName] = [&"haupthand", &"nebenhand", &"fernkampf"]
@@ -34,6 +36,8 @@ const RULES: StatRules = preload("res://data/stats/stat_rules.tres")
 
 var _player: PlayerCharacter = null
 var _stats: CharacterStats = null
+var _equipment: PlayerEquipment = null
+var _slots: Array[EquipmentSlot] = []
 ## Zeilen der Ressourcen: Wert-ID (max_*) → Label des Werts, für schnelle
 ## Aktualisierung ohne Neuaufbau.
 var _resource_value_labels: Dictionary[StringName, Label] = {}
@@ -46,6 +50,7 @@ var _resource_value_labels: Dictionary[StringName, Label] = {}
 @onready var _stats_area: Control = %StatsArea
 @onready var _stats_list: VBoxContainer = %StatsList
 @onready var _combat_label: Label = %CombatLabel
+@onready var _item_level_label: Label = %ItemLevelLabel
 
 
 func _ready() -> void:
@@ -64,8 +69,18 @@ func setup(player: PlayerCharacter) -> void:
 		_stats.stats_changed.disconnect(_on_stats_changed)
 		_stats.resources_changed.disconnect(_update_resources)
 		_stats.combat_changed.disconnect(_on_combat_changed)
+	if _equipment != null:
+		_equipment.equipment_changed.disconnect(_refresh_equipment)
+		_equipment.usability_changed.disconnect(_refresh_equipment)
 	_player = player
 	_stats = player.get_stats() if player != null else null
+	_equipment = player.get_equipment() if player != null else null
+	if _equipment != null:
+		_equipment.equipment_changed.connect(_refresh_equipment)
+		_equipment.usability_changed.connect(_refresh_equipment)
+	for slot in _slots:
+		slot.set_equipment(_equipment)
+	_refresh_equipment()
 	if _stats != null:
 		_stats.stats_changed.connect(_on_stats_changed)
 		_stats.resources_changed.connect(_update_resources)
@@ -87,20 +102,36 @@ func _set_stats_visible(on: bool) -> void:
 
 func _add_slots(container: Container, ids: Array[StringName]) -> void:
 	for slot_id in ids:
-		var row := Data.ausruestungsplatz(slot_id)
-		var slot := Button.new()
-		slot.theme_type_variation = &"SlotButton40"
+		var slot: EquipmentSlot = EQUIPMENT_SLOT_SCENE.instantiate()
 		slot.custom_minimum_size = SLOT_SIZE
-		slot.focus_mode = Control.FOCUS_NONE
-		slot.tooltip_text = "%s (leer)" % (str(row.get_value("name", slot_id)) if row != null else String(slot_id))
-		# Leerer Platz: blasses Bild aus den Daten (Spalte icon), sonst nur der Rahmen.
-		var path := str(row.get_value("icon", "")) if row != null else ""
-		if path != "" and ResourceLoader.exists(path):
-			slot.icon = load(path) as Texture2D
-			slot.expand_icon = true
-			slot.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			slot.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		slot.name = "Slot_%s" % slot_id
 		container.add_child(slot)
+		slot.equipment = _equipment
+		slot.setup(slot_id)
+		_slots.append(slot)
+
+
+## Ausrüstungsplatz im Fenster oder null (für Tests und Bildschirmfotos).
+func get_equipment_slot(place: StringName) -> EquipmentSlot:
+	for slot in _slots:
+		if slot.place == place:
+			return slot
+	return null
+
+
+## Plätze und durchschnittliche Gegenstandsstufe neu zeigen (#29).
+func _refresh_equipment() -> void:
+	if not is_node_ready():
+		return
+	for slot in _slots:
+		slot.refresh()
+	var average := _equipment.get_average_item_level() if _equipment != null else 0.0
+	_item_level_label.text = "Gegenstandsstufe: %s" % (StatFormat.number(average, 1) if average > 0.0 else "–")
+	_item_level_label.tooltip_text = "Durchschnittliche Gegenstandsstufe der angelegten Ausrüstung (leere Plätze zählen nicht)"
+	if _equipment != null:
+		_item_level_label.tooltip_text += "
+" + "
+".join(_equipment.describe())
 
 
 func _on_stats_changed() -> void:

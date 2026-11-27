@@ -243,7 +243,7 @@ func _input(event: InputEvent) -> void:
 	# Ziehen dort nicht selbst. Wie „ins Leere loslassen“ behandeln.
 	if press and event.button_index == MOUSE_BUTTON_LEFT:
 		var hovered := get_viewport().gui_get_hovered_control()
-		if not (hovered is ActionSlot or hovered is ItemSlot or hovered is BagBarSlot):
+		if not (hovered is ActionSlot or hovered is ItemSlot or hovered is BagBarSlot or hovered is EquipmentSlot):
 			get_viewport().gui_cancel_drag()
 			get_viewport().set_input_as_handled()
 		return

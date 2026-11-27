@@ -10,7 +10,11 @@ extends VBoxContainer
 ## „Stapel teilen“ (SplitStackDialog), Loslassen außerhalb des Fensters fragt
 ## „X wirklich zerstören?“ (über confirm_handler, im Spiel Hud.ask).
 ## Fehlermeldungen („Inventar ist voll.“) gehen über error an das HUD.
-## Rein lokal, nichts wird synchronisiert.
+## Rein lokal, nichts wird synchronisiert. Seit #29 kennt das Fenster die
+## Ausrüstung des eigenen Charakters (setup_equipment): Rechtsklick legt an,
+## nicht nutzbare Gegenstände tragen einen roten Schleier, Tooltips vergleichen
+## mit der angelegten Ausrüstung. Loslassen über dem Charakterfenster zerstört
+## nichts.
 
 signal error(message: String)
 
@@ -29,6 +33,7 @@ var confirm_handler: Callable
 var dialog_parent: Node = null
 
 var _inventory: Inventory = null
+var _equipment: PlayerEquipment = null
 var _slots: Array[ItemSlot] = []
 var _group_labels: Dictionary[int, Label] = {}
 var _layout_key := ""
@@ -118,6 +123,21 @@ func get_inventory() -> Inventory:
 	return _inventory
 
 
+## Ausrüstung des eigenen Charakters (#29): Anlegen, Schleier, Vergleich.
+func setup_equipment(equipment: PlayerEquipment) -> void:
+	if _equipment != null:
+		_equipment.equipment_changed.disconnect(_on_changed)
+		_equipment.usability_changed.disconnect(_on_changed)
+	_equipment = equipment
+	if _equipment != null:
+		_equipment.equipment_changed.connect(_on_changed)
+		_equipment.usability_changed.connect(_on_changed)
+	for slot in _slots:
+		slot.equipment = _equipment
+	if _inventory != null and is_node_ready():
+		_refresh()
+
+
 ## Platz im Fenster oder null (für Tests).
 func get_item_slot(container: int, index: int) -> ItemSlot:
 	for slot in _slots:
@@ -187,7 +207,17 @@ func _is_over_inventory(mouse_position: Vector2) -> bool:
 	if window != null and window.get_global_rect().has_point(mouse_position):
 		return true
 	var hovered := get_viewport().gui_get_hovered_control() if get_viewport() != null else null
-	return hovered is BagBarSlot
+	if hovered is BagBarSlot or hovered is EquipmentSlot:
+		return true
+	# Über dem Charakterfenster (#29) wird nichts zerstört.
+	var node: Node = hovered
+	while node != null:
+		if node is CharacterPanel:
+			return true
+		if node is HudWindow:
+			return not node.find_children("*", "CharacterPanel", true, false).is_empty()
+		node = node.get_parent()
+	return false
 
 
 func _find_window() -> Control:
@@ -240,6 +270,7 @@ func _rebuild() -> void:
 		for index in _inventory.get_container_size(container):
 			var slot: ItemSlot = ITEM_SLOT_SCENE.instantiate()
 			grid.add_child(slot)
+			slot.equipment = _equipment
 			slot.setup(_inventory, container, index)
 			slot.error.connect(error.emit)
 			slot.split_requested.connect(request_split)

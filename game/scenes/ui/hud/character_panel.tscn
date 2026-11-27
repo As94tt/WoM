@@ -49,6 +49,13 @@ layout_mode = 2
 theme_type_variation = &"SmallLabel"
 text = "Klasse"
 
+[node name="ItemLevelLabel" type="Label" parent="Equipment/Header/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+theme_type_variation = &"SmallLabel"
+text = "Gegenstandsstufe: –"
+
 [node name="StatsToggle" type="Button" parent="Equipment/Header"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
