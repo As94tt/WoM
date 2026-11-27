@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/combat/aura_data.gd" id="x1"]
 [ext_resource type="Script" path="res://scripts/stats/stat_modifier_data.gd" id="x2"]
+[ext_resource type="Texture2D" uid="uid://nea0w3o1o7o5" path="res://assets/ui/icons/abilities/warrior/battle_master/war_cry.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x2")
@@ -17,6 +18,7 @@ value = 5.0
 [resource]
 script = ExtResource("x1")
 id = &"kriegsruf"
+icon = ExtResource("icon")
 display_name = "Kriegsruf"
 description = "Kampfkraft um 10 %, kritische Trefferchance um 5 % erhöht."
 ability_id = &"kriegsruf"

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_scaling.gd" id="3_8eqb4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_blink_effect.gd" id="4_bglry"]
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="5_uy5hp"]
+[ext_resource type="Texture2D" uid="uid://cb3pfir3lvxkk" path="res://assets/ui/icons/abilities/mage/lightning/lightning_step.png" id="icon"]
 
 [sub_resource type="Resource" id="Resource_85sxb"]
 script = ExtResource("4_bglry")
@@ -13,6 +14,7 @@ target_mode = 1
 [resource]
 script = ExtResource("5_uy5hp")
 id = &"blitzsprung_zickzack"
+icon = ExtResource("icon")
 display_name = "Blitzsprung"
 description = "Wie Magischer Schritt, als Blitz. Zickzack: 2 Aufladungen."
 class_id = &"mage"

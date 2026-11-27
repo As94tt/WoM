@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="x5"]
+[ext_resource type="Texture2D" uid="uid://bb7ump73ahkgv" path="res://assets/ui/icons/abilities/warrior/bulwark/thunder_clap.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -31,6 +32,7 @@ radius_from_ability = true
 [resource]
 script = ExtResource("x1")
 id = &"donnerknall_bollwerk"
+icon = ExtResource("icon")
 display_name = "Donnerknall"
 description = "Schaden an allen Gegnern im Umkreis von 8 m, verlangsamt sie 6 Sekunden um 20 % und senkt ihr Angriffstempo um 10 %. Erhöhte Bedrohung. Kostet 10 Wut."
 class_id = &"warrior"

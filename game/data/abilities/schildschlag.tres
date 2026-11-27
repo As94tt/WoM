@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/threat_effect.gd" id="x4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x5"]
+[ext_resource type="Texture2D" uid="uid://eih03mblwrs7" path="res://assets/ui/icons/abilities/warrior/base/shield_bash.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -24,6 +25,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"schildschlag"
+icon = ExtResource("icon")
 display_name = "Schildschlag"
 description = "Schlägt das Ziel mit dem Schild: mittlerer Schaden, hohe Zusatzbedrohung. Erzeugt 15 Wut. Nur mit Schild."
 class_id = &"warrior"

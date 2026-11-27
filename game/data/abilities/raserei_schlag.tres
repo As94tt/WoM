@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x4"]
 [ext_resource type="Resource" path="res://data/abilities/raserei.tres" id="x5"]
+[ext_resource type="Texture2D" uid="uid://dby1bfo3x1lfi" path="res://assets/ui/icons/abilities/warrior/berserker/frenzy_strike.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -23,6 +24,7 @@ values_ability = ExtResource("x5")
 [resource]
 script = ExtResource("x1")
 id = &"raserei_schlag"
+icon = ExtResource("icon")
 display_name = "Raserei-Schlag"
 description = "Hoher Schaden und +1 Raserei. Kostet 30 Wut."
 class_id = &"warrior"

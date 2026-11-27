@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x3"]
 [ext_resource type="Script" path="res://scripts/combat/effects/resource_effect.gd" id="x4"]
+[ext_resource type="Texture2D" uid="uid://nea0w3o1o7o5" path="res://assets/ui/icons/abilities/warrior/battle_master/war_cry.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -20,6 +21,7 @@ target_mode = 1
 [resource]
 script = ExtResource("x1")
 id = &"kriegsruf"
+icon = ExtResource("icon")
 display_name = "Kriegsruf"
 description = "Alle Gruppenmitglieder im Umkreis von 30 m erhalten 60 Sekunden lang +10 % Kampfkraft und +5 % kritische Trefferchance. Erzeugt 20 Wut."
 class_id = &"warrior"

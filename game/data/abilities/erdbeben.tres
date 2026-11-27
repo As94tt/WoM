@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x4"]
 [ext_resource type="Script" path="res://scripts/combat/effects/mage/mage_aura_effect.gd" id="x5"]
 [ext_resource type="Resource" path="res://data/abilities/tiefe_wunde.tres" id="x6"]
+[ext_resource type="Texture2D" uid="uid://hxjmbt81e70f" path="res://assets/ui/icons/abilities/warrior/battle_master/earthquake.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x4")
@@ -29,6 +30,7 @@ effects = Array[ExtResource("x2")]([SubResource("R1"), SubResource("R2")])
 [resource]
 script = ExtResource("x1")
 id = &"erdbeben"
+icon = ExtResource("icon")
 display_name = "Erdbeben"
 description = "Lässt 6 Sekunden lang den Boden um den Krieger beben: Schaden je Tick und 1 Tiefe Wunde auf alle Gegner darin. Kostet 10 Wut."
 class_id = &"warrior"

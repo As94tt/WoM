@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="x1"]
 [ext_resource type="Script" path="res://scripts/combat/effect_data.gd" id="x2"]
 [ext_resource type="Script" path="res://scripts/combat/effects/strike_effect.gd" id="x3"]
+[ext_resource type="Texture2D" uid="uid://de8lsi80mv2td" path="res://assets/ui/icons/abilities/warrior/berserker/whirlwind.png" id="icon"]
 
 [sub_resource type="Resource" id="R1"]
 script = ExtResource("x3")
@@ -16,6 +17,7 @@ max_targets_key = "werte.ziele"
 [resource]
 script = ExtResource("x1")
 id = &"wirbelwind"
+icon = ExtResource("icon")
 display_name = "Wirbelwind"
 description = "Schaden an bis zu 4 Gegnern im Umkreis von 8 m. Kostet 10 Wut."
 class_id = &"warrior"
